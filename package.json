@@ -1,0 +1,45 @@
+{
+  "name": "atom-xterm",
+  "main": "./lib/atom-xterm",
+  "version": "0.0.0",
+  "description": "Atom plugin for providing terminal emulators inside of the editor as tabs.",
+  "keywords": [
+    "terminal",
+    "emulator",
+    "xterm",
+    "term",
+    "pty",
+    "tty",
+    "comspec",
+    "shell",
+    "console",
+    "command-line",
+    "bash",
+    "sh",
+    "powershell",
+    "cmd"
+  ],
+  "activationCommands": {
+    "atom-workspace": "atom-xterm:need-this-to-activate-package-for-tests-do-not-remove"
+  },
+  "activationHooks": [
+    "core:loaded-shell-environment"
+  ],
+  "atomTestRunner": "atom-jasmine2-test-runner",
+  "repository": "https://github.com/amejia1/atom-xterm",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.19.0 <2.0.0"
+  },
+  "dependencies": {
+    "element-resize-detector": "^1.1.12",
+    "node-pty": "^0.7.0",
+    "uuid": "^3.1.0",
+    "whatwg-url": "^6.1.0",
+    "xterm": "^2.9.2"
+  },
+  "devDependencies": {
+    "atom-jasmine2-test-runner": "^1.1.2",
+    "tmp": "^0.0.33"
+  }
+}

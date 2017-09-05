@@ -1,0 +1,28 @@
+{
+    ".platform-darwin atom-workspace": {
+        "cmd-t": "atom-xterm:open",
+        "cmd-alt-shift-t": "atom-xterm:open",
+        "cmd-alt-shift-up": "atom-xterm:open-split-up",
+        "cmd-alt-shift-down": "atom-xterm:open-split-down",
+        "cmd-alt-shift-left": "atom-xterm:open-split-left",
+        "cmd-alt-shift-right": "atom-xterm:open-split-right"
+    },
+    "atom-workspace": {
+        "ctrl-shift-t": "atom-xterm:open",
+        "ctrl-alt-shift-t": "atom-xterm:open",
+        "ctrl-alt-shift-up": "atom-xterm:open-split-up",
+        "ctrl-alt-shift-down": "atom-xterm:open-split-down",
+        "ctrl-alt-shift-left": "atom-xterm:open-split-left",
+        "ctrl-alt-shift-right": "atom-xterm:open-split-right"
+    },
+    ".platform-darwin atom-xterm": {
+        "cmd-c": "atom-xterm:copy",
+        "cmd-v": "atom-xterm:paste"
+    },
+    "atom-xterm": {
+        "ctrl-shift-c": "atom-xterm:copy",
+        "alt-shift-c": "atom-xterm:copy",
+        "ctrl-shift-v": "atom-xterm:paste",
+        "alt-shift-v": "atom-xterm:paste"
+    }
+}
