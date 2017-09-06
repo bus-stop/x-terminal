@@ -21,6 +21,7 @@ const path = require('path');
 
 const tmp = require('tmp');
 const { URL, URLSearchParams } = require('whatwg-url');
+import * as node_pty from 'node-pty';
 
 import AtomXtermElement from '../lib/atom-xterm-element';
 import AtomXtermModel from '../lib/atom-xterm-model';
@@ -42,13 +43,16 @@ describe('AtomXtermElement', () => {
     beforeEach(() => {
         atom.config.clear();
         atom.project.setPaths([]);
+        let ptyProcess = jasmine.createSpyObj('ptyProcess',
+            ['kill', 'write', 'resize', 'on']);
+        ptyProcess.process = jasmine.createSpy('process')
+            .and.returnValue('sometestprocess');
+        spyOn(node_pty, 'spawn').and.returnValue(ptyProcess);
         this.element = createNewElement();
         this.tmpdirObj = tmp.dirSync({'unsafeCleanup': true});
     });
 
     afterEach(() => {
-        // Destroy the pty processes ASAP.
-        this.element.ptyProcess.kill();
         this.tmpdirObj.removeCallback();
         atom.config.clear();
     });
@@ -72,7 +76,6 @@ describe('AtomXtermElement', () => {
     });
 
     it('destroy() check ptyProcess killed', () => {
-        spyOn(this.element.ptyProcess, 'kill').and.callThrough();
         this.element.destroy();
         expect(this.element.ptyProcess.kill).toHaveBeenCalled();
     });
@@ -97,7 +100,6 @@ describe('AtomXtermElement', () => {
         let expected = 'somecommand';
         let params = new URLSearchParams({'command': expected});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element.ptyProcess.kill();
         this.element = createNewElement(uri=url.href);
         expect(this.element.getShellCommand()).toBe(expected);
     });
@@ -116,7 +118,6 @@ describe('AtomXtermElement', () => {
         let expected = ['some', 'extra', 'args'];
         let params = new URLSearchParams({'args': JSON.stringify(expected)});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element.ptyProcess.kill();
         this.element = createNewElement(uri=url.href);
         expect(this.element.getArgs()).toEqual(expected);
     });
@@ -141,7 +142,6 @@ describe('AtomXtermElement', () => {
         let expected = 'sometermtype';
         let params = new URLSearchParams({'name': expected});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element.ptyProcess.kill();
         this.element = createNewElement(uri=url.href);
         expect(this.element.getTermType()).toBe(expected);
     });
@@ -160,7 +160,6 @@ describe('AtomXtermElement', () => {
         let expected = this.tmpdirObj.name;
         let params = new URLSearchParams({'cwd': expected});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element.ptyProcess.kill();
         this.element = createNewElement(uri=url.href);
         expect(this.element.getCwd()).toBe(expected);
     });
@@ -185,7 +184,6 @@ describe('AtomXtermElement', () => {
         let dir = path.join(this.tmpdirObj.name, 'non-existent-dir');
         let params = new URLSearchParams({'cwd': dir});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element.ptyProcess.kill();
         this.element = createNewElement(uri=url.href);
         expect(this.element.getCwd()).toBeNull();
     });
@@ -209,7 +207,6 @@ describe('AtomXtermElement', () => {
         let expected = {'var1': 'value1', 'var2': 'value2', 'var2': 'value2'};
         let params = new URLSearchParams({'env': JSON.stringify(expected)});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element.ptyProcess.kill();
         this.element = createNewElement(uri=url.href);
         expect(this.element.getEnv()).toEqual(expected);
     });
@@ -231,7 +228,6 @@ describe('AtomXtermElement', () => {
         let expected = {'var2': 'value2'};
         let params = new URLSearchParams({'env': JSON.stringify({'var1': 'value1'}), 'setEnv': JSON.stringify(expected)});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element.ptyProcess.kill();
         this.element = createNewElement(uri=url.href);
         expect(this.element.getEnv()['var2']).toEqual(expected['var2']);
     });
@@ -245,7 +241,6 @@ describe('AtomXtermElement', () => {
     it('getEnv() deleteEnv set in uri', () => {
         let params = new URLSearchParams({'env': JSON.stringify({'var1': 'value1'}), 'deleteEnv': JSON.stringify(['var1'])});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element.ptyProcess.kill();
         this.element = createNewElement(uri=url.href);
         expect(this.element.getEnv()['var1']).toBe(undefined);
     });
