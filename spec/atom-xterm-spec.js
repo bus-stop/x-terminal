@@ -50,6 +50,9 @@ describe('AtomXterm', () => {
         atom.packages.activatePackage('atom-xterm').then(() => {
             atomXtermPackage = atom.packages.getActivePackage('atom-xterm');
             spyOn(atomXtermPackage.mainModule, 'generateNewUri').and.returnValue(default_uri);
+            atomXtermPackage.mainModule.config.spawnPtySettings.properties.command.default = config.getDefaultShellCommand();
+            atomXtermPackage.mainModule.config.spawnPtySettings.properties.name.default = config.getDefaultTermType();
+            atomXtermPackage.mainModule.config.spawnPtySettings.properties.cwd.default = config.getDefaultCwd();
             done();
         }, (reason) => {
             done();
