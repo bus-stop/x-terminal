@@ -14,5 +14,23 @@ command.
 apm install atom-xterm
 ```
 
+# Features
+* Fully functioning terminal (through major help from [xterm.js](https://xtermjs.org/))
+* Cross-platform support (works on Linux, Windows, and macOS through major help from [node-pty](https://www.npmjs.com/package/node-pty))
+* Multiple terminals open at once (open as many as you like)
+* Terminals as tabs (place terminals anywhere in the Atom workspace)
+* Appropriate directory used automatically when opening terminals (terminals will start in appropriate project folder for example)
+* Simple notifications when a terminal has been modified
+* Basic notification of current process running inside a terminal
+* Hotkeys to quickly open terminals
+* Hotkeys to quickly copy from and paste to terminal
+* Support for quickly clicking on or copying links inside terminal
+* Support for auto-arranging terminals to one pane
+* Different customization options, for example...
+  * Setting a different default shell (use [Bash from Homebrew](http://brewformulas.org/Bash) or [Bash from Git for Windows](https://git-for-windows.github.io/) for example)
+  * Setting arguments to pass to default shell
+  * Setting a different default font size
+  * etc.
+
 # Demo
 ![Atom Xterm demo](https://github.com/amejia1/atom-xterm/raw/master/atom-xterm-demo.gif)
