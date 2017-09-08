@@ -36,6 +36,8 @@ describe('AtomXterm', () => {
         spyOn(model, 'exit').and.callThrough();
         spyOn(model, 'copyFromTerminal').and.returnValue('some text from terminal');
         spyOn(model, 'pasteToTerminal');
+        spyOn(model, 'clickOnCurrentAnchor');
+        spyOn(model, 'getCurrentAnchorHref');
         return model;
     };
 
@@ -240,6 +242,48 @@ describe('AtomXterm', () => {
         atom.clipboard.write('some text from clipboard');
         atom.commands.dispatch(element, 'atom-xterm:paste');
         expect(element.model.pasteToTerminal.calls.allArgs()).toEqual([['some text from clipboard']]);
+    });
+
+    it('run atom-xterm:open-link', () => {
+        let element = createNewElement(
+            package_module=atomXtermPackage.mainModule
+        );
+        spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
+        atom.commands.dispatch(element, 'atom-xterm:open-link');
+        expect(element.model.clickOnCurrentAnchor).toHaveBeenCalled();
+    });
+
+    it('run atom-xterm:copy-link', () => {
+        let element = createNewElement(
+            package_module=atomXtermPackage.mainModule
+        );
+        spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
+        atom.commands.dispatch(element, 'atom-xterm:copy-link');
+        expect(element.model.getCurrentAnchorHref).toHaveBeenCalled();
+    });
+
+    it('run atom-xterm:copy-link with returned link', () => {
+        let element = createNewElement(
+            package_module=atomXtermPackage.mainModule
+        );
+        spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
+        let expected = 'https://atom.io';
+        element.model.getCurrentAnchorHref.and.returnValue(expected);
+        spyOn(atom.clipboard, 'write');
+        atom.commands.dispatch(element, 'atom-xterm:copy-link');
+        expect(atom.clipboard.write.calls.allArgs()).toEqual([[expected]]);
+    });
+
+    it('run atom-xterm:copy-link no returned link', () => {
+        let element = createNewElement(
+            package_module=atomXtermPackage.mainModule
+        );
+        spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
+        let expected = null;
+        element.model.getCurrentAnchorHref.and.returnValue(expected);
+        spyOn(atom.clipboard, 'write');
+        atom.commands.dispatch(element, 'atom-xterm:copy-link');
+        expect(atom.clipboard.write).not.toHaveBeenCalled();
     });
 
     it('refitAllTerminals()', () => {

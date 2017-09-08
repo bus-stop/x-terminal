@@ -48,6 +48,65 @@
                 "command": "atom-xterm:close-all"
             }
         ],
+        "atom-xterm a": [
+            {
+                "label": "Open Link",
+                "command": "atom-xterm:open-link"
+            },
+            {
+                "label": "Copy Link Address",
+                "command": "atom-xterm:copy-link"
+            },
+            {
+                "type": "separator"
+            },
+            {
+                "label": "Open New Terminal",
+                "command": "atom-xterm:open"
+            },
+            {
+                "label": "Close",
+                "command": "atom-xterm:close"
+            },
+            {
+                "type": "separator"
+            },
+            {
+                "label": "Copy",
+                "command": "atom-xterm:copy"
+            },
+            {
+                "label": "Paste",
+                "command": "atom-xterm:paste"
+            },
+            {
+                "type": "separator"
+            },
+            {
+                "label": "Reorganize Terminal Tabs (Current Pane)",
+                "command": "atom-xterm:reorganize"
+            },
+            {
+                "label": "Reorganize Terminal Tabs (Topmost Pane)",
+                "command": "atom-xterm:reorganize-top"
+            },
+            {
+                "label": "Reorganize Terminal Tabs (Bottommost Pane)",
+                "command": "atom-xterm:reorganize-bottom"
+            },
+            {
+                "label": "Reorganize Terminal Tabs (Leftmost Pane)",
+                "command": "atom-xterm:reorganize-left"
+            },
+            {
+                "label": "Reorganize Terminal Tabs (Rightmost Pane)",
+                "command": "atom-xterm:reorganize-right"
+            },
+            {
+                "label": "Close All Terminals",
+                "command": "atom-xterm:close-all"
+            }
+        ],
         "atom-text-editor": [
             {
                 "label": "Open New Terminal",

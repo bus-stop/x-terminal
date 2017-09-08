@@ -39,7 +39,7 @@ describe('AtomXtermModel', () => {
         this.pane = jasmine.createSpyObj('pane',
             ['destroyItem', 'getActiveItem']);
         this.element = jasmine.createSpyObj('element',
-            ['destroy', 'refitTerminal', 'focusOnTerminal']);
+            ['destroy', 'refitTerminal', 'focusOnTerminal', 'clickOnCurrentAnchor', 'getCurrentAnchorHref']);
         this.element.terminal = jasmine.createSpyObj('terminal',
             ['getSelection']);
         this.element.ptyProcess = jasmine.createSpyObj('ptyProcess',
@@ -321,5 +321,17 @@ describe('AtomXtermModel', () => {
         let expected = {};
         model.setNewPane(expected);
         expect(model.pane).toBe(expected);
+    });
+
+    it('clickOnCurrentAnchor()', () => {
+        this.model.element = this.element;
+        this.model.clickOnCurrentAnchor();
+        expect(this.model.element.clickOnCurrentAnchor).toHaveBeenCalled();
+    });
+
+    it('getCurrentAnchorHref()', () => {
+        this.model.element = this.element;
+        this.model.getCurrentAnchorHref();
+        expect(this.model.element.getCurrentAnchorHref).toHaveBeenCalled();
     });
 });
