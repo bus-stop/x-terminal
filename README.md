@@ -1,7 +1,11 @@
 # atom-xterm package
 
-[![Travis CI](https://img.shields.io/travis/amejia1/atom-xterm/master.svg)](https://travis-ci.org/amejia1/atom-xterm)
-[![AppVeyor CI](https://img.shields.io/appveyor/ci/amejia1/atom-xterm/master.svg)](https://ci.appveyor.com/project/amejia1/atom-xterm)
+[![Linux/macOS Tests](https://img.shields.io/travis/amejia1/atom-xterm/master.svg?label=Linux/macOS Tests)](https://travis-ci.org/amejia1/atom-xterm)
+[![Windows Tests](https://img.shields.io/appveyor/ci/amejia1/atom-xterm/master.svg?label=Windows Tests)](https://ci.appveyor.com/project/amejia1/atom-xterm)
+[![Depedencies](https://img.shields.io/david/amejia1/atom-xterm.svg)](https://david-dm.org/amejia1/atom-xterm)
+[![Downloads](https://img.shields.io/apm/dm/atom-xterm.svg)](https://atom.io/packages/atom-xterm)
+[![Latest release](https://img.shields.io/apm/v/atom-xterm.svg)](https://atom.io/packages/atom-xterm)
+[![Greenkeeper badge](https://badges.greenkeeper.io/amejia1/atom-xterm.svg)](https://greenkeeper.io/)
 
 Atom plugin for providing terminal emulators inside of the editor as tabs.
 You can place these tabs anywhere in your workspace just like any other tab.
