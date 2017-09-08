@@ -25,7 +25,7 @@
   "activationHooks": [
     "core:loaded-shell-environment"
   ],
-  "atomTestRunner": "atom-jasmine2-test-runner",
+  "atomTestRunner": "./spec/custom-runner",
   "repository": "https://github.com/amejia1/atom-xterm",
   "license": "MIT",
   "engines": {
@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "atom-jasmine2-test-runner": "^1.1.2",
+    "jasmine-spec-reporter": "^4.2.1",
     "tmp": "^0.0.33"
   }
 }
