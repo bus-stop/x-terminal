@@ -1,3 +1,8 @@
+## 1.0.1
+* Update badges.
+* Signup to Greenkeeper.
+* Use a different Jasmine reporter for better test reports on the command line.
+
 ## 1.0.0 - Production Ready
 * API stabilized.
 * The *atom-xterm* pseudo-protocol stabilized.
