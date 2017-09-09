@@ -1,0 +1,49 @@
+]0;andres@andres-VirtualBox: ~/github/atom-xterm[01;32mandres@andres-VirtualBox[00m:[01;34m~/github/atom-xterm[00m$ [K]0;andres@andres-VirtualBox: ~/github/atom-xterm[01;32mandres@andres-VirtualBox[00m:[01;34m~/github/atom-xterm[00m$ man bash
+7[?47h[?1h=BASH(1)                                                                                                                                                      General Commands Manual                                                                                                                                                     BASH(1)[m
+[m
+[1mNAME[m[m
+       bash - GNU Bourne-Again SHell[m
+[m
+[1mSYNOPSIS[m[m
+       [1mbash[m [options] [command_string | file][m
+[m
+[1mCOPYRIGHT[m[m
+       Bash is Copyright (C) 1989-2016 by the Free Software Foundation, Inc.[m
+[m
+[1mDESCRIPTION[m[m
+       [1mBash[m is an [1msh[m-compatible command language interpreter that executes commands read from the standard input or from a file.  [1mBash[m also incorporates useful features from the [4mKorn[m and [4mC[m shells ([1mksh[m and [1mcsh[m).[m
+[m
+       [1mBash[m is intended to be a conformant implementation of the Shell and Utilities portion of the IEEE POSIX specification (IEEE Standard 1003.1).  [1mBash[m can be configured to be POSIX-conformant by default.[m
+[m
+[1mOPTIONS[m[m
+       All of the single-character shell options documented in the description of the [1mset[m builtin command can be used as options when the shell is invoked.  In addition, [1mbash[m interprets the following options when it is invoked:[m
+[m
+       [1m-c[m        If the [1m-c[m option is present, then commands are read from the first non-option argument [4mcommand_string[m.  If there are arguments after the [4mcommand_string[m, the first argument is assigned to [1m$0[m and any remaining arguments are assigned to the positional parameters.  The assignment to [1m$0[m sets the name of the shell, which is[m
+                 used in warning and error messages.[m
+       [1m-i[m        If the [1m-i[m option is present, the shell is [4minteractive[m.[m
+       [1m-l[m        Make [1mbash[m act as if it had been invoked as a login shell (see [1mINVOCATION[m below).[m
+       [1m-r[m        If the [1m-r[m option is present, the shell becomes [4mrestricted[m (see [1mRESTRICTED[m [1mSHELL[m below).[m
+       [1m-s[m        If the [1m-s[m option is present, or if no arguments remain after option processing, then commands are read from the standard input.  This option allows the positional parameters to be set when invoking an interactive shell.[m
+       [1m-D[m        A list of all double-quoted strings preceded by [1m$[m is printed on the standard output.  These are the strings that are subject to language translation when the current locale is not [1mC[m or [1mPOSIX[m.  This implies the [1m-n[m option; no commands will be executed.[m
+       [1m[-+]O[m [1m[[m[4mshopt_option[m[1m][m[m
+                 [4mshopt_option[m is one of the shell options accepted by the [1mshopt[m builtin (see [1mSHELL[m [1mBUILTIN[m [1mCOMMANDS[m below).  If [4mshopt_option[m is present, [1m-O[m sets the value of that option; [1m+O[m unsets it.  If [4mshopt_option[m is not supplied, the names and values of the shell options accepted by [1mshopt[m are printed on the standard  output.   If[m
+                 the invocation option is [1m+O[m, the output is displayed in a format that may be reused as input.[m
+       [1m--[m        A [1m--[m signals the end of options and disables further option processing.  Any arguments after the [1m--[m are treated as filenames and arguments.  An argument of [1m-[m is equivalent to [1m--[m.[m
+[m
+       [1mBash[m also interprets a number of multi-character options.  These options must appear on the command line before the single-character options to be recognized.[m
+[m
+       [1m--debugger[m[m
+              Arrange for the debugger profile to be executed before the shell starts.  Turns on extended debugging mode (see the description of the [1mextdebug[m option to the [1mshopt[m builtin below).[m
+       [1m--dump-po-strings[m[m
+              Equivalent to [1m-D[m, but the output is in the GNU [4mgettext[m [1mpo[m (portable object) file format.[m
+       [1m--dump-strings[m[m
+              Equivalent to [1m-D[m.[m
+       [1m--help[m Display a usage message on standard output and exit successfully.[m
+       [1m--init-file[m [4mfile[m[m
+       [1m--rcfile[m [4mfile[m[m
+              Execute commands from [4mfile[m instead of the system wide initialization file [4m/etc/bash.bashrc[m and the standard personal initialization file [4m~/.bashrc[m if the shell is interactive (see [1mINVOCATION[m below).[m
+[m
+       [1m--login[m[m
+              Equivalent to [1m-l[m.[m
+[7m Manual page bash(1) line 1 (press h for help or q to quit)[m[K[K [KESCESC[KOO[KBB[K[m
+[7m Manual page bash(1) line 2 (press h for help or q to quit)[m[K

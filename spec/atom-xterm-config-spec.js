@@ -88,7 +88,7 @@ describe('Call to getDefaultTermType()', () => {
         if (process.env.TERM) {
             delete process.env.TERM;
         }
-        expect(config.getDefaultTermType()).toBe('xterm-color');
+        expect(config.getDefaultTermType()).toBe('xterm-256color');
     });
 
     it('with TERM set', () => {
