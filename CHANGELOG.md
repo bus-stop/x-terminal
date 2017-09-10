@@ -1,3 +1,10 @@
+## 1.0.3
+* Forgot to update changelog.
+
+## 1.0.2
+* Workaround for the problem with using less on Linux with atom-xterm.
+* Use xterm-256color instead for default TERM.
+
 ## 1.0.1
 * Update badges.
 * Signup to Greenkeeper.
