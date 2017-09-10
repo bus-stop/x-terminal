@@ -1,3 +1,6 @@
+## 1.0.6
+Remove commit attempting to fix [#5](https://github.com/amejia1/atom-xterm/issues/5). Issue remains.
+
 ## 1.0.5
 * No changes, just earlier problem publishing package through apm.
 
