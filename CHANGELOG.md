@@ -1,3 +1,6 @@
+## 1.0.5
+* No changes, just earlier problem publishing package through apm.
+
 ## 1.0.4
 * Fix issue with updating atom-xterm on Windows ([#5](https://github.com/amejia1/atom-xterm/issues/5)).
 
