@@ -32,6 +32,12 @@ function main() {
         process.exit(0);
     }
 
+    console.log('=== Start process.argv log ===');
+    process.argv.forEach((val, index) => {
+        console.log(`${index}: ${val}`);
+    });
+    console.log('=== End process.argv log ===');
+    console.log('process.cwd(): ' + process.cwd());
     console.log('=== Start process.env log ===');
     Object.keys(process.env).forEach(function(key) {
         console.log(key + ' = ' + process.env[key]);
