@@ -1,3 +1,6 @@
+## 1.0.15
+* Just adding a new release to check updates on Windows succeed without issue.
+
 ## 1.0.14
 * Handle case better when home directory is simply set to .node-gyp directory.
 
