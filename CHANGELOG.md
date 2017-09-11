@@ -1,3 +1,6 @@
+## 1.0.9
+* Add more log messages in the 'move-winpty-binaries.js' script.
+
 ## 1.0.8
 * Just adding a new release to check updates on Windows succeed without issue.
 
