@@ -44,7 +44,7 @@
     "tmp": "^0.0.33"
   },
   "scripts": {
-    "move-winpty-binaries": "node lib/scripts/move-winpty-binaries.js",
+    "move-winpty-binaries": "node scripts/move-winpty-binaries.js",
     "preinstall": "npm run move-winpty-binaries",
     "preuninstall": "npm run move-winpty-binaries"
   }
