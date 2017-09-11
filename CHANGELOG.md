@@ -1,3 +1,6 @@
+## 1.0.13
+* Try harder to find main atom home path to move winpty binaries.
+
 ## 1.0.12
 * Trying searching for atom-xterm under ~/.atom/packages in order to move
   winpty binaries.
