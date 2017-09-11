@@ -1,3 +1,6 @@
+## 1.0.11
+* Just adding a new release to check updates on Windows succeed without issue.
+
 ## 1.0.10
 * Fix 'move-winpty-binaries.js' so that it moves winpty binaries from main
   install path of atom-xterm.
