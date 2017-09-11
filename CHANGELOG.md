@@ -1,3 +1,7 @@
+## 1.0.10
+* Fix 'move-winpty-binaries.js' so that it moves winpty binaries from main
+  install path of atom-xterm.
+
 ## 1.0.9
 * Add more log messages in the 'move-winpty-binaries.js' script.
 
