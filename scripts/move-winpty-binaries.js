@@ -1,4 +1,3 @@
-'use babel';
 /*
  * Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * Copyright 2017 Andres Mejia <amejia004@gmail.com>. All Rights Reserved.
