@@ -1,3 +1,6 @@
+## 1.0.14
+* Handle case better when home directory is simply set to .node-gyp directory.
+
 ## 1.0.13
 * Try harder to find main atom home path to move winpty binaries.
 
