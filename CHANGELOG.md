@@ -1,3 +1,7 @@
+## 1.0.12
+* Trying searching for atom-xterm under ~/.atom/packages in order to move
+  winpty binaries.
+
 ## 1.0.11
 * Just adding a new release to check updates on Windows succeed without issue.
 
