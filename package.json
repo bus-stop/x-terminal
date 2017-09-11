@@ -42,5 +42,10 @@
     "atom-jasmine2-test-runner": "^1.1.2",
     "jasmine-spec-reporter": "^4.2.1",
     "tmp": "^0.0.33"
+  },
+  "scripts": {
+    "move-winpty-binaries": "node lib/scripts/move-winpty-binaries.js",
+    "preinstall": "npm run move-winpty-binaries",
+    "preuninstall": "npm run move-winpty-binaries"
   }
 }
