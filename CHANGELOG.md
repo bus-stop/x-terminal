@@ -1,3 +1,6 @@
+## 1.0.8
+* Just adding a new release to check updates on Windows succeed without issue.
+
 ## 1.0.7
 * Add preinstall and preuninstall scripts which will move winpty binaries
   when updating atom-xterm package. This should fix [#5](https://github.com/amejia1/atom-xterm/issues/5).
