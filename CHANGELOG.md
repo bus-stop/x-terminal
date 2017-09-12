@@ -1,3 +1,6 @@
+## 1.0.20
+* Some basic maintenance, no new features.
+
 ## 1.0.19
 * Replace the 'alt-shift-\*' hotkeys.
   Use the same hotkeys as those from Bash from Git for Windows.
