@@ -1,3 +1,8 @@
+## 1.0.16
+* Moving move-winpty-binaries.js script outside of lib directory.
+* Add more debugging output in move-winpty-binaries.js script.
+* Make all keyboard shortcuts the same for all platforms.
+
 ## 1.0.15
 * Just adding a new release to check updates on Windows succeed without issue.
 
