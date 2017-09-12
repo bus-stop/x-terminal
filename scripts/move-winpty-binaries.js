@@ -20,6 +20,11 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
+function mkdtempSyncInAtomHome(atomHome) {
+    if (!atomHome) throw 'must provide atomHome parameter';
+    return fs.mkdtempSync(path.join(atomHome, 'tmp-'));
+}
+
 function main() {
     console.log('Executing script at \'' + __filename + '\'');
     // Proceed only for Windows platforms.
@@ -88,13 +93,13 @@ function main() {
     let nodePtyBuildReleasePath = path.join(nodePtyPath, 'build', 'Release');
     let nodePtyBuildDebugPath = path.join(nodePtyPath, 'build', 'Debug');
     if (fs.existsSync(nodePtyBuildReleasePath)) {
-        let tmpdir = fs.mkdtempSync(os.tmpdir() + path.sep);
+        let tmpdir = mkdtempSyncInAtomHome(atomHome);
         let newPath = path.join(tmpdir, 'Release');
         console.log('Moving \'' + nodePtyBuildReleasePath + '\' to \'' + newPath + '\'.');
         fs.renameSync(nodePtyBuildReleasePath, newPath);
     }
     if (fs.existsSync(nodePtyBuildDebugPath)) {
-        let tmpdir = fs.mkdtempSync(os.tmpdir() + path.sep);
+        let tmpdir = mkdtempSyncInAtomHome(atomHome);
         let newPath = path.join(tmpdir, 'Debug');
         console.log('Moving \'' + nodePtyBuildDebugPath + '\' to \'' + newPath + '\'.')
         fs.renameSync(nodePtyBuildDebugPath, newPath);
