@@ -1,3 +1,6 @@
+## 1.0.18
+* Fix updates on Windows for users that install Atom in a non-standard drive.
+
 ## 1.0.17
 * Use a simpler method to escape needed characters in RegExp in
   move-winpty-binaries.js script.
