@@ -1,3 +1,7 @@
+## 1.0.17
+* Use a simpler method to escape needed characters in RegExp in
+  move-winpty-binaries.js script.
+
 ## 1.0.16
 * Moving move-winpty-binaries.js script outside of lib directory.
 * Add more debugging output in move-winpty-binaries.js script.
