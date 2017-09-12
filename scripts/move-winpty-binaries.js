@@ -20,10 +20,6 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-function escapeRegExp(str) {
-    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-}
-
 function main() {
     console.log('Executing script at \'' + __filename + '\'');
     // Proceed only for Windows platforms.
@@ -58,7 +54,7 @@ function main() {
         if (!fs.existsSync(atomHome)) {
             console.log('atomHome = \'' + atomHome + '\' doesn\'t exist.');
             console.log('Checking if home directory is set to .node-gyp path');
-            let regexp = new RegExp(escapeRegExp(path.join('.atom', '.node-gyp')) + '$');
+            let regexp = new RegExp(path.join('.atom', '.node-gyp').replace(/\.\\/g, "\\$&") + '$');
             if (regexp.test(homeDir)) {
                 homeDir = path.resolve(path.join(homeDir, '..', '..'));
                 console.log('Setting homeDir = \'' + homeDir + '\' from two directories lower from previous homeDir.');
