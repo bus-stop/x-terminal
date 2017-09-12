@@ -15,9 +15,9 @@
     },
     "atom-xterm": {
         "ctrl-shift-c": "atom-xterm:copy",
-        "alt-shift-c": "atom-xterm:copy",
+        "ctrl-insert": "atom-xterm:copy",
         "ctrl-shift-v": "atom-xterm:paste",
-        "alt-shift-v": "atom-xterm:paste",
+        "shift-insert": "atom-xterm:paste",
         "cmd-c": "atom-xterm:copy",
         "cmd-v": "atom-xterm:paste"
     }
