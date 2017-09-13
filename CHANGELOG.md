@@ -1,3 +1,7 @@
+## 1.0.22
+* Import the needed xterm.css through the atom-xterm.less stylesheet instead
+  of when the package is loaded.
+
 ## 1.0.21
 * Fixing busted upload of previous version.
 
