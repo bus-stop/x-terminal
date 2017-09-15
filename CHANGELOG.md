@@ -1,3 +1,6 @@
+## 1.0.24
+* Have the cursor blink by default.
+
 ## 1.0.23
 * Some basic maintenance, no new features.
 
