@@ -1,3 +1,14 @@
+## 2.0.0
+* Update the plugin so that it uses all asynchronous methods when operating.
+  This mainly meant replacing all the 'sync' methods from the 'fs' module with
+  their main async counterparts. This will make the atom-xterm plugin more
+  responsive.
+* Have atom-xterm's 'open' method also be asynchronous.
+* Use the same min/max range for the terminals' font size as that of the main
+  editor.
+* Link to the homepage from the README.md file.
+* Other basic maintenance.
+
 ## 1.0.24
 * Have the cursor blink by default.
 
