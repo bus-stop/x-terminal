@@ -31,16 +31,24 @@ describe('AtomXtermElement', () => {
     let tmpdirObj;
 
     let createNewElement = (uri='atom-xterm://somesessionid/') => {
-        let terminals_set = new Set;
-        let model = new AtomXtermModel(uri, terminals_set);
-        model.pane = jasmine.createSpyObj('pane',
-            ['removeItem', 'getActiveItem', 'destroyItem']);
-        let element = new AtomXtermElement;
-        element.initialize(model);
-        return element;
+        return new Promise((resolve, reject) => {
+            let terminals_set = new Set;
+            let model = new AtomXtermModel({
+                uri: uri,
+                terminals_set: terminals_set
+            });
+            model.initializedPromise.then(() => {
+                model.pane = jasmine.createSpyObj('pane',
+                    ['removeItem', 'getActiveItem', 'destroyItem']);
+                let element = new AtomXtermElement;
+                element.initialize(model).then(() => {
+                    resolve(element);
+                });
+            });
+        });
     };
 
-    beforeEach(() => {
+    beforeEach((done) => {
         atom.config.clear();
         atom.project.setPaths([]);
         let ptyProcess = jasmine.createSpyObj('ptyProcess',
@@ -48,12 +56,18 @@ describe('AtomXtermElement', () => {
         ptyProcess.process = jasmine.createSpy('process')
             .and.returnValue('sometestprocess');
         spyOn(node_pty, 'spawn').and.returnValue(ptyProcess);
-        this.element = createNewElement();
-        this.tmpdirObj = tmp.dirSync({'unsafeCleanup': true});
+        createNewElement().then((element) => {
+            this.element = element;
+            tmp.dir({'unsafeCleanup': true}, (err, path, cleanupCallback) => {
+                this.tmpdir = path;
+                this.tmpdirCleanupCallback = cleanupCallback;
+                done();
+            });
+        });
     });
 
     afterEach(() => {
-        this.tmpdirObj.removeCallback();
+        this.tmpdirCleanupCallback();
         atom.config.clear();
     });
 
@@ -70,9 +84,11 @@ describe('AtomXtermElement', () => {
         expect(this.element.getAttribute('session-parameters')).toBe('');
     });
 
-    it('initialize(model) check session-parameters when parameters set', () => {
-        let element = createNewElement(uri='atom-xterm://somesessionid/?foo=bar');
-        expect(element.getAttribute('session-parameters')).toBe('foo=bar');
+    it('initialize(model) check session-parameters when parameters set', (done) => {
+        createNewElement(uri='atom-xterm://somesessionid/?foo=bar').then((element) => {
+            expect(element.getAttribute('session-parameters')).toBe('foo=bar');
+            done();
+        });
     });
 
     it('destroy() check ptyProcess killed', () => {
@@ -96,12 +112,14 @@ describe('AtomXtermElement', () => {
         expect(this.element.getShellCommand()).toBe(expected);
     });
 
-    it('getShellCommand() command set in uri', () => {
+    it('getShellCommand() command set in uri', (done) => {
         let expected = 'somecommand';
         let params = new URLSearchParams({'command': expected});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element = createNewElement(uri=url.href);
-        expect(this.element.getShellCommand()).toBe(expected);
+        createNewElement(uri=url.href).then((element) => {
+            expect(element.getShellCommand()).toBe(expected);
+            done();
+        });
     });
 
     it('getArgs()', () => {
@@ -114,12 +132,14 @@ describe('AtomXtermElement', () => {
         expect(this.element.getArgs()).toEqual(expected);
     });
 
-    it('getArgs() args set in uri', () => {
+    it('getArgs() args set in uri', (done) => {
         let expected = ['some', 'extra', 'args'];
         let params = new URLSearchParams({'args': JSON.stringify(expected)});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element = createNewElement(uri=url.href);
-        expect(this.element.getArgs()).toEqual(expected);
+        createNewElement(uri=url.href).then((element) => {
+            expect(element.getArgs()).toEqual(expected);
+            done();
+        });
     });
 
     it('getArgs() throw exception when args is not an array', () => {
@@ -138,59 +158,122 @@ describe('AtomXtermElement', () => {
         expect(this.element.getTermType()).toBe(expected);
     });
 
-    it('getTermType() name set in uri', () => {
+    it('getTermType() name set in uri', (done) => {
         let expected = 'sometermtype';
         let params = new URLSearchParams({'name': expected});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element = createNewElement(uri=url.href);
-        expect(this.element.getTermType()).toBe(expected);
+        createNewElement(uri=url.href).then((element) => {
+            expect(element.getTermType()).toBe(expected);
+            done();
+        })
     });
 
-    it('getCwd()', () => {
-        expect(this.element.getCwd()).toBeNull();
+    it('checkPathIsDirectory() no path given', (done) => {
+        this.element.checkPathIsDirectory().then((isDirectory) => {
+            expect(isDirectory).toBe(false);
+            done();
+        });
     });
 
-    it('getCwd() cwd set in config', () => {
-        let expected = this.tmpdirObj.name;
+    it('checkPathIsDirectory() path set to undefined', (done) => {
+        this.element.checkPathIsDirectory(undefined).then((isDirectory) => {
+            expect(isDirectory).toBe(false);
+            done();
+        });
+    });
+
+    it('checkPathIsDirectory() path set to null', (done) => {
+        this.element.checkPathIsDirectory(null).then((isDirectory) => {
+            expect(isDirectory).toBe(false);
+            done();
+        });
+    });
+
+    it('checkPathIsDirectory() path set to tmpdir', (done) => {
+        this.element.checkPathIsDirectory(this.tmpdir).then((isDirectory) => {
+            expect(isDirectory).toBe(true);
+            done();
+        });
+    });
+
+    it('checkPathIsDirectory() path set to non-existent dir', (done) => {
+        this.element.checkPathIsDirectory(path.join(this.tmpdir, 'non-existent-dir')).then((isDirectory) => {
+            expect(isDirectory).toBe(false);
+            done();
+        });
+    });
+
+    it('getCwd()', (done) => {
+        this.element.getCwd().then((cwd) => {
+            expect(cwd).toBeNull();
+            done();
+        });
+    });
+
+    it('getCwd() cwd set in config', (done) => {
+        let expected = this.tmpdir;
         atom.config.set('atom-xterm.spawnPtySettings.cwd', expected);
-        expect(this.element.getCwd()).toBe(expected);
+        this.element.getCwd().then((cwd) => {
+            expect(cwd).toBe(expected);
+            done();
+        });
     });
 
-    it('getCwd() cwd set in uri', () => {
-        let expected = this.tmpdirObj.name;
+    it('getCwd() cwd set in uri', (done) => {
+        let expected = this.tmpdir;
         let params = new URLSearchParams({'cwd': expected});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element = createNewElement(uri=url.href);
-        expect(this.element.getCwd()).toBe(expected);
+        createNewElement(uri=url.href).then((element) => {
+            element.getCwd().then((cwd) => {
+                expect(cwd).toBe(expected);
+                done();
+            });
+        });
     });
 
-    it('getCwd() model getPath() returns valid path', () => {
-        spyOn(this.element.model, 'getPath').and.returnValue(this.tmpdirObj.name);
-        expect(this.element.getCwd()).toBe(this.tmpdirObj.name);
+    it('getCwd() model getPath() returns valid path', (done) => {
+        spyOn(this.element.model, 'getPath').and.returnValue(this.tmpdir);
+        this.element.getCwd().then((cwd) => {
+            expect(cwd).toBe(this.tmpdir);
+            done();
+        });
     });
 
-    it('getCwd() model getPath() returns invalid path', () => {
-        spyOn(this.element.model, 'getPath').and.returnValue(path.join(this.tmpdirObj.name, 'non-existent-dir'));
-        expect(this.element.getCwd()).toBeNull();
+    it('getCwd() model getPath() returns invalid path', (done) => {
+        spyOn(this.element.model, 'getPath').and.returnValue(path.join(this.tmpdir, 'non-existent-dir'));
+        this.element.getCwd().then((cwd) => {
+            expect(cwd).toBeNull();
+            done();
+        });
     });
 
-    it('getCwd() non-existent cwd set in config', () => {
-        let dir = path.join(this.tmpdirObj.name, 'non-existent-dir');
+    it('getCwd() non-existent cwd set in config', (done) => {
+        let dir = path.join(this.tmpdir, 'non-existent-dir');
         atom.config.set('atom-xterm.spawnPtySettings.cwd', dir);
-        expect(this.element.getCwd()).toBeNull();
+        this.element.getCwd().then((cwd) => {
+            expect(cwd).toBeNull();
+            done();
+        });
     });
 
-    it('getCwd() non-existent cwd set in uri', () => {
-        let dir = path.join(this.tmpdirObj.name, 'non-existent-dir');
+    it('getCwd() non-existent cwd set in uri', (done) => {
+        let dir = path.join(this.tmpdir, 'non-existent-dir');
         let params = new URLSearchParams({'cwd': dir});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element = createNewElement(uri=url.href);
-        expect(this.element.getCwd()).toBeNull();
+        createNewElement(uri=url.href).then((element) => {
+            this.element.getCwd().then((cwd) => {
+                expect(cwd).toBeNull();
+                done();
+            });
+        });
     });
 
-    it('getCwd() non-existent project path added', () => {
-        spyOn(atom.project, 'getPaths').and.returnValue([path.join(this.tmpdirObj.name, 'non-existent-dir')]);
-        expect(this.element.getCwd()).toBeNull();
+    it('getCwd() non-existent project path added', (done) => {
+        spyOn(atom.project, 'getPaths').and.returnValue([path.join(this.tmpdir, 'non-existent-dir')]);
+        this.element.getCwd().then((cwd) => {
+            expect(cwd).toBeNull();
+            done();
+        });
     });
 
     it('getEnv()', () => {
@@ -203,12 +286,14 @@ describe('AtomXtermElement', () => {
         expect(this.element.getEnv()).toEqual(expected);
     });
 
-    it('getEnv() env set in uri', () => {
+    it('getEnv() env set in uri', (done) => {
         let expected = {'var1': 'value1', 'var2': 'value2', 'var2': 'value2'};
         let params = new URLSearchParams({'env': JSON.stringify(expected)});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element = createNewElement(uri=url.href);
-        expect(this.element.getEnv()).toEqual(expected);
+        createNewElement(uri=url.href).then((element) => {
+            expect(element.getEnv()).toEqual(expected);
+            done();
+        })
     });
 
     it('getEnv() throw exception when env is not an object', () => {
@@ -224,12 +309,14 @@ describe('AtomXtermElement', () => {
         expect(this.element.getEnv()['var2']).toEqual(expected['var2']);
     });
 
-    it('getEnv() setEnv set in uri', () => {
+    it('getEnv() setEnv set in uri', (done) => {
         let expected = {'var2': 'value2'};
         let params = new URLSearchParams({'env': JSON.stringify({'var1': 'value1'}), 'setEnv': JSON.stringify(expected)});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element = createNewElement(uri=url.href);
-        expect(this.element.getEnv()['var2']).toEqual(expected['var2']);
+        createNewElement(uri=url.href).then((element) => {
+            expect(element.getEnv()['var2']).toEqual(expected['var2']);
+            done();
+        });
     });
 
     it('getEnv() deleteEnv set in config', () => {
@@ -238,11 +325,13 @@ describe('AtomXtermElement', () => {
         expect(this.element.getEnv()['var1']).toBe(undefined);
     });
 
-    it('getEnv() deleteEnv set in uri', () => {
+    it('getEnv() deleteEnv set in uri', (done) => {
         let params = new URLSearchParams({'env': JSON.stringify({'var1': 'value1'}), 'deleteEnv': JSON.stringify(['var1'])});
         let url = new URL('atom-xterm://?' + params.toString());
-        this.element = createNewElement(uri=url.href);
-        expect(this.element.getEnv()['var1']).toBe(undefined);
+        createNewElement(uri=url.href).then((element) => {
+            expect(this.element.getEnv()['var1']).toBe(undefined);
+            done();
+        });
     });
 
     it('getEnv() deleteEnv has precendence over senEnv', () => {

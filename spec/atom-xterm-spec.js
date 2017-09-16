@@ -28,40 +28,52 @@ describe('AtomXterm', () => {
     let atomXtermPackage;
 
     let createNewModel = (package_module, uri=default_uri) => {
-        let model = new AtomXtermModel(uri, package_module.terminals_set);
-        model.pane = jasmine.createSpyObj('pane',
-            ['destroyItem']);
-        model.pane.getActiveItem = jasmine.createSpy('getActiveItem')
-            .and.returnValue(model);
-        spyOn(model, 'exit').and.callThrough();
-        spyOn(model, 'copyFromTerminal').and.returnValue('some text from terminal');
-        spyOn(model, 'pasteToTerminal');
-        spyOn(model, 'clickOnCurrentAnchor');
-        spyOn(model, 'getCurrentAnchorHref');
-        return model;
+        return new Promise((resolve, reject) => {
+            let model = new AtomXtermModel({
+                uri: uri,
+                terminals_set: package_module.terminals_set
+            });
+            model.initializedPromise.then(() => {
+                model.pane = jasmine.createSpyObj('pane',
+                    ['destroyItem']);
+                model.pane.getActiveItem = jasmine.createSpy('getActiveItem')
+                    .and.returnValue(model);
+                spyOn(model, 'exit').and.callThrough();
+                spyOn(model, 'copyFromTerminal').and.returnValue('some text from terminal');
+                spyOn(model, 'pasteToTerminal');
+                spyOn(model, 'clickOnCurrentAnchor');
+                spyOn(model, 'getCurrentAnchorHref');
+                resolve(model);
+            });
+        });
     };
 
     let createNewElement = (package_module) => {
-        let element = new AtomXtermElement;
-        element.initialize(createNewModel(package_module));
-        return element;
+        return new Promise((resolve, reject) => {
+            let element = new AtomXtermElement;
+            createNewModel(package_module).then((model) => {
+                element.initialize(model).then(() => {
+                    resolve(element);
+                });
+            });
+        });
     };
 
     beforeEach((done) => {
-        workspaceElement = atom.views.getView(atom.workspace);
+        this.workspaceElement = atom.views.getView(atom.workspace);
         atom.packages.activatePackage('atom-xterm').then(() => {
-            atomXtermPackage = atom.packages.getActivePackage('atom-xterm');
-            spyOn(atomXtermPackage.mainModule, 'generateNewUri').and.returnValue(default_uri);
-            atomXtermPackage.mainModule.config.spawnPtySettings.properties.command.default = config.getDefaultShellCommand();
-            atomXtermPackage.mainModule.config.spawnPtySettings.properties.name.default = config.getDefaultTermType();
-            atomXtermPackage.mainModule.config.spawnPtySettings.properties.cwd.default = config.getDefaultCwd();
+            this.atomXtermPackage = atom.packages.getActivePackage('atom-xterm');
+            spyOn(this.atomXtermPackage.mainModule, 'generateNewUri').and.returnValue(default_uri);
+            spyOn(atom.workspace, 'open').and.callFake(atom.workspace.openSync);
+            this.atomXtermPackage.mainModule.config.spawnPtySettings.properties.command.default = config.getDefaultShellCommand();
+            this.atomXtermPackage.mainModule.config.spawnPtySettings.properties.name.default = config.getDefaultTermType();
+            this.atomXtermPackage.mainModule.config.spawnPtySettings.properties.cwd.default = config.getDefaultCwd();
             done();
         }, (reason) => {
             done();
             throw reason;
         });
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:need-this-to-activate-package-for-tests-do-not-remove');
-        spyOn(atom.workspace, 'open').and.callFake(atom.workspace.openSync);
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:need-this-to-activate-package-for-tests-do-not-remove');
     });
 
     afterEach(() => {
@@ -73,223 +85,223 @@ describe('AtomXterm', () => {
     });
 
     it('deactivate package', () => {
-        atomXtermPackage.deactivate();
-        expect(atomXtermPackage.mainActivated).toBe(false);
+        this.atomXtermPackage.deactivate();
+        expect(this.atomXtermPackage.mainActivated).toBe(false);
     });
 
     it('generateNewUri() starts with atom-xterm://', () => {
-        atomXtermPackage.mainModule.generateNewUri.and.callThrough();
-        expect(atomXtermPackage.mainModule.generateNewUri().startsWith('atom-xterm://')).toBe(true);
+        this.atomXtermPackage.mainModule.generateNewUri.and.callThrough();
+        expect(this.atomXtermPackage.mainModule.generateNewUri().startsWith('atom-xterm://')).toBe(true);
     });
 
     it('generateNewUri() ends with /', () => {
-        atomXtermPackage.mainModule.generateNewUri.and.callThrough();
-        expect(atomXtermPackage.mainModule.generateNewUri().endsWith('/')).toBe(true);
+        this.atomXtermPackage.mainModule.generateNewUri.and.callThrough();
+        expect(this.atomXtermPackage.mainModule.generateNewUri().endsWith('/')).toBe(true);
     });
 
     it('run atom-xterm:open and check arguments', () => {
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
         expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {}]]);
     });
 
     it('run atom-xterm:open and check element exists', () => {
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open');
-        expect(workspaceElement.querySelector('atom-xterm')).not.toBeNull();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
+        expect(this.workspaceElement.querySelector('atom-xterm')).not.toBeNull();
     });
 
     it('run atom-xterm:open-split-up and check arguments', () => {
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open-split-up');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-up');
         expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {'split': 'up'}]]);
     });
 
     it('run atom-xterm:open-split-up and check element exists', () => {
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open-split-up');
-        expect(workspaceElement.querySelector('atom-xterm')).not.toBeNull();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-up');
+        expect(this.workspaceElement.querySelector('atom-xterm')).not.toBeNull();
     });
 
     it('run atom-xterm:open-split-down and check arguments', () => {
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open-split-down');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-down');
         expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {'split': 'down'}]]);
     });
 
     it('run atom-xterm:open-split-down and check element exists', () => {
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open-split-down');
-        expect(workspaceElement.querySelector('atom-xterm')).not.toBeNull();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-down');
+        expect(this.workspaceElement.querySelector('atom-xterm')).not.toBeNull();
     });
 
     it('run atom-xterm:open-split-left and check arguments', () => {
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open-split-left');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-left');
         expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {'split': 'left'}]]);
     });
 
     it('run atom-xterm:open-split-left and check element exists', () => {
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open-split-left');
-        expect(workspaceElement.querySelector('atom-xterm')).not.toBeNull();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-left');
+        expect(this.workspaceElement.querySelector('atom-xterm')).not.toBeNull();
     });
 
     it('run atom-xterm:open-split-right and check arguments', () => {
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open-split-right');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-right');
         expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {'split': 'right'}]]);
     });
 
     it('run atom-xterm:open-split-down and check element exists', () => {
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open-split-right');
-        expect(workspaceElement.querySelector('atom-xterm')).not.toBeNull();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-right');
+        expect(this.workspaceElement.querySelector('atom-xterm')).not.toBeNull();
     });
 
     it('run atom-xterm:reorganize no terminals in workspace', () => {
-        spyOn(atomXtermPackage.mainModule, 'reorganize').and.callThrough();
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:reorganize');
-        expect(atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['current']]);
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['current']]);
     });
 
     it('run atom-xterm:reorganize one terminal in workspace', () => {
-        spyOn(atomXtermPackage.mainModule, 'reorganize').and.callThrough();
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open');
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:reorganize');
-        expect(atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['current']]);
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['current']]);
     });
 
     it('run atom-xterm:reorganize-top no terminals in workspace', () => {
-        spyOn(atomXtermPackage.mainModule, 'reorganize').and.callThrough();
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:reorganize-top');
-        expect(atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['top']]);
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-top');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['top']]);
     });
 
     it('run atom-xterm:reorganize-top one terminal in workspace', () => {
-        spyOn(atomXtermPackage.mainModule, 'reorganize').and.callThrough();
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open');
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:reorganize-top');
-        expect(atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['top']]);
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-top');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['top']]);
     });
 
     it('run atom-xterm:reorganize-bottom no terminals in workspace', () => {
-        spyOn(atomXtermPackage.mainModule, 'reorganize').and.callThrough();
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:reorganize-bottom');
-        expect(atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['bottom']]);
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-bottom');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['bottom']]);
     });
 
     it('run atom-xterm:reorganize-bottom one terminal in workspace', () => {
-        spyOn(atomXtermPackage.mainModule, 'reorganize').and.callThrough();
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open');
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:reorganize-bottom');
-        expect(atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['bottom']]);
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-bottom');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['bottom']]);
     });
 
     it('run atom-xterm:reorganize-left no terminals in workspace', () => {
-        spyOn(atomXtermPackage.mainModule, 'reorganize').and.callThrough();
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:reorganize-left');
-        expect(atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['left']]);
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-left');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['left']]);
     });
 
     it('run atom-xterm:reorganize-left one terminal in workspace', () => {
-        spyOn(atomXtermPackage.mainModule, 'reorganize').and.callThrough();
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open');
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:reorganize-left');
-        expect(atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['left']]);
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-left');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['left']]);
     });
 
     it('run atom-xterm:reorganize-right no terminals in workspace', () => {
-        spyOn(atomXtermPackage.mainModule, 'reorganize').and.callThrough();
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:reorganize-right');
-        expect(atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['right']]);
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-right');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['right']]);
     });
 
     it('run atom-xterm:reorganize-right one terminal in workspace', () => {
-        spyOn(atomXtermPackage.mainModule, 'reorganize').and.callThrough();
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open');
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:reorganize-right');
-        expect(atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['right']]);
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-right');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['right']]);
     });
 
     it('run atom-xterm:close-all no terminals in workspace', () => {
-        spyOn(atomXtermPackage.mainModule, 'exitAllTerminals').and.callThrough();
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:close-all');
-        expect(atomXtermPackage.mainModule.exitAllTerminals).toHaveBeenCalled();
+        spyOn(this.atomXtermPackage.mainModule, 'exitAllTerminals').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:close-all');
+        expect(this.atomXtermPackage.mainModule.exitAllTerminals).toHaveBeenCalled();
     });
 
     it('run atom-xterm:close-all one terminal in workspace', () => {
-        spyOn(atomXtermPackage.mainModule, 'exitAllTerminals').and.callThrough();
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open');
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:close-all');
-        expect(atomXtermPackage.mainModule.exitAllTerminals).toHaveBeenCalled();
+        spyOn(this.atomXtermPackage.mainModule, 'exitAllTerminals').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:close-all');
+        expect(this.atomXtermPackage.mainModule.exitAllTerminals).toHaveBeenCalled();
     });
 
-    it('run atom-xterm:close', () => {
-        let element = createNewElement(
-            package_module=atomXtermPackage.mainModule
-        );
-        spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
-        atom.commands.dispatch(element, 'atom-xterm:close');
-        expect(element.model.exit).toHaveBeenCalled();
+    it('run atom-xterm:close', (done) => {
+        createNewElement(package_module=this.atomXtermPackage.mainModule).then((element) => {
+            spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
+            atom.commands.dispatch(element, 'atom-xterm:close');
+            expect(element.model.exit).toHaveBeenCalled();
+            done();
+        });
     });
 
-    it('run atom-xterm:copy', () => {
-        let element = createNewElement(
-            package_module=atomXtermPackage.mainModule
-        );
-        spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
-        spyOn(atom.clipboard, 'write');
-        atom.commands.dispatch(element, 'atom-xterm:copy');
-        expect(atom.clipboard.write.calls.allArgs()).toEqual([['some text from terminal']]);
+    it('run atom-xterm:copy', (done) => {
+        createNewElement(package_module=this.atomXtermPackage.mainModule).then((element) => {
+            spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
+            spyOn(atom.clipboard, 'write');
+            atom.commands.dispatch(element, 'atom-xterm:copy');
+            expect(atom.clipboard.write.calls.allArgs()).toEqual([['some text from terminal']]);
+            done();
+        });
     });
 
-    it('run atom-xterm:paste', () => {
-        let element = createNewElement(
-            package_module=atomXtermPackage.mainModule
-        );
-        spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
-        atom.clipboard.write('some text from clipboard');
-        atom.commands.dispatch(element, 'atom-xterm:paste');
-        expect(element.model.pasteToTerminal.calls.allArgs()).toEqual([['some text from clipboard']]);
+    it('run atom-xterm:paste', (done) => {
+        createNewElement(package_module=this.atomXtermPackage.mainModule).then((element) => {
+            spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
+            atom.clipboard.write('some text from clipboard');
+            atom.commands.dispatch(element, 'atom-xterm:paste');
+            expect(element.model.pasteToTerminal.calls.allArgs()).toEqual([['some text from clipboard']]);
+            done();
+        });
     });
 
-    it('run atom-xterm:open-link', () => {
-        let element = createNewElement(
-            package_module=atomXtermPackage.mainModule
-        );
-        spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
-        atom.commands.dispatch(element, 'atom-xterm:open-link');
-        expect(element.model.clickOnCurrentAnchor).toHaveBeenCalled();
+    it('run atom-xterm:open-link', (done) => {
+        createNewElement(package_module=this.atomXtermPackage.mainModule).then((element) => {
+            spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
+            atom.commands.dispatch(element, 'atom-xterm:open-link');
+            expect(element.model.clickOnCurrentAnchor).toHaveBeenCalled();
+            done();
+        });
     });
 
-    it('run atom-xterm:copy-link', () => {
-        let element = createNewElement(
-            package_module=atomXtermPackage.mainModule
-        );
-        spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
-        atom.commands.dispatch(element, 'atom-xterm:copy-link');
-        expect(element.model.getCurrentAnchorHref).toHaveBeenCalled();
+    it('run atom-xterm:copy-link', (done) => {
+        createNewElement(package_module=this.atomXtermPackage.mainModule).then((element) => {
+            spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
+            atom.commands.dispatch(element, 'atom-xterm:copy-link');
+            expect(element.model.getCurrentAnchorHref).toHaveBeenCalled();
+            done();
+        });
     });
 
-    it('run atom-xterm:copy-link with returned link', () => {
-        let element = createNewElement(
-            package_module=atomXtermPackage.mainModule
-        );
-        spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
-        let expected = 'https://atom.io';
-        element.model.getCurrentAnchorHref.and.returnValue(expected);
-        spyOn(atom.clipboard, 'write');
-        atom.commands.dispatch(element, 'atom-xterm:copy-link');
-        expect(atom.clipboard.write.calls.allArgs()).toEqual([[expected]]);
+    it('run atom-xterm:copy-link with returned link', (done) => {
+        createNewElement(package_module=this.atomXtermPackage.mainModule).then((element) => {
+            spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
+            let expected = 'https://atom.io';
+            element.model.getCurrentAnchorHref.and.returnValue(expected);
+            spyOn(atom.clipboard, 'write');
+            atom.commands.dispatch(element, 'atom-xterm:copy-link');
+            expect(atom.clipboard.write.calls.allArgs()).toEqual([[expected]]);
+            done();
+        });
     });
 
-    it('run atom-xterm:copy-link no returned link', () => {
-        let element = createNewElement(
-            package_module=atomXtermPackage.mainModule
-        );
-        spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
-        let expected = null;
-        element.model.getCurrentAnchorHref.and.returnValue(expected);
-        spyOn(atom.clipboard, 'write');
-        atom.commands.dispatch(element, 'atom-xterm:copy-link');
-        expect(atom.clipboard.write).not.toHaveBeenCalled();
+    it('run atom-xterm:copy-link no returned link', (done) => {
+        createNewElement(package_module=this.atomXtermPackage.mainModule).then((element) => {
+            spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
+            let expected = null;
+            element.model.getCurrentAnchorHref.and.returnValue(expected);
+            spyOn(atom.clipboard, 'write');
+            atom.commands.dispatch(element, 'atom-xterm:copy-link');
+            expect(atom.clipboard.write).not.toHaveBeenCalled();
+            done();
+        });
     });
 
     it('refitAllTerminals()', () => {
         // Should basically not fail.
-        atom.commands.dispatch(workspaceElement, 'atom-xterm:open');
-        atomXtermPackage.mainModule.refitAllTerminals();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
+        this.atomXtermPackage.mainModule.refitAllTerminals();
     });
 
     describe('AtomXterm settings', () => {
