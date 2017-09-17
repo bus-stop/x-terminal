@@ -1,3 +1,15 @@
+## 2.1.0
+* Allow terminals to be restarted when they are selected to stay open on exit.
+  * For this change, a helpful message is displayed when the process has
+    exited.
+  * When the pty process has exited successfully, a simple "success" message
+    is displayed.
+  * When the pty process has exited with a failure code, an "error" message
+    is displayed along with the failure code.
+* Support relaunching terminals whenever Atom is restarted.
+  * This support is implemented through Atom's own API for deserializing
+    items (as described [here](http://flight-manual.atom.io/behind-atom/sections/serialization-in-atom/)).
+
 ## 2.0.0
 * Update the plugin so that it uses all asynchronous methods when operating.
   This mainly meant replacing all the 'sync' methods from the 'fs' module with

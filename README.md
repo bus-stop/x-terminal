@@ -26,6 +26,10 @@ apm install atom-xterm
 * Appropriate directory used automatically when opening terminals (terminals will start in appropriate project folder for example)
 * Simple notifications when a terminal has been modified
 * Basic notification of current process running inside a terminal
+* Support for quickly launching any program, for example Django's
+  [runserver](https://docs.djangoproject.com/en/stable/ref/django-admin/#runserver) command.
+* Support for quickly restarting terminal processes that have finished
+* Support for relaunching terminals when Atom restarts
 * Hotkeys to quickly open terminals
 * Hotkeys to quickly copy from and paste to terminal
 * Support for quickly clicking on or copying links inside terminal
