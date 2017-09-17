@@ -396,6 +396,145 @@ describe('AtomXtermElement', () => {
         expect(this.element.ptyProcess).toBeTruthy();
     });
 
+    it('restartPtyProcess() check new pty process created', () => {
+        let oldPtyProcess = this.element.ptyProcess
+        let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+            ['kill', 'write', 'resize', 'on']);
+        newPtyProcess.process = jasmine.createSpy('process')
+            .and.returnValue('sometestprocess');
+        node_pty.spawn.and.returnValue(newPtyProcess);
+        this.element.restartPtyProcess();
+        expect(this.element.ptyProcess).toBe(newPtyProcess);
+        expect(oldPtyProcess).not.toBe(this.element.ptyProcess);
+    });
+
+    it('ptyProcess exit handler code 0 don\'t leave open', () => {
+        let exitHandler;
+        for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+            if (arg[0] === 'exit') {
+                exitHandler = arg[1];
+                break;
+            }
+        }
+        spyOn(this.element.model, 'exit');
+        spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(false);
+        exitHandler(0);
+        expect(this.element.model.exit).toHaveBeenCalled();
+    });
+
+    it('ptyProcess exit handler code 1 don\'t leave open', () => {
+        let exitHandler;
+        for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+            if (arg[0] === 'exit') {
+                exitHandler = arg[1];
+                break;
+            }
+        }
+        spyOn(this.element.model, 'exit');
+        spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(false);
+        exitHandler(1);
+        expect(this.element.model.exit).toHaveBeenCalled();
+    });
+
+    it('ptyProcess exit handler code 0 leave open', () => {
+        let exitHandler;
+        for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+            if (arg[0] === 'exit') {
+                exitHandler = arg[1];
+                break;
+            }
+        }
+        spyOn(this.element.model, 'exit');
+        spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true);
+        exitHandler(0);
+        expect(this.element.model.exit).not.toHaveBeenCalled();
+    });
+
+    it('ptyProcess exit handler code 0 leave open check top message', () => {
+        let exitHandler;
+        for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+            if (arg[0] === 'exit') {
+                exitHandler = arg[1];
+                break;
+            }
+        }
+        spyOn(this.element.model, 'exit');
+        spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true);
+        exitHandler(0);
+        let successDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success');
+        let errorDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error');
+        expect(successDiv).not.toBeNull();
+        expect(errorDiv).toBeNull();
+    });
+
+    it('ptyProcess exit handler code 1 leave open check top message', () => {
+        let exitHandler;
+        for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+            if (arg[0] === 'exit') {
+                exitHandler = arg[1];
+                break;
+            }
+        }
+        spyOn(this.element.model, 'exit');
+        spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true);
+        exitHandler(1);
+        let successDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success');
+        let errorDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error');
+        expect(successDiv).toBeNull();
+        expect(errorDiv).not.toBeNull();
+    });
+
+    it('ptyProcess exit handler code 0 leave open check top message has restart button', () => {
+        let exitHandler;
+        for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+            if (arg[0] === 'exit') {
+                exitHandler = arg[1];
+                break;
+            }
+        }
+        spyOn(this.element.model, 'exit');
+        spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true);
+        exitHandler(0);
+        let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success');
+        let restartButton = messageDiv.querySelector('.btn-success');
+        expect(restartButton).not.toBeNull();
+    });
+
+    it('ptyProcess exit handler code 1 leave open check top message has restart button', () => {
+        let exitHandler;
+        for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+            if (arg[0] === 'exit') {
+                exitHandler = arg[1];
+                break;
+            }
+        }
+        spyOn(this.element.model, 'exit');
+        spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true);
+        exitHandler(1);
+        let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error');
+        let restartButton = messageDiv.querySelector('.btn-error');
+        expect(restartButton).not.toBeNull();
+    });
+
+    it('ptyProcess exit handler code 0 leave open check restart button click handler', () => {
+        let exitHandler;
+        for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+            if (arg[0] === 'exit') {
+                exitHandler = arg[1];
+                break;
+            }
+        }
+        spyOn(this.element.model, 'exit');
+        spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true);
+        exitHandler(0);
+        let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success');
+        let restartButton = messageDiv.querySelector('.btn-success');
+        spyOn(this.element, 'restartPtyProcess');
+        let mouseEvent = new MouseEvent('click');
+        restartButton.dispatchEvent(mouseEvent);
+        expect(this.element.restartPtyProcess).toHaveBeenCalled();
+    });
+
     it('refitTerminal()', () => {
         spyOn(this.element.terminal, 'fit');
         this.element.refitTerminal();
