@@ -22,5 +22,38 @@
 // for a full listing of what's available.
 @import "ui-variables";
 
+atom-xterm {
+    display: flex;
+    flex-direction: column;
+}
+
+.atom-xterm-term-container {
+  height: 90%;
+  width: 100%;
+  flex: auto;
+}
+
+.atom-xterm-notice-type(@tx; @bg) {
+  @atom-xterm-notice-background-color: mix(@bg, @base-background-color, 10%);
+  color: contrast(@atom-xterm-notice-background-color, darken(@tx, 20%), lighten(@tx, 20%) );
+  border-color: lighten(@atom-xterm-notice-background-color, 10%);
+  background-color: @atom-xterm-notice-background-color;
+  border-style: solid;
+  font-size: 14px;
+  height: 100%;
+  width: 100%;
+  flex: none;
+
+  .atom-xterm-link {
+    color: inherit;
+    text-decoration: underline;
+  }
+}
+
+.atom-xterm-notice-info { .atom-xterm-notice-type(@text-color-info; @background-color-info); }
+.atom-xterm-notice-success { .atom-xterm-notice-type(@text-color-success; @background-color-success); }
+.atom-xterm-notice-warning { .atom-xterm-notice-type(@text-color-warning; @background-color-warning); }
+.atom-xterm-notice-error { .atom-xterm-notice-type(@text-color-error; @background-color-error); }
+
 // The stylesheet from xterm.js will always be needed.
 @import (less) "../node_modules/xterm/dist/xterm.css";
