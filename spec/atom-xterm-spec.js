@@ -443,64 +443,61 @@ describe('AtomXterm', () => {
         });
     });
 
-    describe('AtomXterm settings', () => {
-        it('atom-xterm.spawnPtySettings.command', () => {
-            expect(atom.config.get('atom-xterm.spawnPtySettings.command')).toEqual(config.getDefaultShellCommand());
-        });
+    it('atom-xterm.spawnPtySettings.command', () => {
+        expect(atom.config.get('atom-xterm.spawnPtySettings.command')).toEqual(config.getDefaultShellCommand());
+    });
 
-        it('atom-xterm.spawnPtySettings.args', () => {
-            expect(atom.config.get('atom-xterm.spawnPtySettings.args')).toEqual('[]');
-        });
+    it('atom-xterm.spawnPtySettings.args', () => {
+        expect(atom.config.get('atom-xterm.spawnPtySettings.args')).toEqual('[]');
+    });
 
-        it('atom-xterm.spawnPtySettings.name', () => {
-            expect(atom.config.get('atom-xterm.spawnPtySettings.name')).toEqual(config.getDefaultTermType());
-        });
+    it('atom-xterm.spawnPtySettings.name', () => {
+        expect(atom.config.get('atom-xterm.spawnPtySettings.name')).toEqual(config.getDefaultTermType());
+    });
 
-        it('atom-xterm.spawnPtySettings.cwd', () => {
-            expect(atom.config.get('atom-xterm.spawnPtySettings.cwd')).toEqual(config.getDefaultCwd());
-        });
+    it('atom-xterm.spawnPtySettings.cwd', () => {
+        expect(atom.config.get('atom-xterm.spawnPtySettings.cwd')).toEqual(config.getDefaultCwd());
+    });
 
-        it('atom-xterm.spawnPtySettings.env', () => {
-            expect(atom.config.get('atom-xterm.spawnPtySettings.env')).toEqual('');
-        });
+    it('atom-xterm.spawnPtySettings.env', () => {
+        expect(atom.config.get('atom-xterm.spawnPtySettings.env')).toEqual('');
+    });
 
-        it('atom-xterm.spawnPtySettings.setEnv', () => {
-            expect(atom.config.get('atom-xterm.spawnPtySettings.setEnv')).toEqual('{}');
-        });
+    it('atom-xterm.spawnPtySettings.setEnv', () => {
+        expect(atom.config.get('atom-xterm.spawnPtySettings.setEnv')).toEqual('{}');
+    });
 
-        it('atom-xterm.spawnPtySettings.deleteEnv', () => {
-            expect(atom.config.get('atom-xterm.spawnPtySettings.deleteEnv')).toEqual('[]');
-        });
+    it('atom-xterm.spawnPtySettings.deleteEnv', () => {
+        expect(atom.config.get('atom-xterm.spawnPtySettings.deleteEnv')).toEqual('[]');
+    });
 
-        it('atom-xterm.spawnPtySettings.encoding', () => {
-            expect(atom.config.get('atom-xterm.spawnPtySettings.encoding')).toEqual('');
-        });
+    it('atom-xterm.spawnPtySettings.encoding', () => {
+        expect(atom.config.get('atom-xterm.spawnPtySettings.encoding')).toEqual('');
+    });
 
-        it('atom-xterm.terminalSettings.fontSize', () => {
-            expect(atom.config.get('atom-xterm.terminalSettings.fontSize')).toEqual(14);
-        });
+    it('atom-xterm.terminalSettings.fontSize', () => {
+        expect(atom.config.get('atom-xterm.terminalSettings.fontSize')).toEqual(14);
+    });
 
-        it('atom-xterm.terminalSettings.leaveOpenAfterExit', () => {
-            expect(atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit')).toBeFalsy();
-        });
+    it('atom-xterm.terminalSettings.leaveOpenAfterExit', () => {
+        expect(atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit')).toBeFalsy();
+    });
 
-        it('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', () => {
-            expect(atom.config.get('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup')).toBeFalsy();
-        });
+    it('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', () => {
+        expect(atom.config.get('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup')).toBeFalsy();
+    });
 
-        it('atom-xterm.terminalSettings.relaunchTerminalOnStartup', () => {
-            expect(atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup')).toBeFalsy();
-        });
+    it('atom-xterm.terminalSettings.relaunchTerminalOnStartup', () => {
+        expect(atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup')).toBeFalsy();
+    });
 
-        // Tests that set specific config values should go last.
-        it('atom-xterm.terminalSettings.fontSize minimum 1', () => {
-            atom.config.set('atom-xterm.terminalSettings.fontSize', 0);
-            expect(atom.config.get('atom-xterm.terminalSettings.fontSize')).toEqual(1);
-        });
+    it('atom-xterm.terminalSettings.fontSize minimum 1', () => {
+        atom.config.set('atom-xterm.terminalSettings.fontSize', 0);
+        expect(atom.config.get('atom-xterm.terminalSettings.fontSize')).toEqual(1);
+    });
 
-        it('atom-xterm.terminalSettings.fontSize maximum 100', () => {
-            atom.config.set('atom-xterm.terminalSettings.fontSize', 101);
-            expect(atom.config.get('atom-xterm.terminalSettings.fontSize')).toEqual(100);
-        });
+    it('atom-xterm.terminalSettings.fontSize maximum 100', () => {
+        atom.config.set('atom-xterm.terminalSettings.fontSize', 101);
+        expect(atom.config.get('atom-xterm.terminalSettings.fontSize')).toEqual(100);
     });
 });
