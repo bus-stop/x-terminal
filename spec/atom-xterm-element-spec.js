@@ -408,6 +408,31 @@ describe('AtomXtermElement', () => {
         expect(oldPtyProcess).not.toBe(this.element.ptyProcess);
     });
 
+    it('restartPtyProcess() check ptyProcessRunning set to true', () => {
+        let oldPtyProcess = this.element.ptyProcess
+        let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+            ['kill', 'write', 'resize', 'on']);
+        newPtyProcess.process = jasmine.createSpy('process')
+            .and.returnValue('sometestprocess');
+        node_pty.spawn.and.returnValue(newPtyProcess);
+        this.element.restartPtyProcess();
+        expect(this.element.ptyProcessRunning).toBe(true);
+    });
+
+    it('ptyProcess exit handler set ptyProcessRunning to false', () => {
+        let exitHandler;
+        for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+            if (arg[0] === 'exit') {
+                exitHandler = arg[1];
+                break;
+            }
+        }
+        spyOn(this.element.model, 'exit');
+        spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(false);
+        exitHandler(0);
+        expect(this.element.ptyProcessRunning).toBe(false);
+    });
+
     it('ptyProcess exit handler code 0 don\'t leave open', () => {
         let exitHandler;
         for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
@@ -539,6 +564,18 @@ describe('AtomXtermElement', () => {
         spyOn(this.element.terminal, 'fit');
         this.element.refitTerminal();
         expect(this.element.terminal.fit).toHaveBeenCalled();
+    });
+
+    it('ptyProcess resized while running when terminal resized', () => {
+        this.element.ptyProcessRunning = true;
+        this.element.terminal.resize(1, 1);
+        expect(this.element.ptyProcess.resize.calls.allArgs()).toEqual([[1, 1]]);
+    });
+
+    it('ptyProcess not resized when stopped when terminal resized', () => {
+        this.element.ptyProcessRunning = false;
+        this.element.terminal.resize(1, 1);
+        expect(this.element.ptyProcess.resize).not.toHaveBeenCalled();
     });
 
     it('focusOnTerminal()', () => {
