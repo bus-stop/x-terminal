@@ -412,7 +412,7 @@ describe('AtomXtermElement', () => {
         let element = document.createElement('a');
         let mouseEvent = new MouseEvent('mousedown');
         Object.defineProperty(mouseEvent, 'target', {value: element, enumerable: true});
-        this.element.dispatchEvent(mouseEvent);
+        this.element.terminalDiv.dispatchEvent(mouseEvent);
         expect(this.element.currentClickedAnchor).toBe(element);
     });
 
@@ -420,7 +420,7 @@ describe('AtomXtermElement', () => {
         let element = document.createElement('span');
         let mouseEvent = new MouseEvent('mousedown');
         Object.defineProperty(mouseEvent, 'target', {value: element, enumerable: true});
-        this.element.dispatchEvent(mouseEvent);
+        this.element.terminalDiv.dispatchEvent(mouseEvent);
         expect(this.element.currentClickedAnchor).toBeFalsy();
     });
 
