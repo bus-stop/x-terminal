@@ -17,6 +17,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+const { URL } = require('whatwg-url');
+
 import AtomXterm from '../lib/atom-xterm';
 import * as config from '../lib/atom-xterm-config';
 import AtomXtermElement from '../lib/atom-xterm-element';
@@ -60,6 +62,7 @@ describe('AtomXterm', () => {
     };
 
     beforeEach((done) => {
+        atom.config.clear();
         this.workspaceElement = atom.views.getView(atom.workspace);
         atom.packages.activatePackage('atom-xterm').then(() => {
             this.atomXtermPackage = atom.packages.getActivePackage('atom-xterm');
@@ -304,6 +307,142 @@ describe('AtomXterm', () => {
         this.atomXtermPackage.mainModule.refitAllTerminals();
     });
 
+    it('deserializeAtomXtermModel() relaunching terminals on startup not allowed relaunchTerminalOnStartup not set in uri', () => {
+        let url = new URL('atom-xterm://somesessionid/');
+        let serializedModel = {
+            deserializer: 'AtomXtermModel',
+            version: '2017-09-17',
+            uri: url.href,
+        }
+        let model = this.atomXtermPackage.mainModule.deserializeAtomXtermModel(serializedModel);
+        expect(model).toBeUndefined();
+    });
+
+    it('deserializeAtomXtermModel() relaunching terminals on startup not allowed relaunchTerminalOnStartup set in uri', () => {
+        let url = new URL('atom-xterm://somesessionid/');
+        url.searchParams.set('relaunchTerminalOnStartup', true);
+        let serializedModel = {
+            deserializer: 'AtomXtermModel',
+            version: '2017-09-17',
+            uri: url.href,
+        }
+        let model = this.atomXtermPackage.mainModule.deserializeAtomXtermModel(serializedModel);
+        expect(model).toBeUndefined();
+    });
+
+    it('deserializeAtomXtermModel() relaunching terminals on startup allowed relaunchTerminalOnStartup not set in uri', () => {
+        atom.config.set('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', true);
+        let url = new URL('atom-xterm://somesessionid/');
+        let serializedModel = {
+            deserializer: 'AtomXtermModel',
+            version: '2017-09-17',
+            uri: url.href,
+        }
+        let model = this.atomXtermPackage.mainModule.deserializeAtomXtermModel(serializedModel);
+        expect(model).toBeUndefined();
+    });
+
+    it('deserializeAtomXtermModel() relaunching terminals on startup allowed relaunchTerminalOnStartup set to true in uri', () => {
+        atom.config.set('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', true);
+        let url = new URL('atom-xterm://somesessionid/');
+        url.searchParams.set('relaunchTerminalOnStartup', true);
+        let serializedModel = {
+            deserializer: 'AtomXtermModel',
+            version: '2017-09-17',
+            uri: url.href,
+        }
+        let model = this.atomXtermPackage.mainModule.deserializeAtomXtermModel(serializedModel);
+        model.pane = jasmine.createSpyObj('pane',
+            ['destroyItem']);
+        model.pane.getActiveItem = jasmine.createSpy('getActiveItem')
+            .and.returnValue(model);
+        expect(model instanceof AtomXtermModel).toBeTruthy();
+    });
+
+    it('deserializeAtomXtermModel() relaunching terminals on startup allowed relaunchTerminalOnStartup set to false in uri', () => {
+        atom.config.set('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', true);
+        let url = new URL('atom-xterm://somesessionid/');
+        url.searchParams.set('relaunchTerminalOnStartup', false);
+        let serializedModel = {
+            deserializer: 'AtomXtermModel',
+            version: '2017-09-17',
+            uri: url.href,
+        }
+        let model = this.atomXtermPackage.mainModule.deserializeAtomXtermModel(serializedModel);
+        expect(model).toBeUndefined();
+    });
+
+    it('open() basic uri', (done) => {
+        atom.workspace.open.and.stub();
+        let expected_uri = 'atom-xterm://somesessionid/';
+        this.atomXtermPackage.mainModule.open(uri=expected_uri).then(() => {
+            expect(atom.workspace.open.calls.allArgs()).toEqual([[expected_uri, {}]]);
+            done();
+        });
+    });
+
+    it('open() alternate uri', (done) => {
+        atom.workspace.open.and.stub();
+        let expected_uri = 'atom-xterm://somesessionid/?blahblahblah';
+        this.atomXtermPackage.mainModule.open(uri=expected_uri).then(() => {
+            expect(atom.workspace.open.calls.allArgs()).toEqual([[expected_uri, {}]]);
+            done();
+        });
+    });
+
+    it('open() alternate options', (done) => {
+        atom.workspace.open.and.stub();
+        let expected_uri = 'atom-xterm://somesessionid/';
+        let expected_options = {foo: 'bar'}
+        this.atomXtermPackage.mainModule.open(uri=expected_uri, options=expected_options).then(() => {
+            expect(atom.workspace.open.calls.allArgs()).toEqual([[expected_uri, expected_options]]);
+            done();
+        });
+    });
+
+    it('open() alternate uri and options', (done) => {
+        atom.workspace.open.and.stub();
+        let expected_uri = 'atom-xterm://somesessionid/?blahblahblah';
+        let expected_options = {foo: 'bar'}
+        this.atomXtermPackage.mainModule.open(uri=expected_uri, options=expected_options).then(() => {
+            expect(atom.workspace.open.calls.allArgs()).toEqual([[expected_uri, expected_options]]);
+            done();
+        });
+    });
+
+    it('open() relaunchTerminalOnStartup set to true in config not set in uri', (done) => {
+        atom.workspace.open.and.stub();
+        let url = new URL('atom-xterm://somesessionid/');
+        atom.config.set('atom-xterm.terminalSettings.relaunchTerminalOnStartup', true);
+        this.atomXtermPackage.mainModule.open(uri=url.href).then(() => {
+            url.searchParams.set('relaunchTerminalOnStartup', true);
+            expect(atom.workspace.open.calls.allArgs()).toEqual([[url.href, {}]]);
+            done();
+        });
+    });
+
+    it('open() relaunchTerminalOnStartup set to true in config set to false in uri', (done) => {
+        atom.workspace.open.and.stub();
+        let url = new URL('atom-xterm://somesessionid/');
+        url.searchParams.set('relaunchTerminalOnStartup', false);
+        atom.config.set('atom-xterm.terminalSettings.relaunchTerminalOnStartup', true);
+        this.atomXtermPackage.mainModule.open(uri=url.href).then(() => {
+            expect(atom.workspace.open.calls.allArgs()).toEqual([[url.href, {}]]);
+            done();
+        });
+    });
+
+    it('open() relaunchTerminalOnStartup set to true in config set to true in uri', (done) => {
+        atom.workspace.open.and.stub();
+        let url = new URL('atom-xterm://somesessionid/');
+        url.searchParams.set('relaunchTerminalOnStartup', true);
+        atom.config.set('atom-xterm.terminalSettings.relaunchTerminalOnStartup', true);
+        this.atomXtermPackage.mainModule.open(uri=url.href).then(() => {
+            expect(atom.workspace.open.calls.allArgs()).toEqual([[url.href, {}]]);
+            done();
+        });
+    });
+
     describe('AtomXterm settings', () => {
         it('atom-xterm.spawnPtySettings.command', () => {
             expect(atom.config.get('atom-xterm.spawnPtySettings.command')).toEqual(config.getDefaultShellCommand());
@@ -343,6 +482,14 @@ describe('AtomXterm', () => {
 
         it('atom-xterm.terminalSettings.leaveOpenAfterExit', () => {
             expect(atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit')).toBeFalsy();
+        });
+
+        it('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', () => {
+            expect(atom.config.get('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup')).toBeFalsy();
+        });
+
+        it('atom-xterm.terminalSettings.relaunchTerminalOnStartup', () => {
+            expect(atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup')).toBeFalsy();
         });
 
         // Tests that set specific config values should go last.
