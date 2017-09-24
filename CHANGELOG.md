@@ -1,3 +1,8 @@
+## 2.2.0
+* Leave terminal emulator tabs open after process has stopped by default.
+* Have terminal emulator tabs restored to their original locations in the
+  workspace by default after Atom is restarted.
+
 ## 2.1.0
 * Allow terminals to be restarted when they are selected to stay open on exit.
   * For this change, a helpful message is displayed when the process has
