@@ -308,6 +308,7 @@ describe('AtomXterm', () => {
     });
 
     it('deserializeAtomXtermModel() relaunching terminals on startup not allowed relaunchTerminalOnStartup not set in uri', () => {
+        atom.config.set('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', false);
         let url = new URL('atom-xterm://somesessionid/');
         let serializedModel = {
             deserializer: 'AtomXtermModel',
@@ -319,6 +320,7 @@ describe('AtomXterm', () => {
     });
 
     it('deserializeAtomXtermModel() relaunching terminals on startup not allowed relaunchTerminalOnStartup set in uri', () => {
+        atom.config.set('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', false);
         let url = new URL('atom-xterm://somesessionid/');
         url.searchParams.set('relaunchTerminalOnStartup', true);
         let serializedModel = {
@@ -331,7 +333,6 @@ describe('AtomXterm', () => {
     });
 
     it('deserializeAtomXtermModel() relaunching terminals on startup allowed relaunchTerminalOnStartup not set in uri', () => {
-        atom.config.set('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', true);
         let url = new URL('atom-xterm://somesessionid/');
         let serializedModel = {
             deserializer: 'AtomXtermModel',
@@ -339,11 +340,14 @@ describe('AtomXterm', () => {
             uri: url.href,
         }
         let model = this.atomXtermPackage.mainModule.deserializeAtomXtermModel(serializedModel);
-        expect(model).toBeUndefined();
+        model.pane = jasmine.createSpyObj('pane',
+            ['destroyItem']);
+        model.pane.getActiveItem = jasmine.createSpy('getActiveItem')
+            .and.returnValue(model);
+        expect(model instanceof AtomXtermModel).toBeTruthy();
     });
 
     it('deserializeAtomXtermModel() relaunching terminals on startup allowed relaunchTerminalOnStartup set to true in uri', () => {
-        atom.config.set('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', true);
         let url = new URL('atom-xterm://somesessionid/');
         url.searchParams.set('relaunchTerminalOnStartup', true);
         let serializedModel = {
@@ -360,7 +364,6 @@ describe('AtomXterm', () => {
     });
 
     it('deserializeAtomXtermModel() relaunching terminals on startup allowed relaunchTerminalOnStartup set to false in uri', () => {
-        atom.config.set('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', true);
         let url = new URL('atom-xterm://somesessionid/');
         url.searchParams.set('relaunchTerminalOnStartup', false);
         let serializedModel = {
@@ -415,7 +418,6 @@ describe('AtomXterm', () => {
         let url = new URL('atom-xterm://somesessionid/');
         atom.config.set('atom-xterm.terminalSettings.relaunchTerminalOnStartup', true);
         this.atomXtermPackage.mainModule.open(uri=url.href).then(() => {
-            url.searchParams.set('relaunchTerminalOnStartup', true);
             expect(atom.workspace.open.calls.allArgs()).toEqual([[url.href, {}]]);
             done();
         });
@@ -480,15 +482,15 @@ describe('AtomXterm', () => {
     });
 
     it('atom-xterm.terminalSettings.leaveOpenAfterExit', () => {
-        expect(atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit')).toBeFalsy();
+        expect(atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit')).toBeTruthy();
     });
 
     it('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', () => {
-        expect(atom.config.get('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup')).toBeFalsy();
+        expect(atom.config.get('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup')).toBeTruthy();
     });
 
     it('atom-xterm.terminalSettings.relaunchTerminalOnStartup', () => {
-        expect(atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup')).toBeFalsy();
+        expect(atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup')).toBeTruthy();
     });
 
     it('atom-xterm.terminalSettings.fontSize minimum 1', () => {
