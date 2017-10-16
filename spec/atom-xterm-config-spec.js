@@ -17,6 +17,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+const os = require('os');
+const path = require('path');
+
 import * as config from '../lib/atom-xterm-config';
 
 describe('Call to getDefaultShellCommand()', () => {
@@ -141,5 +144,69 @@ describe('Call to getStyles(fontSize)', () => {
     it('fontSize is a String', () => {
         let fontSize = '14';
         expect(config.getStyles(fontSize)).toBe('atom-xterm .terminal { font-size: 14px; }');
+    });
+});
+
+describe('Call to getUserDataPath()', () => {
+    const savedPlatform = process.platform;
+    let savedEnv;
+
+    beforeEach(() => {
+        savedEnv = JSON.parse(JSON.stringify(process.env));
+    });
+
+    afterEach(() => {
+        process.env = savedEnv;
+        Object.defineProperty(process, 'platform', {
+            'value': savedPlatform
+        });
+    });
+
+    it('on win32 without APPDATA set', () => {
+        Object.defineProperty(process, 'platform', {
+            'value': 'win32'
+        });
+        if (process.env.APPDATA) {
+            delete process.env.APPDATA;
+        }
+        let expected = path.join(os.homedir(), 'AppData', 'Roaming', 'atom-xterm');
+        expect(config.getUserDataPath()).toBe(expected);
+    });
+
+    it('on win32 with APPDATA set', () => {
+        Object.defineProperty(process, 'platform', {
+            'value': 'win32'
+        });
+        process.env.APPDATA = path.join('/some', 'dir');
+        let expected = path.join(process.env.APPDATA, 'atom-xterm');
+        expect(config.getUserDataPath()).toBe(expected);
+    });
+
+    it('on darwin', () => {
+        Object.defineProperty(process, 'platform', {
+            'value': 'darwin'
+        });
+        let expected = path.join(os.homedir(), 'Library', 'Application Support', 'atom-xterm');
+        expect(config.getUserDataPath()).toBe(expected);
+    });
+
+    it('on linux without XDG_CONFIG_HOME set', () => {
+        Object.defineProperty(process, 'platform', {
+            'value': 'linux'
+        });
+        if (process.env.XDG_CONFIG_HOME) {
+            delete process.env.XDG_CONFIG_HOME;
+        }
+        let expected = path.join(os.homedir(), '.config', 'atom-xterm');
+        expect(config.getUserDataPath()).toBe(expected);
+    });
+
+    it('on linux with XDG_CONFIG_HOME set', () => {
+        Object.defineProperty(process, 'platform', {
+            'value': 'linux'
+        });
+        process.env.XDG_CONFIG_HOME = path.join('/some', 'dir');
+        let expected = path.join(process.env.XDG_CONFIG_HOME, 'atom-xterm');
+        expect(config.getUserDataPath()).toBe(expected);
     });
 });
