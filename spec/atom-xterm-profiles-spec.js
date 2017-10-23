@@ -441,7 +441,7 @@ describe('AtomXtermProfilesSingleton', () => {
     it('createProfileDataFromUri() URI encoding set to null', () => {
         let url = new URL('atom-xterm://somesessionid/?allowRelaunchingTerminalsOnStartup=true&args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=null&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
         let expected = getDefaultExpectedProfile();
-        expected.encoding = 'null';
+        expected.encoding = null;
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
