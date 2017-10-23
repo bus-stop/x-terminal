@@ -17,14 +17,16 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
 import { CompositeDisposable, Emitter } from 'atom';
 const tmp = require('tmp');
 const { URL } = require('whatwg-url');
 
+import * as config from '../lib/atom-xterm-config';
 import AtomXtermModel from '../lib/atom-xterm-model';
+import { AtomXtermProfilesSingleton } from '../lib/atom-xterm-profiles';
 
 describe('AtomXtermModel', () => {
     let model;
@@ -35,6 +37,7 @@ describe('AtomXtermModel', () => {
 
     beforeEach((done) => {
         let uri = 'atom-xterm://somesessionid/';
+        spyOn(AtomXtermProfilesSingleton.instance, 'generateNewUri').and.returnValue(uri);
         let terminals_set = new Set;
         this.model = new AtomXtermModel({
             uri: uri,
@@ -71,14 +74,14 @@ describe('AtomXtermModel', () => {
             terminals_set: new Set
         });
         model.initializedPromise.then(() => {
-            expect(model.getPath()).toBeNull();
+            expect(model.getPath()).toBe(config.getDefaultCwd());
             done();
         });
     });
 
     it('constructor with valid cwd passed in uri', (done) => {
         spyOn(atom.workspace, 'getActivePaneItem').and.returnValue({});
-        let url = new URL('atom-xterm://somesessionid/');
+        let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData({});
         url.searchParams.set('cwd', this.tmpdir);
         let model = new AtomXtermModel({
             uri: url.href,
@@ -92,14 +95,14 @@ describe('AtomXtermModel', () => {
 
     it('constructor with invalid cwd passed in uri', (done) => {
         spyOn(atom.workspace, 'getActivePaneItem').and.returnValue({});
-        let url = new URL('atom-xterm://somesessionid/');
+        let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData({});
         url.searchParams.set('cwd', path.join(this.tmpdir, 'non-existent-dir'));
         let model = new AtomXtermModel({
             uri: url.href,
             terminals_set: new Set
         });
         model.initializedPromise.then(() => {
-            expect(model.getPath()).toBeNull();
+            expect(model.getPath()).toBe(config.getDefaultCwd());
             done();
         });
     });
@@ -145,7 +148,7 @@ describe('AtomXtermModel', () => {
             terminals_set: new Set
         });
         model.initializedPromise.then(() => {
-            expect(model.getPath()).toBeNull();
+            expect(model.getPath()).toBe(config.getDefaultCwd());
             done();
         });
     });
@@ -165,29 +168,13 @@ describe('AtomXtermModel', () => {
         });
     });
 
-    it('serialize() no cwd set', () => {
-        let url = new URL('atom-xterm://somesessionid/');
+    it('serialize() no cwd set', (done) => {
         let model = new AtomXtermModel({
-            uri: url.href,
-            terminals_set: new Set
-        });
-        let expected = {
-            deserializer: 'AtomXtermModel',
-            version: '2017-09-17',
-            uri: url.href,
-        }
-        expect(model.serialize()).toEqual(expected);
-    });
-
-    it('serialize() cwd set in model', (done) => {
-        let url = new URL('atom-xterm://somesessionid/');
-        let model = new AtomXtermModel({
-            uri: url.href,
+            uri: 'atom-xterm://somesessionid/',
             terminals_set: new Set
         });
         model.initializedPromise.then(() => {
-            model.cwd = '/some/dir';
-            url.searchParams.set('cwd', model.cwd);
+            let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(model.profile);
             let expected = {
                 deserializer: 'AtomXtermModel',
                 version: '2017-09-17',
@@ -198,19 +185,42 @@ describe('AtomXtermModel', () => {
         });
     });
 
-    it('serialize() cwd set in uri', () => {
-        let url = new URL('atom-xterm://somesessionid/');
-        url.searchParams.set('cwd', '/some/dir');
+    it('serialize() cwd set in model', (done) => {
+        let model = new AtomXtermModel({
+            uri: 'atom-xterm://somesessionid/',
+            terminals_set: new Set
+        });
+        model.initializedPromise.then(() => {
+            model.profile.cwd = '/some/dir';
+            let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(model.profile);
+            let expected = {
+                deserializer: 'AtomXtermModel',
+                version: '2017-09-17',
+                uri: url.href,
+            }
+            expect(model.serialize()).toEqual(expected);
+            done();
+        });
+    });
+
+    it('serialize() cwd set in uri', (done) => {
+        let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData({});
+        url.searchParams.set('cwd', this.tmpdir);
         let model = new AtomXtermModel({
             uri: url.href,
             terminals_set: new Set
         });
-        let expected = {
-            deserializer: 'AtomXtermModel',
-            version: '2017-09-17',
-            uri: url.href,
-        }
-        expect(model.serialize()).toEqual(expected);
+        model.initializedPromise.then(() => {
+            let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(model.profile);
+            let expected = {
+                deserializer: 'AtomXtermModel',
+                version: '2017-09-17',
+                uri: url.href,
+            }
+            expect(url.searchParams.get('cwd')).toEqual(this.tmpdir);
+            expect(model.serialize()).toEqual(expected);
+            done();
+        });
     });
 
     it('destroy() check element is destroyed when set', () => {
@@ -293,12 +303,12 @@ describe('AtomXtermModel', () => {
     });
 
     it('getPath()', () => {
-        expect(this.model.getPath()).toBeNull();
+        expect(this.model.getPath()).toBe(config.getDefaultCwd());
     });
 
     it('getPath() cwd set', () => {
         let expected = '/some/dir';
-        this.model.cwd = expected;
+        this.model.profile.cwd = expected;
         expect(this.model.getPath()).toBe(expected);
     });
 
@@ -379,21 +389,9 @@ describe('AtomXtermModel', () => {
             terminals_set: terminals_set
         });
         model.initializedPromise.then(() => {
-            expect(model.getSessionParameters()).toBe('');
-            done();
-        });
-    });
-
-    it('getSessionParameters() when parameters set', (done) => {
-        let expected = 'foo=bar';
-        let uri = 'atom-xterm://somesessionid/?' + expected;
-        let terminals_set = new Set;
-        let model = new AtomXtermModel({
-            uri: uri,
-            terminals_set: terminals_set
-        });
-        model.initializedPromise.then(() => {
-            expect(model.getSessionParameters()).toBe(expected);
+            let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(model.profile);
+            url.searchParams.sort();
+            expect(model.getSessionParameters()).toBe(url.searchParams.toString());
             done();
         });
     });

@@ -76,6 +76,12 @@ describe('Call to getDefaultShellCommand()', () => {
     });
 });
 
+describe('Call to getDefaultArgs()', () => {
+    it('return []', () => {
+        expect(config.getDefaultArgs()).toBe('[]');
+    });
+});
+
 describe('Call to getDefaultTermType()', () => {
     let savedEnv;
 
@@ -132,6 +138,54 @@ describe('Call to getDefaultCwd()', () => {
         let expected = '/some/dir';
         process.env.HOME = expected;
         expect(config.getDefaultCwd()).toBe(expected);
+    });
+});
+
+describe('Call to getDefaultEnv()', () => {
+    it('return \'\'', () => {
+        expect(config.getDefaultEnv()).toBe('');
+    });
+});
+
+describe('Call to getDefaultSetEnv()', () => {
+    it('return {}', () => {
+        expect(config.getDefaultSetEnv()).toBe('{}');
+    });
+});
+
+describe('Call to getDefaultDeleteEnv()', () => {
+    it('return []', () => {
+        expect(config.getDefaultDeleteEnv()).toBe('[]');
+    });
+});
+
+describe('Call to getDefaultEncoding()', () => {
+    it('return \'\'', () => {
+        expect(config.getDefaultEncoding()).toBe('');
+    });
+});
+
+describe('Call to getDefaultFontSize()', () => {
+    it('return 14', () => {
+        expect(config.getDefaultFontSize()).toBe(14);
+    });
+});
+
+describe('Call to getDefaultLeaveOpenAfterExit()', () => {
+    it('return true', () => {
+        expect(config.getDefaultLeaveOpenAfterExit()).toBe(true);
+    });
+});
+
+describe('Call to getDefaultAllowRelaunchingTerminalsOnStartup()', () => {
+    it('return true', () => {
+        expect(config.getDefaultAllowRelaunchingTerminalsOnStartup()).toBe(true);
+    });
+});
+
+describe('Call to getDefaultRelaunchTerminalOnStartup()', () => {
+    it('return true', () => {
+        expect(config.getDefaultRelaunchTerminalOnStartup()).toBe(true);
     });
 });
 

@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "element-resize-detector": "^1.1.12",
+    "fs-extra": "^4.0.2",
     "node-pty": "^0.7.1",
     "uuid": "^3.1.0",
     "whatwg-url": "^6.3.0",

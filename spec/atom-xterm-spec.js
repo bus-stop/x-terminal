@@ -17,12 +17,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import * as node_pty from 'node-pty';
 const { URL } = require('whatwg-url');
 
 import AtomXterm from '../lib/atom-xterm';
 import * as config from '../lib/atom-xterm-config';
 import AtomXtermElement from '../lib/atom-xterm-element';
 import AtomXtermModel from '../lib/atom-xterm-model';
+import { AtomXtermProfilesSingleton } from '../lib/atom-xterm-profiles';
 
 describe('AtomXterm', () => {
     const default_uri = 'atom-xterm://somesessionid/';
@@ -62,11 +64,16 @@ describe('AtomXterm', () => {
     };
 
     beforeEach((done) => {
+        let ptyProcess = jasmine.createSpyObj('ptyProcess',
+            ['kill', 'write', 'resize', 'on']);
+        ptyProcess.process = jasmine.createSpy('process')
+            .and.returnValue('sometestprocess');
+        spyOn(node_pty, 'spawn').and.returnValue(ptyProcess);
         atom.config.clear();
         this.workspaceElement = atom.views.getView(atom.workspace);
         atom.packages.activatePackage('atom-xterm').then(() => {
             this.atomXtermPackage = atom.packages.getActivePackage('atom-xterm');
-            spyOn(this.atomXtermPackage.mainModule, 'generateNewUri').and.returnValue(default_uri);
+            spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'generateNewUri').and.returnValue(default_uri);
             spyOn(atom.workspace, 'open').and.callFake(atom.workspace.openSync);
             this.atomXtermPackage.mainModule.config.spawnPtySettings.properties.command.default = config.getDefaultShellCommand();
             this.atomXtermPackage.mainModule.config.spawnPtySettings.properties.name.default = config.getDefaultTermType();
@@ -90,16 +97,6 @@ describe('AtomXterm', () => {
     it('deactivate package', () => {
         this.atomXtermPackage.deactivate();
         expect(this.atomXtermPackage.mainActivated).toBe(false);
-    });
-
-    it('generateNewUri() starts with atom-xterm://', () => {
-        this.atomXtermPackage.mainModule.generateNewUri.and.callThrough();
-        expect(this.atomXtermPackage.mainModule.generateNewUri().startsWith('atom-xterm://')).toBe(true);
-    });
-
-    it('generateNewUri() ends with /', () => {
-        this.atomXtermPackage.mainModule.generateNewUri.and.callThrough();
-        expect(this.atomXtermPackage.mainModule.generateNewUri().endsWith('/')).toBe(true);
     });
 
     it('run atom-xterm:open and check arguments', () => {
@@ -309,6 +306,7 @@ describe('AtomXterm', () => {
 
     it('deserializeAtomXtermModel() relaunching terminals on startup not allowed relaunchTerminalOnStartup not set in uri', () => {
         atom.config.set('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', false);
+        AtomXtermProfilesSingleton.instance.resetBaseProfile();
         let url = new URL('atom-xterm://somesessionid/');
         let serializedModel = {
             deserializer: 'AtomXtermModel',
@@ -321,6 +319,7 @@ describe('AtomXterm', () => {
 
     it('deserializeAtomXtermModel() relaunching terminals on startup not allowed relaunchTerminalOnStartup set in uri', () => {
         atom.config.set('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', false);
+        AtomXtermProfilesSingleton.instance.resetBaseProfile();
         let url = new URL('atom-xterm://somesessionid/');
         url.searchParams.set('relaunchTerminalOnStartup', true);
         let serializedModel = {
