@@ -16,7 +16,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const fs = require('fs-extra');
+const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
