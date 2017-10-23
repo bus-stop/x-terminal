@@ -335,6 +335,12 @@ describe('AtomXtermModel', () => {
         expect(this.model.modified).toBe(true);
     });
 
+    it('handleNewDataArrival() current item is not in any pane', () => {
+        this.model.pane = null;
+        this.model.handleNewDataArrival();
+        expect(this.model.modified).toBe(true);
+    });
+
     it('handleNewDataArrival() model initially has no pane set', () => {
         this.pane.getActiveItem.and.returnValue({});
         spyOn(atom.workspace, 'paneForItem').and.returnValue(this.pane);
