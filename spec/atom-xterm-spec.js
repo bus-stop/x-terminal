@@ -306,7 +306,6 @@ describe('AtomXterm', () => {
 
     it('deserializeAtomXtermModel() relaunching terminals on startup not allowed relaunchTerminalOnStartup not set in uri', () => {
         atom.config.set('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', false);
-        AtomXtermProfilesSingleton.instance.resetBaseProfile();
         let url = new URL('atom-xterm://somesessionid/');
         let serializedModel = {
             deserializer: 'AtomXtermModel',
@@ -319,7 +318,6 @@ describe('AtomXterm', () => {
 
     it('deserializeAtomXtermModel() relaunching terminals on startup not allowed relaunchTerminalOnStartup set in uri', () => {
         atom.config.set('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', false);
-        AtomXtermProfilesSingleton.instance.resetBaseProfile();
         let url = new URL('atom-xterm://somesessionid/');
         url.searchParams.set('relaunchTerminalOnStartup', true);
         let serializedModel = {
