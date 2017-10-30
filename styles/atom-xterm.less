@@ -27,10 +27,93 @@ atom-xterm {
     flex-direction: column;
 }
 
+atom-xterm-profile {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    flex: auto;
+    color: @text-color;
+    background-color: @app-background-color;
+    overflow: auto;
+    opacity: 0.9;
+    visibility: hidden;
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.atom-xterm-main-div {
+    height: 90%;
+    width: 100%;
+    flex: auto;
+}
+
+.atom-xterm-profile-menu-element-main-div {
+    margin: @component-padding + 50;
+}
+
+.atom-xterm-profile-menu-item-label {
+    -webkit-user-select: none;
+    cursor: default;
+    display: block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    background-color: @app-background-color;
+}
+
+.atom-xterm-profile-menu-item-label-checkbox {
+    padding-left: 2.25em;
+    .atom-xterm-profile-menu-item-checkbox {
+        width: 15px;
+        height: 15px;
+        margin-left: -2.25em;
+        vertical-align: bottom;
+        position: relative;
+        top: 10px;
+    }
+}
+
+.atom-xterm-profile-menu-item-title {
+    font-size: 1.2em;
+    -webkit-user-select: none;
+}
+
+.atom-xterm-profile-menu-item-description {
+    color: @text-color-subtle;
+    -webkit-user-select: none;
+    cursor: default;
+    &:empty {
+        display: none;
+    }
+}
+
+.atom-xterm-profile-menu-item-description-checkbox {
+    padding-left: 2.25em;
+}
+
+.atom-xterm-profile-menu-item-select {
+    color: @text-color;
+    border-color: @button-border-color;
+    background-color: @button-background-color;
+    height: 2em;
+    width: 100%;
+    font-size: 1.25em;
+    padding-top: 0;
+    padding-bottom: 0;
+    &:hover,
+    &:focus {
+        box-shadow: none;
+        background-color: @button-background-color-hover;
+    }
+}
+
 .atom-xterm-term-container {
-  height: 90%;
-  width: 100%;
-  flex: auto;
+    height: 100%;
+    width: 100%;
+    flex: auto;
 }
 
 .atom-xterm-notice-type(@tx; @bg) {

@@ -24,6 +24,10 @@
                 "type": "separator"
             },
             {
+                "label": "Toggle Profile Menu",
+                "command": "atom-xterm:toggle-profile-menu"
+            },
+            {
                 "label": "Reorganize Terminal Tabs (Current Pane)",
                 "command": "atom-xterm:reorganize"
             },
@@ -81,6 +85,10 @@
             },
             {
                 "type": "separator"
+            },
+            {
+                "label": "Toggle Profile Menu",
+                "command": "atom-xterm:toggle-profile-menu"
             },
             {
                 "label": "Reorganize Terminal Tabs (Current Pane)",
