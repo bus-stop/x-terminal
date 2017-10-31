@@ -53,7 +53,7 @@ describe('AtomXtermElement', () => {
         atom.config.clear();
         atom.project.setPaths([]);
         let ptyProcess = jasmine.createSpyObj('ptyProcess',
-            ['kill', 'write', 'resize', 'on']);
+            ['kill', 'write', 'resize', 'on', 'removeAllListeners']);
         ptyProcess.process = jasmine.createSpy('process')
             .and.returnValue('sometestprocess');
         spyOn(node_pty, 'spawn').and.returnValue(ptyProcess);
@@ -346,27 +346,31 @@ describe('AtomXtermElement', () => {
         expect(this.element.ptyProcess).toBeTruthy();
     });
 
-    it('restartPtyProcess() check new pty process created', () => {
+    it('restartPtyProcess() check new pty process created', (done) => {
         let oldPtyProcess = this.element.ptyProcess
         let newPtyProcess = jasmine.createSpyObj('ptyProcess',
-            ['kill', 'write', 'resize', 'on']);
+            ['kill', 'write', 'resize', 'on', 'removeAllListeners']);
         newPtyProcess.process = jasmine.createSpy('process')
             .and.returnValue('sometestprocess');
         node_pty.spawn.and.returnValue(newPtyProcess);
-        this.element.restartPtyProcess();
-        expect(this.element.ptyProcess).toBe(newPtyProcess);
-        expect(oldPtyProcess).not.toBe(this.element.ptyProcess);
+        this.element.restartPtyProcess().then(() => {
+            expect(this.element.ptyProcess).toBe(newPtyProcess);
+            expect(oldPtyProcess).not.toBe(this.element.ptyProcess);
+            done();
+        });
     });
 
-    it('restartPtyProcess() check ptyProcessRunning set to true', () => {
+    it('restartPtyProcess() check ptyProcessRunning set to true', (done) => {
         let oldPtyProcess = this.element.ptyProcess
         let newPtyProcess = jasmine.createSpyObj('ptyProcess',
-            ['kill', 'write', 'resize', 'on']);
+            ['kill', 'write', 'resize', 'on', 'removeAllListeners']);
         newPtyProcess.process = jasmine.createSpy('process')
             .and.returnValue('sometestprocess');
         node_pty.spawn.and.returnValue(newPtyProcess);
-        this.element.restartPtyProcess();
-        expect(this.element.ptyProcessRunning).toBe(true);
+        this.element.restartPtyProcess().then(() => {
+            expect(this.element.ptyProcessRunning).toBe(true);
+            done();
+        });
     });
 
     it('ptyProcess exit handler set ptyProcessRunning to false', () => {
