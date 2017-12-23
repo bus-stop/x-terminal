@@ -22,6 +22,8 @@
 // for a full listing of what's available.
 @import "ui-variables";
 
+@profile-menu-background-color: lighten(@app-background-color, 1.5%);
+
 atom-xterm {
     display: flex;
     flex-direction: column;
@@ -40,9 +42,6 @@ atom-xterm-profile {
     overflow: auto;
     opacity: 0.9;
     visibility: hidden;
-    &:hover {
-        opacity: 1;
-    }
 }
 
 .atom-xterm-main-div {
@@ -51,8 +50,15 @@ atom-xterm-profile {
     flex: auto;
 }
 
+.atom-xterm-profile-menu-element-outer-div {
+    margin: @component-padding * 5;
+}
+
 .atom-xterm-profile-menu-element-main-div {
-    margin: @component-padding + 50;
+    padding: @component-padding;
+    border-radius: @component-border-radius * 2;
+    border: 1px solid @base-border-color;
+    background-color: @profile-menu-background-color;
 }
 
 .atom-xterm-profile-menu-element-hline {
@@ -71,7 +77,7 @@ atom-xterm-profile {
     display: block;
     max-width: 100%;
     margin-bottom: 5px;
-    background-color: @app-background-color;
+    background-color: @profile-menu-background-color;
 }
 
 .atom-xterm-profile-menu-item-label-checkbox {
