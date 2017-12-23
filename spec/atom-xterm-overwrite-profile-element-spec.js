@@ -16,25 +16,3 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
-import AtomXtermModel from './atom-xterm-model';
-
-function isAtomXtermModel(item) {
-    return (item instanceof AtomXtermModel);
-}
-
-function currentItemIsAtomXtermModel() {
-    return isAtomXtermModel(atom.workspace.getActivePaneItem());
-}
-
-function clearDiv(div) {
-    while (div.firstChild) {
-        div.removeChild(div.firstChild);
-    }
-}
-
-export {
-    isAtomXtermModel,
-    currentItemIsAtomXtermModel,
-    clearDiv
-}
