@@ -250,7 +250,7 @@ describe('AtomXtermElement', () => {
     });
 
     it('getEnv()', () => {
-        expect(this.element.getEnv()).toEqual(process.env);
+        expect(JSON.stringify(this.element.getEnv())).toEqual(JSON.stringify(process.env));
     });
 
     it('getEnv() env set in uri', (done) => {
@@ -599,5 +599,26 @@ describe('AtomXtermElement', () => {
         let expected = 'https://atom.io';
         this.element.currentClickedAnchor.getAttribute.and.returnValue(expected);
         expect(this.element.getCurrentAnchorHref()).toBe(expected);
+    });
+
+    it('toggleProfileMenu()', (done) => {
+        this.element.atomXtermProfileMenuElement = jasmine.createSpyObj(
+            'atomXtermProfileMenuElement',
+            [
+                'toggleProfileMenu'
+            ]
+        );
+        this.element.atomXtermProfileMenuElement.initializedPromise = Promise.resolve();
+        let toggleCallback = () => {
+            done();
+        };
+        this.element.atomXtermProfileMenuElement.toggleProfileMenu.and.callFake(toggleCallback);
+        this.element.toggleProfileMenu();
+    });
+
+    it('setNewProfile()', () => {
+        let mock = jasmine.createSpy('mock');
+        this.element.setNewProfile(mock);
+        expect(this.element.model.profile).toBe(mock);
     });
 });

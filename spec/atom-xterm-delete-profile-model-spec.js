@@ -16,3 +16,71 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+import { AtomXtermDeleteProfileModel } from '../lib/atom-xterm-delete-profile-model';
+
+describe('AtomXtermDeleteProfileModel', () => {
+    this.atomXtermProfileMenuElement;
+
+    beforeEach(() => {
+        this.atomXtermProfileMenuElement = jasmine.createSpy(
+            'atomXtermProfileMenuElement'
+        );
+    });
+
+    it('constructor()', () => {
+        let model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement);
+        expect(model).not.toBeNull();
+    });
+
+    it('getTitle()', () => {
+        let model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement);
+        expect(model.getTitle()).toBe('atom-xterm Delete Profile Model');
+    });
+
+    it('getElement()', () => {
+        let model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement);
+        expect(model.getElement()).toBeUndefined();
+    });
+
+    it('setElement()', () => {
+        let model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement);
+        let element = jasmine.createSpy('atomXtermDeleteProfileElement');
+        model.setElement(element);
+        expect(model.getElement()).toBe(element);
+    });
+
+    it('close() panel is not visible', () => {
+        let model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement);
+        model.panel = jasmine.createSpyObj('panel', ['isVisible', 'hide']);
+        model.panel.isVisible.and.returnValue(false);
+        model.close();
+        expect(model.panel.hide).not.toHaveBeenCalled();
+    });
+
+    it('close() panel is visible', () => {
+        let model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement);
+        model.panel = jasmine.createSpyObj('panel', ['isVisible', 'hide']);
+        model.panel.isVisible.and.returnValue(true);
+        model.close();
+        expect(model.panel.hide).toHaveBeenCalled();
+    });
+
+    it('promptDelete() panel is shown', () => {
+        let model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement);
+        model.panel = jasmine.createSpyObj('panel', ['show', 'isVisible', 'hide']);
+        model.panel.isVisible.and.returnValue(true);
+        model.element = jasmine.createSpyObj('atomXtermDeleteProfileElement', ['setNewPrompt']);
+        model.promptDelete('foo');
+        expect(model.panel.show).toHaveBeenCalled();
+    });
+
+    it('promptDelete() new prompt is set', () => {
+        let model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement);
+        model.panel = jasmine.createSpyObj('panel', ['show', 'isVisible', 'hide']);
+        model.panel.isVisible.and.returnValue(true);
+        model.element = jasmine.createSpyObj('atomXtermDeleteProfileElement', ['setNewPrompt']);
+        model.promptDelete('foo');
+        expect(model.element.setNewPrompt).toHaveBeenCalled();
+    });
+});

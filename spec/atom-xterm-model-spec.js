@@ -492,4 +492,16 @@ describe('AtomXtermModel', () => {
         this.model.getCurrentAnchorHref();
         expect(this.model.element.getCurrentAnchorHref).toHaveBeenCalled();
     });
+
+    it('toggleProfileMenu()', () => {
+        this.model.element = jasmine.createSpyObj('element', ['toggleProfileMenu']);
+        this.model.toggleProfileMenu();
+        expect(this.model.element.toggleProfileMenu).toHaveBeenCalled();
+    });
+
+    it('setNewProfile()', () => {
+        let mock = jasmine.createSpy('mock');
+        this.model.setNewProfile(mock);
+        expect(this.model.profile).toBe(mock);
+    });
 });
