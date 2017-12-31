@@ -20,6 +20,7 @@
 const os = require('os');
 const path = require('path');
 
+import { CompositeDisposable } from 'atom';
 const tmp = require('tmp');
 const { URL } = require('whatwg-url');
 
@@ -81,6 +82,7 @@ describe('AtomXtermProfilesSingleton', () => {
     };
 
     beforeEach((done) => {
+        this.disposables = new CompositeDisposable;
         this.origProfilesConfigPath = AtomXtermProfilesSingleton.instance.profilesConfigPath;
         AtomXtermProfilesSingleton.instance.resetBaseProfile();
         AtomXtermProfilesSingleton.instance.profilesLoadPromise.then(() => {
@@ -98,6 +100,7 @@ describe('AtomXtermProfilesSingleton', () => {
     afterEach(() => {
         this.tmpdirCleanupCallback();
         AtomXtermProfilesSingleton.instance.profilesConfigPath = this.origProfilesConfigPath;
+        this.disposables.dispose();
     });
 
     it('AtomXtermProfilesSingleton cannot be instantiated directly', () => {
@@ -115,6 +118,52 @@ describe('AtomXtermProfilesSingleton', () => {
         let expected = path.join(config.getUserDataPath(), 'profiles.json');
         // Need to check to original profiles config path.
         expect(this.origProfilesConfigPath).toBe(expected);
+    });
+
+    it('sortProfiles()', () => {
+        let data = {
+            'z': 'z',
+            'y': 'y',
+            'x': 'x',
+        };
+        let expected = {
+            'x': 'x',
+            'y': 'y',
+            'z': 'z',
+        };
+        expect(AtomXtermProfilesSingleton.instance.sortProfiles(data)).toEqual(expected);
+    });
+
+    it('reloadProfiles()', (done) => {
+        this.disposables.add(AtomXtermProfilesSingleton.instance.onDidReloadProfiles((profiles) => {
+            done();
+        }));
+        AtomXtermProfilesSingleton.instance.reloadProfiles();
+    });
+
+    it('onDidReloadProfiles()', () => {
+        // Should just work.
+        this.disposables.add(AtomXtermProfilesSingleton.instance.onDidReloadProfiles((profiles) => {}));
+    });
+
+    it('updateProfiles()', (done) => {
+        let expected = {
+            'foo': 'bar'
+        }
+        AtomXtermProfilesSingleton.instance.updateProfiles(expected).then(() => {
+            expect(AtomXtermProfilesSingleton.instance.profiles).toEqual(expected);
+            done();
+        });
+    });
+
+    it('deepClone()', () => {
+        let data = {
+            'z': 'z',
+            'y': 'y',
+            'x': 'x',
+        };
+        expect(AtomXtermProfilesSingleton.instance.deepClone(data)).toEqual(data);
+        expect(AtomXtermProfilesSingleton.instance.deepClone(data)).not.toBe(data);
     });
 
     it('getBaseProfile()', () => {
@@ -210,10 +259,39 @@ describe('AtomXtermProfilesSingleton', () => {
         expect(AtomXtermProfilesSingleton.instance.sanitizeData(data)).toEqual(expected);
     });
 
+    it('getProfiles() no profiles defined', (done) => {
+        AtomXtermProfilesSingleton.instance.getProfiles().then((profiles) => {
+            expect(profiles).toEqual({});
+            done();
+        });
+    });
+
     it('getProfile() no profiles defined', (done) => {
         AtomXtermProfilesSingleton.instance.getProfile('foo').then((profile) => {
             expect(profile).toEqual(AtomXtermProfilesSingleton.instance.getBaseProfile());
             done();
+        });
+    });
+
+    it('isProfileExists() non-existent profile', (done) => {
+        AtomXtermProfilesSingleton.instance.isProfileExists('foo').then((exists) => {
+            expect(exists).toBe(false);
+            done();
+        });
+    });
+
+    it('isProfileExists() existent profile', (done) => {
+        let data = {
+            command: './manage.py',
+            args: ['runserver', '9000'],
+        };
+        let expected = Object.assign({}, AtomXtermProfilesSingleton.instance.getBaseProfile(), data);
+        let profileName = 'Django module runserver';
+        AtomXtermProfilesSingleton.instance.setProfile(profileName, data).then(() => {
+            AtomXtermProfilesSingleton.instance.isProfileExists(profileName).then((exists) => {
+                expect(exists).toBe(true);
+                done();
+            });
         });
     });
 
@@ -228,6 +306,23 @@ describe('AtomXtermProfilesSingleton', () => {
             AtomXtermProfilesSingleton.instance.getProfile(profileName).then((profile) => {
                 expect(profile).toEqual(expected);
                 done();
+            });
+        });
+    });
+
+    it('deleteProfile()', (done) => {
+        let data = {
+            command: './manage.py',
+            args: ['runserver', '9000'],
+        };
+        let expected = Object.assign({}, AtomXtermProfilesSingleton.instance.getBaseProfile(), data);
+        let profileName = 'Django module runserver';
+        AtomXtermProfilesSingleton.instance.setProfile(profileName, data).then(() => {
+            AtomXtermProfilesSingleton.instance.deleteProfile(profileName).then(() => {
+                AtomXtermProfilesSingleton.instance.isProfileExists(profileName).then((exists) => {
+                    expect(exists).toBe(false);
+                    done();
+                });
             });
         });
     });
