@@ -29,7 +29,7 @@
   "repository": "https://github.com/amejia1/atom-xterm",
   "license": "MIT",
   "engines": {
-    "atom": ">=1.23.0 <2.0.0"
+    "atom": ">=1.23.1 <2.0.0"
   },
   "dependencies": {
     "element-resize-detector": "^1.1.12",
