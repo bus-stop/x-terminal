@@ -41,7 +41,6 @@ atom-xterm-profile {
     color: @text-color;
     background-color: @app-background-color;
     overflow: auto;
-    opacity: 0.9;
     visibility: hidden;
 }
 
@@ -51,11 +50,34 @@ atom-xterm-profile {
     flex: auto;
 }
 
-.atom-xterm-profile-menu-element-outer-div {
-    margin: @component-padding * 5;
+atom-xterm-profile {
+    display: grid;
+    grid-template-columns: (@component-padding * 5) auto (@component-padding * 5);
+    grid-template-rows: (@component-padding * 5) auto (@component-padding * 5);
+    grid-template-areas:
+        "top top top"
+        "left main right"
+        "bottom bottom bottom";
+}
+
+.atom-xterm-profile-menu-element-top-div {
+    grid-area: top;
+}
+
+.atom-xterm-profile-menu-element-bottom-div {
+    grid-area: bottom;
+}
+
+.atom-xterm-profile-menu-element-left-div {
+    grid-area: left;
+}
+
+.atom-xterm-profile-menu-element-right-div {
+    grid-area: right;
 }
 
 .atom-xterm-profile-menu-element-main-div {
+    grid-area: main;
     padding: @component-padding;
     border-radius: @component-border-radius * 2;
     border: 1px solid @base-border-color;
