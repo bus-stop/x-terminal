@@ -1,3 +1,15 @@
+## 3.0.0
+* Add in support to load and save profiles. With profiles support, it will
+  now be easy to load any command along with arguments, environment variables,
+  and other options so that they can be quickly launched for any project.
+* Resolve an issue where a terminal would crash after restarting Atom.
+* Resolve an issue where the top line would not clear properly after restarting
+  a terminal.
+* Use a standard title for atom-xterm tabs on Windows instead of displaying
+  the term type.
+* Update all dependencies to latest releases.
+* Update copyright info for the new year.
+
 ## 2.2.0
 * Leave terminal emulator tabs open after process has stopped by default.
 * Have terminal emulator tabs restored to their original locations in the
