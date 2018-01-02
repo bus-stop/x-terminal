@@ -538,6 +538,11 @@ describe('AtomXtermElement', () => {
         expect(this.element.terminal.focus).toHaveBeenCalled();
     });
 
+    it('focusOnTerminal() terminal not set', () => {
+        this.element.terminal = null;
+        this.element.focusOnTerminal();
+    });
+
     it('trigger mouse event on anchor element', () => {
         let element = document.createElement('a');
         let mouseEvent = new MouseEvent('mousedown');
