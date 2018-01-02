@@ -1,3 +1,7 @@
+## 3.0.2
+* Redo how profile menu is shown. This time don't use transparency since it
+  doesn't come out well on certain screens.
+
 ## 3.0.1
 * Fix error that appears when terminals are set in docks and Atom is restarted.
 
