@@ -1,3 +1,7 @@
+## 3.1.0
+* Change the button to save new settings so that it doesn't automatically
+  restart the current terminal session.
+
 ## 3.0.2
 * Redo how profile menu is shown. This time don't use transparency since it
   doesn't come out well on certain screens.
