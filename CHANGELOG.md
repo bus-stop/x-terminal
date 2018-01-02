@@ -1,3 +1,6 @@
+## 3.0.1
+* Fix error that appears when terminals are set in docks and Atom is restarted.
+
 ## 3.0.0
 * Add in support to load and save profiles. With profiles support, it will
   now be easy to load any command along with arguments, environment variables,
