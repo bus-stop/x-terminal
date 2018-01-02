@@ -67,7 +67,7 @@ describe('AtomXtermSaveProfileModel', () => {
     it('updateProfile()', (done) => {
         let model = new AtomXtermSaveProfileModel(this.atomXtermProfileMenuElement);
         spyOn(model.profilesSingleton, 'setProfile').and.returnValue(Promise.resolve());
-        model.atomXtermProfileMenuElement.restartTerminal.and.callFake(() => {
+        model.atomXtermProfileMenuElement.applyProfileChanges.and.callFake(() => {
             done();
         });
         model.updateProfile('foo', {});
