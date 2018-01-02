@@ -99,14 +99,10 @@ describe('AtomXterm', () => {
         expect(this.atomXtermPackage.mainActivated).toBe(false);
     });
 
-    it('run atom-xterm:open and check arguments', () => {
+    it('run atom-xterm:open', () => {
+        spyOn(atom.workspace, 'getActivePane').and.returnValue(null);
         atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
         expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {}]]);
-    });
-
-    it('run atom-xterm:open and check element exists', () => {
-        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
-        expect(this.workspaceElement.querySelector('atom-xterm')).not.toBeNull();
     });
 
     it('run atom-xterm:open-split-up and check arguments', () => {
