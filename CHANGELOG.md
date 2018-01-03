@@ -1,3 +1,7 @@
+## 3.1.1
+* Fix issue where terminal tabs wouldn't open in the current pane if the
+  current pane was in one of the docks.
+
 ## 3.1.0
 * Change the button to save new settings so that it doesn't automatically
   restart the current terminal session.
