@@ -641,7 +641,7 @@ describe('AtomXtermElement', () => {
         node_pty.spawn.and.returnValue(newPtyProcess);
         this.element.restartPtyProcess().then(() => {
             let args = this.element.ptyProcess.on.calls.argsFor(0);
-            onDataCallback = args[1];
+            let onDataCallback = args[1];
             onDataCallback('');
             expect(this.element.model.title).toBe('Atom Xterm');
             done();
@@ -658,7 +658,7 @@ describe('AtomXtermElement', () => {
         node_pty.spawn.and.returnValue(newPtyProcess);
         this.element.restartPtyProcess().then(() => {
             let args = this.element.ptyProcess.on.calls.argsFor(0);
-            onDataCallback = args[1];
+            let onDataCallback = args[1];
             onDataCallback('');
             expect(this.element.model.title).toBe('sometestprocess');
             done();
@@ -676,7 +676,7 @@ describe('AtomXtermElement', () => {
         this.element.model.profile.title = 'foo';
         this.element.restartPtyProcess().then(() => {
             let args = this.element.ptyProcess.on.calls.argsFor(0);
-            onDataCallback = args[1];
+            let onDataCallback = args[1];
             onDataCallback('');
             expect(this.element.model.title).toBe('foo');
             done();
@@ -694,9 +694,60 @@ describe('AtomXtermElement', () => {
         this.element.model.profile.title = 'foo';
         this.element.restartPtyProcess().then(() => {
             let args = this.element.ptyProcess.on.calls.argsFor(0);
-            onDataCallback = args[1];
+            let onDataCallback = args[1];
             onDataCallback('');
             expect(this.element.model.title).toBe('foo');
+            done();
+        });
+    });
+
+    it('on \'exit\' handler leave open after exit success', (done) => {
+        let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+            ['kill', 'write', 'resize', 'on', 'removeAllListeners']);
+        newPtyProcess.process = 'sometestprocess';
+        node_pty.spawn.and.returnValue(newPtyProcess);
+        this.element.model.profile.title = 'foo';
+        this.element.restartPtyProcess().then(() => {
+            let args = this.element.ptyProcess.on.calls.argsFor(1);
+            let onExitCallback = args[1];
+            this.element.model.profile.leaveOpenAfterExit = true;
+            onExitCallback(0);
+            expect(this.element.querySelector('.atom-xterm-notice-success')).toBeTruthy();
+            expect(this.element.querySelector('.atom-xterm-notice-error')).toBe(null);
+            done();
+        });
+    });
+
+    it('on \'exit\' handler leave open after exit failure', (done) => {
+        let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+            ['kill', 'write', 'resize', 'on', 'removeAllListeners']);
+        newPtyProcess.process = 'sometestprocess';
+        node_pty.spawn.and.returnValue(newPtyProcess);
+        this.element.model.profile.title = 'foo';
+        this.element.restartPtyProcess().then(() => {
+            let args = this.element.ptyProcess.on.calls.argsFor(1);
+            let onExitCallback = args[1];
+            this.element.model.profile.leaveOpenAfterExit = true;
+            onExitCallback(1);
+            expect(this.element.querySelector('.atom-xterm-notice-success')).toBe(null);
+            expect(this.element.querySelector('.atom-xterm-notice-error')).toBeTruthy();
+            done();
+        });
+    });
+
+    it('on \'exit\' handler do not leave open', (done) => {
+        let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+            ['kill', 'write', 'resize', 'on', 'removeAllListeners']);
+        newPtyProcess.process = 'sometestprocess';
+        node_pty.spawn.and.returnValue(newPtyProcess);
+        this.element.model.profile.title = 'foo';
+        this.element.restartPtyProcess().then(() => {
+            let args = this.element.ptyProcess.on.calls.argsFor(1);
+            let onExitCallback = args[1];
+            this.element.model.profile.leaveOpenAfterExit = false;
+            spyOn(this.element.model, 'exit');
+            onExitCallback(1);
+            expect(this.element.model.exit).toHaveBeenCalled();
             done();
         });
     });
