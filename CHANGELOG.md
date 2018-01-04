@@ -1,3 +1,6 @@
+## 3.2.1
+* Update README.
+
 ## 3.2.0
 * Support custom titles in terminal tabs.
 
