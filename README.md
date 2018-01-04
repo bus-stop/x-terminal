@@ -41,4 +41,4 @@ apm install atom-xterm
   * etc.
 
 # Demo
-![Atom Xterm demo](https://github.com/amejia1/atom-xterm/raw/master/atom-xterm-demo.gif)
+![Atom Xterm demo](https://github.com/amejia1/atom-xterm/raw/master/resources/atom-xterm-demo.gif)
