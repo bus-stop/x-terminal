@@ -1,3 +1,6 @@
+## 3.2.0
+* Support custom titles in terminal tabs.
+
 ## 3.1.1
 * Fix issue where terminal tabs wouldn't open in the current pane if the
   current pane was in one of the docks.
