@@ -14,31 +14,56 @@ To install, simply search for a package named *atom-xterm* to install through
 the Atom editor. It can also be installed via command-line with the following
 command.
 
-```bash
+```
 apm install atom-xterm
 ```
 
-# Features
-* Fully functioning terminal (through major help from [xterm.js](https://xtermjs.org/))
-* Cross-platform support (works on Linux, Windows, and macOS through major help from [node-pty](https://www.npmjs.com/package/node-pty))
-* Multiple terminals open at once (open as many as you like)
-* Terminals as tabs (place terminals anywhere in the Atom workspace)
-* Appropriate directory used automatically when opening terminals (terminals will start in appropriate project folder for example)
-* Simple notifications when a terminal has been modified
-* Basic notification of current process running inside a terminal
-* Support for quickly launching any program, for example Django's
-  [runserver](https://docs.djangoproject.com/en/stable/ref/django-admin/#runserver) command.
-* Support for quickly restarting terminal processes that have finished
-* Support for relaunching terminals when Atom restarts
-* Hotkeys to quickly open terminals
-* Hotkeys to quickly copy from and paste to terminal
-* Support for quickly clicking on or copying links inside terminal
-* Support for auto-arranging terminals to one pane
-* Different customization options, for example...
-  * Setting a different default shell (use [Bash from Homebrew](http://brewformulas.org/Bash) or [Bash from Git for Windows](https://git-for-windows.github.io/) for example)
-  * Setting arguments to pass to default shell
-  * Setting a different default font size
-  * etc.
-
 # Demo
 ![Atom Xterm demo](https://raw.githubusercontent.com/amejia1/atom-xterm/edf0e819656ccc832d899d57d8d23b2c3c5b5614/resources/atom-xterm-demo.gif)
+
+# Usage
+
+## Opening
+To open terminals, just open them through the menu.
+![Atom Xterm menu](https://raw.githubusercontent.com/amejia1/atom-xterm/master/resources/atom-xterm-menu.png)
+
+There's also various key bindings you can use to open terminals. See the
+available key bindings for the atom-xterm package.
+
+There's also menu items available when right clicking on a text editor or on
+a terminal.
+
+Finally, terminal tabs are automatically reopened at the spot you placed them
+when you last exited Atom.
+
+## Reorganizing
+To quickly reorganize terminal tabs, simply use the main menu. You can also
+find menu items by right-clicking on a terminal.
+
+And of course, there's the old fashion way of just moving the tabs where you
+want them. Feel free to place your terminal tabs anywhere in your workspace to
+include any of the docks.
+
+## Profiles
+The atom-xterm package supports saving and loading profiles. What this allows
+you to do is save commonly used commands and settings for later use.
+
+![Atom Xterm profiles demo](https://raw.githubusercontent.com/amejia1/atom-xterm/master/resources/atom-xterm-profiles-demo.gif)
+
+## Notifications
+The atom-xterm package provides notifications about terminal process exit
+successes and failures.
+
+Success
+![Atom Xterm exit success](https://raw.githubusercontent.com/amejia1/atom-xterm/master/resources/atom-xterm-exit-success.png)
+
+Failure
+![Atom Xterm exit failure](https://raw.githubusercontent.com/amejia1/atom-xterm/master/resources/atom-xterm-exit-failure.png)
+
+There's also activity notifications for terminal tabs not in focus.
+![Atom Xterm activity notification](https://raw.githubusercontent.com/amejia1/atom-xterm/master/resources/atom-xterm-activity-notification.png)
+
+# Feedback
+Need to submit a bug report? Have a new feature you want to see implemented in
+*atom-xterm*? Please feel free to report them through the
+[issues page](https://github.com/amejia1/atom-xterm/issues).
