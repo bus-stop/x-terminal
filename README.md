@@ -55,12 +55,15 @@ The atom-xterm package provides notifications about terminal process exit
 successes and failures.
 
 Success
+
 ![Atom Xterm exit success](https://raw.githubusercontent.com/amejia1/atom-xterm/master/resources/atom-xterm-exit-success.png)
 
 Failure
+
 ![Atom Xterm exit failure](https://raw.githubusercontent.com/amejia1/atom-xterm/master/resources/atom-xterm-exit-failure.png)
 
 There's also activity notifications for terminal tabs not in focus.
+
 ![Atom Xterm activity notification](https://raw.githubusercontent.com/amejia1/atom-xterm/master/resources/atom-xterm-activity-notification.png)
 
 # Feedback
