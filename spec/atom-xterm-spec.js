@@ -495,4 +495,8 @@ describe('AtomXterm', () => {
         atom.config.set('atom-xterm.terminalSettings.fontSize', 101);
         expect(atom.config.get('atom-xterm.terminalSettings.fontSize')).toEqual(100);
     });
+
+    it('atom-xterm.terminalSettings.title', () => {
+        expect(atom.config.get('atom-xterm.terminalSettings.title')).toEqual('');
+    });
 });

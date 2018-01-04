@@ -168,6 +168,17 @@ describe('AtomXtermModel', () => {
         });
     });
 
+    it('constructor with custom title', (done) => {
+        let model = new AtomXtermModel({
+            uri: 'atom-xterm://somesessionid/?title=foo',
+            terminals_set: new Set
+        });
+        model.initializedPromise.then(() => {
+            expect(model.title).toBe('foo');
+            done();
+        });
+    });
+
     it('serialize() no cwd set', (done) => {
         let model = new AtomXtermModel({
             uri: 'atom-xterm://somesessionid/',

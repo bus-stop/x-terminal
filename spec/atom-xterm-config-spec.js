@@ -264,3 +264,9 @@ describe('Call to getUserDataPath()', () => {
         expect(config.getUserDataPath()).toBe(expected);
     });
 });
+
+describe('Call to getDefaultTitle()', () => {
+    it('return \'\'', () => {
+        expect(config.getDefaultTitle()).toBe('');
+    });
+});

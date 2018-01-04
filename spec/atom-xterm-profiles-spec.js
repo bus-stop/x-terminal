@@ -41,6 +41,7 @@ describe('AtomXtermProfilesSingleton', () => {
             fontSize: 14,
             leaveOpenAfterExit: true,
             relaunchTerminalOnStartup: true,
+            title: 'foo',
         };
     };
 
@@ -77,6 +78,9 @@ describe('AtomXtermProfilesSingleton', () => {
         }
         if (key === 'atom-xterm.terminalSettings.relaunchTerminalOnStartup') {
             return false;
+        }
+        if (key === 'atom-xterm.terminalSettings.title') {
+            return 'foo';
         }
         throw new Error('Unknown key: ' + key);
     };
@@ -169,6 +173,7 @@ describe('AtomXtermProfilesSingleton', () => {
     it('getBaseProfile()', () => {
         let env = atom.config.get('atom-xterm.spawnPtySettings.env') || config.getDefaultEnv();
         let encoding = atom.config.get('atom-xterm.spawnPtySettings.encoding') || config.getDefaultEncoding();
+        let title = atom.config.get('atom-xterm.terminalSettings.title') || config.getDefaultTitle();
         let expected = {
             command: atom.config.get('atom-xterm.spawnPtySettings.command') || config.getDefaultShellCommand(),
             args: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.args') || config.getDefaultArgs()),
@@ -181,6 +186,7 @@ describe('AtomXtermProfilesSingleton', () => {
             fontSize: atom.config.get('atom-xterm.terminalSettings.fontSize') || config.getDefaultFontSize(),
             leaveOpenAfterExit: atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit') || config.getDefaultLeaveOpenAfterExit(),
             relaunchTerminalOnStartup: atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup') || config.getDefaultRelaunchTerminalOnStartup(),
+            title: title || null,
         };
         expect(AtomXtermProfilesSingleton.instance.getBaseProfile()).toEqual(expected);
     });
@@ -199,7 +205,8 @@ describe('AtomXtermProfilesSingleton', () => {
             encoding: 'someencoding',
             fontSize: 20,
             leaveOpenAfterExit: false,
-            relaunchTerminalOnStartup: false
+            relaunchTerminalOnStartup: false,
+            title: 'foo',
         };
         expect(AtomXtermProfilesSingleton.instance.getBaseProfile()).toEqual(expected);
     });
@@ -234,6 +241,7 @@ describe('AtomXtermProfilesSingleton', () => {
             fontSize: 14,
             leaveOpenAfterExit: true,
             relaunchTerminalOnStartup: true,
+            title: '',
         };
         expect(AtomXtermProfilesSingleton.instance.sanitizeData(data)).toEqual(data);
     });
@@ -251,6 +259,7 @@ describe('AtomXtermProfilesSingleton', () => {
             fontSize: 14,
             leaveOpenAfterExit: true,
             relaunchTerminalOnStartup: true,
+            title: '',
         };
         let data = Object.assign({}, expected, {
             foo: 'bar',
@@ -363,8 +372,9 @@ describe('AtomXtermProfilesSingleton', () => {
             fontSize: 14,
             leaveOpenAfterExit: true,
             relaunchTerminalOnStartup: true,
+            title: '',
         };
-        let expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D';
+        let expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=';
         let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(data);
         url.searchParams.sort();
         expect(url.searchParams.toString()).toBe(expected);
@@ -383,12 +393,13 @@ describe('AtomXtermProfilesSingleton', () => {
             fontSize: 14,
             leaveOpenAfterExit: true,
             relaunchTerminalOnStartup: true,
+            title: '',
         };
         let data = Object.assign({}, validData, {
             foo: 'bar',
             baz: null,
         });
-        let expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D';
+        let expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=';
         let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(data);
         url.searchParams.sort();
         expect(url.searchParams.toString()).toEqual(expected);
@@ -408,89 +419,90 @@ describe('AtomXtermProfilesSingleton', () => {
         expected.fontSize = config.getDefaultFontSize();
         expected.leaveOpenAfterExit = config.getDefaultLeaveOpenAfterExit();
         expected.relaunchTerminalOnStartup = config.getDefaultRelaunchTerminalOnStartup();
+        expected.title = null;
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI with all params set', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI with all params set and invalid params set', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&foo=bar&baz=null');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo&foo=bar&baz=null');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI command set to null', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=null&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=null&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expected.command = 'null';
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI command set to empty string', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expected.command = config.getDefaultShellCommand();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI args set to null', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=null&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=null&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI args set to empty string', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI name set to null', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=null&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=null&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expected.name = 'null';
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI name set to empty string', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expected.name = config.getDefaultTermType();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI cwd set to null', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=null&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=null&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expected.cwd = 'null';
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI cwd set to empty string', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expected.cwd = config.getDefaultCwd();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI env set to null', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI env set to empty string', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI env set to empty object', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=%7B%7D&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=%7B%7D&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         // Specifically defining an empty object for env will mean the
         // pty process will run with no environment.
@@ -499,75 +511,89 @@ describe('AtomXtermProfilesSingleton', () => {
     });
 
     it('createProfileDataFromUri() URI setEnv set to null', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=null');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=null&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI setEnv set to empty string', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI deleteEnv set to null', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=null&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=null&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI deleteEnv set to empty string', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI encoding set to null', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=null&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=null&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expected.encoding = null;
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI encoding set to empty string', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI fontSize set to null', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=null&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=null&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI fontSize set to empty string', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI leaveOpenAfterExit set to null', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=null&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=null&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI leaveOpenAfterExit set to empty string', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI relaunchTerminalOnStartup set to null', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=null&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=null&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 
     it('createProfileDataFromUri() URI relaunchTerminalOnStartup set to empty string', () => {
-        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=&setEnv=%7B%7D');
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=&setEnv=%7B%7D&title=foo');
         let expected = getDefaultExpectedProfile();
+        expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
+    });
+
+    it('createProfileDataFromUri() URI title set to null', () => {
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=null&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=null');
+        let expected = getDefaultExpectedProfile();
+        expected.title = null;
+        expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
+    });
+
+    it('createProfileDataFromUri() URI title set to empty string', () => {
+        let url = new URL('atom-xterm://somesessionid/?args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=');
+        let expected = getDefaultExpectedProfile();
+        expected.title = null;
         expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected);
     });
 });

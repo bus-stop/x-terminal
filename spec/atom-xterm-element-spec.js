@@ -28,6 +28,7 @@ import AtomXtermElement from '../lib/atom-xterm-element';
 import AtomXtermModel from '../lib/atom-xterm-model';
 
 describe('AtomXtermElement', () => {
+    const savedPlatform = process.platform;
     let element;
     let tmpdirObj;
 
@@ -68,6 +69,9 @@ describe('AtomXtermElement', () => {
     });
 
     afterEach(() => {
+        Object.defineProperty(process, 'platform', {
+            'value': savedPlatform
+        });
         this.tmpdirCleanupCallback();
         atom.config.clear();
     });
@@ -625,5 +629,75 @@ describe('AtomXtermElement', () => {
         let mock = jasmine.createSpy('mock');
         this.element.setNewProfile(mock);
         expect(this.element.model.profile).toBe(mock);
+    });
+
+    it('on \'data\' handler no custom title on win32 platform', (done) => {
+        Object.defineProperty(process, 'platform', {
+            'value': 'win32'
+        });
+        let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+            ['kill', 'write', 'resize', 'on', 'removeAllListeners']);
+        newPtyProcess.process = 'sometestprocess';
+        node_pty.spawn.and.returnValue(newPtyProcess);
+        this.element.restartPtyProcess().then(() => {
+            let args = this.element.ptyProcess.on.calls.argsFor(0);
+            onDataCallback = args[1];
+            onDataCallback('');
+            expect(this.element.model.title).toBe('Atom Xterm');
+            done();
+        });
+    });
+
+    it('on \'data\' handler no custom title on linux platform', (done) => {
+        Object.defineProperty(process, 'platform', {
+            'value': 'linux'
+        });
+        let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+            ['kill', 'write', 'resize', 'on', 'removeAllListeners']);
+        newPtyProcess.process = 'sometestprocess';
+        node_pty.spawn.and.returnValue(newPtyProcess);
+        this.element.restartPtyProcess().then(() => {
+            let args = this.element.ptyProcess.on.calls.argsFor(0);
+            onDataCallback = args[1];
+            onDataCallback('');
+            expect(this.element.model.title).toBe('sometestprocess');
+            done();
+        });
+    });
+
+    it('on \'data\' handler custom title on win32 platform', (done) => {
+        Object.defineProperty(process, 'platform', {
+            'value': 'win32'
+        });
+        let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+            ['kill', 'write', 'resize', 'on', 'removeAllListeners']);
+        newPtyProcess.process = 'sometestprocess';
+        node_pty.spawn.and.returnValue(newPtyProcess);
+        this.element.model.profile.title = 'foo';
+        this.element.restartPtyProcess().then(() => {
+            let args = this.element.ptyProcess.on.calls.argsFor(0);
+            onDataCallback = args[1];
+            onDataCallback('');
+            expect(this.element.model.title).toBe('foo');
+            done();
+        });
+    });
+
+    it('on \'data\' handler custom title on linux platform', (done) => {
+        Object.defineProperty(process, 'platform', {
+            'value': 'linux'
+        });
+        let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+            ['kill', 'write', 'resize', 'on', 'removeAllListeners']);
+        newPtyProcess.process = 'sometestprocess';
+        node_pty.spawn.and.returnValue(newPtyProcess);
+        this.element.model.profile.title = 'foo';
+        this.element.restartPtyProcess().then(() => {
+            let args = this.element.ptyProcess.on.calls.argsFor(0);
+            onDataCallback = args[1];
+            onDataCallback('');
+            expect(this.element.model.title).toBe('foo');
+            done();
+        });
     });
 });
