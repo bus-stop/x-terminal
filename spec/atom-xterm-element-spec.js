@@ -342,6 +342,24 @@ describe('AtomXtermElement', () => {
         });
     });
 
+    it('isPtyProcessRunning() ptyProcess null, ptyProcessRunning false', () => {
+        this.element.ptyProcess = null;
+        this.element.ptyProcessRunning = false;
+        expect(this.element.isPtyProcessRunning()).toBeFalsy();
+    });
+
+    it('isPtyProcessRunning() ptyProcess not null, ptyProcessRunning false', () => {
+        this.element.ptyProcess = jasmine.createSpy('ptyProcess');
+        this.element.ptyProcessRunning = false;
+        expect(this.element.isPtyProcessRunning()).toBeFalsy();
+    });
+
+    it('isPtyProcessRunning() ptyProcess not null, ptyProcessRunning true', () => {
+        this.element.ptyProcess = jasmine.createSpy('ptyProcess');
+        this.element.ptyProcessRunning = true;
+        expect(this.element.isPtyProcessRunning()).toBeTruthy();
+    });
+
     it('createTerminal() check terminal object', () => {
         expect(this.element.terminal).toBeTruthy();
     });
@@ -373,6 +391,48 @@ describe('AtomXtermElement', () => {
         node_pty.spawn.and.returnValue(newPtyProcess);
         this.element.restartPtyProcess().then(() => {
             expect(this.element.ptyProcessRunning).toBe(true);
+            done();
+        });
+    });
+
+    it('restartPtyProcess() command not found', (done) => {
+        spyOn(this.element, 'showNotification');
+        this.element.model.profile.command = 'somecommand';
+        let fakeCall = () => {
+            throw Error('File not found: somecommand');
+        };
+        node_pty.spawn.and.callFake(fakeCall);
+        this.element.restartPtyProcess().then(() => {
+            expect(this.element.ptyProcess).toBe(null);
+            expect(this.element.ptyProcessRunning).toBe(false);
+            expect(this.element.showNotification.calls.argsFor(0)).toEqual(
+                [
+                    "Could not find command 'somecommand'.",
+                    "error",
+                    true
+                ]
+            );
+            done();
+        });
+    });
+
+    it('restartPtyProcess() some other error thrown', (done) => {
+        spyOn(this.element, 'showNotification');
+        this.element.model.profile.command = 'somecommand';
+        let fakeCall = () => {
+            throw Error('Something went wrong');
+        };
+        node_pty.spawn.and.callFake(fakeCall);
+        this.element.restartPtyProcess().then(() => {
+            expect(this.element.ptyProcess).toBe(null);
+            expect(this.element.ptyProcessRunning).toBe(false);
+            expect(this.element.showNotification.calls.argsFor(0)).toEqual(
+                [
+                    "Launching 'somecommand' raised the following error: Something went wrong",
+                    "error",
+                    true
+                ]
+            );
             done();
         });
     });
@@ -750,5 +810,74 @@ describe('AtomXtermElement', () => {
             expect(this.element.model.exit).toHaveBeenCalled();
             done();
         });
+    });
+
+    it('showNotification() success message', () => {
+        this.element.showNotification(
+            message='foo',
+            infoType='success'
+        );
+        let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success');
+        expect(messageDiv.textContent).toBe('fooRestart');
+    });
+
+    it('showNotification() error message', () => {
+        this.element.showNotification(
+            message='foo',
+            infoType='error'
+        );
+        let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error');
+        expect(messageDiv.textContent).toBe('fooRestart');
+    });
+
+    it('showNotification() success message with Atom notification', () => {
+        spyOn(atom.notifications, 'addSuccess');
+        this.element.showNotification(
+            message='foo',
+            infoType='success',
+            showAtomNotification=true
+        );
+        expect(atom.notifications.addSuccess).toHaveBeenCalled();
+    });
+
+    it('showNotification() error message with Atom notification', () => {
+        spyOn(atom.notifications, 'addError');
+        this.element.showNotification(
+            message='foo',
+            infoType='error',
+            showAtomNotification=true
+        );
+        expect(atom.notifications.addError).toHaveBeenCalled();
+    });
+
+    it('showNotification() warning message with Atom notification', () => {
+        spyOn(atom.notifications, 'addWarning');
+        this.element.showNotification(
+            message='foo',
+            infoType='warning',
+            showAtomNotification=true
+        );
+        expect(atom.notifications.addWarning).toHaveBeenCalled();
+    });
+
+    it('showNotification() info message with Atom notification', () => {
+        spyOn(atom.notifications, 'addInfo');
+        this.element.showNotification(
+            message='foo',
+            infoType='info',
+            showAtomNotification=true
+        );
+        expect(atom.notifications.addInfo).toHaveBeenCalled();
+    });
+
+    it('showNotification() bogus info type with Atom notification', () => {
+        let call = () => {
+            this.element.showNotification(
+                message='foo',
+                infoType='bogus',
+                showAtomNotification=true
+            );
+        };
+        expect(call).toThrow('Unknown info type: bogus');
     });
 });
