@@ -1,3 +1,6 @@
+## 3.2.2
+* Fix issue where terminal tabs would crash if it cannot load the pty process.
+
 ## 3.2.1
 * Update README.
 
