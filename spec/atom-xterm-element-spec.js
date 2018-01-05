@@ -409,7 +409,6 @@ describe('AtomXtermElement', () => {
                 [
                     "Could not find command 'somecommand'.",
                     "error",
-                    true
                 ]
             );
             done();
@@ -430,7 +429,6 @@ describe('AtomXtermElement', () => {
                 [
                     "Launching 'somecommand' raised the following error: Something went wrong",
                     "error",
-                    true
                 ]
             );
             done();
@@ -835,7 +833,6 @@ describe('AtomXtermElement', () => {
         this.element.showNotification(
             message='foo',
             infoType='success',
-            showAtomNotification=true
         );
         expect(atom.notifications.addSuccess).toHaveBeenCalled();
     });
@@ -845,7 +842,6 @@ describe('AtomXtermElement', () => {
         this.element.showNotification(
             message='foo',
             infoType='error',
-            showAtomNotification=true
         );
         expect(atom.notifications.addError).toHaveBeenCalled();
     });
@@ -855,7 +851,6 @@ describe('AtomXtermElement', () => {
         this.element.showNotification(
             message='foo',
             infoType='warning',
-            showAtomNotification=true
         );
         expect(atom.notifications.addWarning).toHaveBeenCalled();
     });
@@ -865,7 +860,6 @@ describe('AtomXtermElement', () => {
         this.element.showNotification(
             message='foo',
             infoType='info',
-            showAtomNotification=true
         );
         expect(atom.notifications.addInfo).toHaveBeenCalled();
     });
@@ -875,7 +869,6 @@ describe('AtomXtermElement', () => {
             this.element.showNotification(
                 message='foo',
                 infoType='bogus',
-                showAtomNotification=true
             );
         };
         expect(call).toThrow('Unknown info type: bogus');
