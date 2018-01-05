@@ -1,7 +1,7 @@
 {
   "name": "atom-xterm",
   "main": "./lib/atom-xterm",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "description": "Atom plugin for providing terminals inside your Atom workspace.",
   "keywords": [
     "terminal",
