@@ -2,7 +2,7 @@
   "name": "atom-xterm",
   "main": "./lib/atom-xterm",
   "version": "3.2.2",
-  "description": "Atom plugin for providing terminal emulators inside of the editor as tabs.",
+  "description": "Atom plugin for providing terminals inside your Atom workspace.",
   "keywords": [
     "terminal",
     "xterm",
