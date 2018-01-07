@@ -135,6 +135,18 @@
             {
                 "label": "Open New Terminal (Split Right)",
                 "command": "atom-xterm:open-split-right"
+            },
+            {
+                "label": "Open New Terminal (Bottom Dock)",
+                "command": "atom-xterm:open-split-bottom-dock"
+            },
+            {
+                "label": "Open New Terminal (Left Dock)",
+                "command": "atom-xterm:open-split-left-dock"
+            },
+            {
+                "label": "Open New Terminal (Right Dock)",
+                "command": "atom-xterm:open-split-right-dock"
             }
         ]
     },
@@ -164,6 +176,18 @@
                         {
                             "label": "Open New Terminal (Split Right)",
                             "command": "atom-xterm:open-split-right"
+                        },
+                        {
+                            "label": "Open New Terminal (Bottom Dock)",
+                            "command": "atom-xterm:open-split-bottom-dock"
+                        },
+                        {
+                            "label": "Open New Terminal (Left Dock)",
+                            "command": "atom-xterm:open-split-left-dock"
+                        },
+                        {
+                            "label": "Open New Terminal (Right Dock)",
+                            "command": "atom-xterm:open-split-right-dock"
                         },
                         {
                             "label": "Reorganize Terminal Tabs (Current Pane)",

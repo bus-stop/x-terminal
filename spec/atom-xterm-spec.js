@@ -145,6 +145,30 @@ describe('AtomXterm', () => {
         expect(this.workspaceElement.querySelector('atom-xterm')).not.toBeNull();
     });
 
+    it('run atom-xterm:open-split-bottom-dock', () => {
+        let mock = jasmine.createSpyObj('dock', ['getActivePane']);
+        spyOn(atom.workspace, 'getBottomDock').and.returnValue(mock);
+        mock.getActivePane.and.returnValue(null);
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-bottom-dock');
+        expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {}]]);
+    });
+
+    it('run atom-xterm:open-split-left-dock', () => {
+        let mock = jasmine.createSpyObj('dock', ['getActivePane']);
+        spyOn(atom.workspace, 'getLeftDock').and.returnValue(mock);
+        mock.getActivePane.and.returnValue(null);
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-left-dock');
+        expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {}]]);
+    });
+
+    it('run atom-xterm:open-split-right-dock', () => {
+        let mock = jasmine.createSpyObj('dock', ['getActivePane']);
+        spyOn(atom.workspace, 'getRightDock').and.returnValue(mock);
+        mock.getActivePane.and.returnValue(null);
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-right-dock');
+        expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {}]]);
+    });
+
     it('run atom-xterm:reorganize no terminals in workspace', () => {
         spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
         atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize');
@@ -292,6 +316,13 @@ describe('AtomXterm', () => {
             expect(atom.clipboard.write).not.toHaveBeenCalled();
             done();
         });
+    });
+
+    it('openInCenterOrDock()', () => {
+        let mock = jasmine.createSpyObj('dock', ['getActivePane']);
+        mock.getActivePane.and.returnValue(null);
+        this.atomXtermPackage.mainModule.openInCenterOrDock(mock);
+        expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {}]]);
     });
 
     it('refitAllTerminals()', () => {
