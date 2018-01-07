@@ -1,3 +1,6 @@
+## 3.3.1
+* Update README.
+
 ## 3.3.0
 * Ensure atom-xterm is able to use other packages' services.
 * Support opening terminal tabs directly in docks.
