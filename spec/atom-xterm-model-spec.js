@@ -47,7 +47,7 @@ describe('AtomXtermModel', () => {
             this.pane = jasmine.createSpyObj('pane',
                 ['destroyItem', 'getActiveItem']);
             this.element = jasmine.createSpyObj('element',
-                ['destroy', 'refitTerminal', 'focusOnTerminal', 'clickOnCurrentAnchor', 'getCurrentAnchorHref']);
+                ['destroy', 'refitTerminal', 'focusOnTerminal', 'clickOnCurrentAnchor', 'getCurrentAnchorHref', 'restartPtyProcess']);
             this.element.terminal = jasmine.createSpyObj('terminal',
                 ['getSelection']);
             this.element.ptyProcess = jasmine.createSpyObj('ptyProcess',
@@ -462,6 +462,17 @@ describe('AtomXtermModel', () => {
         this.model.pane = this.pane;
         this.model.exit();
         expect(this.model.pane.destroyItem.calls.allArgs()).toEqual([[this.model, true]]);
+    });
+
+    it('restartPtyProcess() no element set', () => {
+        this.model.restartPtyProcess();
+        expect(this.element.restartPtyProcess).not.toHaveBeenCalled();
+    });
+
+    it('restartPtyProcess() element set', () => {
+        this.model.element = this.element;
+        this.model.restartPtyProcess();
+        expect(this.model.element.restartPtyProcess).toHaveBeenCalled();
     });
 
     it('copyFromTerminal()', () => {

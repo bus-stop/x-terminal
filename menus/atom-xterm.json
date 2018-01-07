@@ -10,6 +10,10 @@
                 "command": "atom-xterm:close"
             },
             {
+                "label": "Restart",
+                "command": "atom-xterm:restart"
+            },
+            {
                 "type": "separator"
             },
             {
@@ -72,6 +76,10 @@
             {
                 "label": "Copy Link Address",
                 "command": "atom-xterm:copy-link"
+            },
+            {
+                "label": "Restart",
+                "command": "atom-xterm:restart"
             },
             {
                 "type": "separator"

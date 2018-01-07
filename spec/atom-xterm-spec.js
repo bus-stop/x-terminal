@@ -47,6 +47,7 @@ describe('AtomXterm', () => {
                 spyOn(model, 'pasteToTerminal');
                 spyOn(model, 'clickOnCurrentAnchor');
                 spyOn(model, 'getCurrentAnchorHref');
+                spyOn(model, 'restartPtyProcess');
                 resolve(model);
             });
         });
@@ -291,6 +292,15 @@ describe('AtomXterm', () => {
             spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
             atom.commands.dispatch(element, 'atom-xterm:close');
             expect(element.model.exit).toHaveBeenCalled();
+            done();
+        });
+    });
+
+    it('run atom-xterm:restart', (done) => {
+        createNewElement(package_module=this.atomXtermPackage.mainModule).then((element) => {
+            spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model);
+            atom.commands.dispatch(element, 'atom-xterm:restart');
+            expect(element.model.restartPtyProcess).toHaveBeenCalled();
             done();
         });
     });
