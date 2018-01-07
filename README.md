@@ -9,7 +9,7 @@ Atom plugin for providing terminals inside your Atom workspace.
 [![Latest release](https://img.shields.io/apm/v/atom-xterm.svg)](https://atom.io/packages/atom-xterm)
 [![Greenkeeper badge](https://badges.greenkeeper.io/amejia1/atom-xterm.svg)](https://greenkeeper.io/)
 
-![Atom Xterm demo](https://raw.githubusercontent.com/amejia1/atom-xterm/edf0e819656ccc832d899d57d8d23b2c3c5b5614/resources/atom-xterm-demo.gif)
+![Atom Xterm demo](https://raw.githubusercontent.com/amejia1/atom-xterm/dab2521a8cbfd72b70e2063e1e23c579bd62e7e1/resources/atom-xterm-demo.gif)
 
 # Installation
 
@@ -27,7 +27,7 @@ apm install atom-xterm
 
 To open terminals, just open them through the menu.
 
-![Atom Xterm menu](https://raw.githubusercontent.com/amejia1/atom-xterm/master/resources/atom-xterm-menu.png)
+![Atom Xterm menu](https://raw.githubusercontent.com/amejia1/atom-xterm/dab2521a8cbfd72b70e2063e1e23c579bd62e7e1/resources/atom-xterm-menu.png)
 
 There's also various key bindings you can use to open terminals. See the
 available key bindings for the atom-xterm package.
@@ -38,6 +38,12 @@ text editor or on a terminal.
 Finally, terminal tabs are automatically reopened at the spot you placed them
 when you last exited Atom.
 
+### NOTE
+
+The key bindings in the image of the menu above are not correct. They should all
+also include the `Ctrl` key as well as what's shown in the menu. See also
+[here](https://github.com/atom/atom/issues/16509).
+
 ## Organizing Terminals
 
 To quickly organize your terminal tabs, simply use the main menu. You can also
@@ -46,6 +52,8 @@ find menu items by right-clicking on a terminal to organize your terminals.
 And of course, there's the old fashion way of just moving the tabs where you
 want them. Feel free to place your terminal tabs anywhere in your workspace to
 include any of the docks.
+
+![Atom Xterm moving terminals demo](https://raw.githubusercontent.com/amejia1/atom-xterm/dab2521a8cbfd72b70e2063e1e23c579bd62e7e1/resources/atom-xterm-moving-terminals-demo.gif)
 
 ## Profiles
 
@@ -89,7 +97,10 @@ Simply go to `View > Developer > Run Package Specs` in Atom's main menu or
 use the hotkey. You can also run test suite via command-line by running
 `atom --test spec` inside the atom-xterm directory.
 
-# Credits
+# Credits and Legal
+
+See the [NOTICE](NOTICE) and [LICENSE](LICENSE) files for copyright and license
+info about this package respectively.
 
 See the [THIRD-PARTY](THIRD-PARTY) file for info about the dependencies used in
 the atom-xterm package.
