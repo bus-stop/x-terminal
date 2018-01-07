@@ -48,6 +48,18 @@
                 "command": "atom-xterm:reorganize-right"
             },
             {
+                "label": "Reorganize Terminal Tabs (Bottom Dock)",
+                "command": "atom-xterm:reorganize-bottom-dock"
+            },
+            {
+                "label": "Reorganize Terminal Tabs (Left Dock)",
+                "command": "atom-xterm:reorganize-left-dock"
+            },
+            {
+                "label": "Reorganize Terminal Tabs (Right Dock)",
+                "command": "atom-xterm:reorganize-right-dock"
+            },
+            {
                 "label": "Close All Terminals",
                 "command": "atom-xterm:close-all"
             }
@@ -109,6 +121,18 @@
             {
                 "label": "Reorganize Terminal Tabs (Rightmost Pane)",
                 "command": "atom-xterm:reorganize-right"
+            },
+            {
+                "label": "Reorganize Terminal Tabs (Bottom Dock)",
+                "command": "atom-xterm:reorganize-bottom-dock"
+            },
+            {
+                "label": "Reorganize Terminal Tabs (Left Dock)",
+                "command": "atom-xterm:reorganize-left-dock"
+            },
+            {
+                "label": "Reorganize Terminal Tabs (Right Dock)",
+                "command": "atom-xterm:reorganize-right-dock"
             },
             {
                 "label": "Close All Terminals",
@@ -208,6 +232,18 @@
                         {
                             "label": "Reorganize Terminal Tabs (Rightmost Pane)",
                             "command": "atom-xterm:reorganize-right"
+                        },
+                        {
+                            "label": "Reorganize Terminal Tabs (Bottom Dock)",
+                            "command": "atom-xterm:reorganize-bottom-dock"
+                        },
+                        {
+                            "label": "Reorganize Terminal Tabs (Left Dock)",
+                            "command": "atom-xterm:reorganize-left-dock"
+                        },
+                        {
+                            "label": "Reorganize Terminal Tabs (Right Dock)",
+                            "command": "atom-xterm:reorganize-right-dock"
                         },
                         {
                             "label": "Close All Terminals",

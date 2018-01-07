@@ -234,6 +234,45 @@ describe('AtomXterm', () => {
         expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['right']]);
     });
 
+    it('run atom-xterm:reorganize-bottom-dock no terminals in workspace', () => {
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-bottom-dock');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['bottom-dock']]);
+    });
+
+    it('run atom-xterm:reorganize-bottom-dock one terminal in workspace', () => {
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-bottom-dock');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['bottom-dock']]);
+    });
+
+    it('run atom-xterm:reorganize-left-dock no terminals in workspace', () => {
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-left-dock');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['left-dock']]);
+    });
+
+    it('run atom-xterm:reorganize-left-dock one terminal in workspace', () => {
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-left-dock');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['left-dock']]);
+    });
+
+    it('run atom-xterm:reorganize-right-dock no terminals in workspace', () => {
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-right-dock');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['right-dock']]);
+    });
+
+    it('run atom-xterm:reorganize-right-dock one terminal in workspace', () => {
+        spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough();
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open');
+        atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-right-dock');
+        expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['right-dock']]);
+    });
+
     it('run atom-xterm:close-all no terminals in workspace', () => {
         spyOn(this.atomXtermPackage.mainModule, 'exitAllTerminals').and.callThrough();
         atom.commands.dispatch(this.workspaceElement, 'atom-xterm:close-all');
