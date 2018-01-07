@@ -1,3 +1,9 @@
+## 3.3.0
+* Ensure atom-xterm is able to use other packages' services.
+* Support opening terminal tabs directly in docks.
+* Support reorganizing terminal tabs to docks.
+* Add a menu item to quickly restart terminals.
+
 ## 3.2.3
 * Update description in package.json.
 
