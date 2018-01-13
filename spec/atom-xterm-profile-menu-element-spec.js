@@ -32,6 +32,17 @@ describe('AtomXtermProfileMenuElement', () => {
         );
         model.atomXtermModel = jasmine.createSpy('atomXtermModel');
         model.atomXtermModel.profile = {};
+        let mock = jasmine.createSpyObj(
+            'atomXtermElement',
+            [
+                'setNewProfile',
+                'restartPtyProcess',
+                'hideTerminal',
+                'showTerminal',
+                'focusOnTerminal'
+            ]
+        );
+        model.getAtomXtermModelElement.and.returnValue(mock);
         this.element = new AtomXtermProfileMenuElement;
         this.element.initialize(model);
         this.element.initializedPromise.then(() => {
@@ -119,17 +130,13 @@ describe('AtomXtermProfileMenuElement', () => {
     });
 
     it('applyProfileChanges()', () => {
-        let mock = jasmine.createSpyObj('mock', ['setNewProfile']);
-        this.element.model.getAtomXtermModelElement.and.returnValue(mock);
         this.element.applyProfileChanges('foo');
-        expect(mock.setNewProfile).toHaveBeenCalledWith('foo');
+        expect(this.element.model.getAtomXtermModelElement().setNewProfile).toHaveBeenCalledWith('foo');
     });
 
     it('restartTerminal()', () => {
-        let mock = jasmine.createSpyObj('mock', ['restartPtyProcess']);
-        this.element.model.getAtomXtermModelElement.and.returnValue(mock);
         this.element.restartTerminal();
-        expect(mock.restartPtyProcess).toHaveBeenCalled();
+        expect(this.element.model.getAtomXtermModelElement().restartPtyProcess).toHaveBeenCalled();
     });
 
     it('createMenuItemContainer() check id', () => {
@@ -199,9 +206,24 @@ describe('AtomXtermProfileMenuElement', () => {
         expect(this.element.style.visibility).toBe('hidden');
     });
 
+    it('hideProfileMenu() terminal shown', () => {
+        this.element.hideProfileMenu();
+        expect(this.element.model.getAtomXtermModelElement().showTerminal).toHaveBeenCalled();
+    });
+
+    it('hideProfileMenu() terminal focused', () => {
+        this.element.hideProfileMenu();
+        expect(this.element.model.getAtomXtermModelElement().focusOnTerminal).toHaveBeenCalled();
+    });
+
     it('showProfileMenu()', () => {
         this.element.showProfileMenu();
         expect(this.element.style.visibility).toBe('visible');
+    });
+
+    it('showProfileMenu() terminal hidden', () => {
+        this.element.showProfileMenu();
+        expect(this.element.model.getAtomXtermModelElement().hideTerminal).toHaveBeenCalled();
     });
 
     it('toggleProfileMenu() currently hidden', () => {
@@ -219,11 +241,9 @@ describe('AtomXtermProfileMenuElement', () => {
     });
 
     it('loadProfile()', () => {
-        let mock = jasmine.createSpyObj('mock', ['setNewProfile', 'restartPtyProcess']);
-        this.element.model.getAtomXtermModelElement.and.returnValue(mock);
         this.element.loadProfile();
-        expect(mock.setNewProfile).toHaveBeenCalled();
-        expect(mock.restartPtyProcess).toHaveBeenCalled();
+        expect(this.element.model.getAtomXtermModelElement().setNewProfile).toHaveBeenCalled();
+        expect(this.element.model.getAtomXtermModelElement().restartPtyProcess).toHaveBeenCalled();
     });
 
     it('saveProfile()', () => {

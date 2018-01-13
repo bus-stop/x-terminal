@@ -689,6 +689,16 @@ describe('AtomXtermElement', () => {
         expect(this.element.model.profile).toBe(mock);
     });
 
+    it('hideTerminal()', () => {
+        this.element.hideTerminal();
+        expect(this.element.terminalDiv.style.visibility).toBe('hidden');
+    });
+
+    it('showTerminal()', () => {
+        this.element.showTerminal();
+        expect(this.element.terminalDiv.style.visibility).toBe('visible');
+    });
+
     it('on \'data\' handler no custom title on win32 platform', (done) => {
         Object.defineProperty(process, 'platform', {
             'value': 'win32'
