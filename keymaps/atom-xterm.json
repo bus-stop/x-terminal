@@ -1,5 +1,5 @@
 {
-    "atom-workspace": {
+    ".platform-linux atom-workspace": {
         "ctrl-shift-t": "atom-xterm:open",
         "ctrl-alt-shift-t": "atom-xterm:open",
         "ctrl-alt-shift-up": "atom-xterm:open-split-up",
@@ -8,7 +8,20 @@
         "ctrl-alt-shift-right": "atom-xterm:open-split-right",
         "ctrl-alt-shift-i": "atom-xterm:open-split-bottom-dock",
         "ctrl-alt-shift-u": "atom-xterm:open-split-left-dock",
-        "ctrl-alt-shift-o": "atom-xterm:open-split-right-dock",
+        "ctrl-alt-shift-o": "atom-xterm:open-split-right-dock"
+    },
+    ".platform-win32 atom-workspace": {
+        "ctrl-shift-t": "atom-xterm:open",
+        "ctrl-alt-shift-t": "atom-xterm:open",
+        "ctrl-alt-shift-up": "atom-xterm:open-split-up",
+        "ctrl-alt-shift-down": "atom-xterm:open-split-down",
+        "ctrl-alt-shift-left": "atom-xterm:open-split-left",
+        "ctrl-alt-shift-right": "atom-xterm:open-split-right",
+        "ctrl-alt-shift-i": "atom-xterm:open-split-bottom-dock",
+        "ctrl-alt-shift-u": "atom-xterm:open-split-left-dock",
+        "ctrl-alt-shift-o": "atom-xterm:open-split-right-dock"
+    },
+    ".platform-darwin atom-workspace": {
         "cmd-t": "atom-xterm:open",
         "cmd-alt-shift-t": "atom-xterm:open",
         "cmd-alt-shift-up": "atom-xterm:open-split-up",
@@ -19,7 +32,19 @@
         "cmd-alt-shift-u": "atom-xterm:open-split-left-dock",
         "cmd-alt-shift-o": "atom-xterm:open-split-right-dock"
     },
-    "atom-xterm": {
+    ".platform-linux atom-xterm": {
+        "ctrl-insert": "atom-xterm:copy",
+        "ctrl-shift-c": "atom-xterm:copy",
+        "shift-insert": "atom-xterm:paste",
+        "ctrl-shift-v": "atom-xterm:paste"
+    },
+    ".platform-win32 atom-xterm": {
+        "ctrl-insert": "atom-xterm:copy",
+        "ctrl-shift-c": "atom-xterm:copy",
+        "shift-insert": "atom-xterm:paste",
+        "ctrl-shift-v": "atom-xterm:paste"
+    },
+    ".platform-darwin atom-xterm": {
         "ctrl-shift-c": "atom-xterm:copy",
         "ctrl-insert": "atom-xterm:copy",
         "ctrl-shift-v": "atom-xterm:paste",
