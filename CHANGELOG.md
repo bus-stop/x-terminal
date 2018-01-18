@@ -1,3 +1,6 @@
+## 4.1.0
+* Use latest dependencies.
+
 ## 4.0.0
 * Fix issue with showing proper hotkeys for menu items.
 * Use different hotkeys to open terminals inside docks.
