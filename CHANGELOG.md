@@ -1,3 +1,7 @@
+## 4.0.0
+* Fix issue with showing proper hotkeys for menu items.
+* Use different hotkeys to open terminals inside docks.
+
 ## 3.3.1
 * Update README.
 
