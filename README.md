@@ -9,7 +9,7 @@ Atom plugin for providing terminals inside your Atom workspace.
 [![Latest release](https://img.shields.io/apm/v/atom-xterm.svg)](https://atom.io/packages/atom-xterm)
 [![Greenkeeper badge](https://badges.greenkeeper.io/amejia1/atom-xterm.svg)](https://greenkeeper.io/)
 
-![Atom Xterm demo](https://raw.githubusercontent.com/amejia1/atom-xterm/dab2521a8cbfd72b70e2063e1e23c579bd62e7e1/resources/atom-xterm-demo.gif)
+![Atom Xterm demo](https://raw.githubusercontent.com/amejia1/atom-xterm/9dfb79f31df4df67b12be74f541c39d498d2212f/resources/atom-xterm-demo.gif)
 
 # Installation
 
@@ -27,7 +27,7 @@ apm install atom-xterm
 
 To open terminals, just open them through the menu.
 
-![Atom Xterm menu](https://raw.githubusercontent.com/amejia1/atom-xterm/dab2521a8cbfd72b70e2063e1e23c579bd62e7e1/resources/atom-xterm-menu.png)
+![Atom Xterm menu](https://raw.githubusercontent.com/amejia1/atom-xterm/9dfb79f31df4df67b12be74f541c39d498d2212f/resources/atom-xterm-menu.png)
 
 There's also various key bindings you can use to open terminals. See the
 available key bindings for the atom-xterm package.
@@ -53,7 +53,7 @@ And of course, there's the old fashion way of just moving the tabs where you
 want them. Feel free to place your terminal tabs anywhere in your workspace to
 include any of the docks.
 
-![Atom Xterm moving terminals demo](https://raw.githubusercontent.com/amejia1/atom-xterm/dab2521a8cbfd72b70e2063e1e23c579bd62e7e1/resources/atom-xterm-moving-terminals-demo.gif)
+![Atom Xterm moving terminals demo](https://raw.githubusercontent.com/amejia1/atom-xterm/9dfb79f31df4df67b12be74f541c39d498d2212f/resources/atom-xterm-moving-terminals-demo.gif)
 
 ## Profiles
 
