@@ -52,6 +52,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
+    "gulp-notice": "^1.0.3",
     "jasmine-spec-reporter": "^4.2.1",
     "tmp": "0.0.33"
   },

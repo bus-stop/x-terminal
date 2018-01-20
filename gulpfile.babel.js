@@ -19,9 +19,11 @@
 
 import gulp from 'gulp'
 import babel from 'gulp-babel'
+import notice from 'gulp-notice'
 
 gulp.task('default', () => {
     return gulp.src('scripts_src/*.js')
         .pipe(babel())
+        .pipe(notice())
         .pipe(gulp.dest('scripts/'))
 })
