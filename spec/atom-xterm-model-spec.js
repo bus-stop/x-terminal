@@ -23,10 +23,10 @@ import * as config from '../lib/atom-xterm-config'
 import AtomXtermModel from '../lib/atom-xterm-model'
 import { AtomXtermProfilesSingleton } from '../lib/atom-xterm-profiles'
 
-const fs = require('fs-extra')
-const path = require('path')
+import fs from 'fs-extra'
+import path from 'path'
 
-const tmp = require('tmp')
+import tmp from 'tmp'
 
 describe('AtomXtermModel', () => {
     this.model = null

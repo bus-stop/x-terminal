@@ -22,10 +22,10 @@ import { CompositeDisposable } from 'atom'
 import * as config from '../lib/atom-xterm-config'
 import { AtomXtermProfilesSingleton } from '../lib/atom-xterm-profiles'
 
-const path = require('path')
+import path from 'path'
 
-const tmp = require('tmp')
-const { URL } = require('whatwg-url')
+import tmp from 'tmp'
+import { URL } from 'whatwg-url'
 
 describe('AtomXtermProfilesSingleton', () => {
     let getDefaultExpectedProfile = () => {

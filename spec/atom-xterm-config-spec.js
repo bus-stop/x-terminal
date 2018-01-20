@@ -19,8 +19,8 @@
 
 import * as config from '../lib/atom-xterm-config'
 
-const os = require('os')
-const path = require('path')
+import os from 'os'
+import path from 'path'
 
 describe('Call to getDefaultShellCommand()', () => {
     const savedPlatform = process.platform

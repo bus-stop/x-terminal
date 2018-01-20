@@ -18,7 +18,7 @@
  */
 
 import { SpecReporter } from 'jasmine-spec-reporter'
-const { createRunner } = require('atom-jasmine2-test-runner')
+import { createRunner } from 'atom-jasmine2-test-runner'
 
 module.exports = createRunner({
     reporter: new SpecReporter()

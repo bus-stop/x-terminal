@@ -23,7 +23,7 @@ import * as config from '../lib/atom-xterm-config'
 import AtomXtermElement from '../lib/atom-xterm-element'
 import AtomXtermModel from '../lib/atom-xterm-model'
 
-const { URL } = require('whatwg-url')
+import { URL } from 'whatwg-url'
 
 describe('AtomXterm', () => {
     const defaultUri = 'atom-xterm://somesessionid/'

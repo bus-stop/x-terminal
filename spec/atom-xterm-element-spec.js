@@ -23,10 +23,11 @@ import * as config from '../lib/atom-xterm-config'
 import AtomXtermElement from '../lib/atom-xterm-element'
 import AtomXtermModel from '../lib/atom-xterm-model'
 
-const path = require('path')
+import path from 'path'
 
-const tmp = require('tmp')
-const { URL, URLSearchParams } = require('whatwg-url')
+import tmp from 'tmp'
+import { URL, URLSearchParams } from 'whatwg-url'
+
 describe('AtomXtermElement', () => {
     const savedPlatform = process.platform
     this.element = null
