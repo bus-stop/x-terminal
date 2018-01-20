@@ -57,11 +57,11 @@
   },
   "scripts": {
     "compile-scripts": "gulp",
+    "lint": "eslint lib/ spec/ scripts_src/ gulpfile.babel.js",
     "move-winpty-binaries": "node scripts/move-winpty-binaries.js",
     "preinstall": "npm run move-winpty-binaries",
     "prepare": "npm run compile-scripts",
-    "preuninstall": "npm run move-winpty-binaries",
-    "lint": "eslint lib/ spec/ scripts_src/ gulpfile.babel.js"
+    "preuninstall": "npm run move-winpty-binaries"
   },
   "deserializers": {
     "AtomXtermModel": "deserializeAtomXtermModel"
