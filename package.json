@@ -54,7 +54,7 @@
     "move-winpty-binaries": "node scripts/move-winpty-binaries.js",
     "preinstall": "npm run move-winpty-binaries",
     "preuninstall": "npm run move-winpty-binaries",
-    "lint": "eslint lib"
+    "lint": "eslint lib spec"
   },
   "deserializers": {
     "AtomXtermModel": "deserializeAtomXtermModel"
