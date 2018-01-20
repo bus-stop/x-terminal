@@ -63,7 +63,8 @@
     "move-winpty-binaries": "node scripts/move-winpty-binaries.js",
     "preinstall": "npm run move-winpty-binaries",
     "prepare": "npm run compile-scripts",
-    "preuninstall": "npm run move-winpty-binaries"
+    "preuninstall": "npm run move-winpty-binaries",
+    "test": "atom --test spec && npm run lint"
   },
   "deserializers": {
     "AtomXtermModel": "deserializeAtomXtermModel"
