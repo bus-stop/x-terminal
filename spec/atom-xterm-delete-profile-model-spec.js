@@ -40,7 +40,7 @@ describe('AtomXtermDeleteProfileModel', () => {
 
     it('getElement()', () => {
         let model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement);
-        expect(model.getElement()).toBeUndefined();
+        expect(model.getElement()).toBeNull();
     });
 
     it('setElement()', () => {

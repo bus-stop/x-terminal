@@ -43,7 +43,7 @@ describe('AtomXtermOverwriteProfileModel', () => {
 
     it('getElement()', () => {
         let model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel);
-        expect(model.getElement()).toBeUndefined();
+        expect(model.getElement()).toBeNull();
     });
 
     it('setElement()', () => {

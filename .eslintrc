@@ -5,6 +5,9 @@
         "node": true,
         "browser": true
     },
+    "globals": {
+        "atom": false
+    },
     "rules": {
         "indent": [
             "error",

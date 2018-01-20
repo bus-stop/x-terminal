@@ -47,7 +47,7 @@ describe('AtomXtermSaveProfileModel', () => {
 
     it('getElement()', () => {
         let model = new AtomXtermSaveProfileModel(this.atomXtermProfileMenuElement);
-        expect(model.getElement()).toBeUndefined();
+        expect(model.getElement()).toBeNull();
     });
 
     it('setElement()', () => {

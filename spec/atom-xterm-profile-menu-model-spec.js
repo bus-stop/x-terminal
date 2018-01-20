@@ -50,7 +50,7 @@ describe('AtomXtermProfileMenuModel', () => {
 
     it('getElement()', () => {
         let model = new AtomXtermProfileMenuModel(this.atomXtermModel);
-        expect(model.getElement()).toBeUndefined();
+        expect(model.getElement()).toBeNull();
     });
 
     it('setElement()', () => {

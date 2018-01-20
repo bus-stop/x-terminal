@@ -126,7 +126,7 @@ describe('AtomXtermElement', () => {
 
     it('getArgs() throw exception when args is not an array', () => {
         this.element.model.profile.args = {};
-        expect(() => {this.element.getArgs();}).toThrow('Arguments set are not an array.');
+        expect(() => {this.element.getArgs();}).toThrow(new Error('Arguments set are not an array.'));
     });
 
     it('getTermType()', () => {
@@ -172,8 +172,8 @@ describe('AtomXtermElement', () => {
     });
 
     it('checkPathIsDirectory() path set to non-existent dir', (done) => {
-        this.element.checkPathIsDirectory(path.join(this.tmpdir, 'non-existent-dir')).then((isDirectory) => {
-            expect(isDirectory).toBe(false);
+        this.element.checkPathIsDirectory(path.join(this.tmpdir, 'non-existent-dir')).catch((err) => {
+            expect(err).toBeTruthy();
             done();
         });
     });
@@ -269,7 +269,7 @@ describe('AtomXtermElement', () => {
 
     it('getEnv() throw exception when env is not an object', () => {
         this.element.model.profile.env = [];
-        expect(() => {this.element.getEnv();}).toThrow('Environment set is not an object.');
+        expect(() => {this.element.getEnv();}).toThrow(new Error('Environment set is not an object.'));
     });
 
     it('getEnv() setEnv set in uri', (done) => {
@@ -881,6 +881,6 @@ describe('AtomXtermElement', () => {
                 infoType='bogus',
             );
         };
-        expect(call).toThrow('Unknown info type: bogus');
+        expect(call).toThrow(new Error('Unknown info type: bogus'));
     });
 });
