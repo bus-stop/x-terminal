@@ -47,6 +47,7 @@
     "eslint": "^4.15.0",
     "eslint-config-standard": "^11.0.0-beta.0",
     "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
@@ -58,7 +59,7 @@
   },
   "scripts": {
     "compile-scripts": "gulp",
-    "lint": "eslint lib/ spec/ scripts_src/ gulpfile.babel.js",
+    "lint": "eslint --ext .json --ext .js keymaps/ lib/ menus/ scripts_src/ spec/ gulpfile.babel.js package.json",
     "move-winpty-binaries": "node scripts/move-winpty-binaries.js",
     "preinstall": "npm run move-winpty-binaries",
     "prepare": "npm run compile-scripts",
