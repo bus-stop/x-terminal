@@ -25,160 +25,163 @@
 @profile-menu-background-color: lighten(@app-background-color, 2%);
 
 atom-xterm {
-    display: flex;
-    flex-direction: column;
-    background-color: #000;
+  display: flex;
+  flex-direction: column;
+  background-color: #000;
 }
 
 atom-xterm-profile {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    flex: auto;
-    color: @text-color;
-    background-color: @app-background-color;
-    overflow: auto;
-    visibility: hidden;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  flex: auto;
+  color: @text-color;
+  background-color: @app-background-color;
+  overflow: auto;
+  visibility: hidden;
+  display: grid;
+  grid-template-columns: (@component-padding * 5) auto (@component-padding * 5);
+  grid-template-rows: (@component-padding * 5) auto (@component-padding * 5);
+  grid-template-areas:
+    "top top top"
+    "left main right"
+    "bottom bottom bottom";
 }
 
 .atom-xterm-restart-btn {
-    margin-left: @component-padding;
-    margin-right: @component-padding;
+  margin-left: @component-padding;
+  margin-right: @component-padding;
 }
 
 .atom-xterm-main-div {
-    height: 90%;
-    width: 100%;
-    flex: auto;
-}
-
-atom-xterm-profile {
-    display: grid;
-    grid-template-columns: (@component-padding * 5) auto (@component-padding * 5);
-    grid-template-rows: (@component-padding * 5) auto (@component-padding * 5);
-    grid-template-areas:
-        "top top top"
-        "left main right"
-        "bottom bottom bottom";
+  height: 90%;
+  width: 100%;
+  flex: auto;
 }
 
 .atom-xterm-profile-menu-element-top-div {
-    grid-area: top;
+  grid-area: top;
 }
 
 .atom-xterm-profile-menu-element-bottom-div {
-    grid-area: bottom;
+  grid-area: bottom;
 }
 
 .atom-xterm-profile-menu-element-left-div {
-    grid-area: left;
+  grid-area: left;
 }
 
 .atom-xterm-profile-menu-element-right-div {
-    grid-area: right;
+  grid-area: right;
 }
 
 .atom-xterm-profile-menu-element-main-div {
-    grid-area: main;
-    padding: @component-padding;
-    border-radius: @component-border-radius * 2;
-    border: 1px solid @base-border-color;
-    background-color: @profile-menu-background-color;
+  grid-area: main;
+  padding: @component-padding;
+  border-radius: @component-border-radius * 2;
+  border: 1px solid @base-border-color;
+  background-color: @profile-menu-background-color;
 }
 
 .atom-xterm-profile-menu-element-hline {
-    width: 100%;
-    font-size: 1px;
-    color: @text-color-subtle;
-    line-height: 2px;
-    background-color:@text-color-subtle;
-    margin-top: 20px;
-    margin-bottom: 20px;
+  width: 100%;
+  font-size: 1px;
+  color: @text-color-subtle;
+  line-height: 2px;
+  background-color: @text-color-subtle;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .atom-xterm-profile-menu-item-label {
-    -webkit-user-select: none;
-    cursor: default;
-    display: block;
-    max-width: 100%;
-    margin-bottom: 5px;
-    background-color: @profile-menu-background-color;
+  -webkit-user-select: none;
+  cursor: default;
+  display: block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  background-color: @profile-menu-background-color;
 }
 
 .atom-xterm-profile-menu-item-label-checkbox {
-    padding-left: 2.25em;
-    .atom-xterm-profile-menu-item-checkbox {
-        width: 15px;
-        height: 15px;
-        margin-left: -2.25em;
-        vertical-align: bottom;
-        position: relative;
-        top: 10px;
-    }
+  padding-left: 2.25em;
+
+  .atom-xterm-profile-menu-item-checkbox {
+    width: 15px;
+    height: 15px;
+    margin-left: -2.25em;
+    vertical-align: bottom;
+    position: relative;
+    top: 10px;
+  }
 }
 
 .atom-xterm-profile-menu-item-title {
-    font-size: 1.2em;
-    -webkit-user-select: none;
+  font-size: 1.2em;
+  -webkit-user-select: none;
 }
 
 .atom-xterm-profile-menu-item-description {
-    color: @text-color-subtle;
-    -webkit-user-select: none;
-    cursor: default;
-    &:empty {
-        display: none;
-    }
+  color: @text-color-subtle;
+  -webkit-user-select: none;
+  cursor: default;
+
+  &:empty {
+    display: none;
+  }
 }
 
 .atom-xterm-profile-menu-item-description-checkbox {
-    padding-left: 2.25em;
+  padding-left: 2.25em;
 }
 
 .atom-xterm-profile-menu-item-select {
-    color: @text-color;
-    border-color: @button-border-color;
-    background-color: @button-background-color;
-    height: 2em;
-    width: 100%;
-    font-size: 1.25em;
-    padding-top: 0;
-    padding-bottom: 0;
-    &:hover,
-    &:focus {
-        box-shadow: none;
-        background-color: @button-background-color-hover;
-    }
+  color: @text-color;
+  border-color: @button-border-color;
+  background-color: @button-background-color;
+  height: 2em;
+  width: 100%;
+  font-size: 1.25em;
+  padding-top: 0;
+  padding-bottom: 0;
+
+  &:hover,
+  &:focus {
+    box-shadow: none;
+    background-color: @button-background-color-hover;
+  }
 }
 
 .atom-xterm-profile-menu-buttons-div {
-    padding-top: 1em;
+  padding-top: 1em;
 }
 
-.atom-xterm-profile-menu-button, .atom-xterm-modal-button {
-    font-size: 1.25em;
-    border: 1px solid @button-border-color;
-    background-color: @button-background-color;
-    &:hover {
-        background-color: @button-background-color-hover;
-    }
+.atom-xterm-profile-menu-button,
+.atom-xterm-modal-button {
+  font-size: 1.25em;
+  border: 1px solid @button-border-color;
+  background-color: @button-background-color;
+
+  &:hover {
+    background-color: @button-background-color-hover;
+  }
 }
 
 .atom-xterm-modal-message {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 .atom-xterm-term-container {
-    height: 100%;
-    width: 100%;
-    flex: auto;
+  height: 100%;
+  width: 100%;
+  flex: auto;
 }
 
 .atom-xterm-notice-type(@tx; @bg) {
   @atom-xterm-notice-background-color: mix(@bg, @base-background-color, 10%);
-  color: contrast(@atom-xterm-notice-background-color, darken(@tx, 20%), lighten(@tx, 20%) );
+
+  color: contrast(@atom-xterm-notice-background-color, darken(@tx, 20%), lighten(@tx, 20%));
   border-color: lighten(@atom-xterm-notice-background-color, 10%);
   background-color: @atom-xterm-notice-background-color;
   border-style: solid;
