@@ -1,265 +1,264 @@
 {
-    "context-menu": {
-        "atom-xterm": [
-            {
-                "label": "Open New Terminal",
-                "command": "atom-xterm:open"
-            },
-            {
-                "label": "Close",
-                "command": "atom-xterm:close"
-            },
-            {
-                "label": "Restart",
-                "command": "atom-xterm:restart"
-            },
-            {
-                "type": "separator"
-            },
-            {
-                "label": "Copy",
-                "command": "atom-xterm:copy"
-            },
-            {
-                "label": "Paste",
-                "command": "atom-xterm:paste"
-            },
-            {
-                "type": "separator"
-            },
-            {
-                "label": "Toggle Profile Menu",
-                "command": "atom-xterm:toggle-profile-menu"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Current Pane)",
-                "command": "atom-xterm:reorganize"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Topmost Pane)",
-                "command": "atom-xterm:reorganize-top"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Bottommost Pane)",
-                "command": "atom-xterm:reorganize-bottom"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Leftmost Pane)",
-                "command": "atom-xterm:reorganize-left"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Rightmost Pane)",
-                "command": "atom-xterm:reorganize-right"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Bottom Dock)",
-                "command": "atom-xterm:reorganize-bottom-dock"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Left Dock)",
-                "command": "atom-xterm:reorganize-left-dock"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Right Dock)",
-                "command": "atom-xterm:reorganize-right-dock"
-            },
-            {
-                "label": "Close All Terminals",
-                "command": "atom-xterm:close-all"
-            }
-        ],
-        "atom-xterm a": [
-            {
-                "label": "Open Link",
-                "command": "atom-xterm:open-link"
-            },
-            {
-                "label": "Copy Link Address",
-                "command": "atom-xterm:copy-link"
-            },
-            {
-                "label": "Restart",
-                "command": "atom-xterm:restart"
-            },
-            {
-                "type": "separator"
-            },
-            {
-                "label": "Open New Terminal",
-                "command": "atom-xterm:open"
-            },
-            {
-                "label": "Close",
-                "command": "atom-xterm:close"
-            },
-            {
-                "type": "separator"
-            },
-            {
-                "label": "Copy",
-                "command": "atom-xterm:copy"
-            },
-            {
-                "label": "Paste",
-                "command": "atom-xterm:paste"
-            },
-            {
-                "type": "separator"
-            },
-            {
-                "label": "Toggle Profile Menu",
-                "command": "atom-xterm:toggle-profile-menu"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Current Pane)",
-                "command": "atom-xterm:reorganize"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Topmost Pane)",
-                "command": "atom-xterm:reorganize-top"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Bottommost Pane)",
-                "command": "atom-xterm:reorganize-bottom"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Leftmost Pane)",
-                "command": "atom-xterm:reorganize-left"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Rightmost Pane)",
-                "command": "atom-xterm:reorganize-right"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Bottom Dock)",
-                "command": "atom-xterm:reorganize-bottom-dock"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Left Dock)",
-                "command": "atom-xterm:reorganize-left-dock"
-            },
-            {
-                "label": "Reorganize Terminal Tabs (Right Dock)",
-                "command": "atom-xterm:reorganize-right-dock"
-            },
-            {
-                "label": "Close All Terminals",
-                "command": "atom-xterm:close-all"
-            }
-        ],
-        "atom-text-editor": [
-            {
-                "label": "Open New Terminal",
-                "command": "atom-xterm:open"
-            },
-            {
-                "label": "Open New Terminal (Split Up)",
-                "command": "atom-xterm:open-split-up"
-            },
-            {
-                "label": "Open New Terminal (Split Down)",
-                "command": "atom-xterm:open-split-down"
-            },
-            {
-                "label": "Open New Terminal (Split Left)",
-                "command": "atom-xterm:open-split-left"
-            },
-            {
-                "label": "Open New Terminal (Split Right)",
-                "command": "atom-xterm:open-split-right"
-            },
-            {
-                "label": "Open New Terminal (Bottom Dock)",
-                "command": "atom-xterm:open-split-bottom-dock"
-            },
-            {
-                "label": "Open New Terminal (Left Dock)",
-                "command": "atom-xterm:open-split-left-dock"
-            },
-            {
-                "label": "Open New Terminal (Right Dock)",
-                "command": "atom-xterm:open-split-right-dock"
-            }
-        ]
-    },
-    "menu": [
-        {
-            "label": "Packages",
-            "submenu": [
-                {
-                    "label": "Atom Xterm",
-                    "submenu": [
-                        {
-                            "label": "Open New Terminal",
-                            "command": "atom-xterm:open"
-                        },
-                        {
-                            "label": "Open New Terminal (Split Up)",
-                            "command": "atom-xterm:open-split-up"
-                        },
-                        {
-                            "label": "Open New Terminal (Split Down)",
-                            "command": "atom-xterm:open-split-down"
-                        },
-                        {
-                            "label": "Open New Terminal (Split Left)",
-                            "command": "atom-xterm:open-split-left"
-                        },
-                        {
-                            "label": "Open New Terminal (Split Right)",
-                            "command": "atom-xterm:open-split-right"
-                        },
-                        {
-                            "label": "Open New Terminal (Bottom Dock)",
-                            "command": "atom-xterm:open-split-bottom-dock"
-                        },
-                        {
-                            "label": "Open New Terminal (Left Dock)",
-                            "command": "atom-xterm:open-split-left-dock"
-                        },
-                        {
-                            "label": "Open New Terminal (Right Dock)",
-                            "command": "atom-xterm:open-split-right-dock"
-                        },
-                        {
-                            "label": "Reorganize Terminal Tabs (Current Pane)",
-                            "command": "atom-xterm:reorganize"
-                        },
-                        {
-                            "label": "Reorganize Terminal Tabs (Topmost Pane)",
-                            "command": "atom-xterm:reorganize-top"
-                        },
-                        {
-                            "label": "Reorganize Terminal Tabs (Bottommost Pane)",
-                            "command": "atom-xterm:reorganize-bottom"
-                        },
-                        {
-                            "label": "Reorganize Terminal Tabs (Leftmost Pane)",
-                            "command": "atom-xterm:reorganize-left"
-                        },
-                        {
-                            "label": "Reorganize Terminal Tabs (Rightmost Pane)",
-                            "command": "atom-xterm:reorganize-right"
-                        },
-                        {
-                            "label": "Reorganize Terminal Tabs (Bottom Dock)",
-                            "command": "atom-xterm:reorganize-bottom-dock"
-                        },
-                        {
-                            "label": "Reorganize Terminal Tabs (Left Dock)",
-                            "command": "atom-xterm:reorganize-left-dock"
-                        },
-                        {
-                            "label": "Reorganize Terminal Tabs (Right Dock)",
-                            "command": "atom-xterm:reorganize-right-dock"
-                        },
-                        {
-                            "label": "Close All Terminals",
-                            "command": "atom-xterm:close-all"
-                        }
-                    ]
-                }
-            ]
-        }
+  "context-menu": {
+    "atom-xterm": [
+      {
+        "label": "Open New Terminal",
+        "command": "atom-xterm:open"
+      },
+      {
+        "label": "Close",
+        "command": "atom-xterm:close"
+      },
+      {
+        "label": "Restart",
+        "command": "atom-xterm:restart"
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "label": "Copy",
+        "command": "atom-xterm:copy"
+      },
+      {
+        "label": "Paste",
+        "command": "atom-xterm:paste"
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "label": "Toggle Profile Menu",
+        "command": "atom-xterm:toggle-profile-menu"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Current Pane)",
+        "command": "atom-xterm:reorganize"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Topmost Pane)",
+        "command": "atom-xterm:reorganize-top"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Bottommost Pane)",
+        "command": "atom-xterm:reorganize-bottom"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Leftmost Pane)",
+        "command": "atom-xterm:reorganize-left"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Rightmost Pane)",
+        "command": "atom-xterm:reorganize-right"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Bottom Dock)",
+        "command": "atom-xterm:reorganize-bottom-dock"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Left Dock)",
+        "command": "atom-xterm:reorganize-left-dock"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Right Dock)",
+        "command": "atom-xterm:reorganize-right-dock"
+      },
+      {
+        "label": "Close All Terminals",
+        "command": "atom-xterm:close-all"
+      }
+    ],
+    "atom-xterm a": [
+      {
+        "label": "Open Link",
+        "command": "atom-xterm:open-link"
+      },
+      {
+        "label": "Copy Link Address",
+        "command": "atom-xterm:copy-link"
+      },
+      {
+        "label": "Restart",
+        "command": "atom-xterm:restart"
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "label": "Open New Terminal",
+        "command": "atom-xterm:open"
+      },
+      {
+        "label": "Close",
+        "command": "atom-xterm:close"
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "label": "Copy",
+        "command": "atom-xterm:copy"
+      },
+      {
+        "label": "Paste",
+        "command": "atom-xterm:paste"
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "label": "Toggle Profile Menu",
+        "command": "atom-xterm:toggle-profile-menu"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Current Pane)",
+        "command": "atom-xterm:reorganize"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Topmost Pane)",
+        "command": "atom-xterm:reorganize-top"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Bottommost Pane)",
+        "command": "atom-xterm:reorganize-bottom"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Leftmost Pane)",
+        "command": "atom-xterm:reorganize-left"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Rightmost Pane)",
+        "command": "atom-xterm:reorganize-right"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Bottom Dock)",
+        "command": "atom-xterm:reorganize-bottom-dock"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Left Dock)",
+        "command": "atom-xterm:reorganize-left-dock"
+      },
+      {
+        "label": "Reorganize Terminal Tabs (Right Dock)",
+        "command": "atom-xterm:reorganize-right-dock"
+      },
+      {
+        "label": "Close All Terminals",
+        "command": "atom-xterm:close-all"
+      }
+    ],
+    "atom-text-editor": [
+      {
+        "label": "Open New Terminal",
+        "command": "atom-xterm:open"
+      },
+      {
+        "label": "Open New Terminal (Split Up)",
+        "command": "atom-xterm:open-split-up"
+      },
+      {
+        "label": "Open New Terminal (Split Down)",
+        "command": "atom-xterm:open-split-down"
+      },
+      {
+        "label": "Open New Terminal (Split Left)",
+        "command": "atom-xterm:open-split-left"
+      },
+      {
+        "label": "Open New Terminal (Split Right)",
+        "command": "atom-xterm:open-split-right"
+      },
+      {
+        "label": "Open New Terminal (Bottom Dock)",
+        "command": "atom-xterm:open-split-bottom-dock"
+      },
+      {
+        "label": "Open New Terminal (Left Dock)",
+        "command": "atom-xterm:open-split-left-dock"
+      },
+      {
+        "label": "Open New Terminal (Right Dock)",
+        "command": "atom-xterm:open-split-right-dock"
+      }
     ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "Atom Xterm",
+          "submenu": [{
+              "label": "Open New Terminal",
+              "command": "atom-xterm:open"
+            },
+            {
+              "label": "Open New Terminal (Split Up)",
+              "command": "atom-xterm:open-split-up"
+            },
+            {
+              "label": "Open New Terminal (Split Down)",
+              "command": "atom-xterm:open-split-down"
+            },
+            {
+              "label": "Open New Terminal (Split Left)",
+              "command": "atom-xterm:open-split-left"
+            },
+            {
+              "label": "Open New Terminal (Split Right)",
+              "command": "atom-xterm:open-split-right"
+            },
+            {
+              "label": "Open New Terminal (Bottom Dock)",
+              "command": "atom-xterm:open-split-bottom-dock"
+            },
+            {
+              "label": "Open New Terminal (Left Dock)",
+              "command": "atom-xterm:open-split-left-dock"
+            },
+            {
+              "label": "Open New Terminal (Right Dock)",
+              "command": "atom-xterm:open-split-right-dock"
+            },
+            {
+              "label": "Reorganize Terminal Tabs (Current Pane)",
+              "command": "atom-xterm:reorganize"
+            },
+            {
+              "label": "Reorganize Terminal Tabs (Topmost Pane)",
+              "command": "atom-xterm:reorganize-top"
+            },
+            {
+              "label": "Reorganize Terminal Tabs (Bottommost Pane)",
+              "command": "atom-xterm:reorganize-bottom"
+            },
+            {
+              "label": "Reorganize Terminal Tabs (Leftmost Pane)",
+              "command": "atom-xterm:reorganize-left"
+            },
+            {
+              "label": "Reorganize Terminal Tabs (Rightmost Pane)",
+              "command": "atom-xterm:reorganize-right"
+            },
+            {
+              "label": "Reorganize Terminal Tabs (Bottom Dock)",
+              "command": "atom-xterm:reorganize-bottom-dock"
+            },
+            {
+              "label": "Reorganize Terminal Tabs (Left Dock)",
+              "command": "atom-xterm:reorganize-left-dock"
+            },
+            {
+              "label": "Reorganize Terminal Tabs (Right Dock)",
+              "command": "atom-xterm:reorganize-right-dock"
+            },
+            {
+              "label": "Close All Terminals",
+              "command": "atom-xterm:close-all"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
