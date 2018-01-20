@@ -36,6 +36,12 @@ function main () {
   if (process.platform !== 'win32') {
     console.log('Not win32 platform, exiting.')
     process.exit(0)
+    /* eslint-disable no-unreachable */
+    /* eslint-disable no-useless-return */
+    // Return statement is here so that this method can be tested properly.
+    return
+    /* eslint-enable no-unreachable */
+    /* eslint-enable no-useless-return */
   }
 
   console.log('=== Start process.argv log ===')
@@ -89,6 +95,12 @@ function main () {
   if (!fs.existsSync(atomXtermPath)) {
     console.log('atom-xterm not installed, exiting.')
     process.exit(0)
+    /* eslint-disable no-unreachable */
+    /* eslint-disable no-useless-return */
+    // Return statement is here so that this method can be tested properly.
+    return
+    /* eslint-enable no-unreachable */
+    /* eslint-enable no-useless-return */
   }
   let nodePtyPath = path.join(atomXtermPath, 'node_modules', 'node-pty')
   console.log('Using nodePtyPath = \'' + nodePtyPath + '\'')
@@ -109,6 +121,11 @@ function main () {
     console.log('Moving \'' + nodePtyBuildDebugPath + '\' to \'' + newPath + '\'.')
     fs.renameSync(nodePtyBuildDebugPath, newPath)
   }
+}
+
+export {
+  mkdtempSyncForRenamingDLLs,
+  main
 }
 
 if (require.main === module) {
