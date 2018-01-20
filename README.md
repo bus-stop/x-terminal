@@ -38,12 +38,6 @@ text editor or on a terminal.
 Finally, terminal tabs are automatically reopened at the spot you placed them
 when you last exited Atom.
 
-### NOTE
-
-The key bindings in the image of the menu above are not correct. They should all
-also include the `Ctrl` key as well as what's shown in the menu. See also
-[here](https://github.com/atom/atom/issues/16509).
-
 ## Organizing Terminals
 
 To quickly organize your terminal tabs, simply use the main menu. You can also
