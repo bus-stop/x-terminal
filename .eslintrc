@@ -7,8 +7,5 @@
   },
   "globals": {
     "atom": false
-  },
-  "plugins": [
-    "json"
-  ]
+  }
 }
