@@ -7,11 +7,5 @@
     },
     "globals": {
         "atom": false
-    },
-    "rules": {
-        "indent": [
-            "error",
-            4
-        ]
     }
 }

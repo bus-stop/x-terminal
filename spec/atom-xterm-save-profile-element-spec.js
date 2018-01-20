@@ -20,24 +20,24 @@
 import AtomXtermSaveProfileElement from '../lib/atom-xterm-save-profile-element'
 
 describe('AtomXtermSaveProfileElement', () => {
-    this.model = null
+  this.model = null
 
-    beforeEach(() => {
-        this.model = jasmine.createSpyObj('model', ['setElement'])
-    })
+  beforeEach(() => {
+    this.model = jasmine.createSpyObj('model', ['setElement'])
+  })
 
-    it('initialize()', () => {
-        let element = new AtomXtermSaveProfileElement()
-        element.initialize(this.model)
-        expect(element.messageDiv.textContent).toBe('Enter new profile name')
-    })
+  it('initialize()', () => {
+    let element = new AtomXtermSaveProfileElement()
+    element.initialize(this.model)
+    expect(element.messageDiv.textContent).toBe('Enter new profile name')
+  })
 
-    it('setNewTextbox()', () => {
-        let element = new AtomXtermSaveProfileElement()
-        element.initialize(this.model)
-        let textbox = jasmine.createSpyObj('textbox', ['getElement'])
-        textbox.getElement.and.returnValue(document.createElement('div'))
-        element.setNewTextbox(textbox)
-        expect(textbox.getElement).toHaveBeenCalled()
-    })
+  it('setNewTextbox()', () => {
+    let element = new AtomXtermSaveProfileElement()
+    element.initialize(this.model)
+    let textbox = jasmine.createSpyObj('textbox', ['getElement'])
+    textbox.getElement.and.returnValue(document.createElement('div'))
+    element.setNewTextbox(textbox)
+    expect(textbox.getElement).toHaveBeenCalled()
+  })
 })

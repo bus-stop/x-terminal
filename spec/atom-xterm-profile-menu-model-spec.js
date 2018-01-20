@@ -20,49 +20,49 @@
 import { AtomXtermProfileMenuModel } from '../lib/atom-xterm-profile-menu-model'
 
 describe('AtomXtermProfileMenuModel', () => {
-    this.atomXtermModel = null
+  this.atomXtermModel = null
 
-    beforeEach(() => {
-        this.atomXtermModel = jasmine.createSpyObj('atomXtermModel', ['getElement'])
-    })
+  beforeEach(() => {
+    this.atomXtermModel = jasmine.createSpyObj('atomXtermModel', ['getElement'])
+  })
 
-    it('constructor()', () => {
-        let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
-        expect(model).not.toBeUndefined()
-    })
+  it('constructor()', () => {
+    let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
+    expect(model).not.toBeUndefined()
+  })
 
-    it('destroy() no element set', () => {
-        let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
-        model.destroy()
-    })
+  it('destroy() no element set', () => {
+    let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
+    model.destroy()
+  })
 
-    it('destroy() element set', () => {
-        let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
-        model.element = jasmine.createSpyObj('element', ['destroy'])
-        model.destroy()
-        expect(model.element.destroy).toHaveBeenCalled()
-    })
+  it('destroy() element set', () => {
+    let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
+    model.element = jasmine.createSpyObj('element', ['destroy'])
+    model.destroy()
+    expect(model.element.destroy).toHaveBeenCalled()
+  })
 
-    it('getTitle()', () => {
-        let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
-        expect(model.getTitle()).toBe('Atom Xterm Profile Menu')
-    })
+  it('getTitle()', () => {
+    let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
+    expect(model.getTitle()).toBe('Atom Xterm Profile Menu')
+  })
 
-    it('getElement()', () => {
-        let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
-        expect(model.getElement()).toBeNull()
-    })
+  it('getElement()', () => {
+    let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
+    expect(model.getElement()).toBeNull()
+  })
 
-    it('setElement()', () => {
-        let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
-        let mock = jasmine.createSpy('element')
-        model.setElement(mock)
-        expect(model.getElement()).toBe(mock)
-    })
+  it('setElement()', () => {
+    let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
+    let mock = jasmine.createSpy('element')
+    model.setElement(mock)
+    expect(model.getElement()).toBe(mock)
+  })
 
-    it('getAtomXtermModelElement()', () => {
-        let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
-        model.getAtomXtermModelElement()
-        expect(model.atomXtermModel.getElement).toHaveBeenCalled()
-    })
+  it('getAtomXtermModelElement()', () => {
+    let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
+    model.getAtomXtermModelElement()
+    expect(model.atomXtermModel.getElement).toHaveBeenCalled()
+  })
 })

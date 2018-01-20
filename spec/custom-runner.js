@@ -21,5 +21,5 @@ import { SpecReporter } from 'jasmine-spec-reporter'
 import { createRunner } from 'atom-jasmine2-test-runner'
 
 module.exports = createRunner({
-    reporter: new SpecReporter()
+  reporter: new SpecReporter()
 })
