@@ -20,7 +20,7 @@
 import { AtomXtermProfileMenuModel } from '../lib/atom-xterm-profile-menu-model'
 
 describe('AtomXtermProfileMenuModel', () => {
-    this.atomXtermModel
+    this.atomXtermModel = null
 
     beforeEach(() => {
         this.atomXtermModel = jasmine.createSpyObj('atomXtermModel', ['getElement'])

@@ -17,27 +17,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const path = require('path')
-
-const tmp = require('tmp')
-const { URL, URLSearchParams } = require('whatwg-url')
-import * as node_pty from 'node-pty'
+import * as nodePty from 'node-pty'
 
 import * as config from '../lib/atom-xterm-config'
 import AtomXtermElement from '../lib/atom-xterm-element'
 import AtomXtermModel from '../lib/atom-xterm-model'
 
+const path = require('path')
+
+const tmp = require('tmp')
+const { URL, URLSearchParams } = require('whatwg-url')
 describe('AtomXtermElement', () => {
     const savedPlatform = process.platform
-    let element
-    let tmpdirObj
+    this.element = null
+    this.tmpdirObj = null
 
     let createNewElement = (uri = 'atom-xterm://somesessionid/') => {
         return new Promise((resolve, reject) => {
-            let terminals_set = new Set()
+            let terminalsSet = new Set()
             let model = new AtomXtermModel({
                 uri: uri,
-                terminals_set: terminals_set
+                terminals_set: terminalsSet
             })
             model.initializedPromise.then(() => {
                 model.pane = jasmine.createSpyObj('pane',
@@ -57,10 +57,13 @@ describe('AtomXtermElement', () => {
             ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
         ptyProcess.process = jasmine.createSpy('process')
             .and.returnValue('sometestprocess')
-        spyOn(node_pty, 'spawn').and.returnValue(ptyProcess)
+        spyOn(nodePty, 'spawn').and.returnValue(ptyProcess)
         createNewElement().then((element) => {
             this.element = element
             tmp.dir({'unsafeCleanup': true}, (err, path, cleanupCallback) => {
+                if (err) {
+                    throw err
+                }
                 this.tmpdir = path
                 this.tmpdirCleanupCallback = cleanupCallback
                 done()
@@ -104,7 +107,7 @@ describe('AtomXtermElement', () => {
         let expected = 'somecommand'
         let params = new URLSearchParams({'command': expected})
         let url = new URL('atom-xterm://?' + params.toString())
-        createNewElement(uri = url.href).then((element) => {
+        createNewElement(url.href).then((element) => {
             expect(element.getShellCommand()).toBe(expected)
             done()
         })
@@ -118,7 +121,7 @@ describe('AtomXtermElement', () => {
         let expected = ['some', 'extra', 'args']
         let params = new URLSearchParams({'args': JSON.stringify(expected)})
         let url = new URL('atom-xterm://?' + params.toString())
-        createNewElement(uri = url.href).then((element) => {
+        createNewElement(url.href).then((element) => {
             expect(element.getArgs()).toEqual(expected)
             done()
         })
@@ -137,7 +140,7 @@ describe('AtomXtermElement', () => {
         let expected = 'sometermtype'
         let params = new URLSearchParams({'name': expected})
         let url = new URL('atom-xterm://?' + params.toString())
-        createNewElement(uri = url.href).then((element) => {
+        createNewElement(url.href).then((element) => {
             expect(element.getTermType()).toBe(expected)
             done()
         })
@@ -189,7 +192,7 @@ describe('AtomXtermElement', () => {
         let expected = this.tmpdir
         let params = new URLSearchParams({'cwd': expected})
         let url = new URL('atom-xterm://?' + params.toString())
-        createNewElement(uri = url.href).then((element) => {
+        createNewElement(url.href).then((element) => {
             element.getCwd().then((cwd) => {
                 expect(cwd).toBe(expected)
                 done()
@@ -235,7 +238,7 @@ describe('AtomXtermElement', () => {
         let dir = path.join(this.tmpdir, 'non-existent-dir')
         let params = new URLSearchParams({'cwd': dir})
         let url = new URL('atom-xterm://?' + params.toString())
-        createNewElement(uri = url.href).then((element) => {
+        createNewElement(url.href).then((element) => {
             this.element.getCwd().then((cwd) => {
                 expect(cwd).toBe(config.getDefaultCwd())
                 done()
@@ -258,10 +261,10 @@ describe('AtomXtermElement', () => {
     })
 
     it('getEnv() env set in uri', (done) => {
-        let expected = {'var1': 'value1', 'var2': 'value2', 'var2': 'value2'}
+        let expected = {'var1': 'value1', 'var2': 'value2'}
         let params = new URLSearchParams({'env': JSON.stringify(expected)})
         let url = new URL('atom-xterm://?' + params.toString())
-        createNewElement(uri = url.href).then((element) => {
+        createNewElement(url.href).then((element) => {
             expect(element.getEnv()).toEqual(expected)
             done()
         })
@@ -276,7 +279,7 @@ describe('AtomXtermElement', () => {
         let expected = {'var2': 'value2'}
         let params = new URLSearchParams({'env': JSON.stringify({'var1': 'value1'}), 'setEnv': JSON.stringify(expected)})
         let url = new URL('atom-xterm://?' + params.toString())
-        createNewElement(uri = url.href).then((element) => {
+        createNewElement(url.href).then((element) => {
             expect(element.getEnv()['var2']).toEqual(expected['var2'])
             done()
         })
@@ -291,7 +294,7 @@ describe('AtomXtermElement', () => {
     it('getEnv() deleteEnv set in uri', (done) => {
         let params = new URLSearchParams({'env': JSON.stringify({'var1': 'value1'}), 'deleteEnv': JSON.stringify(['var1'])})
         let url = new URL('atom-xterm://?' + params.toString())
-        createNewElement(uri = url.href).then((element) => {
+        createNewElement(url.href).then((element) => {
             expect(this.element.getEnv()['var1']).toBe(undefined)
             done()
         })
@@ -312,7 +315,7 @@ describe('AtomXtermElement', () => {
         let expected = 'someencoding'
         let params = new URLSearchParams({'encoding': expected})
         let url = new URL('atom-xterm://?' + params.toString())
-        createNewElement(uri = url.href).then((element) => {
+        createNewElement(url.href).then((element) => {
             expect(element.getEncoding()).toBe(expected)
             done()
         })
@@ -326,7 +329,7 @@ describe('AtomXtermElement', () => {
         let expected = true
         let params = new URLSearchParams({'leaveOpenAfterExit': expected})
         let url = new URL('atom-xterm://?' + params.toString())
-        createNewElement(uri = url.href).then((element) => {
+        createNewElement(url.href).then((element) => {
             expect(element.leaveOpenAfterExit()).toBe(expected)
             done()
         })
@@ -336,7 +339,7 @@ describe('AtomXtermElement', () => {
         let expected = false
         let params = new URLSearchParams({'leaveOpenAfterExit': expected})
         let url = new URL('atom-xterm://?' + params.toString())
-        createNewElement(uri = url.href).then((element) => {
+        createNewElement(url.href).then((element) => {
             expect(element.leaveOpenAfterExit()).toBe(expected)
             done()
         })
@@ -374,7 +377,7 @@ describe('AtomXtermElement', () => {
             ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
         newPtyProcess.process = jasmine.createSpy('process')
             .and.returnValue('sometestprocess')
-        node_pty.spawn.and.returnValue(newPtyProcess)
+        nodePty.spawn.and.returnValue(newPtyProcess)
         this.element.restartPtyProcess().then(() => {
             expect(this.element.ptyProcess).toBe(newPtyProcess)
             expect(oldPtyProcess).not.toBe(this.element.ptyProcess)
@@ -383,12 +386,11 @@ describe('AtomXtermElement', () => {
     })
 
     it('restartPtyProcess() check ptyProcessRunning set to true', (done) => {
-        let oldPtyProcess = this.element.ptyProcess
         let newPtyProcess = jasmine.createSpyObj('ptyProcess',
             ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
         newPtyProcess.process = jasmine.createSpy('process')
             .and.returnValue('sometestprocess')
-        node_pty.spawn.and.returnValue(newPtyProcess)
+        nodePty.spawn.and.returnValue(newPtyProcess)
         this.element.restartPtyProcess().then(() => {
             expect(this.element.ptyProcessRunning).toBe(true)
             done()
@@ -401,7 +403,7 @@ describe('AtomXtermElement', () => {
         let fakeCall = () => {
             throw Error('File not found: somecommand')
         }
-        node_pty.spawn.and.callFake(fakeCall)
+        nodePty.spawn.and.callFake(fakeCall)
         this.element.restartPtyProcess().then(() => {
             expect(this.element.ptyProcess).toBe(null)
             expect(this.element.ptyProcessRunning).toBe(false)
@@ -421,7 +423,7 @@ describe('AtomXtermElement', () => {
         let fakeCall = () => {
             throw Error('Something went wrong')
         }
-        node_pty.spawn.and.callFake(fakeCall)
+        nodePty.spawn.and.callFake(fakeCall)
         this.element.restartPtyProcess().then(() => {
             expect(this.element.ptyProcess).toBe(null)
             expect(this.element.ptyProcessRunning).toBe(false)
@@ -706,7 +708,7 @@ describe('AtomXtermElement', () => {
         let newPtyProcess = jasmine.createSpyObj('ptyProcess',
             ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
         newPtyProcess.process = 'sometestprocess'
-        node_pty.spawn.and.returnValue(newPtyProcess)
+        nodePty.spawn.and.returnValue(newPtyProcess)
         this.element.restartPtyProcess().then(() => {
             let args = this.element.ptyProcess.on.calls.argsFor(0)
             let onDataCallback = args[1]
@@ -723,7 +725,7 @@ describe('AtomXtermElement', () => {
         let newPtyProcess = jasmine.createSpyObj('ptyProcess',
             ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
         newPtyProcess.process = 'sometestprocess'
-        node_pty.spawn.and.returnValue(newPtyProcess)
+        nodePty.spawn.and.returnValue(newPtyProcess)
         this.element.restartPtyProcess().then(() => {
             let args = this.element.ptyProcess.on.calls.argsFor(0)
             let onDataCallback = args[1]
@@ -740,7 +742,7 @@ describe('AtomXtermElement', () => {
         let newPtyProcess = jasmine.createSpyObj('ptyProcess',
             ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
         newPtyProcess.process = 'sometestprocess'
-        node_pty.spawn.and.returnValue(newPtyProcess)
+        nodePty.spawn.and.returnValue(newPtyProcess)
         this.element.model.profile.title = 'foo'
         this.element.restartPtyProcess().then(() => {
             let args = this.element.ptyProcess.on.calls.argsFor(0)
@@ -758,7 +760,7 @@ describe('AtomXtermElement', () => {
         let newPtyProcess = jasmine.createSpyObj('ptyProcess',
             ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
         newPtyProcess.process = 'sometestprocess'
-        node_pty.spawn.and.returnValue(newPtyProcess)
+        nodePty.spawn.and.returnValue(newPtyProcess)
         this.element.model.profile.title = 'foo'
         this.element.restartPtyProcess().then(() => {
             let args = this.element.ptyProcess.on.calls.argsFor(0)
@@ -773,7 +775,7 @@ describe('AtomXtermElement', () => {
         let newPtyProcess = jasmine.createSpyObj('ptyProcess',
             ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
         newPtyProcess.process = 'sometestprocess'
-        node_pty.spawn.and.returnValue(newPtyProcess)
+        nodePty.spawn.and.returnValue(newPtyProcess)
         this.element.model.profile.title = 'foo'
         this.element.restartPtyProcess().then(() => {
             let args = this.element.ptyProcess.on.calls.argsFor(1)
@@ -790,7 +792,7 @@ describe('AtomXtermElement', () => {
         let newPtyProcess = jasmine.createSpyObj('ptyProcess',
             ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
         newPtyProcess.process = 'sometestprocess'
-        node_pty.spawn.and.returnValue(newPtyProcess)
+        nodePty.spawn.and.returnValue(newPtyProcess)
         this.element.model.profile.title = 'foo'
         this.element.restartPtyProcess().then(() => {
             let args = this.element.ptyProcess.on.calls.argsFor(1)
@@ -807,7 +809,7 @@ describe('AtomXtermElement', () => {
         let newPtyProcess = jasmine.createSpyObj('ptyProcess',
             ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
         newPtyProcess.process = 'sometestprocess'
-        node_pty.spawn.and.returnValue(newPtyProcess)
+        nodePty.spawn.and.returnValue(newPtyProcess)
         this.element.model.profile.title = 'foo'
         this.element.restartPtyProcess().then(() => {
             let args = this.element.ptyProcess.on.calls.argsFor(1)
@@ -822,8 +824,8 @@ describe('AtomXtermElement', () => {
 
     it('showNotification() success message', () => {
         this.element.showNotification(
-            message = 'foo',
-            infoType = 'success'
+            'foo',
+            'success'
         )
         let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
         expect(messageDiv.textContent).toBe('fooRestart')
@@ -831,8 +833,8 @@ describe('AtomXtermElement', () => {
 
     it('showNotification() error message', () => {
         this.element.showNotification(
-            message = 'foo',
-            infoType = 'error'
+            'foo',
+            'error'
         )
         let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error')
         expect(messageDiv.textContent).toBe('fooRestart')
@@ -841,8 +843,8 @@ describe('AtomXtermElement', () => {
     it('showNotification() success message with Atom notification', () => {
         spyOn(atom.notifications, 'addSuccess')
         this.element.showNotification(
-            message = 'foo',
-            infoType = 'success'
+            'foo',
+            'success'
         )
         expect(atom.notifications.addSuccess).toHaveBeenCalled()
     })
@@ -850,8 +852,8 @@ describe('AtomXtermElement', () => {
     it('showNotification() error message with Atom notification', () => {
         spyOn(atom.notifications, 'addError')
         this.element.showNotification(
-            message = 'foo',
-            infoType = 'error'
+            'foo',
+            'error'
         )
         expect(atom.notifications.addError).toHaveBeenCalled()
     })
@@ -859,8 +861,8 @@ describe('AtomXtermElement', () => {
     it('showNotification() warning message with Atom notification', () => {
         spyOn(atom.notifications, 'addWarning')
         this.element.showNotification(
-            message = 'foo',
-            infoType = 'warning'
+            'foo',
+            'warning'
         )
         expect(atom.notifications.addWarning).toHaveBeenCalled()
     })
@@ -868,8 +870,8 @@ describe('AtomXtermElement', () => {
     it('showNotification() info message with Atom notification', () => {
         spyOn(atom.notifications, 'addInfo')
         this.element.showNotification(
-            message = 'foo',
-            infoType = 'info'
+            'foo',
+            'info'
         )
         expect(atom.notifications.addInfo).toHaveBeenCalled()
     })
@@ -877,8 +879,8 @@ describe('AtomXtermElement', () => {
     it('showNotification() bogus info type with Atom notification', () => {
         let call = () => {
             this.element.showNotification(
-                message = 'foo',
-                infoType = 'bogus'
+                'foo',
+                'bogus'
             )
         }
         expect(call).toThrow(new Error('Unknown info type: bogus'))

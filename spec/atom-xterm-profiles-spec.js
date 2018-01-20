@@ -17,15 +17,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const os = require('os')
-const path = require('path')
-
 import { CompositeDisposable } from 'atom'
-const tmp = require('tmp')
-const { URL } = require('whatwg-url')
 
 import * as config from '../lib/atom-xterm-config'
 import { AtomXtermProfilesSingleton } from '../lib/atom-xterm-profiles'
+
+const path = require('path')
+
+const tmp = require('tmp')
+const { URL } = require('whatwg-url')
 
 describe('AtomXtermProfilesSingleton', () => {
     let getDefaultExpectedProfile = () => {
@@ -91,6 +91,9 @@ describe('AtomXtermProfilesSingleton', () => {
         AtomXtermProfilesSingleton.instance.resetBaseProfile()
         AtomXtermProfilesSingleton.instance.profilesLoadPromise.then(() => {
             tmp.dir({'unsafeCleanup': true}, (err, _path, cleanupCallback) => {
+                if (err) {
+                    throw err
+                }
                 AtomXtermProfilesSingleton.instance.profilesConfigPath = path.join(_path, 'profiles.json')
                 this.tmpdirCleanupCallback = cleanupCallback
                 AtomXtermProfilesSingleton.instance.reloadProfiles()
@@ -109,13 +112,13 @@ describe('AtomXtermProfilesSingleton', () => {
 
     it('AtomXtermProfilesSingleton cannot be instantiated directly', () => {
         let cb = () => {
-            new AtomXtermProfilesSingleton()
+            return new AtomXtermProfilesSingleton()
         }
         expect(cb).toThrowError('AtomXtermProfilesSingleton cannot be instantiated directly.')
     })
 
     it('instance property works', () => {
-        expect(AtomXtermProfilesSingleton.instance).toBeDefined
+        expect(AtomXtermProfilesSingleton.instance).toBeDefined()
     })
 
     it('has proper profiles.json path', () => {
@@ -294,7 +297,6 @@ describe('AtomXtermProfilesSingleton', () => {
             command: './manage.py',
             args: ['runserver', '9000']
         }
-        let expected = Object.assign({}, AtomXtermProfilesSingleton.instance.getBaseProfile(), data)
         let profileName = 'Django module runserver'
         AtomXtermProfilesSingleton.instance.setProfile(profileName, data).then(() => {
             AtomXtermProfilesSingleton.instance.isProfileExists(profileName).then((exists) => {
@@ -324,7 +326,6 @@ describe('AtomXtermProfilesSingleton', () => {
             command: './manage.py',
             args: ['runserver', '9000']
         }
-        let expected = Object.assign({}, AtomXtermProfilesSingleton.instance.getBaseProfile(), data)
         let profileName = 'Django module runserver'
         AtomXtermProfilesSingleton.instance.setProfile(profileName, data).then(() => {
             AtomXtermProfilesSingleton.instance.deleteProfile(profileName).then(() => {

@@ -20,7 +20,7 @@
 import AtomXtermProfileMenuElement from '../lib/atom-xterm-profile-menu-element'
 
 describe('AtomXtermProfileMenuElement', () => {
-    this.element
+    this.element = null
 
     beforeEach((done) => {
         let model = jasmine.createSpyObj(
@@ -81,9 +81,9 @@ describe('AtomXtermProfileMenuElement', () => {
     it('parseJson() array type', () => {
         let expected = ['foo']
         let actual = this.element.parseJson(
-            value = '["foo"]',
-            defaultValue = null,
-            type = Array
+            '["foo"]',
+            null,
+            Array
         )
         expect(actual).toEqual(expected)
     })
@@ -91,9 +91,9 @@ describe('AtomXtermProfileMenuElement', () => {
     it('parseJson() object type', () => {
         let expected = {'foo': 'bar'}
         let actual = this.element.parseJson(
-            value = '{"foo": "bar"}',
-            defaultValue = null,
-            type = Object
+            '{"foo": "bar"}',
+            null,
+            Object
         )
         expect(actual).toEqual(expected)
     })
@@ -101,18 +101,18 @@ describe('AtomXtermProfileMenuElement', () => {
     it('parseJson() default value', () => {
         let expected = ['foo']
         let actual = this.element.parseJson(
-            value = 'null',
-            defaultValue = expected,
-            type = Array
+            'null',
+            expected,
+            Array
         )
         expect(actual).toEqual(expected)
     })
 
     it('parseJson() syntax error', () => {
         let actual = this.element.parseJson(
-            value = '[[',
-            defaultValue = 'foo',
-            type = Array
+            '[[',
+            'foo',
+            Array
         )
         expect(actual).toBe('foo')
     })

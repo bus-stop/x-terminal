@@ -20,7 +20,7 @@
 import { AtomXtermDeleteProfileModel } from '../lib/atom-xterm-delete-profile-model'
 
 describe('AtomXtermDeleteProfileModel', () => {
-    this.atomXtermProfileMenuElement
+    this.atomXtermProfileMenuElement = null
 
     beforeEach(() => {
         this.atomXtermProfileMenuElement = jasmine.createSpy(

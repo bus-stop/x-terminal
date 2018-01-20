@@ -20,7 +20,7 @@
 import AtomXtermOverwriteProfileElement from '../lib/atom-xterm-overwrite-profile-element'
 
 describe('AtomXtermOverwriteProfileElement', () => {
-    this.model
+    this.model = null
 
     beforeEach(() => {
         this.model = jasmine.createSpyObj('model', ['setElement'])

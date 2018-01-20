@@ -21,7 +21,7 @@ import { AtomXtermSaveProfileModel } from '../lib/atom-xterm-save-profile-model'
 import * as utils from '../lib/atom-xterm-utils'
 
 describe('AtomXtermSaveProfileModel', () => {
-    this.atomXtermProfileMenuElement
+    this.atomXtermProfileMenuElement = null
 
     beforeEach(() => {
         this.atomXtermProfileMenuElement = jasmine.createSpyObj(

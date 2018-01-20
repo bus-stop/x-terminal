@@ -17,31 +17,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const fs = require('fs-extra')
-const path = require('path')
-
 import { CompositeDisposable, Emitter } from 'atom'
-const tmp = require('tmp')
-const { URL } = require('whatwg-url')
 
 import * as config from '../lib/atom-xterm-config'
 import AtomXtermModel from '../lib/atom-xterm-model'
 import { AtomXtermProfilesSingleton } from '../lib/atom-xterm-profiles'
 
+const fs = require('fs-extra')
+const path = require('path')
+
+const tmp = require('tmp')
+
 describe('AtomXtermModel', () => {
-    let model
-    let pane
-    let element
-    let disposables
-    let emitter
+    this.model = null
+    this.pane = null
+    this.element = null
+    this.disposables = null
+    this.emitter = null
 
     beforeEach((done) => {
         let uri = 'atom-xterm://somesessionid/'
         spyOn(AtomXtermProfilesSingleton.instance, 'generateNewUri').and.returnValue(uri)
-        let terminals_set = new Set()
+        let terminalsSet = new Set()
         this.model = new AtomXtermModel({
             uri: uri,
-            terminals_set: terminals_set
+            terminals_set: terminalsSet
         })
         this.model.initializedPromise.then(() => {
             this.pane = jasmine.createSpyObj('pane',
@@ -55,6 +55,9 @@ describe('AtomXtermModel', () => {
             this.disposables = new CompositeDisposable()
             this.emitter = new Emitter()
             tmp.dir({'unsafeCleanup': true}, (err, path, cleanupCallback) => {
+                if (err) {
+                    throw err
+                }
                 this.tmpdir = path
                 this.tmpdirCleanupCallback = cleanupCallback
                 done()
@@ -270,10 +273,10 @@ describe('AtomXtermModel', () => {
 
     it('getURI()', (done) => {
         let uri = 'atom-xterm://somesessionid/'
-        let terminals_set = new Set()
+        let terminalsSet = new Set()
         let model = new AtomXtermModel({
             uri: uri,
-            terminals_set: terminals_set
+            terminals_set: terminalsSet
         })
         model.initializedPromise.then(() => {
             expect(model.getURI()).toBe(uri)
@@ -387,10 +390,10 @@ describe('AtomXtermModel', () => {
     it('getSessionId()', (done) => {
         let expected = 'somesessionid'
         let uri = 'atom-xterm://' + expected + '/'
-        let terminals_set = new Set()
+        let terminalsSet = new Set()
         let model = new AtomXtermModel({
             uri: uri,
-            terminals_set: terminals_set
+            terminals_set: terminalsSet
         })
         model.initializedPromise.then(() => {
             expect(model.getSessionId()).toBe(expected)
@@ -400,10 +403,10 @@ describe('AtomXtermModel', () => {
 
     it('getSessionParameters() when no parameters set', (done) => {
         let uri = 'atom-xterm://somesessionid/'
-        let terminals_set = new Set()
+        let terminalsSet = new Set()
         let model = new AtomXtermModel({
             uri: uri,
-            terminals_set: terminals_set
+            terminals_set: terminalsSet
         })
         model.initializedPromise.then(() => {
             let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(model.profile)
@@ -483,17 +486,17 @@ describe('AtomXtermModel', () => {
 
     it('pasteToTerminal(text)', () => {
         this.model.element = this.element
-        let expected_text = 'some text'
-        this.model.pasteToTerminal(expected_text)
-        expect(this.model.element.ptyProcess.write.calls.allArgs()).toEqual([[expected_text]])
+        let expectedText = 'some text'
+        this.model.pasteToTerminal(expectedText)
+        expect(this.model.element.ptyProcess.write.calls.allArgs()).toEqual([[expectedText]])
     })
 
     it('setNewPane(event)', (done) => {
         let uri = 'atom-xterm://somesessionid/'
-        let terminals_set = new Set()
+        let terminalsSet = new Set()
         let model = new AtomXtermModel({
             uri: uri,
-            terminals_set: terminals_set
+            terminals_set: terminalsSet
         })
         model.initializedPromise.then(() => {
             let expected = {}

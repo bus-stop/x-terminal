@@ -20,7 +20,7 @@
 import AtomXtermSaveProfileElement from '../lib/atom-xterm-save-profile-element'
 
 describe('AtomXtermSaveProfileElement', () => {
-    this.model
+    this.model = null
 
     beforeEach(() => {
         this.model = jasmine.createSpyObj('model', ['setElement'])

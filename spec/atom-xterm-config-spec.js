@@ -17,10 +17,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import * as config from '../lib/atom-xterm-config'
+
 const os = require('os')
 const path = require('path')
-
-import * as config from '../lib/atom-xterm-config'
 
 describe('Call to getDefaultShellCommand()', () => {
     const savedPlatform = process.platform

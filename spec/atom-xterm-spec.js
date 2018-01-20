@@ -17,25 +17,24 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as node_pty from 'node-pty'
-const { URL } = require('whatwg-url')
+import * as nodePty from 'node-pty'
 
-import AtomXterm from '../lib/atom-xterm'
 import * as config from '../lib/atom-xterm-config'
 import AtomXtermElement from '../lib/atom-xterm-element'
 import AtomXtermModel from '../lib/atom-xterm-model'
-import { AtomXtermProfilesSingleton } from '../lib/atom-xterm-profiles'
+
+const { URL } = require('whatwg-url')
 
 describe('AtomXterm', () => {
-    const default_uri = 'atom-xterm://somesessionid/'
-    let workspaceElement
-    let atomXtermPackage
+    const defaultUri = 'atom-xterm://somesessionid/'
+    this.workspaceElement = null
+    this.atomXtermPackage = null
 
-    let createNewModel = (package_module, uri = default_uri) => {
+    let createNewModel = (packageModule, uri = defaultUri) => {
         return new Promise((resolve, reject) => {
             let model = new AtomXtermModel({
                 uri: uri,
-                terminals_set: package_module.terminals_set
+                terminals_set: packageModule.terminals_set
             })
             model.initializedPromise.then(() => {
                 model.pane = jasmine.createSpyObj('pane',
@@ -53,10 +52,10 @@ describe('AtomXterm', () => {
         })
     }
 
-    let createNewElement = (package_module) => {
+    let createNewElement = (packageModule) => {
         return new Promise((resolve, reject) => {
             let element = new AtomXtermElement()
-            createNewModel(package_module).then((model) => {
+            createNewModel(packageModule).then((model) => {
                 element.initialize(model).then(() => {
                     resolve(element)
                 })
@@ -69,12 +68,12 @@ describe('AtomXterm', () => {
             ['kill', 'write', 'resize', 'on'])
         ptyProcess.process = jasmine.createSpy('process')
             .and.returnValue('sometestprocess')
-        spyOn(node_pty, 'spawn').and.returnValue(ptyProcess)
+        spyOn(nodePty, 'spawn').and.returnValue(ptyProcess)
         atom.config.clear()
         this.workspaceElement = atom.views.getView(atom.workspace)
         atom.packages.activatePackage('atom-xterm').then(() => {
             this.atomXtermPackage = atom.packages.getActivePackage('atom-xterm')
-            spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'generateNewUri').and.returnValue(default_uri)
+            spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'generateNewUri').and.returnValue(defaultUri)
             spyOn(atom.workspace, 'open').and.callFake(atom.workspace.openSync)
             this.atomXtermPackage.mainModule.config.spawnPtySettings.properties.command.default = config.getDefaultShellCommand()
             this.atomXtermPackage.mainModule.config.spawnPtySettings.properties.name.default = config.getDefaultTermType()
@@ -103,12 +102,12 @@ describe('AtomXterm', () => {
     it('run atom-xterm:open', () => {
         spyOn(atom.workspace, 'getActivePane').and.returnValue(null)
         atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open')
-        expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {}]])
+        expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {}]])
     })
 
     it('run atom-xterm:open-split-up and check arguments', () => {
         atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-up')
-        expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {'split': 'up'}]])
+        expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {'split': 'up'}]])
     })
 
     it('run atom-xterm:open-split-up and check element exists', () => {
@@ -118,7 +117,7 @@ describe('AtomXterm', () => {
 
     it('run atom-xterm:open-split-down and check arguments', () => {
         atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-down')
-        expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {'split': 'down'}]])
+        expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {'split': 'down'}]])
     })
 
     it('run atom-xterm:open-split-down and check element exists', () => {
@@ -128,7 +127,7 @@ describe('AtomXterm', () => {
 
     it('run atom-xterm:open-split-left and check arguments', () => {
         atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-left')
-        expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {'split': 'left'}]])
+        expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {'split': 'left'}]])
     })
 
     it('run atom-xterm:open-split-left and check element exists', () => {
@@ -138,7 +137,7 @@ describe('AtomXterm', () => {
 
     it('run atom-xterm:open-split-right and check arguments', () => {
         atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-right')
-        expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {'split': 'right'}]])
+        expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {'split': 'right'}]])
     })
 
     it('run atom-xterm:open-split-down and check element exists', () => {
@@ -151,7 +150,7 @@ describe('AtomXterm', () => {
         spyOn(atom.workspace, 'getBottomDock').and.returnValue(mock)
         mock.getActivePane.and.returnValue(null)
         atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-bottom-dock')
-        expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {}]])
+        expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {}]])
     })
 
     it('run atom-xterm:open-split-left-dock', () => {
@@ -159,7 +158,7 @@ describe('AtomXterm', () => {
         spyOn(atom.workspace, 'getLeftDock').and.returnValue(mock)
         mock.getActivePane.and.returnValue(null)
         atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-left-dock')
-        expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {}]])
+        expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {}]])
     })
 
     it('run atom-xterm:open-split-right-dock', () => {
@@ -167,7 +166,7 @@ describe('AtomXterm', () => {
         spyOn(atom.workspace, 'getRightDock').and.returnValue(mock)
         mock.getActivePane.and.returnValue(null)
         atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-right-dock')
-        expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {}]])
+        expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {}]])
     })
 
     it('run atom-xterm:reorganize no terminals in workspace', () => {
@@ -288,7 +287,7 @@ describe('AtomXterm', () => {
     })
 
     it('run atom-xterm:close', (done) => {
-        createNewElement(package_module = this.atomXtermPackage.mainModule).then((element) => {
+        createNewElement(this.atomXtermPackage.mainModule).then((element) => {
             spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model)
             atom.commands.dispatch(element, 'atom-xterm:close')
             expect(element.model.exit).toHaveBeenCalled()
@@ -297,7 +296,7 @@ describe('AtomXterm', () => {
     })
 
     it('run atom-xterm:restart', (done) => {
-        createNewElement(package_module = this.atomXtermPackage.mainModule).then((element) => {
+        createNewElement(this.atomXtermPackage.mainModule).then((element) => {
             spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model)
             atom.commands.dispatch(element, 'atom-xterm:restart')
             expect(element.model.restartPtyProcess).toHaveBeenCalled()
@@ -306,7 +305,7 @@ describe('AtomXterm', () => {
     })
 
     it('run atom-xterm:copy', (done) => {
-        createNewElement(package_module = this.atomXtermPackage.mainModule).then((element) => {
+        createNewElement(this.atomXtermPackage.mainModule).then((element) => {
             spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model)
             spyOn(atom.clipboard, 'write')
             atom.commands.dispatch(element, 'atom-xterm:copy')
@@ -316,7 +315,7 @@ describe('AtomXterm', () => {
     })
 
     it('run atom-xterm:paste', (done) => {
-        createNewElement(package_module = this.atomXtermPackage.mainModule).then((element) => {
+        createNewElement(this.atomXtermPackage.mainModule).then((element) => {
             spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model)
             atom.clipboard.write('some text from clipboard')
             atom.commands.dispatch(element, 'atom-xterm:paste')
@@ -326,7 +325,7 @@ describe('AtomXterm', () => {
     })
 
     it('run atom-xterm:open-link', (done) => {
-        createNewElement(package_module = this.atomXtermPackage.mainModule).then((element) => {
+        createNewElement(this.atomXtermPackage.mainModule).then((element) => {
             spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model)
             atom.commands.dispatch(element, 'atom-xterm:open-link')
             expect(element.model.clickOnCurrentAnchor).toHaveBeenCalled()
@@ -335,7 +334,7 @@ describe('AtomXterm', () => {
     })
 
     it('run atom-xterm:copy-link', (done) => {
-        createNewElement(package_module = this.atomXtermPackage.mainModule).then((element) => {
+        createNewElement(this.atomXtermPackage.mainModule).then((element) => {
             spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model)
             atom.commands.dispatch(element, 'atom-xterm:copy-link')
             expect(element.model.getCurrentAnchorHref).toHaveBeenCalled()
@@ -344,7 +343,7 @@ describe('AtomXterm', () => {
     })
 
     it('run atom-xterm:copy-link with returned link', (done) => {
-        createNewElement(package_module = this.atomXtermPackage.mainModule).then((element) => {
+        createNewElement(this.atomXtermPackage.mainModule).then((element) => {
             spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model)
             let expected = 'https://atom.io'
             element.model.getCurrentAnchorHref.and.returnValue(expected)
@@ -356,7 +355,7 @@ describe('AtomXterm', () => {
     })
 
     it('run atom-xterm:copy-link no returned link', (done) => {
-        createNewElement(package_module = this.atomXtermPackage.mainModule).then((element) => {
+        createNewElement(this.atomXtermPackage.mainModule).then((element) => {
             spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model)
             let expected = null
             element.model.getCurrentAnchorHref.and.returnValue(expected)
@@ -371,7 +370,7 @@ describe('AtomXterm', () => {
         let mock = jasmine.createSpyObj('dock', ['getActivePane'])
         mock.getActivePane.and.returnValue(null)
         this.atomXtermPackage.mainModule.openInCenterOrDock(mock)
-        expect(atom.workspace.open.calls.allArgs()).toEqual([[default_uri, {}]])
+        expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {}]])
     })
 
     it('refitAllTerminals()', () => {
@@ -450,38 +449,38 @@ describe('AtomXterm', () => {
 
     it('open() basic uri', (done) => {
         atom.workspace.open.and.stub()
-        let expected_uri = 'atom-xterm://somesessionid/'
-        this.atomXtermPackage.mainModule.open(uri = expected_uri).then(() => {
-            expect(atom.workspace.open.calls.allArgs()).toEqual([[expected_uri, {}]])
+        let expectedUri = 'atom-xterm://somesessionid/'
+        this.atomXtermPackage.mainModule.open(expectedUri).then(() => {
+            expect(atom.workspace.open.calls.allArgs()).toEqual([[expectedUri, {}]])
             done()
         })
     })
 
     it('open() alternate uri', (done) => {
         atom.workspace.open.and.stub()
-        let expected_uri = 'atom-xterm://somesessionid/?blahblahblah'
-        this.atomXtermPackage.mainModule.open(uri = expected_uri).then(() => {
-            expect(atom.workspace.open.calls.allArgs()).toEqual([[expected_uri, {}]])
+        let expectedUri = 'atom-xterm://somesessionid/?blahblahblah'
+        this.atomXtermPackage.mainModule.open(expectedUri).then(() => {
+            expect(atom.workspace.open.calls.allArgs()).toEqual([[expectedUri, {}]])
             done()
         })
     })
 
     it('open() alternate options', (done) => {
         atom.workspace.open.and.stub()
-        let expected_uri = 'atom-xterm://somesessionid/'
-        let expected_options = {foo: 'bar'}
-        this.atomXtermPackage.mainModule.open(uri = expected_uri, options = expected_options).then(() => {
-            expect(atom.workspace.open.calls.allArgs()).toEqual([[expected_uri, expected_options]])
+        let expectedUri = 'atom-xterm://somesessionid/'
+        let expectedOptions = {foo: 'bar'}
+        this.atomXtermPackage.mainModule.open(expectedUri, expectedOptions).then(() => {
+            expect(atom.workspace.open.calls.allArgs()).toEqual([[expectedUri, expectedOptions]])
             done()
         })
     })
 
     it('open() alternate uri and options', (done) => {
         atom.workspace.open.and.stub()
-        let expected_uri = 'atom-xterm://somesessionid/?blahblahblah'
-        let expected_options = {foo: 'bar'}
-        this.atomXtermPackage.mainModule.open(uri = expected_uri, options = expected_options).then(() => {
-            expect(atom.workspace.open.calls.allArgs()).toEqual([[expected_uri, expected_options]])
+        let expectedUri = 'atom-xterm://somesessionid/?blahblahblah'
+        let expectedOptions = {foo: 'bar'}
+        this.atomXtermPackage.mainModule.open(expectedUri, expectedOptions).then(() => {
+            expect(atom.workspace.open.calls.allArgs()).toEqual([[expectedUri, expectedOptions]])
             done()
         })
     })
@@ -490,7 +489,7 @@ describe('AtomXterm', () => {
         atom.workspace.open.and.stub()
         let url = new URL('atom-xterm://somesessionid/')
         atom.config.set('atom-xterm.terminalSettings.relaunchTerminalOnStartup', true)
-        this.atomXtermPackage.mainModule.open(uri = url.href).then(() => {
+        this.atomXtermPackage.mainModule.open(url.href).then(() => {
             expect(atom.workspace.open.calls.allArgs()).toEqual([[url.href, {}]])
             done()
         })
@@ -501,7 +500,7 @@ describe('AtomXterm', () => {
         let url = new URL('atom-xterm://somesessionid/')
         url.searchParams.set('relaunchTerminalOnStartup', false)
         atom.config.set('atom-xterm.terminalSettings.relaunchTerminalOnStartup', true)
-        this.atomXtermPackage.mainModule.open(uri = url.href).then(() => {
+        this.atomXtermPackage.mainModule.open(url.href).then(() => {
             expect(atom.workspace.open.calls.allArgs()).toEqual([[url.href, {}]])
             done()
         })
@@ -512,7 +511,7 @@ describe('AtomXterm', () => {
         let url = new URL('atom-xterm://somesessionid/')
         url.searchParams.set('relaunchTerminalOnStartup', true)
         atom.config.set('atom-xterm.terminalSettings.relaunchTerminalOnStartup', true)
-        this.atomXtermPackage.mainModule.open(uri = url.href).then(() => {
+        this.atomXtermPackage.mainModule.open(url.href).then(() => {
             expect(atom.workspace.open.calls.allArgs()).toEqual([[url.href, {}]])
             done()
         })
