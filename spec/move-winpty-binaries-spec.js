@@ -133,10 +133,15 @@ describe('move-winpty-binaries script', () => {
           'atom-xterm'
         )
         let nodePtyPath = path.join(atomXtermPath, 'node_modules', 'node-pty')
+        let nodePtyPrebuiltPath = path.join(atomXtermPath, 'node_modules', 'node-pty-prebuilt')
         this.nodePtyBuildReleasePath = path.join(nodePtyPath, 'build', 'Release')
         this.nodePtyBuildDebugPath = path.join(nodePtyPath, 'build', 'Debug')
+        this.nodePtyPrebuiltBuildReleasePath = path.join(nodePtyPrebuiltPath, 'build', 'Release')
+        this.nodePtyPrebuiltBuildDebugPath = path.join(nodePtyPrebuiltPath, 'build', 'Debug')
         fsExtra.ensureDirSync(this.nodePtyBuildReleasePath)
         fsExtra.ensureDirSync(this.nodePtyBuildDebugPath)
+        fsExtra.ensureDirSync(this.nodePtyPrebuiltBuildReleasePath)
+        fsExtra.ensureDirSync(this.nodePtyPrebuiltBuildDebugPath)
         Object.defineProperty(process, 'platform', {
           'value': 'win32'
         })
@@ -144,28 +149,63 @@ describe('move-winpty-binaries script', () => {
 
       it('node-pty build directories exist', () => {
         script.main()
-        expect(fs.renameSync.calls.count()).toBe(2)
+        expect(fs.renameSync.calls.count()).toBe(4)
         expect(fs.renameSync.calls.argsFor(0)[0]).toBe(this.nodePtyBuildReleasePath)
         expect(fs.renameSync.calls.argsFor(1)[0]).toBe(this.nodePtyBuildDebugPath)
+        expect(fs.renameSync.calls.argsFor(2)[0]).toBe(this.nodePtyPrebuiltBuildReleasePath)
+        expect(fs.renameSync.calls.argsFor(3)[0]).toBe(this.nodePtyPrebuiltBuildDebugPath)
       })
 
       it('node-pty Release directory does not exist', () => {
         fsExtra.removeSync(this.nodePtyBuildReleasePath)
         script.main()
-        expect(fs.renameSync.calls.count()).toBe(1)
+        expect(fs.renameSync.calls.count()).toBe(3)
         expect(fs.renameSync.calls.argsFor(0)[0]).toBe(this.nodePtyBuildDebugPath)
+        expect(fs.renameSync.calls.argsFor(1)[0]).toBe(this.nodePtyPrebuiltBuildReleasePath)
+        expect(fs.renameSync.calls.argsFor(2)[0]).toBe(this.nodePtyPrebuiltBuildDebugPath)
       })
 
       it('node-pty Debug directory does not exist', () => {
         fsExtra.removeSync(this.nodePtyBuildDebugPath)
         script.main()
-        expect(fs.renameSync.calls.count()).toBe(1)
+        expect(fs.renameSync.calls.count()).toBe(3)
         expect(fs.renameSync.calls.argsFor(0)[0]).toBe(this.nodePtyBuildReleasePath)
+        expect(fs.renameSync.calls.argsFor(1)[0]).toBe(this.nodePtyPrebuiltBuildReleasePath)
+        expect(fs.renameSync.calls.argsFor(2)[0]).toBe(this.nodePtyPrebuiltBuildDebugPath)
       })
 
       it('node-pty Release and Debug directories do not exist', () => {
         fsExtra.removeSync(this.nodePtyBuildReleasePath)
         fsExtra.removeSync(this.nodePtyBuildDebugPath)
+        script.main()
+        expect(fs.renameSync.calls.count()).toBe(2)
+        expect(fs.renameSync.calls.argsFor(0)[0]).toBe(this.nodePtyPrebuiltBuildReleasePath)
+        expect(fs.renameSync.calls.argsFor(1)[0]).toBe(this.nodePtyPrebuiltBuildDebugPath)
+      })
+
+      it('node-pty does not exist, node-pty-prebuilt Release directory does not exist', () => {
+        fsExtra.removeSync(this.nodePtyBuildReleasePath)
+        fsExtra.removeSync(this.nodePtyBuildDebugPath)
+        fsExtra.removeSync(this.nodePtyPrebuiltBuildReleasePath)
+        script.main()
+        expect(fs.renameSync.calls.count()).toBe(1)
+        expect(fs.renameSync.calls.argsFor(0)[0]).toBe(this.nodePtyPrebuiltBuildDebugPath)
+      })
+
+      it('node-pty does not exist, node-pty-prebuilt Debug directory does not exist', () => {
+        fsExtra.removeSync(this.nodePtyBuildReleasePath)
+        fsExtra.removeSync(this.nodePtyBuildDebugPath)
+        fsExtra.removeSync(this.nodePtyPrebuiltBuildDebugPath)
+        script.main()
+        expect(fs.renameSync.calls.count()).toBe(1)
+        expect(fs.renameSync.calls.argsFor(0)[0]).toBe(this.nodePtyPrebuiltBuildReleasePath)
+      })
+
+      it('node-pty does not exist, node-pty-prebuilt Release and Debug directories do not exist', () => {
+        fsExtra.removeSync(this.nodePtyBuildReleasePath)
+        fsExtra.removeSync(this.nodePtyBuildDebugPath)
+        fsExtra.removeSync(this.nodePtyPrebuiltBuildReleasePath)
+        fsExtra.removeSync(this.nodePtyPrebuiltBuildDebugPath)
         script.main()
         expect(fs.renameSync).not.toHaveBeenCalled()
       })

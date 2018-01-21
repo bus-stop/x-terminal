@@ -108,22 +108,23 @@ function main () {
   // smoother for Windows users.
   let nodePtyPath = path.join(atomXtermPath, 'node_modules', 'node-pty')
   console.log('Using nodePtyPath = \'' + nodePtyPath + '\'')
+  let nodePtyPrebuiltPath = path.join(atomXtermPath, 'node_modules', 'node-pty-prebuilt')
+  console.log('Using nodePtyPrebuiltPath = \'' + nodePtyPrebuiltPath + '\'')
 
   // Move the directories containing the Windows binaries under a tmp
   // directory.
-  let nodePtyBuildReleasePath = path.join(nodePtyPath, 'build', 'Release')
-  let nodePtyBuildDebugPath = path.join(nodePtyPath, 'build', 'Debug')
-  if (fs.existsSync(nodePtyBuildReleasePath)) {
-    let tmpdir = mkdtempSyncForRenamingDLLs(atomHome)
-    let newPath = path.join(tmpdir, 'Release')
-    console.log('Moving \'' + nodePtyBuildReleasePath + '\' to \'' + newPath + '\'.')
-    fs.renameSync(nodePtyBuildReleasePath, newPath)
-  }
-  if (fs.existsSync(nodePtyBuildDebugPath)) {
-    let tmpdir = mkdtempSyncForRenamingDLLs(atomHome)
-    let newPath = path.join(tmpdir, 'Debug')
-    console.log('Moving \'' + nodePtyBuildDebugPath + '\' to \'' + newPath + '\'.')
-    fs.renameSync(nodePtyBuildDebugPath, newPath)
+  for (let nodePtyModulePath of [nodePtyPath, nodePtyPrebuiltPath]) {
+    let releaseBuildPath = path.join(nodePtyModulePath, 'build', 'Release')
+    let debugBuildPath = path.join(nodePtyModulePath, 'build', 'Debug')
+    for (let buildPath of [releaseBuildPath, debugBuildPath]) {
+      console.log(`Checking if '${buildPath}' exists`)
+      if (fs.existsSync(buildPath)) {
+        let tmpdir = mkdtempSyncForRenamingDLLs(atomHome)
+        let newPath = path.join(tmpdir, path.basename(buildPath))
+        console.log(`Moving '${buildPath}' to '${newPath}'.`)
+        fs.renameSync(buildPath, newPath)
+      }
+    }
   }
 }
 
