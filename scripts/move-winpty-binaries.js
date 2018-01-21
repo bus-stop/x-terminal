@@ -12,9 +12,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.main = exports.mkdtempSyncForRenamingDLLs = undefined;
 
-var _fs = require('fs');
+var _fsExtra = require('fs-extra');
 
-var _fs2 = _interopRequireDefault(_fs);
+var _fsExtra2 = _interopRequireDefault(_fsExtra);
 
 var _os = require('os');
 
@@ -31,8 +31,8 @@ function mkdtempSyncForRenamingDLLs(atomHome) {
     throw new Error('must provide atomHome parameter');
   }
   var tmp = _path2.default.join(atomHome, 'tmp');
-  if (!_fs2.default.existsSync(tmp)) _fs2.default.mkdirSync(tmp);
-  return _fs2.default.mkdtempSync(_path2.default.join(tmp, 'moved-dll-'));
+  if (!_fsExtra2.default.existsSync(tmp)) _fsExtra2.default.mkdirSync(tmp);
+  return _fsExtra2.default.mkdtempSync(_path2.default.join(tmp, 'moved-dll-'));
 } /** @babel */
 /*
  * Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -89,7 +89,7 @@ function main() {
     atomHome = _path2.default.resolve(atomHome);
   } else {
     atomHome = _path2.default.join(homeDir, '.atom');
-    if (!_fs2.default.existsSync(atomHome)) {
+    if (!_fsExtra2.default.existsSync(atomHome)) {
       console.log('atomHome = \'' + atomHome + '\' doesn\'t exist.');
       console.log('Checking if home directory is set to .node-gyp path');
       var regexp = new RegExp(_path2.default.join('.atom', '.node-gyp').replace(/\.\\/g, '\\$&') + '$');
@@ -100,7 +100,7 @@ function main() {
         console.log('New atomHome = \'' + atomHome + '\'.');
       }
     }
-    if (!_fs2.default.existsSync(atomHome)) {
+    if (!_fsExtra2.default.existsSync(atomHome)) {
       console.log('Attempting use of HOMEDRIVE and HOMEPATH environment variables.');
       var homeDrive = process.env.HOMEDRIVE;
       var homePath = process.env.HOMEPATH;
@@ -114,7 +114,7 @@ function main() {
   console.log('Using atomHome = \'' + atomHome + '\'');
   var atomXtermPath = _path2.default.join(atomHome, 'packages', 'atom-xterm');
   console.log('Using atomXtermPath = \'' + atomXtermPath + '\'');
-  if (!_fs2.default.existsSync(atomXtermPath)) {
+  if (!_fsExtra2.default.existsSync(atomXtermPath)) {
     console.log('atom-xterm not installed, exiting.');
     process.exit(0);
     /* eslint-disable no-unreachable */
@@ -144,11 +144,11 @@ function main() {
     for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
       var buildPath = _arr2[_i2];
       console.log('Checking if \'' + buildPath + '\' exists');
-      if (_fs2.default.existsSync(buildPath)) {
+      if (_fsExtra2.default.existsSync(buildPath)) {
         var tmpdir = mkdtempSyncForRenamingDLLs(atomHome);
         var newPath = _path2.default.join(tmpdir, _path2.default.basename(buildPath));
         console.log('Moving \'' + buildPath + '\' to \'' + newPath + '\'.');
-        _fs2.default.renameSync(buildPath, newPath);
+        _fsExtra2.default.renameSync(buildPath, newPath);
       }
     }
   }
