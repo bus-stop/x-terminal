@@ -1,3 +1,6 @@
+## 4.2.1
+* Use exact commit for dependency on xterm.
+
 ## 4.2.0
 * Upgrade to xterm.js v3.
 * Convert the move-winpty-binaries.js script to ES6.
