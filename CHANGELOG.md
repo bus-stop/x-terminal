@@ -2,7 +2,7 @@
 * Upgrade to xterm.js v3.
 * Convert the move-winpty-binaries.js script to ES6.
 * Include unit tests for the move-winpty-binaries.js script.
-* Use various linting tools to check for and correct problems with code.
+* Use various `lint` tools to check for and correct problems with code.
 
 ## 4.1.0
 * Use latest dependencies.
