@@ -1,3 +1,6 @@
+## 4.3.0
+* Switch to node-pty-prebuilt.
+
 ## 4.2.1
 * Use exact commit for dependency on xterm.
 
