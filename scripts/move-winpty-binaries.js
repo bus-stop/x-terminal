@@ -124,24 +124,33 @@ function main() {
     /* eslint-enable no-unreachable */
     /* eslint-enable no-useless-return */
   }
+  // NOTE: This script will move binaries for the 'node-pty' module. Although
+  // 'node-pty' has been replaced with 'node-pty-prebuilt', this script will
+  // still move the binaries in the 'node-pty' module to make upgrades
+  // smoother for Windows users.
   var nodePtyPath = _path2.default.join(atomXtermPath, 'node_modules', 'node-pty');
   console.log('Using nodePtyPath = \'' + nodePtyPath + '\'');
+  var nodePtyPrebuiltPath = _path2.default.join(atomXtermPath, 'node_modules', 'node-pty-prebuilt');
+  console.log('Using nodePtyPrebuiltPath = \'' + nodePtyPrebuiltPath + '\'');
 
   // Move the directories containing the Windows binaries under a tmp
   // directory.
-  var nodePtyBuildReleasePath = _path2.default.join(nodePtyPath, 'build', 'Release');
-  var nodePtyBuildDebugPath = _path2.default.join(nodePtyPath, 'build', 'Debug');
-  if (_fs2.default.existsSync(nodePtyBuildReleasePath)) {
-    var tmpdir = mkdtempSyncForRenamingDLLs(atomHome);
-    var newPath = _path2.default.join(tmpdir, 'Release');
-    console.log('Moving \'' + nodePtyBuildReleasePath + '\' to \'' + newPath + '\'.');
-    _fs2.default.renameSync(nodePtyBuildReleasePath, newPath);
-  }
-  if (_fs2.default.existsSync(nodePtyBuildDebugPath)) {
-    var _tmpdir = mkdtempSyncForRenamingDLLs(atomHome);
-    var _newPath = _path2.default.join(_tmpdir, 'Debug');
-    console.log('Moving \'' + nodePtyBuildDebugPath + '\' to \'' + _newPath + '\'.');
-    _fs2.default.renameSync(nodePtyBuildDebugPath, _newPath);
+  var _arr = [nodePtyPath, nodePtyPrebuiltPath];
+  for (var _i = 0; _i < _arr.length; _i++) {
+    var nodePtyModulePath = _arr[_i];
+    var releaseBuildPath = _path2.default.join(nodePtyModulePath, 'build', 'Release');
+    var debugBuildPath = _path2.default.join(nodePtyModulePath, 'build', 'Debug');
+    var _arr2 = [releaseBuildPath, debugBuildPath];
+    for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
+      var buildPath = _arr2[_i2];
+      console.log('Checking if \'' + buildPath + '\' exists');
+      if (_fs2.default.existsSync(buildPath)) {
+        var tmpdir = mkdtempSyncForRenamingDLLs(atomHome);
+        var newPath = _path2.default.join(tmpdir, _path2.default.basename(buildPath));
+        console.log('Moving \'' + buildPath + '\' to \'' + newPath + '\'.');
+        _fs2.default.renameSync(buildPath, newPath);
+      }
+    }
   }
 }
 
