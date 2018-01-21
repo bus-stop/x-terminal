@@ -34,7 +34,7 @@
   "dependencies": {
     "element-resize-detector": "^1.1.12",
     "fs-extra": "^5.0.0",
-    "node-pty": "^0.7.4",
+    "node-pty-prebuilt": "^0.7.3",
     "uuid": "^3.2.1",
     "whatwg-url": "^6.4.0",
     "xterm": "git://github.com/amejia1/xterm.js.git#0303dabb47c7b8c7353e3af3229ff77524c617d1"

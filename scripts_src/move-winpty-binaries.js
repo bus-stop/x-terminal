@@ -102,6 +102,10 @@ function main () {
     /* eslint-enable no-unreachable */
     /* eslint-enable no-useless-return */
   }
+  // NOTE: This script will move binaries for the 'node-pty' module. Although
+  // 'node-pty' has been replaced with 'node-pty-prebuilt', this script will
+  // still move the binaries in the 'node-pty' module to make upgrades
+  // smoother for Windows users.
   let nodePtyPath = path.join(atomXtermPath, 'node_modules', 'node-pty')
   console.log('Using nodePtyPath = \'' + nodePtyPath + '\'')
 

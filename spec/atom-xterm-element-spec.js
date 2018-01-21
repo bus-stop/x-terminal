@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as nodePty from 'node-pty'
+import * as nodePty from 'node-pty-prebuilt'
 
 import * as config from '../lib/atom-xterm-config'
 import AtomXtermElement from '../lib/atom-xterm-element'
