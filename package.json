@@ -32,7 +32,7 @@
     "atom": ">=1.23.1 <2.0.0"
   },
   "dependencies": {
-    "element-resize-detector": "^1.1.12",
+    "element-resize-detector": "^1.1.13",
     "fs-extra": "^5.0.0",
     "node-pty-prebuilt": "^0.7.3",
     "uuid": "^3.2.1",
@@ -40,12 +40,12 @@
     "xterm": "git://github.com/amejia1/xterm.js.git#0303dabb47c7b8c7353e3af3229ff77524c617d1"
   },
   "devDependencies": {
-    "atom-jasmine2-test-runner": "^1.3.1",
+    "atom-jasmine2-test-runner": "^1.4.2",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-register": "^6.26.0",
-    "eslint": "^4.15.0",
+    "eslint": "^4.16.0",
     "eslint-config-standard": "^11.0.0-beta.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-node": "^5.2.1",
