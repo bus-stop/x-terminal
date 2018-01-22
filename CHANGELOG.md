@@ -1,3 +1,6 @@
+## 4.3.1
+* Update all dependencies.
+
 ## 4.3.0
 * Switch to node-pty-prebuilt.
 
