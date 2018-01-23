@@ -176,8 +176,8 @@ describe('AtomXtermElement', () => {
   })
 
   it('checkPathIsDirectory() path set to non-existent dir', (done) => {
-    this.element.checkPathIsDirectory(path.join(this.tmpdir, 'non-existent-dir')).catch((err) => {
-      expect(err).toBeTruthy()
+    this.element.checkPathIsDirectory(path.join(this.tmpdir, 'non-existent-dir')).then((isDirectory) => {
+      expect(isDirectory).toBe(false)
       done()
     })
   })
