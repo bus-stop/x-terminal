@@ -1,3 +1,8 @@
+## 4.4.0
+* Fix issue where terminal hangs if directory to use as CWD does not exist.
+* Provide a service method `openTerminal()` for plugin writers to easily open
+  terminals using the atom-xterm package.
+
 ## 4.3.1
 * Update all dependencies.
 
