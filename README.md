@@ -78,8 +78,9 @@ There's also activity notifications for terminal tabs not in focus.
 
 For plugin writers, the atom-xterm package supports one service method which
 can be used to easily open terminals. This method is provided using Atom's [services](http://flight-manual.atom.io/behind-atom/sections/interacting-with-other-packages-via-services/)
-API. To use it, add a consumer method to consume the service method, or rather
-the [openTerminal()](https://github.com/amejia1/atom-xterm/blob/0376dba8551f7518fa184d4688bbdba6779163aa/lib/atom-xterm.js#L388) method. The `openTerminal()` method behaves just like Atom's
+API. To use it, add a consumer method to consume the `atom-xterm` service, or
+rather a JavaScript object that provides an
+[openTerminal()](https://github.com/amejia1/atom-xterm/blob/0376dba8551f7518fa184d4688bbdba6779163aa/lib/atom-xterm.js#L388) method. The `openTerminal()` method behaves just like Atom's
 [open()](https://github.com/atom/atom/blob/v1.23.3/src/workspace.js#L912)
 method except that the first argument must be a JSON object describing the
 terminal profile that should be opened. Docs about this JSON object can be
@@ -93,15 +94,15 @@ As an example on how to use the provided `openTerminal()` method, your
   "consumedServices": {
     "atom-xterm": {
       "versions": {
-        "^1.0.0": "consumeOpenTerminal"
+        "^1.0.0": "consumeAtomXtermService"
       }
     }
   }
 }
 ```
 
-Your package's main module should then define a `consumeOpenTerminal` method,
-for example.
+Your package's main module should then define a `consumeAtomXtermService`
+method, for example.
 
 ```javascript
 // In ECMAScript 6
@@ -109,27 +110,32 @@ for example.
 import { Disposable } from 'atom'
 
 export default {
-  activate (state) {
-    // Define a default callback for openTerminal.
-    this.openTerminal = () => {
-      throw new Error('Not implemented')
-    }
-    . . .
-  },
+  atomXtermService: null,
 
-  consumeOpenTerminal (service) {
-    // Set openTerminal() to the method provided in atom-xterm.
-    this.openTerminal = service
+  consumeAtomXtermService (atomXtermService) {
+    this.atomXtermService = atomXtermService
     return new Disposable(() => {
-      // Set openTerminal back to some default when atom-xterm is deactivated.
-      this.openTerminal = () => {
-        throw new Error('Not implemented')
-      }
+      this.atomXtermService = null
     })
   },
 
-  . . .
+  // . . .
 }
+```
+
+Once the service is consumed, use the `openTerminal()` method that is provided
+by the service, for example.
+
+```javascript
+// Launch `somecommand --foo --bar --baz` in a terminal.
+this.atomXtermService.openTerminal({
+  command: 'somecommand',
+  args: [
+    '--foo',
+    '--bar',
+    '--baz'
+  ]
+})
 ```
 
 # Development

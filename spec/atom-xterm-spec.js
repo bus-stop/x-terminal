@@ -74,7 +74,7 @@ describe('AtomXterm', () => {
     atom.packages.activatePackage('atom-xterm').then(() => {
       this.atomXtermPackage = atom.packages.getActivePackage('atom-xterm')
       spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'generateNewUri').and.returnValue(defaultUri)
-      spyOn(atom.workspace, 'open').and.callFake(async function (...args) {
+      spyOn(atom.workspace, 'open').and.callFake(async (...args) => {
         return atom.workspace.openSync(...args)
       })
       this.atomXtermPackage.mainModule.config.spawnPtySettings.properties.command.default = config.getDefaultShellCommand()
@@ -578,9 +578,18 @@ describe('AtomXterm', () => {
     })
   })
 
-  it('provideOpenTerminal()', () => {
-    let callback = this.atomXtermPackage.mainModule.provideOpenTerminal()
-    expect(callback).toBe(this.atomXtermPackage.mainModule.openTerminal)
+  it('provideAtomXtermService() provides openTerminal() method', () => {
+    let atomXtermService = this.atomXtermPackage.mainModule.provideAtomXtermService()
+    expect(atomXtermService.hasOwnProperty('openTerminal')).toBe(true)
+    expect(Object.prototype.toString.call(atomXtermService.openTerminal)).toBe('[object Function]')
+  })
+
+  it('provideAtomXtermService() openTerminal() returns AtomXtermModel', (done) => {
+    let atomXtermService = this.atomXtermPackage.mainModule.provideAtomXtermService()
+    atomXtermService.openTerminal({}).then((item) => {
+      expect(item instanceof AtomXtermModel).toBe(true)
+      done()
+    })
   })
 
   it('atom-xterm.spawnPtySettings.command', () => {
