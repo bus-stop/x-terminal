@@ -1,3 +1,11 @@
+## 5.0.0
+* Rework service that's provided by atom-xterm. Service will now be an object
+  which defines an `openTerminal` property that can be used to open terminals.
+  This change also fixes earlier problems with terminal not opening in call
+  to service method.
+* Don't add any useless return statements called after calling process.exit()
+  in move-winpty-binaries.js script.
+
 ## 4.4.0
 * Fix issue where terminal hangs if directory to use as CWD does not exist.
 * Provide a service method `openTerminal()` for plugin writers to easily open
