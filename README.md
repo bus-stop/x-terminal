@@ -74,6 +74,64 @@ There's also activity notifications for terminal tabs not in focus.
 
 ![Atom Xterm activity notification](https://raw.githubusercontent.com/amejia1/atom-xterm/master/resources/atom-xterm-activity-notification.png)
 
+## Services
+
+For plugin writers, the atom-xterm package supports one service method which
+can be used to easily open terminals. This method is provided using Atom's [services](http://flight-manual.atom.io/behind-atom/sections/interacting-with-other-packages-via-services/)
+API. To use it, add a consumer method to consume the service method, or rather
+the [openTerminal()](https://github.com/amejia1/atom-xterm/blob/0376dba8551f7518fa184d4688bbdba6779163aa/lib/atom-xterm.js#L388) method. The `openTerminal()` method behaves just like Atom's
+[open()](https://github.com/atom/atom/blob/v1.23.3/src/workspace.js#L912)
+method except that the first argument must be a JSON object describing the
+terminal profile that should be opened. Docs about this JSON object can be
+found [here](https://github.com/amejia1/atom-xterm/blob/0376dba8551f7518fa184d4688bbdba6779163aa/lib/atom-xterm-profiles.js#L223).
+
+As an example on how to use the provided `openTerminal()` method, your
+`package.json` should have the following.
+
+```json
+{
+  "consumedServices": {
+    "atom-xterm": {
+      "versions": {
+        "^1.0.0": "consumeOpenTerminal"
+      }
+    }
+  }
+}
+```
+
+Your package's main module should then define a `consumeOpenTerminal` method,
+for example.
+
+```javascript
+// In ECMAScript 6
+
+import { Disposable } from 'atom'
+
+export default {
+  activate (state) {
+    // Define a default callback for openTerminal.
+    this.openTerminal = () => {
+      throw new Error('Not implemented')
+    }
+    . . .
+  },
+
+  consumeOpenTerminal (service) {
+    // Set openTerminal() to the method provided in atom-xterm.
+    this.openTerminal = service
+    return new Disposable(() => {
+      // Set openTerminal back to some default when atom-xterm is deactivated.
+      this.openTerminal = () => {
+        throw new Error('Not implemented')
+      }
+    })
+  },
+
+  . . .
+}
+```
+
 # Development
 
 Want to help develop atom-xterm? Just use the
