@@ -74,7 +74,9 @@ describe('AtomXterm', () => {
     atom.packages.activatePackage('atom-xterm').then(() => {
       this.atomXtermPackage = atom.packages.getActivePackage('atom-xterm')
       spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'generateNewUri').and.returnValue(defaultUri)
-      spyOn(atom.workspace, 'open').and.callFake(atom.workspace.openSync)
+      spyOn(atom.workspace, 'open').and.callFake(async function (...args) {
+        return atom.workspace.openSync(...args)
+      })
       this.atomXtermPackage.mainModule.config.spawnPtySettings.properties.command.default = config.getDefaultShellCommand()
       this.atomXtermPackage.mainModule.config.spawnPtySettings.properties.name.default = config.getDefaultTermType()
       this.atomXtermPackage.mainModule.config.spawnPtySettings.properties.cwd.default = config.getDefaultCwd()
@@ -456,6 +458,14 @@ describe('AtomXterm', () => {
     })
   })
 
+  it('open() return AtomXtermModel', (done) => {
+    let expectedUri = 'atom-xterm://somesessionid/'
+    this.atomXtermPackage.mainModule.open(expectedUri).then((item) => {
+      expect(item instanceof AtomXtermModel).toBe(true)
+      done()
+    })
+  })
+
   it('open() alternate uri', (done) => {
     atom.workspace.open.and.stub()
     let expectedUri = 'atom-xterm://somesessionid/?blahblahblah'
@@ -515,6 +525,62 @@ describe('AtomXterm', () => {
       expect(atom.workspace.open.calls.allArgs()).toEqual([[url.href, {}]])
       done()
     })
+  })
+
+  it('openTerminal() check call to open', (done) => {
+    this.atomXtermPackage.mainModule.openTerminal({}).then((item) => {
+      let args = atom.workspace.open.calls.argsFor(0)
+      let url = new URL(args[0])
+      expect(url.protocol).toBe('atom-xterm:')
+      done()
+    })
+  })
+
+  it('openTerminal() check options passed', (done) => {
+    this.atomXtermPackage.mainModule.openTerminal({}, {'split': 'down'}).then((item) => {
+      let args = atom.workspace.open.calls.argsFor(0)
+      let options = args[1]
+      expect(options).toEqual({'split': 'down'})
+      done()
+    })
+  })
+
+  it('openTerminal() check call to open with command', (done) => {
+    let profile = {
+      command: 'somecommand'
+    }
+    this.atomXtermPackage.mainModule.openTerminal(profile).then((item) => {
+      let args = atom.workspace.open.calls.argsFor(0)
+      let url = new URL(args[0])
+      expect(url.searchParams.get('command')).toBe('somecommand')
+      done()
+    })
+  })
+
+  it('openTerminal() check call to open with command and arguments', (done) => {
+    let profile = {
+      command: 'somecommand',
+      args: ['--foo', '--bar', '--baz']
+    }
+    this.atomXtermPackage.mainModule.openTerminal(profile).then((item) => {
+      let args = atom.workspace.open.calls.argsFor(0)
+      let url = new URL(args[0])
+      expect(url.searchParams.get('command')).toBe('somecommand')
+      expect(JSON.parse(url.searchParams.get('args'))).toEqual(['--foo', '--bar', '--baz'])
+      done()
+    })
+  })
+
+  it('openTerminal() check returned item is AtomXtermModel', (done) => {
+    this.atomXtermPackage.mainModule.openTerminal({}).then((item) => {
+      expect(item instanceof AtomXtermModel).toBe(true)
+      done()
+    })
+  })
+
+  it('provideOpenTerminal()', () => {
+    let callback = this.atomXtermPackage.mainModule.provideOpenTerminal()
+    expect(callback).toBe(this.atomXtermPackage.mainModule.openTerminal)
   })
 
   it('atom-xterm.spawnPtySettings.command', () => {

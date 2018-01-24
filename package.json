@@ -31,6 +31,14 @@
   "engines": {
     "atom": ">=1.23.1 <2.0.0"
   },
+  "providedServices": {
+    "atom-xterm": {
+      "description": "Atom plugin for providing terminals inside your Atom workspace.",
+      "versions": {
+        "1.0.0": "provideOpenTerminal"
+      }
+    }
+  },
   "dependencies": {
     "element-resize-detector": "^1.1.13",
     "fs-extra": "^5.0.0",
