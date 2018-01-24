@@ -28,7 +28,9 @@ import * as script from '../scripts_src/move-winpty-binaries'
 
 describe('move-winpty-binaries script', () => {
   beforeEach((done) => {
-    spyOn(process, 'exit')
+    spyOn(process, 'exit').and.callFake((exitCode) => {
+      throw new Error(`process.exit(${exitCode}) called`)
+    })
     spyOn(console, 'log')
     tmp.dir({'unsafeCleanup': true}, (err, _path, cleanupCallback) => {
       if (err) {
@@ -111,18 +113,14 @@ describe('move-winpty-binaries script', () => {
       Object.defineProperty(process, 'platform', {
         'value': 'linux'
       })
-      script.main()
-      expect(process.exit.calls.argsFor(0)).toEqual([0])
-      expect(os.homedir).not.toHaveBeenCalled()
+      expect(() => script.main()).toThrow(new Error('process.exit(0) called'))
     })
 
     it('is win32 atom-xterm not installed', () => {
       Object.defineProperty(process, 'platform', {
         'value': 'win32'
       })
-      script.main()
-      expect(process.exit.calls.argsFor(0)).toEqual([0])
-      expect(fs.renameSync).not.toHaveBeenCalled()
+      expect(() => script.main()).toThrow(new Error('process.exit(0) called'))
     })
 
     describe('is win32 atom-xterm installed', () => {
