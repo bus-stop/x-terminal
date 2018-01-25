@@ -1,3 +1,7 @@
+## 5.1.0
+* Enable support for opening links inside terminal once again with new changes
+  from xterm.js v3.
+
 ## 5.0.1
 * Optimize opening of terminals by simply returning calls to async functions.
 
