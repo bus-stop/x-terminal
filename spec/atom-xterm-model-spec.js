@@ -506,18 +506,6 @@ describe('AtomXtermModel', () => {
     })
   })
 
-  it('clickOnCurrentAnchor()', () => {
-    this.model.element = this.element
-    this.model.clickOnCurrentAnchor()
-    expect(this.model.element.clickOnCurrentAnchor).toHaveBeenCalled()
-  })
-
-  it('getCurrentAnchorHref()', () => {
-    this.model.element = this.element
-    this.model.getCurrentAnchorHref()
-    expect(this.model.element.getCurrentAnchorHref).toHaveBeenCalled()
-  })
-
   it('toggleProfileMenu()', () => {
     this.model.element = jasmine.createSpyObj('element', ['toggleProfileMenu'])
     this.model.toggleProfileMenu()
@@ -528,5 +516,17 @@ describe('AtomXtermModel', () => {
     let mock = jasmine.createSpy('mock')
     this.model.setNewProfile(mock)
     expect(this.model.profile).toBe(mock)
+  })
+
+  it('openHoveredLink()', () => {
+    this.model.element = jasmine.createSpyObj('element', ['openHoveredLink'])
+    this.model.openHoveredLink()
+    expect(this.model.element.openHoveredLink).toHaveBeenCalled()
+  })
+
+  it('getHoveredLink()', () => {
+    this.model.element = jasmine.createSpyObj('element', ['getHoveredLink'])
+    this.model.getHoveredLink()
+    expect(this.model.element.getHoveredLink).toHaveBeenCalled()
   })
 })

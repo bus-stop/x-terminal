@@ -18,6 +18,7 @@
  */
 
 import * as nodePty from 'node-pty-prebuilt'
+import { shell } from 'electron'
 
 import * as config from '../lib/atom-xterm-config'
 import AtomXtermElement from '../lib/atom-xterm-element'
@@ -59,6 +60,7 @@ describe('AtomXtermElement', () => {
     ptyProcess.process = jasmine.createSpy('process')
       .and.returnValue('sometestprocess')
     spyOn(nodePty, 'spawn').and.returnValue(ptyProcess)
+    spyOn(shell, 'openExternal')
     createNewElement().then((element) => {
       this.element = element
       tmp.dir({'unsafeCleanup': true}, (err, path, cleanupCallback) => {
@@ -608,69 +610,6 @@ describe('AtomXtermElement', () => {
     this.element.focusOnTerminal()
   })
 
-  it('trigger mouse event on anchor element', () => {
-    let element = document.createElement('a')
-    let mouseEvent = new MouseEvent('mousedown')
-    Object.defineProperty(mouseEvent, 'target', {value: element, enumerable: true})
-    this.element.terminalDiv.dispatchEvent(mouseEvent)
-    expect(this.element.currentClickedAnchor).toBe(element)
-  })
-
-  it('trigger mouse event on non-anchor element', () => {
-    let element = document.createElement('span')
-    let mouseEvent = new MouseEvent('mousedown')
-    Object.defineProperty(mouseEvent, 'target', {value: element, enumerable: true})
-    this.element.terminalDiv.dispatchEvent(mouseEvent)
-    expect(this.element.currentClickedAnchor).toBeFalsy()
-  })
-
-  it('clickOnCurrentAnchor() no current anchor', () => {
-    // Should just work.
-    this.element.clickOnCurrentAnchor()
-  })
-
-  it('clickOnCurrentAnchor() current anchor set', () => {
-    this.element.currentClickedAnchor = jasmine.createSpyObj(
-      'currentClickedAnchor',
-      ['click']
-    )
-    this.element.clickOnCurrentAnchor()
-    expect(this.element.currentClickedAnchor.click).toHaveBeenCalled()
-  })
-
-  it('getCurrentAnchorHref() no current anchor', () => {
-    // Should just work.
-    this.element.getCurrentAnchorHref()
-  })
-
-  it('getCurrentAnchorHref() current anchor set', () => {
-    this.element.currentClickedAnchor = jasmine.createSpyObj(
-      'currentClickedAnchor',
-      ['getAttribute']
-    )
-    this.element.getCurrentAnchorHref()
-    expect(this.element.currentClickedAnchor.getAttribute.calls.allArgs()).toEqual([['href']])
-  })
-
-  it('getCurrentAnchorHref() current anchor has no href attribute', () => {
-    this.element.currentClickedAnchor = jasmine.createSpyObj(
-      'currentClickedAnchor',
-      ['getAttribute']
-    )
-    this.element.currentClickedAnchor.getAttribute.and.returnValue(null)
-    expect(this.element.getCurrentAnchorHref()).toBeNull()
-  })
-
-  it('getCurrentAnchorHref() current anchor has href attribute', () => {
-    this.element.currentClickedAnchor = jasmine.createSpyObj(
-      'currentClickedAnchor',
-      ['getAttribute']
-    )
-    let expected = 'https://atom.io'
-    this.element.currentClickedAnchor.getAttribute.and.returnValue(expected)
-    expect(this.element.getCurrentAnchorHref()).toBe(expected)
-  })
-
   it('toggleProfileMenu()', (done) => {
     this.element.atomXtermProfileMenuElement = jasmine.createSpyObj(
       'atomXtermProfileMenuElement',
@@ -700,6 +639,48 @@ describe('AtomXtermElement', () => {
   it('showTerminal()', () => {
     this.element.showTerminal()
     expect(this.element.terminalDiv.style.visibility).toBe('visible')
+  })
+
+  it('hoveredLink initially null', () => {
+    expect(this.element.hoveredLink).toBeNull()
+  })
+
+  it('terminalDiv initially does not have link class', () => {
+    expect(this.element.terminalDiv.classList.contains('atom-xterm-term-container-has-link')).toBe(false)
+  })
+
+  it('setHoveredLink(\'https://atom.io\')', () => {
+    let expected = 'https://atom.io'
+    this.element.setHoveredLink(expected)
+    expect(this.element.hoveredLink).toBe(expected)
+    expect(this.element.terminalDiv.classList.contains('atom-xterm-term-container-has-link')).toBe(true)
+  })
+
+  it('clearHoveredLink()', () => {
+    this.element.setHoveredLink('https://atom.io')
+    this.element.clearHoveredLink()
+    expect(this.element.hoveredLink).toBeNull()
+    expect(this.element.terminalDiv.classList.contains('atom-xterm-term-container-has-link')).toBe(false)
+  })
+
+  it('openHoveredLink() no hovered link set', () => {
+    this.element.openHoveredLink()
+    expect(shell.openExternal).not.toHaveBeenCalled()
+  })
+
+  it('openHoveredLink() hovered link set', () => {
+    this.element.hoveredLink = 'https://atom.io'
+    this.element.openHoveredLink()
+    expect(shell.openExternal.calls.argsFor(0)).toEqual(['https://atom.io'])
+  })
+
+  it('getHoveredLink() no hovered link set', () => {
+    expect(this.element.getHoveredLink()).toBeFalsy()
+  })
+
+  it('openHoveredLink() hovered link set', () => {
+    this.element.hoveredLink = 'https://atom.io'
+    expect(this.element.getHoveredLink()).toBe('https://atom.io')
   })
 
   it('on \'data\' handler no custom title on win32 platform', (done) => {

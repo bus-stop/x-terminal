@@ -44,8 +44,8 @@ describe('AtomXterm', () => {
         spyOn(model, 'exit').and.callThrough()
         spyOn(model, 'copyFromTerminal').and.returnValue('some text from terminal')
         spyOn(model, 'pasteToTerminal')
-        spyOn(model, 'clickOnCurrentAnchor')
-        spyOn(model, 'getCurrentAnchorHref')
+        spyOn(model, 'openHoveredLink')
+        spyOn(model, 'getHoveredLink')
         spyOn(model, 'restartPtyProcess')
         resolve(model)
       })
@@ -330,7 +330,7 @@ describe('AtomXterm', () => {
     createNewElement(this.atomXtermPackage.mainModule).then((element) => {
       spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model)
       atom.commands.dispatch(element, 'atom-xterm:open-link')
-      expect(element.model.clickOnCurrentAnchor).toHaveBeenCalled()
+      expect(element.model.openHoveredLink).toHaveBeenCalled()
       done()
     })
   })
@@ -339,7 +339,7 @@ describe('AtomXterm', () => {
     createNewElement(this.atomXtermPackage.mainModule).then((element) => {
       spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model)
       atom.commands.dispatch(element, 'atom-xterm:copy-link')
-      expect(element.model.getCurrentAnchorHref).toHaveBeenCalled()
+      expect(element.model.getHoveredLink).toHaveBeenCalled()
       done()
     })
   })
@@ -348,7 +348,7 @@ describe('AtomXterm', () => {
     createNewElement(this.atomXtermPackage.mainModule).then((element) => {
       spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model)
       let expected = 'https://atom.io'
-      element.model.getCurrentAnchorHref.and.returnValue(expected)
+      element.model.getHoveredLink.and.returnValue(expected)
       spyOn(atom.clipboard, 'write')
       atom.commands.dispatch(element, 'atom-xterm:copy-link')
       expect(atom.clipboard.write.calls.allArgs()).toEqual([[expected]])
@@ -360,7 +360,7 @@ describe('AtomXterm', () => {
     createNewElement(this.atomXtermPackage.mainModule).then((element) => {
       spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(element.model)
       let expected = null
-      element.model.getCurrentAnchorHref.and.returnValue(expected)
+      element.model.getHoveredLink.and.returnValue(expected)
       spyOn(atom.clipboard, 'write')
       atom.commands.dispatch(element, 'atom-xterm:copy-link')
       expect(atom.clipboard.write).not.toHaveBeenCalled()

@@ -68,7 +68,7 @@
         "command": "atom-xterm:close-all"
       }
     ],
-    "atom-xterm a": [
+    "atom-xterm .atom-xterm-term-container-has-link": [
       {
         "label": "Open Link",
         "command": "atom-xterm:open-link"
