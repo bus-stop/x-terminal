@@ -1,3 +1,6 @@
+## 5.0.1
+* Optimize opening of terminals by simply returning calls to async functions.
+
 ## 5.0.0
 * Rework service that's provided by atom-xterm. Service will now be an object
   which defines an `openTerminal` property that can be used to open terminals.
