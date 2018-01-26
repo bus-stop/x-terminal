@@ -1,3 +1,7 @@
+## 5.2.0
+* Partially enable support for setting font size for terminals. New font size
+  changes will apply for newly created terminals.
+
 ## 5.1.0
 * Enable support for opening links inside terminal once again with new changes
   from xterm.js v3.
