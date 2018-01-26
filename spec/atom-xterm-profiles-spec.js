@@ -153,6 +153,11 @@ describe('AtomXtermProfilesSingleton', () => {
     this.disposables.add(AtomXtermProfilesSingleton.instance.onDidReloadProfiles((profiles) => {}))
   })
 
+  it('onDidResetBaseProfile()', () => {
+    // Should just work.
+    this.disposables.add(AtomXtermProfilesSingleton.instance.onDidResetBaseProfile((baseProfile) => {}))
+  })
+
   it('updateProfiles()', (done) => {
     let expected = {
       'foo': 'bar'

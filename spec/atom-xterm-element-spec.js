@@ -75,6 +75,7 @@ describe('AtomXtermElement', () => {
   })
 
   afterEach(() => {
+    this.element.destroy()
     Object.defineProperty(process, 'platform', {
       'value': savedPlatform
     })
@@ -100,6 +101,12 @@ describe('AtomXtermElement', () => {
     spyOn(this.element.terminal, 'destroy').and.callThrough()
     this.element.destroy()
     expect(this.element.terminal.destroy).toHaveBeenCalled()
+  })
+
+  it('destroy() check disposables disposed', () => {
+    spyOn(this.element.disposables, 'dispose').and.callThrough()
+    this.element.destroy()
+    expect(this.element.disposables.dispose).toHaveBeenCalled()
   })
 
   it('getShellCommand()', () => {
@@ -355,13 +362,13 @@ describe('AtomXtermElement', () => {
   })
 
   it('isPtyProcessRunning() ptyProcess not null, ptyProcessRunning false', () => {
-    this.element.ptyProcess = jasmine.createSpy('ptyProcess')
+    this.element.ptyProcess = jasmine.createSpyObj('ptyProcess', ['kill'])
     this.element.ptyProcessRunning = false
     expect(this.element.isPtyProcessRunning()).toBeFalsy()
   })
 
   it('isPtyProcessRunning() ptyProcess not null, ptyProcessRunning true', () => {
-    this.element.ptyProcess = jasmine.createSpy('ptyProcess')
+    this.element.ptyProcess = jasmine.createSpyObj('ptyProcess', ['kill'])
     this.element.ptyProcessRunning = true
     expect(this.element.isPtyProcessRunning()).toBeTruthy()
   })
@@ -614,7 +621,8 @@ describe('AtomXtermElement', () => {
     this.element.atomXtermProfileMenuElement = jasmine.createSpyObj(
       'atomXtermProfileMenuElement',
       [
-        'toggleProfileMenu'
+        'toggleProfileMenu',
+        'destroy'
       ]
     )
     this.element.atomXtermProfileMenuElement.initializedPromise = Promise.resolve()

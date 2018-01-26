@@ -189,18 +189,6 @@ describe('Call to getDefaultRelaunchTerminalOnStartup()', () => {
   })
 })
 
-describe('Call to getStyles(fontSize)', () => {
-  it('fontSize is a Number', () => {
-    let fontSize = 14
-    expect(config.getStyles(fontSize)).toBe('atom-xterm .terminal { font-size: 14px; }')
-  })
-
-  it('fontSize is a String', () => {
-    let fontSize = '14'
-    expect(config.getStyles(fontSize)).toBe('atom-xterm .terminal { font-size: 14px; }')
-  })
-})
-
 describe('Call to getUserDataPath()', () => {
   const savedPlatform = process.platform
   let savedEnv
