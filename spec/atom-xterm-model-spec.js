@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { CompositeDisposable, Emitter } from 'atom'
+import { Emitter } from 'atom'
 
 import * as config from '../lib/atom-xterm-config'
 import AtomXtermModel from '../lib/atom-xterm-model'
@@ -32,7 +32,6 @@ describe('AtomXtermModel', () => {
   this.model = null
   this.pane = null
   this.element = null
-  this.disposables = null
   this.emitter = null
 
   beforeEach((done) => {
@@ -52,7 +51,6 @@ describe('AtomXtermModel', () => {
         ['getSelection'])
       this.element.ptyProcess = jasmine.createSpyObj('ptyProcess',
         ['write'])
-      this.disposables = new CompositeDisposable()
       this.emitter = new Emitter()
       tmp.dir({'unsafeCleanup': true}, (err, path, cleanupCallback) => {
         if (err) {
@@ -66,7 +64,6 @@ describe('AtomXtermModel', () => {
   })
 
   afterEach(() => {
-    this.disposables.dispose()
     this.tmpdirCleanupCallback()
   })
 
@@ -243,12 +240,6 @@ describe('AtomXtermModel', () => {
     expect(this.model.element.destroy).toHaveBeenCalled()
   })
 
-  it('destroy() disposables disposed', () => {
-    spyOn(this.model.disposables, 'dispose').and.callThrough()
-    this.model.destroy()
-    expect(this.model.disposables.dispose).toHaveBeenCalled()
-  })
-
   it('destroy() check model removed from terminals_set', () => {
     spyOn(this.model.terminals_set, 'delete').and.callThrough()
     this.model.destroy()
@@ -296,11 +287,12 @@ describe('AtomXtermModel', () => {
 
   it('onDidChangeTitle()', () => {
     let callbackCalled = false
-    this.disposables.add(this.model.onDidChangeTitle(() => {
+    let disposable = this.model.onDidChangeTitle(() => {
       callbackCalled = true
-    }))
+    })
     this.model.emitter.emit('did-change-title')
     expect(callbackCalled).toBe(true)
+    disposable.dispose()
   })
 
   it('getIconName()', () => {
@@ -328,11 +320,12 @@ describe('AtomXtermModel', () => {
 
   it('onDidChangeModified()', () => {
     let callbackCalled = false
-    this.disposables.add(this.model.onDidChangeModified(() => {
+    let disposable = this.model.onDidChangeModified(() => {
       callbackCalled = true
-    }))
+    })
     this.model.emitter.emit('did-change-modified')
     expect(callbackCalled).toBe(true)
+    disposable.dispose()
   })
 
   it('handleNewDataArrival() current item is active item', () => {

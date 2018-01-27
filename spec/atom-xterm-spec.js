@@ -640,9 +640,9 @@ describe('AtomXterm', () => {
     expect(atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup')).toBeTruthy()
   })
 
-  it('atom-xterm.terminalSettings.fontSize minimum 1', () => {
+  it('atom-xterm.terminalSettings.fontSize minimum 8', () => {
     atom.config.set('atom-xterm.terminalSettings.fontSize', 0)
-    expect(atom.config.get('atom-xterm.terminalSettings.fontSize')).toEqual(1)
+    expect(atom.config.get('atom-xterm.terminalSettings.fontSize')).toEqual(8)
   })
 
   it('atom-xterm.terminalSettings.fontSize maximum 100', () => {

@@ -588,8 +588,29 @@ describe('AtomXtermElement', () => {
     expect(this.element.restartPtyProcess).toHaveBeenCalled()
   })
 
-  it('refitTerminal()', () => {
+  it('refitTerminal() initial state', () => {
     spyOn(this.element.terminal, 'fit')
+    this.element.refitTerminal()
+    expect(this.element.terminal.fit).not.toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal not visible', () => {
+    spyOn(this.element.terminal, 'fit')
+    this.element.terminalDivIntersectionRatio = 0.0
+    this.element.refitTerminal()
+    expect(this.element.terminal.fit).not.toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal partially visible', () => {
+    spyOn(this.element.terminal, 'fit')
+    this.element.terminalDivIntersectionRatio = 0.5
+    this.element.refitTerminal()
+    expect(this.element.terminal.fit).not.toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal completely visible', () => {
+    spyOn(this.element.terminal, 'fit')
+    this.element.terminalDivIntersectionRatio = 1.0
     this.element.refitTerminal()
     expect(this.element.terminal.fit).toHaveBeenCalled()
   })
