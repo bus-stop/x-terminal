@@ -1,3 +1,8 @@
+## 5.3.0
+* Fully fix support for changing font size in terminals. New font size
+  settings will be applied to existing terminals as well as new terminals.
+* Only refit terminals when they are fully visible.
+
 ## 5.2.0
 * Partially enable support for setting font size for terminals. New font size
   changes will apply for newly created terminals.
