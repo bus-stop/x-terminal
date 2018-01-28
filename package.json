@@ -35,7 +35,7 @@
     "atom-xterm": {
       "description": "Atom plugin for providing terminals inside your Atom workspace.",
       "versions": {
-        "1.0.0": "provideAtomXtermService"
+        "2.0.0": "provideAtomXtermService"
       }
     }
   },
