@@ -29,8 +29,10 @@ describe('AtomXterm', () => {
   const defaultUri = 'atom-xterm://somesessionid/'
   this.workspaceElement = null
   this.atomXtermPackage = null
+  this.atomWorkspaceOpenCallback = null
+  this.atomWorkspaceAddModalPanelCallback = null
 
-  let createNewModel = (packageModule, uri = defaultUri) => {
+  const createNewModel = (packageModule, uri = defaultUri) => {
     return new Promise((resolve, reject) => {
       let model = new AtomXtermModel({
         uri: uri,
@@ -52,7 +54,7 @@ describe('AtomXterm', () => {
     })
   }
 
-  let createNewElement = (packageModule) => {
+  const createNewElement = (packageModule) => {
     return new Promise((resolve, reject) => {
       let element = new AtomXtermElement()
       createNewModel(packageModule).then((model) => {
@@ -63,6 +65,24 @@ describe('AtomXterm', () => {
     })
   }
 
+  const setupAtomWorkspaceOpenTests = (options) => {
+    // For tests that call atom.workspace.open(), the tests need to be setup
+    // so that jasmine doesn't tear down all the spies until the various
+    // methods being spied in `atom.workspace` are called.
+    this.atomWorkspaceOpenCallback = (item) => {
+      options.spiedMethodsCalled += 1
+      if (options.spiedMethodsCalled === options.expectedNumberofCalls) {
+        options.done()
+      }
+    }
+    this.atomWorkspaceAddModalPanelCallback = () => {
+      options.spiedMethodsCalled += 1
+      if (options.spiedMethodsCalled === options.expectedNumberofCalls) {
+        options.done()
+      }
+    }
+  }
+
   beforeEach((done) => {
     let ptyProcess = jasmine.createSpyObj('ptyProcess',
       ['kill', 'write', 'resize', 'on'])
@@ -71,11 +91,18 @@ describe('AtomXterm', () => {
     spyOn(nodePty, 'spawn').and.returnValue(ptyProcess)
     atom.config.clear()
     this.workspaceElement = atom.views.getView(atom.workspace)
+    this.atomWorkspaceOpenCallback = () => {}
+    this.atomWorkspaceAddModalPanelCallback = () => {}
     atom.packages.activatePackage('atom-xterm').then(() => {
       this.atomXtermPackage = atom.packages.getActivePackage('atom-xterm')
       spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'generateNewUri').and.returnValue(defaultUri)
       spyOn(atom.workspace, 'open').and.callFake(async (...args) => {
-        return atom.workspace.openSync(...args)
+        const item = atom.workspace.openSync(...args)
+        this.atomWorkspaceOpenCallback(item)
+        return item
+      })
+      spyOn(atom.workspace, 'addModalPanel').and.callFake(() => {
+        this.atomWorkspaceAddModalPanelCallback()
       })
       this.atomXtermPackage.mainModule.config.spawnPtySettings.properties.command.default = config.getDefaultShellCommand()
       this.atomXtermPackage.mainModule.config.spawnPtySettings.properties.name.default = config.getDefaultTermType()
@@ -101,189 +128,219 @@ describe('AtomXterm', () => {
     expect(this.atomXtermPackage.mainActivated).toBe(false)
   })
 
-  it('run atom-xterm:open', () => {
-    spyOn(atom.workspace, 'getActivePane').and.returnValue(null)
+  it('run atom-xterm:open', (done) => {
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
+    }
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
+      expect(atom.workspace.open.calls.argsFor(0)).toEqual([
+        defaultUri,
+        {
+          pane: atom.workspace.getActivePane()
+        }
+      ])
+      expect(item instanceof AtomXtermModel).toBe(true)
+      options.spiedMethodsCalled += 1
+    }
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open')
-    expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {}]])
   })
 
-  it('run atom-xterm:open-split-up and check arguments', () => {
+  it('run atom-xterm:open-split-up and check arguments', (done) => {
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
+    }
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
+      expect(atom.workspace.open.calls.argsFor(0)).toEqual([
+        defaultUri,
+        {
+          split: 'up'
+        }
+      ])
+      expect(item instanceof AtomXtermModel).toBe(true)
+      options.spiedMethodsCalled += 1
+    }
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-up')
-    expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {'split': 'up'}]])
   })
 
-  it('run atom-xterm:open-split-up and check element exists', () => {
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-up')
-    expect(this.workspaceElement.querySelector('atom-xterm')).not.toBeNull()
-  })
-
-  it('run atom-xterm:open-split-down and check arguments', () => {
+  it('run atom-xterm:open-split-down and check arguments', (done) => {
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
+    }
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
+      expect(atom.workspace.open.calls.argsFor(0)).toEqual([
+        defaultUri,
+        {
+          split: 'down'
+        }
+      ])
+      expect(item instanceof AtomXtermModel).toBe(true)
+      options.spiedMethodsCalled += 1
+    }
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-down')
-    expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {'split': 'down'}]])
   })
 
-  it('run atom-xterm:open-split-down and check element exists', () => {
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-down')
-    expect(this.workspaceElement.querySelector('atom-xterm')).not.toBeNull()
-  })
-
-  it('run atom-xterm:open-split-left and check arguments', () => {
+  it('run atom-xterm:open-split-left and check arguments', (done) => {
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
+    }
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
+      expect(atom.workspace.open.calls.argsFor(0)).toEqual([
+        defaultUri,
+        {
+          split: 'left'
+        }
+      ])
+      expect(item instanceof AtomXtermModel).toBe(true)
+      options.spiedMethodsCalled += 1
+    }
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-left')
-    expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {'split': 'left'}]])
   })
 
-  it('run atom-xterm:open-split-left and check element exists', () => {
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-left')
-    expect(this.workspaceElement.querySelector('atom-xterm')).not.toBeNull()
-  })
-
-  it('run atom-xterm:open-split-right and check arguments', () => {
+  it('run atom-xterm:open-split-right and check arguments', (done) => {
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
+    }
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
+      expect(atom.workspace.open.calls.argsFor(0)).toEqual([
+        defaultUri,
+        {
+          split: 'right'
+        }
+      ])
+      expect(item instanceof AtomXtermModel).toBe(true)
+      options.spiedMethodsCalled += 1
+    }
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-right')
-    expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {'split': 'right'}]])
   })
 
-  it('run atom-xterm:open-split-down and check element exists', () => {
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-right')
-    expect(this.workspaceElement.querySelector('atom-xterm')).not.toBeNull()
-  })
-
-  it('run atom-xterm:open-split-bottom-dock', () => {
+  it('run atom-xterm:open-split-bottom-dock', (done) => {
     let mock = jasmine.createSpyObj('dock', ['getActivePane'])
+    mock.getActivePane.and.returnValue(null)
     spyOn(atom.workspace, 'getBottomDock').and.returnValue(mock)
-    mock.getActivePane.and.returnValue(null)
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
+    }
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
+      expect(atom.workspace.open.calls.argsFor(0)).toEqual([
+        defaultUri,
+        {}
+      ])
+      expect(item instanceof AtomXtermModel).toBe(true)
+      options.spiedMethodsCalled += 1
+    }
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-bottom-dock')
-    expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {}]])
   })
 
-  it('run atom-xterm:open-split-left-dock', () => {
+  it('run atom-xterm:open-split-left-dock', (done) => {
     let mock = jasmine.createSpyObj('dock', ['getActivePane'])
+    mock.getActivePane.and.returnValue(null)
     spyOn(atom.workspace, 'getLeftDock').and.returnValue(mock)
-    mock.getActivePane.and.returnValue(null)
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
+    }
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
+      expect(atom.workspace.open.calls.argsFor(0)).toEqual([
+        defaultUri,
+        {}
+      ])
+      expect(item instanceof AtomXtermModel).toBe(true)
+      options.spiedMethodsCalled += 1
+    }
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-left-dock')
-    expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {}]])
   })
 
-  it('run atom-xterm:open-split-right-dock', () => {
+  it('run atom-xterm:open-split-right-dock', (done) => {
     let mock = jasmine.createSpyObj('dock', ['getActivePane'])
-    spyOn(atom.workspace, 'getRightDock').and.returnValue(mock)
     mock.getActivePane.and.returnValue(null)
+    spyOn(atom.workspace, 'getRightDock').and.returnValue(mock)
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
+    }
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
+      expect(atom.workspace.open.calls.argsFor(0)).toEqual([
+        defaultUri,
+        {}
+      ])
+      expect(item instanceof AtomXtermModel).toBe(true)
+      options.spiedMethodsCalled += 1
+    }
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open-split-right-dock')
-    expect(atom.workspace.open.calls.allArgs()).toEqual([[defaultUri, {}]])
   })
 
-  it('run atom-xterm:reorganize no terminals in workspace', () => {
+  it('run atom-xterm:reorganize', () => {
     spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize')
     expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['current']])
   })
 
-  it('run atom-xterm:reorganize one terminal in workspace', () => {
-    spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open')
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize')
-    expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['current']])
-  })
-
-  it('run atom-xterm:reorganize-top no terminals in workspace', () => {
+  it('run atom-xterm:reorganize-top', () => {
     spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-top')
     expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['top']])
   })
 
-  it('run atom-xterm:reorganize-top one terminal in workspace', () => {
-    spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open')
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-top')
-    expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['top']])
-  })
-
-  it('run atom-xterm:reorganize-bottom no terminals in workspace', () => {
+  it('run atom-xterm:reorganize-bottom', () => {
     spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-bottom')
     expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['bottom']])
   })
 
-  it('run atom-xterm:reorganize-bottom one terminal in workspace', () => {
-    spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open')
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-bottom')
-    expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['bottom']])
-  })
-
-  it('run atom-xterm:reorganize-left no terminals in workspace', () => {
+  it('run atom-xterm:reorganize-left', () => {
     spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-left')
     expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['left']])
   })
 
-  it('run atom-xterm:reorganize-left one terminal in workspace', () => {
-    spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open')
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-left')
-    expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['left']])
-  })
-
-  it('run atom-xterm:reorganize-right no terminals in workspace', () => {
+  it('run atom-xterm:reorganize-right', () => {
     spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-right')
     expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['right']])
   })
 
-  it('run atom-xterm:reorganize-right one terminal in workspace', () => {
-    spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open')
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-right')
-    expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['right']])
-  })
-
-  it('run atom-xterm:reorganize-bottom-dock no terminals in workspace', () => {
+  it('run atom-xterm:reorganize-bottom-dock', () => {
     spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-bottom-dock')
     expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['bottom-dock']])
   })
 
-  it('run atom-xterm:reorganize-bottom-dock one terminal in workspace', () => {
-    spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open')
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-bottom-dock')
-    expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['bottom-dock']])
-  })
-
-  it('run atom-xterm:reorganize-left-dock no terminals in workspace', () => {
+  it('run atom-xterm:reorganize-left-dock', () => {
     spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-left-dock')
     expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['left-dock']])
   })
 
-  it('run atom-xterm:reorganize-left-dock one terminal in workspace', () => {
-    spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open')
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-left-dock')
-    expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['left-dock']])
-  })
-
-  it('run atom-xterm:reorganize-right-dock no terminals in workspace', () => {
+  it('run atom-xterm:reorganize-right-dock', () => {
     spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-right-dock')
     expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['right-dock']])
   })
 
-  it('run atom-xterm:reorganize-right-dock one terminal in workspace', () => {
-    spyOn(this.atomXtermPackage.mainModule, 'reorganize').and.callThrough()
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open')
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:reorganize-right-dock')
-    expect(this.atomXtermPackage.mainModule.reorganize.calls.allArgs()).toEqual([['right-dock']])
-  })
-
-  it('run atom-xterm:close-all no terminals in workspace', () => {
+  it('run atom-xterm:close-all', () => {
     spyOn(this.atomXtermPackage.mainModule, 'exitAllTerminals').and.callThrough()
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:close-all')
-    expect(this.atomXtermPackage.mainModule.exitAllTerminals).toHaveBeenCalled()
-  })
-
-  it('run atom-xterm:close-all one terminal in workspace', () => {
-    spyOn(this.atomXtermPackage.mainModule, 'exitAllTerminals').and.callThrough()
-    atom.commands.dispatch(this.workspaceElement, 'atom-xterm:open')
     atom.commands.dispatch(this.workspaceElement, 'atom-xterm:close-all')
     expect(this.atomXtermPackage.mainModule.exitAllTerminals).toHaveBeenCalled()
   })
@@ -459,11 +516,18 @@ describe('AtomXterm', () => {
   })
 
   it('open() return AtomXtermModel', (done) => {
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
+    }
+    setupAtomWorkspaceOpenTests(options)
     let expectedUri = 'atom-xterm://somesessionid/'
-    this.atomXtermPackage.mainModule.open(expectedUri).then((item) => {
+    this.atomWorkspaceOpenCallback = (item) => {
       expect(item instanceof AtomXtermModel).toBe(true)
-      done()
-    })
+      options.spiedMethodsCalled += 1
+    }
+    this.atomXtermPackage.mainModule.open(expectedUri)
   })
 
   it('open() alternate uri', (done) => {
@@ -528,54 +592,89 @@ describe('AtomXterm', () => {
   })
 
   it('openTerminal() check call to open', (done) => {
-    this.atomXtermPackage.mainModule.openTerminal({}).then((item) => {
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
+    }
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
       let args = atom.workspace.open.calls.argsFor(0)
       let url = new URL(args[0])
       expect(url.protocol).toBe('atom-xterm:')
-      done()
-    })
+      options.spiedMethodsCalled += 1
+    }
+    this.atomXtermPackage.mainModule.openTerminal({})
   })
 
   it('openTerminal() check options passed', (done) => {
-    this.atomXtermPackage.mainModule.openTerminal({}, {'split': 'down'}).then((item) => {
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
+    }
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
       let args = atom.workspace.open.calls.argsFor(0)
-      let options = args[1]
-      expect(options).toEqual({'split': 'down'})
-      done()
-    })
+      let callOptions = args[1]
+      expect(callOptions).toEqual({'split': 'down'})
+      options.spiedMethodsCalled += 1
+    }
+    this.atomXtermPackage.mainModule.openTerminal({}, {'split': 'down'})
   })
 
   it('openTerminal() check call to open with command', (done) => {
-    let profile = {
-      command: 'somecommand'
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
     }
-    this.atomXtermPackage.mainModule.openTerminal(profile).then((item) => {
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
       let args = atom.workspace.open.calls.argsFor(0)
       let url = new URL(args[0])
       expect(url.searchParams.get('command')).toBe('somecommand')
-      done()
-    })
+      options.spiedMethodsCalled += 1
+    }
+    let profile = {
+      command: 'somecommand'
+    }
+    this.atomXtermPackage.mainModule.openTerminal(profile)
   })
 
   it('openTerminal() check call to open with command and arguments', (done) => {
-    let profile = {
-      command: 'somecommand',
-      args: ['--foo', '--bar', '--baz']
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
     }
-    this.atomXtermPackage.mainModule.openTerminal(profile).then((item) => {
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
       let args = atom.workspace.open.calls.argsFor(0)
       let url = new URL(args[0])
       expect(url.searchParams.get('command')).toBe('somecommand')
       expect(JSON.parse(url.searchParams.get('args'))).toEqual(['--foo', '--bar', '--baz'])
-      done()
-    })
+      options.spiedMethodsCalled += 1
+    }
+    let profile = {
+      command: 'somecommand',
+      args: ['--foo', '--bar', '--baz']
+    }
+    this.atomXtermPackage.mainModule.openTerminal(profile)
   })
 
   it('openTerminal() check returned item is AtomXtermModel', (done) => {
-    this.atomXtermPackage.mainModule.openTerminal({}).then((item) => {
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
+    }
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
       expect(item instanceof AtomXtermModel).toBe(true)
-      done()
-    })
+      options.spiedMethodsCalled += 1
+    }
+    this.atomXtermPackage.mainModule.openTerminal({})
   })
 
   it('provideAtomXtermService() provides openTerminal() method', () => {
@@ -586,10 +685,17 @@ describe('AtomXterm', () => {
 
   it('provideAtomXtermService() openTerminal() returns AtomXtermModel', (done) => {
     let atomXtermService = this.atomXtermPackage.mainModule.provideAtomXtermService()
-    atomXtermService.openTerminal({}).then((item) => {
+    let options = {
+      spiedMethodsCalled: 0,
+      expectedNumberofCalls: 4,
+      done: done
+    }
+    setupAtomWorkspaceOpenTests(options)
+    this.atomWorkspaceOpenCallback = (item) => {
       expect(item instanceof AtomXtermModel).toBe(true)
-      done()
-    })
+      options.spiedMethodsCalled += 1
+    }
+    atomXtermService.openTerminal({})
   })
 
   it('atom-xterm.spawnPtySettings.command', () => {
