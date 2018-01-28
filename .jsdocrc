@@ -1,0 +1,8 @@
+{
+  "source": {
+    "include": ["lib/atom-xterm.js","lib/atom-xterm-model.js"]
+  },
+  "opts": {
+    "destination": "./docs/"
+  }
+}

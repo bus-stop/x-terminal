@@ -65,6 +65,7 @@
     "gulp-babel": "^7.0.0",
     "gulp-notice": "^1.0.3",
     "jasmine-spec-reporter": "^4.2.1",
+    "jsdoc": "^3.5.5",
     "jsonlint-cli": "^1.0.1",
     "stylelint": "^8.4.0",
     "stylelint-config-standard": "^18.0.0",
@@ -72,7 +73,9 @@
   },
   "scripts": {
     "compile-scripts": "gulp",
+    "docs": "npm run jsdoc",
     "eslint": "eslint lib/ scripts_src/ spec/ gulpfile.babel.js",
+    "jsdoc": "jsdoc -c .jsdocrc",
     "jsonlint": "jsonlint-cli keymaps/*.json menus/*.json package.json",
     "lint": "npm run eslint && npm run stylelint && npm run jsonlint",
     "move-winpty-binaries": "node scripts/move-winpty-binaries.js",
