@@ -20,7 +20,7 @@
 import { Emitter } from 'atom'
 
 import * as config from '../lib/atom-xterm-config'
-import { AtomXtermModel } from '../lib/atom-xterm-model'
+import { AtomXtermModel, isAtomXtermModel, currentItemIsAtomXtermModel } from '../lib/atom-xterm-model'
 import { AtomXtermProfilesSingleton } from '../lib/atom-xterm-profiles'
 
 import fs from 'fs-extra'
@@ -542,5 +542,35 @@ describe('AtomXtermModel', () => {
     expected.fontSize = 24
     this.model.applyProfileChanges({fontSize: 24})
     expect(this.model.profile).toEqual(expected)
+  })
+})
+
+describe('AtomXtermModel utilities', () => {
+  it('isAtomXtermModel() item is not AtomXtermModel', () => {
+    let item = document.createElement('div')
+    expect(isAtomXtermModel(item)).toBe(false)
+  })
+
+  it('isAtomXtermModel() item is AtomXtermModel', () => {
+    let item = new AtomXtermModel({
+      'uri': 'atom-xterm://',
+      'terminals_set': new Set()
+    })
+    expect(isAtomXtermModel(item)).toBe(true)
+  })
+
+  it('currentItemIsAtomXtermModel() item is not AtomXtermModel', () => {
+    let item = document.createElement('div')
+    spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(item)
+    expect(currentItemIsAtomXtermModel()).toBe(false)
+  })
+
+  it('currentItemIsAtomXtermModel() item is AtomXtermModel', () => {
+    let item = new AtomXtermModel({
+      'uri': 'atom-xterm://',
+      'terminals_set': new Set()
+    })
+    spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(item)
+    expect(currentItemIsAtomXtermModel()).toBe(true)
   })
 })

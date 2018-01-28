@@ -18,7 +18,7 @@
  */
 
 import { AtomXtermSaveProfileModel } from '../lib/atom-xterm-save-profile-model'
-import * as utils from '../lib/atom-xterm-utils'
+import * as atomXtermModelModule from '../lib/atom-xterm-model'
 
 describe('AtomXtermSaveProfileModel', () => {
   this.atomXtermProfileMenuElement = null
@@ -158,7 +158,7 @@ describe('AtomXtermSaveProfileModel', () => {
     model.panel = jasmine.createSpyObj('panel', ['isVisible', 'show'])
     model.panel.isVisible.and.returnValue(false)
     model.element = jasmine.createSpyObj('element', ['setNewTextbox'])
-    spyOn(utils, 'currentItemIsAtomXtermModel').and.returnValue(false)
+    spyOn(atomXtermModelModule, 'currentItemIsAtomXtermModel').and.returnValue(false)
     model.promptForNewProfileName({}, 'baz')
     expect(model.panel.show).not.toHaveBeenCalled()
   })
@@ -168,7 +168,7 @@ describe('AtomXtermSaveProfileModel', () => {
     model.panel = jasmine.createSpyObj('panel', ['isVisible', 'show'])
     model.panel.isVisible.and.returnValue(false)
     model.element = jasmine.createSpyObj('element', ['setNewTextbox'])
-    spyOn(utils, 'currentItemIsAtomXtermModel').and.returnValue(true)
+    spyOn(atomXtermModelModule, 'currentItemIsAtomXtermModel').and.returnValue(true)
     model.promptForNewProfileName({}, 'baz')
     expect(model.panel.show).toHaveBeenCalled()
   })
@@ -178,7 +178,7 @@ describe('AtomXtermSaveProfileModel', () => {
     model.panel = jasmine.createSpyObj('panel', ['isVisible', 'show'])
     model.panel.isVisible.and.returnValue(true)
     model.element = jasmine.createSpyObj('element', ['setNewTextbox'])
-    spyOn(utils, 'currentItemIsAtomXtermModel').and.returnValue(false)
+    spyOn(atomXtermModelModule, 'currentItemIsAtomXtermModel').and.returnValue(false)
     model.promptForNewProfileName({}, 'baz')
     expect(model.panel.show).not.toHaveBeenCalled()
   })
@@ -188,7 +188,7 @@ describe('AtomXtermSaveProfileModel', () => {
     model.panel = jasmine.createSpyObj('panel', ['isVisible', 'show'])
     model.panel.isVisible.and.returnValue(true)
     model.element = jasmine.createSpyObj('element', ['setNewTextbox'])
-    spyOn(utils, 'currentItemIsAtomXtermModel').and.returnValue(true)
+    spyOn(atomXtermModelModule, 'currentItemIsAtomXtermModel').and.returnValue(true)
     model.promptForNewProfileName({}, 'baz')
     expect(model.panel.show).not.toHaveBeenCalled()
   })
