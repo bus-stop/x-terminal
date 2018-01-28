@@ -76,25 +76,25 @@ There's also activity notifications for terminal tabs not in focus.
 
 ## Services
 
-For plugin writers, the atom-xterm package supports one service method which
+For plugin writers, the `atom-xterm` package supports one service method which
 can be used to easily open terminals. This method is provided using Atom's [services](http://flight-manual.atom.io/behind-atom/sections/interacting-with-other-packages-via-services/)
 API. To use it, add a consumer method to consume the `atom-xterm` service, or
 rather a JavaScript object that provides an
-[openTerminal()](https://github.com/amejia1/atom-xterm/blob/0376dba8551f7518fa184d4688bbdba6779163aa/lib/atom-xterm.js#L388) method. The `openTerminal()` method behaves just like Atom's
+[openTerminal()](https://github.com/amejia1/atom-xterm/blob/b9578414e93b6fd164e19e03e2fbd5140934c3cb/lib/atom-xterm.js#L368) method. The `openTerminal()` method behaves just like Atom's
 [open()](https://github.com/atom/atom/blob/v1.23.3/src/workspace.js#L912)
 method except that the first argument must be a JSON object describing the
 terminal profile that should be opened. Docs about this JSON object can be
-found [here](https://github.com/amejia1/atom-xterm/blob/0376dba8551f7518fa184d4688bbdba6779163aa/lib/atom-xterm-profiles.js#L223).
+found [here](https://github.com/amejia1/atom-xterm/blob/b9578414e93b6fd164e19e03e2fbd5140934c3cb/lib/atom-xterm-profiles.js#L295).
 
 As an example on how to use the provided `openTerminal()` method, your
 `package.json` should have the following.
 
-```json
+```javascript
 {
   "consumedServices": {
     "atom-xterm": {
       "versions": {
-        "^1.0.0": "consumeAtomXtermService"
+        "^2.0.0": "consumeAtomXtermService"
       }
     }
   }
