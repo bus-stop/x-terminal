@@ -20,7 +20,7 @@
 import { Emitter } from 'atom'
 
 import * as config from '../lib/atom-xterm-config'
-import AtomXtermModel from '../lib/atom-xterm-model'
+import { AtomXtermModel } from '../lib/atom-xterm-model'
 import { AtomXtermProfilesSingleton } from '../lib/atom-xterm-profiles'
 
 import fs from 'fs-extra'

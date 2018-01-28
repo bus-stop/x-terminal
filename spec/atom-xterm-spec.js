@@ -20,8 +20,8 @@
 import * as nodePty from 'node-pty-prebuilt'
 
 import * as config from '../lib/atom-xterm-config'
-import AtomXtermElement from '../lib/atom-xterm-element'
-import AtomXtermModel from '../lib/atom-xterm-model'
+import { AtomXtermElement } from '../lib/atom-xterm-element'
+import { AtomXtermModel } from '../lib/atom-xterm-model'
 
 import { URL } from 'whatwg-url'
 

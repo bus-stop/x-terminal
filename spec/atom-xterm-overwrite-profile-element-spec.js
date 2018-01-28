@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import AtomXtermOverwriteProfileElement from '../lib/atom-xterm-overwrite-profile-element'
+import { AtomXtermOverwriteProfileElement } from '../lib/atom-xterm-overwrite-profile-element'
 
 describe('AtomXtermOverwriteProfileElement', () => {
   this.model = null

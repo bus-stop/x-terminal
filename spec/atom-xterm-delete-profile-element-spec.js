@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import AtomXtermDeleteProfileElement from '../lib/atom-xterm-delete-profile-element'
+import { AtomXtermDeleteProfileElement } from '../lib/atom-xterm-delete-profile-element'
 
 describe('AtomXtermDeleteProfileElement', () => {
   this.model = null

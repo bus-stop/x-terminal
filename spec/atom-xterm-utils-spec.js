@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import AtomXtermModel from '../lib/atom-xterm-model'
+import { AtomXtermModel } from '../lib/atom-xterm-model'
 import * as utils from '../lib/atom-xterm-utils'
 
 describe('Utilities', () => {

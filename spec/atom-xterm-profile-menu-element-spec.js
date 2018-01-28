@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import AtomXtermProfileMenuElement from '../lib/atom-xterm-profile-menu-element'
+import { AtomXtermProfileMenuElement } from '../lib/atom-xterm-profile-menu-element'
 
 describe('AtomXtermProfileMenuElement', () => {
   this.element = null
