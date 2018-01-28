@@ -505,12 +505,6 @@ describe('AtomXtermModel', () => {
     expect(this.model.element.toggleProfileMenu).toHaveBeenCalled()
   })
 
-  it('setNewProfile()', () => {
-    let mock = jasmine.createSpy('mock')
-    this.model.setNewProfile(mock)
-    expect(this.model.profile).toBe(mock)
-  })
-
   it('openHoveredLink()', () => {
     this.model.element = jasmine.createSpyObj('element', ['openHoveredLink'])
     this.model.openHoveredLink()
@@ -521,5 +515,32 @@ describe('AtomXtermModel', () => {
     this.model.element = jasmine.createSpyObj('element', ['getHoveredLink'])
     this.model.getHoveredLink()
     expect(this.model.element.getHoveredLink).toHaveBeenCalled()
+  })
+
+  it('getProfile()', () => {
+    let mock = jasmine.createSpy('mock')
+    this.model.profile = mock
+    expect(this.model.getProfile()).toBe(mock)
+  })
+
+  it('applyProfileChanges() element queueNewProfileChanges() called', () => {
+    this.model.element = jasmine.createSpyObj('element', ['queueNewProfileChanges'])
+    this.model.applyProfileChanges({})
+    expect(this.model.element.queueNewProfileChanges).toHaveBeenCalled()
+  })
+
+  it('applyProfileChanges() profileChanges = {}', () => {
+    this.model.element = jasmine.createSpyObj('element', ['queueNewProfileChanges'])
+    let expected = this.model.profilesSingleton.deepClone(this.model.profile)
+    this.model.applyProfileChanges({})
+    expect(this.model.profile).toEqual(expected)
+  })
+
+  it('applyProfileChanges() profileChanges = {fontSize: 24}', () => {
+    this.model.element = jasmine.createSpyObj('element', ['queueNewProfileChanges'])
+    let expected = this.model.profilesSingleton.deepClone(this.model.profile)
+    expected.fontSize = 24
+    this.model.applyProfileChanges({fontSize: 24})
+    expect(this.model.profile).toEqual(expected)
   })
 })

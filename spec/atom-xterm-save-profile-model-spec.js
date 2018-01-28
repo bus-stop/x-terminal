@@ -67,10 +67,11 @@ describe('AtomXtermSaveProfileModel', () => {
   it('updateProfile()', (done) => {
     let model = new AtomXtermSaveProfileModel(this.atomXtermProfileMenuElement)
     spyOn(model.profilesSingleton, 'setProfile').and.returnValue(Promise.resolve())
-    model.atomXtermProfileMenuElement.applyProfileChanges.and.callFake(() => {
+    model.atomXtermProfileMenuElement.applyProfileChanges.and.callFake((profileChanges) => {
+      expect(profileChanges).toBe('baz')
       done()
     })
-    model.updateProfile('foo', {})
+    model.updateProfile('foo', {}, 'baz')
   })
 
   it('confirm() no name given', () => {
@@ -87,10 +88,13 @@ describe('AtomXtermSaveProfileModel', () => {
     model.textbox = jasmine.createSpyObj('textbox', ['getText'])
     model.textbox.getText.and.returnValue('foo')
     spyOn(model.profilesSingleton, 'isProfileExists').and.returnValue(Promise.resolve(false))
-    spyOn(model, 'updateProfile').and.callFake(() => {
+    spyOn(model, 'updateProfile').and.callFake((profileName, newProfile, profileChanges) => {
+      expect(profileName).toBe('foo')
+      expect(newProfile).toEqual({})
+      expect(profileChanges).toBe('baz')
       done()
     })
-    model.confirm({})
+    model.confirm({}, 'baz')
   })
 
   it('confirm() name given exists', (done) => {
@@ -99,11 +103,11 @@ describe('AtomXtermSaveProfileModel', () => {
     model.textbox.getText.and.returnValue('foo')
     spyOn(model.profilesSingleton, 'isProfileExists').and.returnValue(Promise.resolve(true))
     spyOn(model, 'close')
-    spyOn(model.overwriteProfileModel, 'promptOverwrite').and.callFake(() => {
+    spyOn(model.overwriteProfileModel, 'promptOverwrite').and.callFake((profileChanges) => {
       expect(model.close).toHaveBeenCalledWith(false)
       done()
     })
-    model.confirm({})
+    model.confirm({}, 'baz')
   })
 
   it('close() panel is not visible', () => {
@@ -155,7 +159,7 @@ describe('AtomXtermSaveProfileModel', () => {
     model.panel.isVisible.and.returnValue(false)
     model.element = jasmine.createSpyObj('element', ['setNewTextbox'])
     spyOn(utils, 'currentItemIsAtomXtermModel').and.returnValue(false)
-    model.promptForNewProfileName({})
+    model.promptForNewProfileName({}, 'baz')
     expect(model.panel.show).not.toHaveBeenCalled()
   })
 
@@ -165,7 +169,7 @@ describe('AtomXtermSaveProfileModel', () => {
     model.panel.isVisible.and.returnValue(false)
     model.element = jasmine.createSpyObj('element', ['setNewTextbox'])
     spyOn(utils, 'currentItemIsAtomXtermModel').and.returnValue(true)
-    model.promptForNewProfileName({})
+    model.promptForNewProfileName({}, 'baz')
     expect(model.panel.show).toHaveBeenCalled()
   })
 
@@ -175,7 +179,7 @@ describe('AtomXtermSaveProfileModel', () => {
     model.panel.isVisible.and.returnValue(true)
     model.element = jasmine.createSpyObj('element', ['setNewTextbox'])
     spyOn(utils, 'currentItemIsAtomXtermModel').and.returnValue(false)
-    model.promptForNewProfileName({})
+    model.promptForNewProfileName({}, 'baz')
     expect(model.panel.show).not.toHaveBeenCalled()
   })
 
@@ -185,7 +189,7 @@ describe('AtomXtermSaveProfileModel', () => {
     model.panel.isVisible.and.returnValue(true)
     model.element = jasmine.createSpyObj('element', ['setNewTextbox'])
     spyOn(utils, 'currentItemIsAtomXtermModel').and.returnValue(true)
-    model.promptForNewProfileName({})
+    model.promptForNewProfileName({}, 'baz')
     expect(model.panel.show).not.toHaveBeenCalled()
   })
 })

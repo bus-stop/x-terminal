@@ -171,6 +171,18 @@ describe('Call to getDefaultFontSize()', () => {
   })
 })
 
+describe('Call to getMinimumFontSize()', () => {
+  it('return 8', () => {
+    expect(config.getMinimumFontSize()).toBe(8)
+  })
+})
+
+describe('Call to getMaximumFontSize()', () => {
+  it('return 100', () => {
+    expect(config.getMaximumFontSize()).toBe(100)
+  })
+})
+
 describe('Call to getDefaultLeaveOpenAfterExit()', () => {
   it('return true', () => {
     expect(config.getDefaultLeaveOpenAfterExit()).toBe(true)
@@ -186,6 +198,12 @@ describe('Call to getDefaultAllowRelaunchingTerminalsOnStartup()', () => {
 describe('Call to getDefaultRelaunchTerminalOnStartup()', () => {
   it('return true', () => {
     expect(config.getDefaultRelaunchTerminalOnStartup()).toBe(true)
+  })
+})
+
+describe('Call to getDefaultXtermOptions()', () => {
+  it('return {}', () => {
+    expect(config.getDefaultXtermOptions()).toBe('{}')
   })
 })
 

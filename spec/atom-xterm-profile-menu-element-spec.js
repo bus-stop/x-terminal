@@ -27,21 +27,29 @@ describe('AtomXtermProfileMenuElement', () => {
       'atomXtermProfileMenuModel',
       [
         'setElement',
+        'getAtomXtermModel',
         'getAtomXtermModelElement'
       ]
     )
-    model.atomXtermModel = jasmine.createSpy('atomXtermModel')
+    model.atomXtermModel = jasmine.createSpyObj(
+      'atomXtermModel',
+      [
+        'getProfile',
+        'applyProfileChanges'
+      ]
+    )
+    model.atomXtermModel.getProfile.and.returnValue({})
     model.atomXtermModel.profile = {}
     let mock = jasmine.createSpyObj(
       'atomXtermElement',
       [
-        'setNewProfile',
         'restartPtyProcess',
         'hideTerminal',
         'showTerminal',
         'focusOnTerminal'
       ]
     )
+    model.getAtomXtermModel.and.returnValue(model.atomXtermModel)
     model.getAtomXtermModelElement.and.returnValue(mock)
     this.element = new AtomXtermProfileMenuElement()
     this.element.initialize(model)
@@ -123,19 +131,30 @@ describe('AtomXtermProfileMenuElement', () => {
 
   it('getProfileMenuSettings()', () => {
     let expected = this.element.profilesSingleton.getBaseProfile()
-    delete expected.fontSize
     let actual = this.element.getProfileMenuSettings()
     expect(actual).toEqual(expected)
   })
 
   it('applyProfileChanges()', () => {
     this.element.applyProfileChanges('foo')
-    expect(this.element.model.getAtomXtermModelElement().setNewProfile).toHaveBeenCalledWith('foo')
+    expect(this.element.model.getAtomXtermModel().applyProfileChanges).toHaveBeenCalledWith('foo')
+  })
+
+  it('applyProfileChanges() profile menu hidden', () => {
+    spyOn(this.element, 'hideProfileMenu')
+    this.element.applyProfileChanges('foo')
+    expect(this.element.hideProfileMenu).toHaveBeenCalled()
   })
 
   it('restartTerminal()', () => {
     this.element.restartTerminal()
     expect(this.element.model.getAtomXtermModelElement().restartPtyProcess).toHaveBeenCalled()
+  })
+
+  it('restartTerminal() profile menu hidden', () => {
+    spyOn(this.element, 'hideProfileMenu')
+    this.element.restartTerminal()
+    expect(this.element.hideProfileMenu).toHaveBeenCalled()
   })
 
   it('createMenuItemContainer() check id', () => {
@@ -239,10 +258,41 @@ describe('AtomXtermProfileMenuElement', () => {
     expect(this.element.hideProfileMenu).toHaveBeenCalled()
   })
 
+  it('getNewProfileAndChanges()', () => {
+    spyOn(this.element, 'getProfileMenuSettings').and.returnValue({
+      args: [
+        '--foo',
+        '--bar',
+        '--baz'
+      ]
+    })
+    this.element.model.atomXtermModel.getProfile.and.returnValue({
+      command: 'somecommand'
+    })
+    let expected = {
+      newProfile: {
+        args: [
+          '--foo',
+          '--bar',
+          '--baz'
+        ]
+      },
+      profileChanges: {
+        args: [
+          '--foo',
+          '--bar',
+          '--baz'
+        ]
+      }
+    }
+    let actual = this.element.getNewProfileAndChanges()
+    expect(actual).toEqual(expected)
+  })
+
   it('loadProfile()', () => {
+    spyOn(this.element, 'applyProfileChanges')
     this.element.loadProfile()
-    expect(this.element.model.getAtomXtermModelElement().setNewProfile).toHaveBeenCalled()
-    expect(this.element.model.getAtomXtermModelElement().restartPtyProcess).toHaveBeenCalled()
+    expect(this.element.applyProfileChanges).toHaveBeenCalled()
   })
 
   it('saveProfile()', () => {
@@ -276,11 +326,12 @@ describe('AtomXtermProfileMenuElement', () => {
   })
 
   it('promptForNewProfileName()', (done) => {
-    spyOn(this.element.saveProfileModel, 'promptForNewProfileName').and.callFake((newProfile) => {
+    spyOn(this.element.saveProfileModel, 'promptForNewProfileName').and.callFake((newProfile, profileChanges) => {
       expect(newProfile).toBe('foo')
+      expect(profileChanges).toBe('bar')
       done()
     })
-    this.element.promptForNewProfileName('foo')
+    this.element.promptForNewProfileName('foo', 'bar')
   })
 
   it('convertNullToEmptyString() value is null', () => {

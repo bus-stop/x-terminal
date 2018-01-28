@@ -596,48 +596,120 @@ describe('AtomXterm', () => {
     expect(atom.config.get('atom-xterm.spawnPtySettings.command')).toEqual(config.getDefaultShellCommand())
   })
 
+  it('atom-xterm.spawnPtySettings.command changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.spawnPtySettings.command', 'someCommand')
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
+  })
+
   it('atom-xterm.spawnPtySettings.args', () => {
     expect(atom.config.get('atom-xterm.spawnPtySettings.args')).toEqual('[]')
+  })
+
+  it('atom-xterm.spawnPtySettings.args changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.spawnPtySettings.args', '["foo", "bar"]')
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
   })
 
   it('atom-xterm.spawnPtySettings.name', () => {
     expect(atom.config.get('atom-xterm.spawnPtySettings.name')).toEqual(config.getDefaultTermType())
   })
 
+  it('atom-xterm.spawnPtySettings.name changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.spawnPtySettings.name', 'sometermname')
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
+  })
+
   it('atom-xterm.spawnPtySettings.cwd', () => {
     expect(atom.config.get('atom-xterm.spawnPtySettings.cwd')).toEqual(config.getDefaultCwd())
+  })
+
+  it('atom-xterm.spawnPtySettings.cwd changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.spawnPtySettings.cwd', '/some/path')
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
   })
 
   it('atom-xterm.spawnPtySettings.env', () => {
     expect(atom.config.get('atom-xterm.spawnPtySettings.env')).toEqual('')
   })
 
+  it('atom-xterm.spawnPtySettings.env changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.spawnPtySettings.env', '{"foo": "bar"}')
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
+  })
+
   it('atom-xterm.spawnPtySettings.setEnv', () => {
     expect(atom.config.get('atom-xterm.spawnPtySettings.setEnv')).toEqual('{}')
+  })
+
+  it('atom-xterm.spawnPtySettings.setEnv changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.spawnPtySettings.setEnv', '{"foo": "bar"}')
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
   })
 
   it('atom-xterm.spawnPtySettings.deleteEnv', () => {
     expect(atom.config.get('atom-xterm.spawnPtySettings.deleteEnv')).toEqual('[]')
   })
 
+  it('atom-xterm.spawnPtySettings.deleteEnv changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.spawnPtySettings.deleteEnv', '["foo", "bar"]')
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
+  })
+
   it('atom-xterm.spawnPtySettings.encoding', () => {
     expect(atom.config.get('atom-xterm.spawnPtySettings.encoding')).toEqual('')
+  })
+
+  it('atom-xterm.spawnPtySettings.encoding changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.spawnPtySettings.encoding', 'someencoding')
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
   })
 
   it('atom-xterm.terminalSettings.fontSize', () => {
     expect(atom.config.get('atom-xterm.terminalSettings.fontSize')).toEqual(14)
   })
 
+  it('atom-xterm.terminalSettings.fontSize changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.terminalSettings.fontSize', 42)
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
+  })
+
   it('atom-xterm.terminalSettings.leaveOpenAfterExit', () => {
     expect(atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit')).toBeTruthy()
+  })
+
+  it('atom-xterm.terminalSettings.leaveOpenAfterExit changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.terminalSettings.leaveOpenAfterExit', false)
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
   })
 
   it('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', () => {
     expect(atom.config.get('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup')).toBeTruthy()
   })
 
+  it('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup', false)
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
+  })
+
   it('atom-xterm.terminalSettings.relaunchTerminalOnStartup', () => {
     expect(atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup')).toBeTruthy()
+  })
+
+  it('atom-xterm.terminalSettings.relaunchTerminalOnStartup changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.terminalSettings.relaunchTerminalOnStartup', false)
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
   })
 
   it('atom-xterm.terminalSettings.fontSize minimum 8', () => {
@@ -652,5 +724,21 @@ describe('AtomXterm', () => {
 
   it('atom-xterm.terminalSettings.title', () => {
     expect(atom.config.get('atom-xterm.terminalSettings.title')).toEqual('')
+  })
+
+  it('atom-xterm.terminalSettings.title changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.terminalSettings.title', 'foo')
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
+  })
+
+  it('atom-xterm.spawnPtySettings.xtermOptions', () => {
+    expect(atom.config.get('atom-xterm.terminalSettings.xtermOptions')).toEqual('{}')
+  })
+
+  it('atom-xterm.terminalSettings.xtermOptions changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.terminalSettings.xtermOptions', '{"theme": {"background": "#FFF"}}')
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
   })
 })

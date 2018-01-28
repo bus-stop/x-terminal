@@ -65,4 +65,9 @@ describe('AtomXtermProfileMenuModel', () => {
     model.getAtomXtermModelElement()
     expect(model.atomXtermModel.getElement).toHaveBeenCalled()
   })
+
+  it('getAtomXtermModel()', () => {
+    let model = new AtomXtermProfileMenuModel(this.atomXtermModel)
+    expect(model.getAtomXtermModel()).toBe(this.atomXtermModel)
+  })
 })

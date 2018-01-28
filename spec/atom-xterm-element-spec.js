@@ -654,12 +654,6 @@ describe('AtomXtermElement', () => {
     this.element.toggleProfileMenu()
   })
 
-  it('setNewProfile()', () => {
-    let mock = jasmine.createSpy('mock')
-    this.element.setNewProfile(mock)
-    expect(this.element.model.profile).toBe(mock)
-  })
-
   it('hideTerminal()', () => {
     this.element.hideTerminal()
     expect(this.element.terminalDiv.style.visibility).toBe('hidden')
@@ -895,5 +889,239 @@ describe('AtomXtermElement', () => {
       )
     }
     expect(call).toThrow(new Error('Unknown info type: bogus'))
+  })
+
+  it('use wheelScrollUp on terminal container', () => {
+    let wheelEvent = new WheelEvent('wheel', {
+      deltaY: -150
+    })
+    this.element.terminalDiv.dispatchEvent(wheelEvent)
+    expect(this.element.model.profile.fontSize).toBe(14)
+  })
+
+  it('use wheelScrollDown on terminal container', () => {
+    let wheelEvent = new WheelEvent('wheel', {
+      deltaY: 150
+    })
+    this.element.terminalDiv.dispatchEvent(wheelEvent)
+    expect(this.element.model.profile.fontSize).toBe(14)
+  })
+
+  it('use ctrl+wheelScrollUp on terminal container', () => {
+    let wheelEvent = new WheelEvent('wheel', {
+      deltaY: -150,
+      ctrlKey: true
+    })
+    this.element.terminalDiv.dispatchEvent(wheelEvent)
+    expect(this.element.model.profile.fontSize).toBe(15)
+  })
+
+  it('use ctrl+wheelScrollDown on terminal container', () => {
+    let wheelEvent = new WheelEvent('wheel', {
+      deltaY: 150,
+      ctrlKey: true
+    })
+    this.element.terminalDiv.dispatchEvent(wheelEvent)
+    expect(this.element.model.profile.fontSize).toBe(13)
+  })
+
+  it('use ctrl+wheelScrollUp font already at maximum', () => {
+    this.element.model.profile.fontSize = config.getMaximumFontSize()
+    let wheelEvent = new WheelEvent('wheel', {
+      deltaY: -150,
+      ctrlKey: true
+    })
+    this.element.terminalDiv.dispatchEvent(wheelEvent)
+    expect(this.element.model.profile.fontSize).toBe(config.getMaximumFontSize())
+  })
+
+  it('use ctrl+wheelScrollDown font already at minimum', () => {
+    this.element.model.profile.fontSize = config.getMinimumFontSize()
+    let wheelEvent = new WheelEvent('wheel', {
+      deltaY: 150,
+      ctrlKey: true
+    })
+    this.element.terminalDiv.dispatchEvent(wheelEvent)
+    expect(this.element.model.profile.fontSize).toBe(config.getMinimumFontSize())
+  })
+
+  it('getXtermOptions() default options', () => {
+    let expected = {
+      cursorBlink: true,
+      fontSize: 14
+    }
+    expect(this.element.getXtermOptions()).toEqual(expected)
+  })
+
+  it('getXtermOptions() xtermOptions in profile', () => {
+    this.element.model.profile.xtermOptions = {
+      theme: {
+        background: '#FFF'
+      }
+    }
+    let expected = {
+      cursorBlink: true,
+      fontSize: 14,
+      theme: {
+        background: '#FFF'
+      }
+    }
+    expect(this.element.getXtermOptions()).toEqual(expected)
+  })
+
+  it('applyPendingTerminalProfileOptions() terminal not visible', () => {
+    spyOn(this.element, 'refitTerminal')
+    this.element.terminalDivIntersectionRatio = 0.0
+    this.element.applyPendingTerminalProfileOptions()
+    expect(this.element.refitTerminal).not.toHaveBeenCalled()
+  })
+
+  it('applyPendingTerminalProfileOptions() terminal visible no pending changes', () => {
+    spyOn(this.element, 'refitTerminal')
+    spyOn(this.element, 'setMainBackgroundColor')
+    spyOn(this.element, 'restartPtyProcess')
+    spyOn(this.element.terminal, 'setOption')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.applyPendingTerminalProfileOptions()
+    expect(this.element.setMainBackgroundColor).toHaveBeenCalled()
+    expect(this.element.terminal.setOption).not.toHaveBeenCalled()
+    expect(this.element.restartPtyProcess).not.toHaveBeenCalled()
+    expect(this.element.refitTerminal).toHaveBeenCalled()
+  })
+
+  it('applyPendingTerminalProfileOptions() terminal visible pending xtermOptions', () => {
+    spyOn(this.element, 'refitTerminal')
+    spyOn(this.element, 'setMainBackgroundColor')
+    spyOn(this.element, 'restartPtyProcess')
+    spyOn(this.element.terminal, 'setOption')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.pendingTerminalProfileOptions.xtermOptions = {
+      theme: {
+        background: '#FFF'
+      }
+    }
+    this.element.applyPendingTerminalProfileOptions()
+    expect(this.element.setMainBackgroundColor).toHaveBeenCalled()
+    expect(this.element.terminal.setOption).toHaveBeenCalled()
+    expect(this.element.restartPtyProcess).not.toHaveBeenCalled()
+    expect(this.element.refitTerminal).toHaveBeenCalled()
+  })
+
+  it('applyPendingTerminalProfileOptions() terminal visible pending pty changes', () => {
+    spyOn(this.element, 'refitTerminal')
+    spyOn(this.element, 'setMainBackgroundColor')
+    spyOn(this.element, 'restartPtyProcess')
+    spyOn(this.element.terminal, 'setOption')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.pendingTerminalProfileOptions.command = 'somecommand'
+    this.element.applyPendingTerminalProfileOptions()
+    expect(this.element.setMainBackgroundColor).toHaveBeenCalled()
+    expect(this.element.terminal.setOption).not.toHaveBeenCalled()
+    expect(this.element.restartPtyProcess).toHaveBeenCalled()
+    expect(this.element.refitTerminal).toHaveBeenCalled()
+  })
+
+  it('applyPendingTerminalProfileOptions() terminal visible pending xtermOptions and pty changes', () => {
+    spyOn(this.element, 'refitTerminal')
+    spyOn(this.element, 'setMainBackgroundColor')
+    spyOn(this.element, 'restartPtyProcess')
+    spyOn(this.element.terminal, 'setOption')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.pendingTerminalProfileOptions.xtermOptions = {
+      theme: {
+        background: '#FFF'
+      }
+    }
+    this.element.pendingTerminalProfileOptions.command = 'somecommand'
+    this.element.applyPendingTerminalProfileOptions()
+    expect(this.element.setMainBackgroundColor).toHaveBeenCalled()
+    expect(this.element.terminal.setOption).toHaveBeenCalled()
+    expect(this.element.restartPtyProcess).toHaveBeenCalled()
+    expect(this.element.refitTerminal).toHaveBeenCalled()
+  })
+
+  it('applyPendingTerminalProfileOptions() terminal not visible pending xtermOptions and pty changes kept', () => {
+    spyOn(this.element, 'refitTerminal')
+    this.element.terminalDivIntersectionRatio = 0.0
+    this.element.pendingTerminalProfileOptions.xtermOptions = {
+      theme: {
+        background: '#FFF'
+      }
+    }
+    this.element.pendingTerminalProfileOptions.command = 'somecommand'
+    this.element.applyPendingTerminalProfileOptions()
+    expect(this.element.pendingTerminalProfileOptions).toEqual({
+      xtermOptions: {
+        theme: {
+          background: '#FFF'
+        }
+      },
+      command: 'somecommand'
+    })
+  })
+
+  it('applyPendingTerminalProfileOptions() terminal visible pending xtermOptions and pty changes removed', () => {
+    spyOn(this.element, 'refitTerminal')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.pendingTerminalProfileOptions.xtermOptions = {
+      theme: {
+        background: '#FFF'
+      }
+    }
+    this.element.pendingTerminalProfileOptions.command = 'somecommand'
+    this.element.applyPendingTerminalProfileOptions()
+    expect(this.element.pendingTerminalProfileOptions).toEqual({})
+  })
+
+  it('applyPendingTerminalProfileOptions() terminal not visible atom-xterm options removed', () => {
+    spyOn(this.element, 'refitTerminal')
+    this.element.terminalDivIntersectionRatio = 0.0
+    this.element.pendingTerminalProfileOptions.leaveOpenAfterExit = true
+    this.element.pendingTerminalProfileOptions.relaunchTerminalOnStartup = true
+    this.element.pendingTerminalProfileOptions.title = 'foo'
+    this.element.applyPendingTerminalProfileOptions()
+    expect(this.element.pendingTerminalProfileOptions).toEqual({})
+  })
+
+  it('applyPendingTerminalProfileOptions() terminal visible atom-xterm options removed', () => {
+    spyOn(this.element, 'refitTerminal')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.pendingTerminalProfileOptions.leaveOpenAfterExit = true
+    this.element.pendingTerminalProfileOptions.relaunchTerminalOnStartup = true
+    this.element.pendingTerminalProfileOptions.title = 'foo'
+    this.element.applyPendingTerminalProfileOptions()
+    expect(this.element.pendingTerminalProfileOptions).toEqual({})
+  })
+
+  it('queueNewProfileChanges() no previous changes', () => {
+    spyOn(this.element, 'applyPendingTerminalProfileOptions')
+    let profileChanges = {
+      command: 'somecommand'
+    }
+    this.element.queueNewProfileChanges(profileChanges)
+    expect(this.element.pendingTerminalProfileOptions).toEqual(profileChanges)
+  })
+
+  it('queueNewProfileChanges() previous command change made', () => {
+    spyOn(this.element, 'applyPendingTerminalProfileOptions')
+    this.element.pendingTerminalProfileOptions.command = 'somecommand'
+    let profileChanges = {
+      command: 'someothercommand'
+    }
+    this.element.queueNewProfileChanges(profileChanges)
+    expect(this.element.pendingTerminalProfileOptions).toEqual(profileChanges)
+  })
+
+  it('queueNewProfileChanges() another setting', () => {
+    spyOn(this.element, 'applyPendingTerminalProfileOptions')
+    this.element.pendingTerminalProfileOptions.command = 'somecommand'
+    let profileChanges = {
+      args: ['--foo', '--bar', '--baz']
+    }
+    this.element.queueNewProfileChanges(profileChanges)
+    expect(this.element.pendingTerminalProfileOptions).toEqual({
+      command: 'somecommand',
+      args: ['--foo', '--bar', '--baz']
+    })
   })
 })

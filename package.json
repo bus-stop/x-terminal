@@ -40,6 +40,7 @@
     }
   },
   "dependencies": {
+    "deep-object-diff": "^1.0.4",
     "element-resize-detector": "^1.1.13",
     "fs-extra": "^5.0.0",
     "node-pty-prebuilt": "^0.7.3",
