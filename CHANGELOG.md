@@ -1,3 +1,15 @@
+## 6.0.0
+* Allow for full customization of the terminals through the available options
+  for xterm.js Terminal objects.
+* Support increasing/decreasing the font size for specific terminals by holding
+  the Ctrl button and moving the mouse wheel up and down.
+* Ensure terminal is completely visible before applying any new terminal
+  changes. This includes resizing the terminal.
+* When making changes to the terminal via the profiles view, only restart the
+  pty process if any of the pty process settings have changed.
+* Formally declare what methods are considered public in the AtomXtermModel
+  class.
+
 ## 5.3.0
 * Fully fix support for changing font size in terminals. New font size
   settings will be applied to existing terminals as well as new terminals.
