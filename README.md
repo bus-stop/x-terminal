@@ -147,13 +147,33 @@ Want to help develop atom-xterm? Just use the
 apm develop atom-xterm
 ```
 
-This should clone the atom-xterm package into `$HOME/github/atom-xterm`. Open
-this directory in Atom's dev mode and hack away.
+This should clone the atom-xterm package into the `$HOME/github/atom-xterm`
+directory. Open this directory in Atom's dev mode and hack away.
 
-There's a test suite for automated testing of the atom-xterm package.
+There's a test suite available for automated testing of the atom-xterm package.
 Simply go to `View > Developer > Run Package Specs` in Atom's main menu or
-use the hotkey. You can also run test suite via command-line by running
-`atom --test spec` inside the atom-xterm directory.
+use the hotkey. You can run the full test suite (which includes running lint
+tools) via command-line by running `npm run test` inside the atom-xterm
+directory.
+
+Various lint tools are being used to keep the code "beautified". To run only
+the lint tools, simply run `npm run lint`.
+
+## Pull Requests
+
+Whenever you're ready to submit a pull request, be sure to submit it
+against a fork of the main [atom-xterm repo](https://github.com/amejia1/atom-xterm)
+master branch that you'll own. Fork the repo using Github and make note of the
+new `git` URL. Set this new git URL as the URL for the `origin` remote in your
+already cloned git repo is follows.
+
+```
+git remote set-url origin ${NEW_GIT_URL}
+```
+
+Ensure your new changes passes the test suite by running `npm run test`.
+Afterwards, push your changes to your repo and then use Github to submit a new
+pull request.
 
 # Credits and Legal
 
