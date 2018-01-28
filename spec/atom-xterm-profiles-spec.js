@@ -735,4 +735,80 @@ describe('AtomXtermProfilesSingleton', () => {
     let actual = AtomXtermProfilesSingleton.instance.diffProfiles(oldProfile, profileChanges)
     expect(actual).toEqual(expected)
   })
+
+  it('getDefaultProfile()', () => {
+    let expected = {
+      command: config.getDefaultShellCommand(),
+      args: JSON.parse(config.getDefaultArgs()),
+      name: config.getDefaultTermType(),
+      cwd: config.getDefaultCwd(),
+      env: null,
+      setEnv: JSON.parse(config.getDefaultSetEnv()),
+      deleteEnv: JSON.parse(config.getDefaultDeleteEnv()),
+      encoding: null,
+      fontSize: config.getDefaultFontSize(),
+      leaveOpenAfterExit: config.getDefaultLeaveOpenAfterExit(),
+      relaunchTerminalOnStartup: config.getDefaultRelaunchTerminalOnStartup(),
+      title: null,
+      xtermOptions: JSON.parse(config.getDefaultXtermOptions())
+    }
+    expect(AtomXtermProfilesSingleton.instance.getDefaultProfile()).toEqual(expected)
+  })
+
+  it('validateJsonConfigSetting() empty string config value', () => {
+    spyOn(atom.config, 'get').and.returnValue('')
+    let actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
+      'atom-xterm.spawnPtySettings.args',
+      '["foo", "bar"]'
+    )
+    expect(actual).toEqual(['foo', 'bar'])
+  })
+
+  it('validateJsonConfigSetting() non-empty string config value', () => {
+    spyOn(atom.config, 'get').and.returnValue('["baz"]')
+    let actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
+      'atom-xterm.spawnPtySettings.args',
+      '["foo", "bar"]'
+    )
+    expect(actual).toEqual(['baz'])
+  })
+
+  it('validateJsonConfigSetting() bad JSON string config value', () => {
+    spyOn(atom.config, 'get').and.returnValue('[]]')
+    AtomXtermProfilesSingleton.instance.previousBaseProfile.args = ['baz']
+    let actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
+      'atom-xterm.spawnPtySettings.args',
+      '["foo", "bar"]'
+    )
+    expect(actual).toEqual(['baz'])
+  })
+
+  it('validateJsonConfigSetting() empty string config value null default value', () => {
+    spyOn(atom.config, 'get').and.returnValue('')
+    AtomXtermProfilesSingleton.instance.previousBaseProfile.args = ['foo', 'bar']
+    let actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
+      'atom-xterm.spawnPtySettings.args',
+      'null'
+    )
+    expect(actual).toEqual(['foo', 'bar'])
+  })
+
+  it('validateJsonConfigSetting() non-empty string config value null default value', () => {
+    spyOn(atom.config, 'get').and.returnValue('["baz"]')
+    let actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
+      'atom-xterm.spawnPtySettings.args',
+      'null'
+    )
+    expect(actual).toEqual(['baz'])
+  })
+
+  it('validateJsonConfigSetting() bad JSON string config value null default value', () => {
+    spyOn(atom.config, 'get').and.returnValue('[]]')
+    AtomXtermProfilesSingleton.instance.previousBaseProfile.args = ['foo', 'bar']
+    let actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
+      'atom-xterm.spawnPtySettings.args',
+      'null'
+    )
+    expect(actual).toEqual(['foo', 'bar'])
+  })
 })

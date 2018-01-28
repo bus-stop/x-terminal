@@ -1124,4 +1124,127 @@ describe('AtomXtermElement', () => {
       args: ['--foo', '--bar', '--baz']
     })
   })
+
+  it('base profile changed, font size and xterm options remained the same', () => {
+    let profile = {
+      fontSize: 14,
+      xtermOptions: {
+        theme: {
+          background: '#FFF'
+        }
+      }
+    }
+    spyOn(this.element.model, 'getProfile').and.returnValue(profile)
+    spyOn(this.element.model, 'applyProfileChanges')
+    this.element.profilesSingleton.emitter.emit(
+      'did-reset-base-profile',
+      profile
+    )
+    expect(this.element.model.applyProfileChanges).toHaveBeenCalledWith({})
+  })
+
+  it('base profile changed, font size changed, xterm options remained the same', () => {
+    let profile = {
+      fontSize: 14,
+      xtermOptions: {
+        theme: {
+          background: '#FFF'
+        }
+      }
+    }
+    let newBaseProfile = this.element.profilesSingleton.deepClone(profile)
+    newBaseProfile.fontSize = 15
+    spyOn(this.element.model, 'getProfile').and.returnValue(profile)
+    spyOn(this.element.model, 'applyProfileChanges')
+    this.element.profilesSingleton.emitter.emit(
+      'did-reset-base-profile',
+      newBaseProfile
+    )
+    expect(this.element.model.applyProfileChanges).toHaveBeenCalledWith({
+      fontSize: 15
+    })
+  })
+
+  it('base profile changed, font size remained the same, xterm options changed', () => {
+    let profile = {
+      fontSize: 14,
+      xtermOptions: {
+        theme: {
+          background: '#FFF'
+        }
+      }
+    }
+    let newBaseProfile = this.element.profilesSingleton.deepClone(profile)
+    newBaseProfile.xtermOptions = {
+      theme: {
+        background: '#000'
+      }
+    }
+    spyOn(this.element.model, 'getProfile').and.returnValue(profile)
+    spyOn(this.element.model, 'applyProfileChanges')
+    this.element.profilesSingleton.emitter.emit(
+      'did-reset-base-profile',
+      newBaseProfile
+    )
+    expect(this.element.model.applyProfileChanges).toHaveBeenCalledWith({
+      xtermOptions: {
+        theme: {
+          background: '#000'
+        }
+      }
+    })
+  })
+
+  it('base profile changed, font size and xterm options changed', () => {
+    let profile = {
+      fontSize: 14,
+      xtermOptions: {
+        theme: {
+          background: '#FFF'
+        }
+      }
+    }
+    let newBaseProfile = this.element.profilesSingleton.deepClone(profile)
+    newBaseProfile.fontSize = 15
+    newBaseProfile.xtermOptions = {
+      theme: {
+        background: '#000'
+      }
+    }
+    spyOn(this.element.model, 'getProfile').and.returnValue(profile)
+    spyOn(this.element.model, 'applyProfileChanges')
+    this.element.profilesSingleton.emitter.emit(
+      'did-reset-base-profile',
+      newBaseProfile
+    )
+    expect(this.element.model.applyProfileChanges).toHaveBeenCalledWith({
+      fontSize: 15,
+      xtermOptions: {
+        theme: {
+          background: '#000'
+        }
+      }
+    })
+  })
+
+  it('base profile changed, font size and xterm options remained the same, command changed', () => {
+    let profile = {
+      command: 'somecommand',
+      fontSize: 14,
+      xtermOptions: {
+        theme: {
+          background: '#FFF'
+        }
+      }
+    }
+    let newBaseProfile = this.element.profilesSingleton.deepClone(profile)
+    newBaseProfile.command = 'someothercommand'
+    spyOn(this.element.model, 'getProfile').and.returnValue(profile)
+    spyOn(this.element.model, 'applyProfileChanges')
+    this.element.profilesSingleton.emitter.emit(
+      'did-reset-base-profile',
+      newBaseProfile
+    )
+    expect(this.element.model.applyProfileChanges).toHaveBeenCalledWith({})
+  })
 })
