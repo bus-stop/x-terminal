@@ -175,6 +175,72 @@ Ensure your new changes passes the test suite by running `npm run test`.
 Afterwards, push your changes to your repo and then use Github to submit a new
 pull request.
 
+## [xterm.js](https://github.com/xtermjs/xterm.js)
+
+The terminals that users interact with in this package is made possible with
+major help from the [xterm.js](https://github.com/xtermjs/xterm.js) library. As
+such, often times it's necessary to make changes to xterm.js in order to fix
+some bug or implement new features.
+
+If you want to work on xterm.js for the benefit of a bug fix or feature to be
+supported in atom-xterm, here's how you can quickly get setup.
+
+First make a fork of [xterm.js](https://github.com/xtermjs/xterm.js). Next,
+clone your newly created fork as follows.
+
+```
+git clone ${YOUR_XTERMJS_FORK} ${HOME}/github/xterm.js
+```
+
+Go into your newly cloned repo for xterm.js.
+
+```
+cd ${HOME}/github/xterm.js
+```
+
+Install all needed dependencies.
+
+```
+npm install
+```
+
+Build xterm.js.
+
+```
+npm run build
+```
+
+Ensure the test suite passes.
+
+```
+npm run test
+npm run lint
+```
+
+Add a global link for xterm.js to your system.
+
+```
+npm link
+```
+
+Inside your atom-xterm directory, link against the global `xterm` link.
+
+```
+cd ${HOME}/github/atom-xterm
+npm link xterm
+```
+
+Finally, perform a rebuild with the [apm](https://github.com/atom/apm) program
+inside the atom-xterm directory.
+
+```
+apm rebuild
+```
+
+You're all set for developing xterm.js. Hack away in your xterm.js directory,
+run `npm run build`, then reload your Atom window to see the changes to your
+terminals.
+
 # Credits and Legal
 
 See the [NOTICE](NOTICE) and [LICENSE](LICENSE) files for copyright and license
