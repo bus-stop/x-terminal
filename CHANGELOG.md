@@ -1,3 +1,12 @@
+## 6.1.0
+* Do some general refactoring of the codebase.
+* Fix problems in test suite triggered in calls to asynchronous code.
+* Document public APIs (i.e. services) using JSDoc.
+* Fix README Development section to add critical steps in order to develop
+  atom-xterm.
+* Add section on how to develop [xterm.js](https://github.com/xtermjs/xterm.js)
+  with atom-xterm.
+
 ## 6.0.0
 * Allow for full customization of the terminals through the available options
   for xterm.js Terminal objects.
