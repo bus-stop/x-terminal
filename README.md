@@ -140,15 +140,36 @@ this.atomXtermService.openTerminal({
 
 # Development
 
-Want to help develop atom-xterm? Just use the
-[apm](https://github.com/atom/apm) command to quickly get setup.
+Want to help develop atom-xterm? Here's how to quickly get setup.
+
+First use the [apm](https://github.com/atom/apm) command to clone the
+[atom-xterm repo](https://github.com/amejia1/atom-xterm).
 
 ```
 apm develop atom-xterm
 ```
 
 This should clone the atom-xterm package into the `$HOME/github/atom-xterm`
-directory. Open this directory in Atom's dev mode and hack away.
+directory. Go into this directory and install its dependencies.
+
+```
+cd $HOME/github/atom-xterm
+npm install
+```
+
+Rebuild any native binaries that were installed (such as the binaries from the
+[node-pty](https://github.com/Tyriar/node-pty) package) so that they can be
+used inside Atom.
+
+```
+apm rebuild
+```
+
+Finally, open this directory in Atom's dev mode and hack away.
+
+```
+atom --dev
+```
 
 There's a test suite available for automated testing of the atom-xterm package.
 Simply go to `View > Developer > Run Package Specs` in Atom's main menu or
