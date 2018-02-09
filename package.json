@@ -47,7 +47,7 @@
     "url-regex": "^4.1.1",
     "uuid": "^3.2.1",
     "whatwg-url": "^6.4.0",
-    "xterm": "git://github.com/amejia1/xterm.js.git#0303dabb47c7b8c7353e3af3229ff77524c617d1"
+    "xterm": "^3.1.0"
   },
   "devDependencies": {
     "atom-jasmine2-test-runner": "^1.4.2",
