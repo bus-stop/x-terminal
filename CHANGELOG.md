@@ -1,3 +1,8 @@
+## 6.2.0
+* Update all dependencies to latest releases.
+* Fix issue where the "link" menu items don't appear in some cases when
+  right-clicking on a link.
+
 ## 6.1.0
 * Do some general refactoring of the codebase.
 * Fix problems in test suite triggered in calls to asynchronous code.
