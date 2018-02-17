@@ -1,3 +1,6 @@
+## 6.2.1
+* Update all dependencies to latest releases.
+
 ## 6.2.0
 * Update all dependencies to latest releases.
 * Fix issue where the "link" menu items don't appear in some cases when
