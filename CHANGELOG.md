@@ -1,3 +1,6 @@
+## 6.2.2
+* Update all dependencies to latest releases.
+
 ## 6.2.1
 * Update all dependencies to latest releases.
 
