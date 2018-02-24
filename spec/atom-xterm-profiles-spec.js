@@ -117,6 +117,7 @@ describe('AtomXtermProfilesSingleton', () => {
   }
 
   beforeEach((done) => {
+    this.origAtomConfigGet = atom.config.get
     this.disposables = new CompositeDisposable()
     this.origProfilesConfigPath = AtomXtermProfilesSingleton.instance.profilesConfigPath
     AtomXtermProfilesSingleton.instance.resetBaseProfile()
@@ -136,6 +137,7 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   afterEach(() => {
+    atom.config.get = this.origAtomConfigGet
     this.tmpdirCleanupCallback()
     AtomXtermProfilesSingleton.instance.profilesConfigPath = this.origProfilesConfigPath
     this.disposables.dispose()

@@ -90,6 +90,9 @@ describe('AtomXterm', () => {
       .and.returnValue('sometestprocess')
     spyOn(nodePty, 'spawn').and.returnValue(ptyProcess)
     atom.config.clear()
+    this.origAtomWorkspaceGetBottomDock = atom.workspace.getBottomDock
+    this.origAtomWorkspaceGetLeftDock = atom.workspace.getLeftDock
+    this.origAtomWorkspaceGetRightDock = atom.workspace.getRightDock
     this.workspaceElement = atom.views.getView(atom.workspace)
     this.atomWorkspaceOpenCallback = () => {}
     this.atomWorkspaceAddModalPanelCallback = () => {}
@@ -116,6 +119,9 @@ describe('AtomXterm', () => {
   })
 
   afterEach(() => {
+    atom.workspace.getBottomDock = this.origAtomWorkspaceGetBottomDock
+    atom.workspace.getLeftDock = this.origAtomWorkspaceGetLeftDock
+    atom.workspace.getRightDock = this.origAtomWorkspaceGetRightDock
     atom.packages.reset()
   })
 
