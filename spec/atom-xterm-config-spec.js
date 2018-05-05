@@ -276,3 +276,9 @@ describe('Call to getDefaultTitle()', () => {
     expect(config.getDefaultTitle()).toBe('')
   })
 })
+
+describe('Call to getDefaultPromptToStartup()', () => {
+  it('return false', () => {
+    expect(config.getDefaultPromptToStartup()).toBe(false)
+  })
+})

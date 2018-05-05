@@ -853,4 +853,14 @@ describe('AtomXterm', () => {
     atom.config.set('atom-xterm.terminalSettings.xtermOptions', '{"theme": {"background": "#FFF"}}')
     expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
   })
+
+  it('atom-xterm.terminalSettings.promptToStartup', () => {
+    expect(atom.config.get('atom-xterm.terminalSettings.promptToStartup')).toBeFalsy()
+  })
+
+  it('atom-xterm.terminalSettings.promptToStartup changed', () => {
+    spyOn(this.atomXtermPackage.mainModule.profilesSingleton, 'resetBaseProfile')
+    atom.config.set('atom-xterm.terminalSettings.promptToStartup', true)
+    expect(this.atomXtermPackage.mainModule.profilesSingleton.resetBaseProfile).toHaveBeenCalled()
+  })
 })

@@ -355,6 +355,30 @@ describe('AtomXtermElement', () => {
     })
   })
 
+  it('isPromptToStartup()', () => {
+    expect(this.element.isPromptToStartup()).toBe(false)
+  })
+
+  it('isPromptToStartup() false set in uri', (done) => {
+    let expected = false
+    let params = new URLSearchParams({'promptToStartup': expected})
+    let url = new URL('atom-xterm://?' + params.toString())
+    createNewElement(url.href).then((element) => {
+      expect(element.isPromptToStartup()).toBe(expected)
+      done()
+    })
+  })
+
+  it('isPromptToStartup() true set in uri', (done) => {
+    let expected = true
+    let params = new URLSearchParams({'promptToStartup': expected})
+    let url = new URL('atom-xterm://?' + params.toString())
+    createNewElement(url.href).then((element) => {
+      expect(element.isPromptToStartup()).toBe(expected)
+      done()
+    })
+  })
+
   it('isPtyProcessRunning() ptyProcess null, ptyProcessRunning false', () => {
     this.element.ptyProcess = null
     this.element.ptyProcessRunning = false
@@ -889,6 +913,46 @@ describe('AtomXtermElement', () => {
       )
     }
     expect(call).toThrow(new Error('Unknown info type: bogus'))
+  })
+
+  it('showNotification() custom restart button text', () => {
+    this.element.showNotification(
+      'foo',
+      'info',
+      'Some text'
+    )
+    let restartButton = this.element.topDiv.querySelector('.atom-xterm-restart-btn')
+    expect(restartButton.firstChild.nodeValue).toBe('Some text')
+  })
+
+  it('promptToStartup()', (done) => {
+    this.element.promptToStartup().then(() => {
+      let restartButton = this.element.topDiv.querySelector('.atom-xterm-restart-btn')
+      expect(restartButton.firstChild.nodeValue).toBe('Start')
+      done()
+    })
+  })
+
+  it('promptToStartup() check message without title', (done) => {
+    let command = ['some_command', 'a', 'b', 'c']
+    spyOn(this.element, 'getShellCommand').and.returnValue(command[0])
+    spyOn(this.element, 'getArgs').and.returnValue(command.slice(1))
+    let expected = `New command ${JSON.stringify(command)} ready to start.`
+    this.element.promptToStartup().then(() => {
+      let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-info')
+      expect(messageDiv.firstChild.nodeValue).toBe(expected)
+      done()
+    })
+  })
+
+  it('promptToStartup() check message with title', (done) => {
+    this.element.model.profile.title = 'My Profile'
+    let expected = `New command for profile My Profile ready to start.`
+    this.element.promptToStartup().then(() => {
+      let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-info')
+      expect(messageDiv.firstChild.nodeValue).toBe(expected)
+      done()
+    })
   })
 
   it('use wheelScrollUp on terminal container', () => {

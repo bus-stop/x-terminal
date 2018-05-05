@@ -46,7 +46,8 @@ describe('AtomXtermProfilesSingleton', () => {
         theme: {
           background: '#FFF'
         }
-      }
+      },
+      promptToStartup: false
     }
   }
 
@@ -66,6 +67,7 @@ describe('AtomXtermProfilesSingleton', () => {
     url.searchParams.set('relaunchTerminalOnStartup', JSON.stringify(defaultProfile.relaunchTerminalOnStartup))
     url.searchParams.set('title', defaultProfile.title)
     url.searchParams.set('xtermOptions', JSON.stringify(defaultProfile.xtermOptions))
+    url.searchParams.set('promptToStartup', JSON.stringify(defaultProfile.promptToStartup))
     return url
   }
 
@@ -112,6 +114,9 @@ describe('AtomXtermProfilesSingleton', () => {
           background: '#FFF'
         }
       })
+    }
+    if (key === 'atom-xterm.terminalSettings.promptToStartup') {
+      return true
     }
     throw new Error('Unknown key: ' + key)
   }
@@ -228,7 +233,8 @@ describe('AtomXtermProfilesSingleton', () => {
       leaveOpenAfterExit: atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit') || config.getDefaultLeaveOpenAfterExit(),
       relaunchTerminalOnStartup: atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup') || config.getDefaultRelaunchTerminalOnStartup(),
       title: title || null,
-      xtermOptions: JSON.parse(atom.config.get('atom-xterm.terminalSettings.xtermOptions') || config.getDefaultXtermOptions())
+      xtermOptions: JSON.parse(atom.config.get('atom-xterm.terminalSettings.xtermOptions') || config.getDefaultXtermOptions()),
+      promptToStartup: atom.config.get('atom-xterm.terminalSettings.promptToStartup') || config.getDefaultPromptToStartup()
     }
     expect(AtomXtermProfilesSingleton.instance.getBaseProfile()).toEqual(expected)
   })
@@ -253,7 +259,8 @@ describe('AtomXtermProfilesSingleton', () => {
         theme: {
           background: '#FFF'
         }
-      }
+      },
+      promptToStartup: true
     }
     expect(AtomXtermProfilesSingleton.instance.getBaseProfile()).toEqual(expected)
   })
@@ -391,9 +398,10 @@ describe('AtomXtermProfilesSingleton', () => {
       fontSize: 14,
       leaveOpenAfterExit: true,
       relaunchTerminalOnStartup: true,
-      title: ''
+      title: '',
+      promptToStartup: false
     }
-    let expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title='
+    let expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&promptToStartup=false&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title='
     let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(data)
     url.searchParams.sort()
     expect(url.searchParams.toString()).toBe(expected)
@@ -417,13 +425,14 @@ describe('AtomXtermProfilesSingleton', () => {
         theme: {
           background: '#FFF'
         }
-      }
+      },
+      promptToStartup: false
     }
     let data = Object.assign({}, validData, {
       foo: 'bar',
       baz: null
     })
-    let expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=&xtermOptions=%7B%22theme%22%3A%7B%22background%22%3A%22%23FFF%22%7D%7D'
+    let expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&promptToStartup=false&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=&xtermOptions=%7B%22theme%22%3A%7B%22background%22%3A%22%23FFF%22%7D%7D'
     let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(data)
     url.searchParams.sort()
     expect(url.searchParams.toString()).toEqual(expected)
@@ -445,6 +454,7 @@ describe('AtomXtermProfilesSingleton', () => {
     expected.relaunchTerminalOnStartup = config.getDefaultRelaunchTerminalOnStartup()
     expected.title = null
     expected.xtermOptions = JSON.parse(config.getDefaultXtermOptions())
+    expected.promptToStartup = config.getDefaultPromptToStartup()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
@@ -665,6 +675,20 @@ describe('AtomXtermProfilesSingleton', () => {
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
+  it('createProfileDataFromUri() URI promptToStartup set to null', () => {
+    let url = getDefaultExpectedUrl()
+    url.searchParams.set('promptToStartup', null)
+    let expected = getDefaultExpectedProfile()
+    expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
+  })
+
+  it('createProfileDataFromUri() URI promptToStartup set to empty string', () => {
+    let url = getDefaultExpectedUrl()
+    url.searchParams.set('promptToStartup', '')
+    let expected = getDefaultExpectedProfile()
+    expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
+  })
+
   it('diffProfiles() no change between objects', () => {
     let baseProfile = AtomXtermProfilesSingleton.instance.getBaseProfile()
     let expected = {}
@@ -752,7 +776,8 @@ describe('AtomXtermProfilesSingleton', () => {
       leaveOpenAfterExit: config.getDefaultLeaveOpenAfterExit(),
       relaunchTerminalOnStartup: config.getDefaultRelaunchTerminalOnStartup(),
       title: null,
-      xtermOptions: JSON.parse(config.getDefaultXtermOptions())
+      xtermOptions: JSON.parse(config.getDefaultXtermOptions()),
+      promptToStartup: config.getDefaultPromptToStartup()
     }
     expect(AtomXtermProfilesSingleton.instance.getDefaultProfile()).toEqual(expected)
   })
