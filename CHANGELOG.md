@@ -1,3 +1,10 @@
+## 6.3.0
+* Add notice in README to have users request a built-in terminal in Atom.
+* Support an option to prompt to start terminal commands when Atom starts up.
+* Utilize the global editor option 'Zoom Font When Ctrl Scrolling' to determine
+  if zooming the font with ctrl+mousewheel should be done in terminals.
+* Update all dependencies to latest releases.
+
 ## 6.2.3
 * Update all dependencies to latest releases.
 
