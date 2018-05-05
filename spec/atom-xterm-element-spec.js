@@ -971,7 +971,8 @@ describe('AtomXtermElement', () => {
     expect(this.element.model.profile.fontSize).toBe(14)
   })
 
-  it('use ctrl+wheelScrollUp on terminal container', () => {
+  it('use ctrl+wheelScrollUp on terminal container, editor.zoomFontWhenCtrlScrolling = true', () => {
+    atom.config.set('editor.zoomFontWhenCtrlScrolling', true)
     let wheelEvent = new WheelEvent('wheel', {
       deltaY: -150,
       ctrlKey: true
@@ -980,13 +981,34 @@ describe('AtomXtermElement', () => {
     expect(this.element.model.profile.fontSize).toBe(15)
   })
 
-  it('use ctrl+wheelScrollDown on terminal container', () => {
+  it('use ctrl+wheelScrollDown on terminal container, editor.zoomFontWhenCtrlScrolling = true', () => {
+    atom.config.set('editor.zoomFontWhenCtrlScrolling', true)
     let wheelEvent = new WheelEvent('wheel', {
       deltaY: 150,
       ctrlKey: true
     })
     this.element.terminalDiv.dispatchEvent(wheelEvent)
     expect(this.element.model.profile.fontSize).toBe(13)
+  })
+
+  it('use ctrl+wheelScrollUp on terminal container, editor.zoomFontWhenCtrlScrolling = false', () => {
+    atom.config.set('editor.zoomFontWhenCtrlScrolling', false)
+    let wheelEvent = new WheelEvent('wheel', {
+      deltaY: -150,
+      ctrlKey: true
+    })
+    this.element.terminalDiv.dispatchEvent(wheelEvent)
+    expect(this.element.model.profile.fontSize).toBe(14)
+  })
+
+  it('use ctrl+wheelScrollDown on terminal container, editor.zoomFontWhenCtrlScrolling = false', () => {
+    atom.config.set('editor.zoomFontWhenCtrlScrolling', false)
+    let wheelEvent = new WheelEvent('wheel', {
+      deltaY: 150,
+      ctrlKey: true
+    })
+    this.element.terminalDiv.dispatchEvent(wheelEvent)
+    expect(this.element.model.profile.fontSize).toBe(14)
   })
 
   it('use ctrl+wheelScrollUp font already at maximum', () => {
