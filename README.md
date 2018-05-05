@@ -11,6 +11,13 @@ Atom plugin for providing terminals inside your Atom workspace.
 
 ![Atom Xterm demo](https://raw.githubusercontent.com/amejia1/atom-xterm/b43510426c6443ad130a36753352e57b4b24c71a/resources/atom-xterm-demo.gif)
 
+## Built in Terminal for Atom Feature Request
+
+If you're reading this and you would rather see Atom have a built-in terminal
+by default, please go over to the built-in terminal feature request
+[here](https://github.com/atom/atom/issues/14490), give it a thumbs up, **and**
+give an explanation as to why you need a built-in terminal in Atom by default.
+
 # Installation
 
 To install, simply search for the *atom-xterm* package via Atom's package
@@ -59,7 +66,7 @@ you to do is save commonly used commands and settings for later use.
 ## Notifications
 
 The atom-xterm package provides notifications about terminal process exit
-successes and failures. Notifications will appear in Atom's own noatification
+successes and failures. Notifications will appear in Atom's own notification
 manager as well as on the terminal tab triggering the notification.
 
 Success
