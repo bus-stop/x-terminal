@@ -1,3 +1,7 @@
+## 6.3.1
+* Fix issue where output could become corrupted when resizing terminal
+  on Windows.
+
 ## 6.3.0
 * Add notice in README to have users request a built-in terminal in Atom.
 * Support an option to prompt to start terminal commands when Atom starts up.
