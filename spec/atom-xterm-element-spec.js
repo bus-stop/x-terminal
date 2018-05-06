@@ -687,7 +687,10 @@ describe('AtomXtermElement', () => {
     expect(this.element.terminal.resize).toHaveBeenCalled()
   })
 
-  it('refitTerminal() terminal size cols decreased', () => {
+  it('refitTerminal() terminal size cols decreased platform win32', () => {
+    Object.defineProperty(process, 'platform', {
+      'value': 'win32'
+    })
     spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
       cols: this.element.terminal.cols - 1,
       rows: this.element.terminal.rows
@@ -697,6 +700,21 @@ describe('AtomXtermElement', () => {
     this.element.ptyProcessRunning = false
     this.element.refitTerminal()
     expect(this.element.terminal.resize).not.toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size cols decreased platform not win32', () => {
+    Object.defineProperty(process, 'platform', {
+      'value': 'linux'
+    })
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols - 1,
+      rows: this.element.terminal.rows
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = false
+    this.element.refitTerminal()
+    expect(this.element.terminal.resize).toHaveBeenCalled()
   })
 
   it('refitTerminal() terminal size rows decreased', () => {
