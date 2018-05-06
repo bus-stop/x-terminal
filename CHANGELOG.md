@@ -1,7 +1,7 @@
 ## 6.3.1
 * Fix issue where output could become corrupted when resizing terminal
   on Windows.
-* Add docs on installing one time prerequisites before install atom-xterm.
+* Add docs on installing one time prerequisites before installing atom-xterm.
 
 ## 6.3.0
 * Add notice in README to have users request a built-in terminal in Atom.
