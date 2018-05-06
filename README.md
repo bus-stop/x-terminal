@@ -9,7 +9,7 @@ Atom plugin for providing terminals inside your Atom workspace.
 [![Latest release](https://img.shields.io/apm/v/atom-xterm.svg)](https://atom.io/packages/atom-xterm)
 [![Greenkeeper badge](https://badges.greenkeeper.io/amejia1/atom-xterm.svg)](https://greenkeeper.io/)
 
-![Atom Xterm demo](https://raw.githubusercontent.com/amejia1/atom-xterm/b43510426c6443ad130a36753352e57b4b24c71a/resources/atom-xterm-demo.gif)
+![Atom Xterm demo](https://github.com/amejia1/atom-xterm/raw/b7b9d4b073d9eea4f54806be5385d81d4fdd2393/resources/atom-xterm-demo.gif)
 
 ## Built in Terminal for Atom Feature Request
 
@@ -95,7 +95,7 @@ And of course, there's the old fashion way of just moving the tabs where you
 want them. Feel free to place your terminal tabs anywhere in your workspace to
 include any of the docks.
 
-![Atom Xterm moving terminals demo](https://raw.githubusercontent.com/amejia1/atom-xterm/b43510426c6443ad130a36753352e57b4b24c71a/resources/atom-xterm-moving-terminals-demo.gif)
+![Atom Xterm moving terminals demo](https://github.com/amejia1/atom-xterm/raw/b7b9d4b073d9eea4f54806be5385d81d4fdd2393/resources/atom-xterm-moving-terminals-demo.gif)
 
 ## Profiles
 
