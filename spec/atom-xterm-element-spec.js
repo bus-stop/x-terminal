@@ -613,42 +613,276 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() initial state', () => {
-    spyOn(this.element.terminal, 'fit')
+    spyOn(this.element.terminal, 'proposeGeometry')
     this.element.refitTerminal()
-    expect(this.element.terminal.fit).not.toHaveBeenCalled()
+    expect(this.element.terminal.proposeGeometry).not.toHaveBeenCalled()
   })
 
   it('refitTerminal() terminal not visible', () => {
-    spyOn(this.element.terminal, 'fit')
+    spyOn(this.element.terminal, 'proposeGeometry')
     this.element.terminalDivIntersectionRatio = 0.0
     this.element.refitTerminal()
-    expect(this.element.terminal.fit).not.toHaveBeenCalled()
+    expect(this.element.terminal.proposeGeometry).not.toHaveBeenCalled()
   })
 
   it('refitTerminal() terminal partially visible', () => {
-    spyOn(this.element.terminal, 'fit')
+    spyOn(this.element.terminal, 'proposeGeometry')
     this.element.terminalDivIntersectionRatio = 0.5
     this.element.refitTerminal()
-    expect(this.element.terminal.fit).not.toHaveBeenCalled()
+    expect(this.element.terminal.proposeGeometry).not.toHaveBeenCalled()
   })
 
   it('refitTerminal() terminal completely visible', () => {
-    spyOn(this.element.terminal, 'fit')
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(null)
     this.element.terminalDivIntersectionRatio = 1.0
     this.element.refitTerminal()
-    expect(this.element.terminal.fit).toHaveBeenCalled()
+    expect(this.element.terminal.proposeGeometry).toHaveBeenCalled()
   })
 
-  it('ptyProcess resized while running when terminal resized', () => {
-    this.element.ptyProcessRunning = true
-    this.element.terminal.resize(1, 1)
-    expect(this.element.ptyProcess.resize.calls.allArgs()).toEqual([[1, 1]])
-  })
-
-  it('ptyProcess not resized when stopped when terminal resized', () => {
+  it('refitTerminal() terminal size not changed', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols,
+      rows: this.element.terminal.rows
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
     this.element.ptyProcessRunning = false
-    this.element.terminal.resize(1, 1)
+    this.element.refitTerminal()
+    expect(this.element.terminal.resize).not.toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size cols increased', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols + 1,
+      rows: this.element.terminal.rows
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = false
+    this.element.refitTerminal()
+    expect(this.element.terminal.resize).toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size rows increased', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols,
+      rows: this.element.terminal.rows + 1
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = false
+    this.element.refitTerminal()
+    expect(this.element.terminal.resize).toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size cols and rows increased', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols + 1,
+      rows: this.element.terminal.rows + 1
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = false
+    this.element.refitTerminal()
+    expect(this.element.terminal.resize).toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size cols decreased', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols - 1,
+      rows: this.element.terminal.rows
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = false
+    this.element.refitTerminal()
+    expect(this.element.terminal.resize).not.toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size rows decreased', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols,
+      rows: this.element.terminal.rows - 1
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = false
+    this.element.refitTerminal()
+    expect(this.element.terminal.resize).toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size cols and rows decreased', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols - 1,
+      rows: this.element.terminal.rows - 1
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = false
+    this.element.refitTerminal()
+    expect(this.element.terminal.resize).toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size not changed ptyProcess running', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols,
+      rows: this.element.terminal.rows
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = true
+    this.element.refitTerminal()
     expect(this.element.ptyProcess.resize).not.toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size cols increased ptyProcess running', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols + 1,
+      rows: this.element.terminal.rows
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = true
+    this.element.refitTerminal()
+    expect(this.element.ptyProcess.resize).toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size rows increased ptyProcess running', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols,
+      rows: this.element.terminal.rows + 1
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = true
+    this.element.refitTerminal()
+    expect(this.element.ptyProcess.resize).toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size cols and rows increased ptyProcess running', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols + 1,
+      rows: this.element.terminal.rows + 1
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = true
+    this.element.refitTerminal()
+    expect(this.element.ptyProcess.resize).toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size cols decreased ptyProcess running', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols - 1,
+      rows: this.element.terminal.rows
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = true
+    this.element.refitTerminal()
+    expect(this.element.ptyProcess.resize).toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size rows decreased ptyProcess running', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols,
+      rows: this.element.terminal.rows - 1
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = true
+    this.element.refitTerminal()
+    expect(this.element.ptyProcess.resize).toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size cols and rows decreased ptyProcess running', () => {
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+      cols: this.element.terminal.cols - 1,
+      rows: this.element.terminal.rows - 1
+    })
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = true
+    this.element.refitTerminal()
+    expect(this.element.ptyProcess.resize).toHaveBeenCalled()
+  })
+
+  it('refitTerminal() terminal size cols increased ptyProcess running check call args', () => {
+    let expected = {
+      cols: this.element.terminal.cols + 1,
+      rows: this.element.terminal.rows
+    }
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(expected)
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = true
+    this.element.refitTerminal()
+    expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
+  })
+
+  it('refitTerminal() terminal size rows increased ptyProcess running check call args', () => {
+    let expected = {
+      cols: this.element.terminal.cols,
+      rows: this.element.terminal.rows + 1
+    }
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(expected)
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = true
+    this.element.refitTerminal()
+    expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
+  })
+
+  it('refitTerminal() terminal size cols and rows increased ptyProcess running check call args', () => {
+    let expected = {
+      cols: this.element.terminal.cols + 1,
+      rows: this.element.terminal.rows + 1
+    }
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(expected)
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = true
+    this.element.refitTerminal()
+    expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
+  })
+
+  it('refitTerminal() terminal size cols decreased ptyProcess running check call args', () => {
+    let expected = {
+      cols: this.element.terminal.cols - 1,
+      rows: this.element.terminal.rows
+    }
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(expected)
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = true
+    this.element.refitTerminal()
+    expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
+  })
+
+  it('refitTerminal() terminal size rows decreased ptyProcess running check call args', () => {
+    let expected = {
+      cols: this.element.terminal.cols,
+      rows: this.element.terminal.rows - 1
+    }
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(expected)
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = true
+    this.element.refitTerminal()
+    expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
+  })
+
+  it('refitTerminal() terminal size cols and rows decreased ptyProcess running check call args', () => {
+    let expected = {
+      cols: this.element.terminal.cols - 1,
+      rows: this.element.terminal.rows - 1
+    }
+    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(expected)
+    spyOn(this.element.terminal, 'resize')
+    this.element.terminalDivIntersectionRatio = 1.0
+    this.element.ptyProcessRunning = true
+    this.element.refitTerminal()
+    expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
   })
 
   it('focusOnTerminal()', () => {
