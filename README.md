@@ -28,6 +28,47 @@ manager. It can also be installed via command-line with the
 apm install atom-xterm
 ```
 
+## One time prerequisites
+
+The *atom-xterm* package requires
+[node-pty](https://www.npmjs.com/package/node-pty). That package currently
+requires building some native bindings on the local system using
+[node-gyp](https://github.com/nodejs/node-gyp). Providing prebuilt binaries
+is still [work in progress](https://github.com/Microsoft/node-pty/issues/46)
+so for now, you'll need to install certain packages on your system before
+installing *atom-xterm*. Below are what you'll need to install only once before
+installing *atom-xterm*.
+
+### Windows
+
+Download and install [Node.js](https://nodejs.org/en/download/). It's recommended
+to install the LTS version of Node.js.
+
+Then, install the *windows-build-tools* package via npm.
+
+```plain
+npm install --global --production windows-build-tools
+```
+
+### Linux
+
+#### Debian/Ubuntu based Linux distributions
+
+Follow the instructions [here](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+to install Node.js. It's recommended to install the LTS version of Node.js.
+
+Then install the *build-essential* and *python2.7* .deb packages.
+
+```plain
+sudo apt-get install build-essential python2.7
+```
+
+### macOS
+
+Install Node.js using the instructions provided
+[here](https://nodejs.org/en/download/package-manager/#macos). Then, install
+the programs listed [here](https://github.com/nodejs/node-gyp#on-mac-os-x)
+
 # Usage
 
 ## Opening Terminals
