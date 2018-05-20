@@ -47,7 +47,7 @@
     "url-regex": "^4.1.1",
     "uuid": "^3.2.1",
     "whatwg-url": "^6.4.1",
-    "xterm": "^3.3.0"
+    "xterm": "^3.4.0"
   },
   "devDependencies": {
     "atom-jasmine3-test-runner": "^3.1.0",
