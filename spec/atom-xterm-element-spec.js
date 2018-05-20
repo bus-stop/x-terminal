@@ -1286,6 +1286,7 @@ describe('AtomXtermElement', () => {
   it('getXtermOptions() default options', () => {
     let expected = {
       cursorBlink: true,
+      experimentalCharAtlas: 'dynamic',
       fontSize: 14
     }
     expect(this.element.getXtermOptions()).toEqual(expected)
@@ -1299,6 +1300,7 @@ describe('AtomXtermElement', () => {
     }
     let expected = {
       cursorBlink: true,
+      experimentalCharAtlas: 'dynamic',
       fontSize: 14,
       theme: {
         background: '#FFF'
