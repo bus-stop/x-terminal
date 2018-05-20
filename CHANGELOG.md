@@ -1,3 +1,6 @@
+## 6.4.1
+* Support opening terminals with 'ctrl+\`' and 'ctrl+~'.
+
 ## 6.4.0
 * Upgrade to xterm v3.4.0.
 * Set the 'experimentalCharAtlas' option to 'dynamic' by default. This improves
