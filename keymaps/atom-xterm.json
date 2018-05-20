@@ -1,5 +1,7 @@
 {
   ".platform-linux atom-workspace": {
+    "ctrl-`": "atom-xterm:open",
+    "ctrl-~": "atom-xterm:open",
     "ctrl-shift-t": "atom-xterm:open",
     "ctrl-alt-shift-t": "atom-xterm:open",
     "ctrl-alt-shift-up": "atom-xterm:open-split-up",
@@ -11,6 +13,8 @@
     "ctrl-alt-shift-o": "atom-xterm:open-split-right-dock"
   },
   ".platform-win32 atom-workspace": {
+    "ctrl-`": "atom-xterm:open",
+    "ctrl-~": "atom-xterm:open",
     "ctrl-shift-t": "atom-xterm:open",
     "ctrl-alt-shift-t": "atom-xterm:open",
     "ctrl-alt-shift-up": "atom-xterm:open-split-up",
@@ -22,6 +26,8 @@
     "ctrl-alt-shift-o": "atom-xterm:open-split-right-dock"
   },
   ".platform-darwin atom-workspace": {
+    "cmd-`": "atom-xterm:open",
+    "cmd-~": "atom-xterm:open",
     "cmd-t": "atom-xterm:open",
     "cmd-alt-shift-t": "atom-xterm:open",
     "cmd-alt-shift-up": "atom-xterm:open-split-up",
