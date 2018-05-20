@@ -1,3 +1,10 @@
+## 6.4.0
+* Upgrade to xterm v3.4.0.
+* Set the 'experimentalCharAtlas' option to 'dynamic' by default. This improves
+  performance and also seems to be more stable than the 'static' mode which
+  xterm.js uses by default.
+* Upgrade to latest releases for other dependencies.
+
 ## 6.3.1
 * Fix issue where output could become corrupted when resizing terminal
   on Windows.
