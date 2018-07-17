@@ -45,9 +45,9 @@
     "fs-extra": "^6.0.1",
     "node-pty-prebuilt": "^0.7.3",
     "url-regex": "^4.1.1",
-    "uuid": "^3.2.1",
-    "whatwg-url": "^6.4.1",
-    "xterm": "^3.4.0"
+    "uuid": "^3.3.2",
+    "whatwg-url": "^6.5.0",
+    "xterm": "^3.5.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.54",
@@ -55,11 +55,11 @@
     "@babel/preset-env": "^7.0.0-beta.54",
     "@babel/register": "^7.0.0-beta.54",
     "atom-jasmine3-test-runner": "^3.1.0",
-    "eslint": "^4.19.1",
+    "eslint": "^5.1.0",
     "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
     "gulp": "^4.0.0",
     "gulp-babel": "^8.0.0-beta.2",
@@ -67,7 +67,7 @@
     "jasmine-spec-reporter": "^4.2.1",
     "jsdoc": "^3.5.5",
     "jsonlint-cli": "^1.0.1",
-    "stylelint": "^9.2.1",
+    "stylelint": "^9.3.0",
     "stylelint-config-standard": "^18.2.0",
     "tmp": "0.0.33"
   },
