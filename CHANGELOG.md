@@ -1,3 +1,8 @@
+## 6.5.0
+* Switch to babel 7 for generating move-winpty-binaries.js script.
+* Use eslint-config-standard@next release to fix test failures in AppVeyor.
+* Upgrade all dependencies.
+
 ## 6.4.1
 * Support opening terminals with 'ctrl+\`' and 'ctrl+~'.
 
