@@ -65,7 +65,6 @@
     "eslint-plugin-standard": "^3.1.0",
     "fs-extra": "^6.0.1",
     "jasmine-spec-reporter": "^4.2.1",
-    "jsdoc": "^3.5.5",
     "jsonlint-cli": "^1.0.1",
     "less-loader": "^4.1.0",
     "style-loader": "^0.21.0",
@@ -82,9 +81,7 @@
   "scripts": {
     "build": "npm run webpack",
     "webpack": "webpack",
-    "docs": "npm run jsdoc",
     "eslint": "eslint ./",
-    "jsdoc": "jsdoc -c .jsdocrc",
     "jsonlint": "jsonlint-cli keymaps/*.json menus/*.json package.json",
     "lint": "npm run eslint && npm run stylelint && npm run jsonlint",
     "move-winpty-binaries": "node dist/preinstallScripts/move-winpty-binaries.js",
