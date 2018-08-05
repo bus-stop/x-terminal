@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import fs from 'fs'
+import fs from 'fs-extra'
 import os from 'os'
 import path from 'path'
 
