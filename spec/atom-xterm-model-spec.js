@@ -19,7 +19,7 @@
 
 import { Emitter } from 'atom'
 
-import * as config from '../src/lib/atom-xterm-config'
+import atomXtermConfig from '../src/lib/atom-xterm-config'
 import { AtomXtermModel, isAtomXtermModel, currentItemIsAtomXtermModel } from '../src/lib/atom-xterm-model'
 import { AtomXtermProfilesSingleton } from '../src/lib/atom-xterm-profiles'
 
@@ -74,7 +74,7 @@ describe('AtomXtermModel', () => {
       terminals_set: new Set()
     })
     model.initializedPromise.then(() => {
-      expect(model.getPath()).toBe(config.getDefaultCwd())
+      expect(model.getPath()).toBe(atomXtermConfig.getDefaultCwd())
       done()
     })
   })
@@ -102,7 +102,7 @@ describe('AtomXtermModel', () => {
       terminals_set: new Set()
     })
     model.initializedPromise.then(() => {
-      expect(model.getPath()).toBe(config.getDefaultCwd())
+      expect(model.getPath()).toBe(atomXtermConfig.getDefaultCwd())
       done()
     })
   })
@@ -148,7 +148,7 @@ describe('AtomXtermModel', () => {
       terminals_set: new Set()
     })
     model.initializedPromise.then(() => {
-      expect(model.getPath()).toBe(config.getDefaultCwd())
+      expect(model.getPath()).toBe(atomXtermConfig.getDefaultCwd())
       done()
     })
   })
@@ -309,7 +309,7 @@ describe('AtomXtermModel', () => {
   })
 
   it('getPath()', () => {
-    expect(this.model.getPath()).toBe(config.getDefaultCwd())
+    expect(this.model.getPath()).toBe(atomXtermConfig.getDefaultCwd())
   })
 
   it('getPath() cwd set', () => {

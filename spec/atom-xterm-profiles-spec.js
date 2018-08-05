@@ -19,7 +19,7 @@
 
 import { CompositeDisposable } from 'atom'
 
-import * as config from '../src/lib/atom-xterm-config'
+import atomXtermConfig from '../src/lib/atom-xterm-config'
 import { AtomXtermProfilesSingleton } from '../src/lib/atom-xterm-profiles'
 
 import path from 'path'
@@ -160,7 +160,7 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   it('has proper profiles.json path', () => {
-    let expected = path.join(config.getUserDataPath(), 'profiles.json')
+    let expected = path.join(atomXtermConfig.getUserDataPath(), 'profiles.json')
     // Need to check to original profiles config path.
     expect(this.origProfilesConfigPath).toBe(expected)
   })
@@ -217,24 +217,24 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   it('getBaseProfile()', () => {
-    let env = atom.config.get('atom-xterm.spawnPtySettings.env') || config.getDefaultEnv()
-    let encoding = atom.config.get('atom-xterm.spawnPtySettings.encoding') || config.getDefaultEncoding()
-    let title = atom.config.get('atom-xterm.terminalSettings.title') || config.getDefaultTitle()
+    let env = atom.config.get('atom-xterm.spawnPtySettings.env') || atomXtermConfig.getDefaultEnv()
+    let encoding = atom.config.get('atom-xterm.spawnPtySettings.encoding') || atomXtermConfig.getDefaultEncoding()
+    let title = atom.config.get('atom-xterm.terminalSettings.title') || atomXtermConfig.getDefaultTitle()
     let expected = {
-      command: atom.config.get('atom-xterm.spawnPtySettings.command') || config.getDefaultShellCommand(),
-      args: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.args') || config.getDefaultArgs()),
-      name: atom.config.get('atom-xterm.spawnPtySettings.name') || config.getDefaultTermType(),
-      cwd: atom.config.get('atom-xterm.spawnPtySettings.cwd') || config.getDefaultCwd(),
+      command: atom.config.get('atom-xterm.spawnPtySettings.command') || atomXtermConfig.getDefaultShellCommand(),
+      args: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.args') || atomXtermConfig.getDefaultArgs()),
+      name: atom.config.get('atom-xterm.spawnPtySettings.name') || atomXtermConfig.getDefaultTermType(),
+      cwd: atom.config.get('atom-xterm.spawnPtySettings.cwd') || atomXtermConfig.getDefaultCwd(),
       env: JSON.parse(env || 'null'),
-      setEnv: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.setEnv') || config.getDefaultSetEnv()),
-      deleteEnv: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.deleteEnv') || config.getDefaultDeleteEnv()),
+      setEnv: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.setEnv') || atomXtermConfig.getDefaultSetEnv()),
+      deleteEnv: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.deleteEnv') || atomXtermConfig.getDefaultDeleteEnv()),
       encoding: encoding || null,
-      fontSize: atom.config.get('atom-xterm.terminalSettings.fontSize') || config.getDefaultFontSize(),
-      leaveOpenAfterExit: atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit') || config.getDefaultLeaveOpenAfterExit(),
-      relaunchTerminalOnStartup: atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup') || config.getDefaultRelaunchTerminalOnStartup(),
+      fontSize: atom.config.get('atom-xterm.terminalSettings.fontSize') || atomXtermConfig.getDefaultFontSize(),
+      leaveOpenAfterExit: atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit') || atomXtermConfig.getDefaultLeaveOpenAfterExit(),
+      relaunchTerminalOnStartup: atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup') || atomXtermConfig.getDefaultRelaunchTerminalOnStartup(),
       title: title || null,
-      xtermOptions: JSON.parse(atom.config.get('atom-xterm.terminalSettings.xtermOptions') || config.getDefaultXtermOptions()),
-      promptToStartup: atom.config.get('atom-xterm.terminalSettings.promptToStartup') || config.getDefaultPromptToStartup()
+      xtermOptions: JSON.parse(atom.config.get('atom-xterm.terminalSettings.xtermOptions') || atomXtermConfig.getDefaultXtermOptions()),
+      promptToStartup: atom.config.get('atom-xterm.terminalSettings.promptToStartup') || atomXtermConfig.getDefaultPromptToStartup()
     }
     expect(AtomXtermProfilesSingleton.instance.getBaseProfile()).toEqual(expected)
   })
@@ -441,20 +441,20 @@ describe('AtomXtermProfilesSingleton', () => {
   it('createProfileDataFromUri() base URI', () => {
     let url = new URL('atom-xterm://somesessionid/')
     let expected = {}
-    expected.command = config.getDefaultShellCommand()
-    expected.args = JSON.parse(config.getDefaultArgs())
-    expected.name = config.getDefaultTermType()
-    expected.cwd = config.getDefaultCwd()
+    expected.command = atomXtermConfig.getDefaultShellCommand()
+    expected.args = JSON.parse(atomXtermConfig.getDefaultArgs())
+    expected.name = atomXtermConfig.getDefaultTermType()
+    expected.cwd = atomXtermConfig.getDefaultCwd()
     expected.env = null
-    expected.setEnv = JSON.parse(config.getDefaultSetEnv())
-    expected.deleteEnv = JSON.parse(config.getDefaultDeleteEnv())
+    expected.setEnv = JSON.parse(atomXtermConfig.getDefaultSetEnv())
+    expected.deleteEnv = JSON.parse(atomXtermConfig.getDefaultDeleteEnv())
     expected.encoding = null
-    expected.fontSize = config.getDefaultFontSize()
-    expected.leaveOpenAfterExit = config.getDefaultLeaveOpenAfterExit()
-    expected.relaunchTerminalOnStartup = config.getDefaultRelaunchTerminalOnStartup()
+    expected.fontSize = atomXtermConfig.getDefaultFontSize()
+    expected.leaveOpenAfterExit = atomXtermConfig.getDefaultLeaveOpenAfterExit()
+    expected.relaunchTerminalOnStartup = atomXtermConfig.getDefaultRelaunchTerminalOnStartup()
     expected.title = null
-    expected.xtermOptions = JSON.parse(config.getDefaultXtermOptions())
-    expected.promptToStartup = config.getDefaultPromptToStartup()
+    expected.xtermOptions = JSON.parse(atomXtermConfig.getDefaultXtermOptions())
+    expected.promptToStartup = atomXtermConfig.getDefaultPromptToStartup()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
@@ -484,7 +484,7 @@ describe('AtomXtermProfilesSingleton', () => {
     let url = getDefaultExpectedUrl()
     url.searchParams.set('command', '')
     let expected = getDefaultExpectedProfile()
-    expected.command = config.getDefaultShellCommand()
+    expected.command = atomXtermConfig.getDefaultShellCommand()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
@@ -514,7 +514,7 @@ describe('AtomXtermProfilesSingleton', () => {
     let url = getDefaultExpectedUrl()
     url.searchParams.set('name', '')
     let expected = getDefaultExpectedProfile()
-    expected.name = config.getDefaultTermType()
+    expected.name = atomXtermConfig.getDefaultTermType()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
@@ -530,7 +530,7 @@ describe('AtomXtermProfilesSingleton', () => {
     let url = getDefaultExpectedUrl()
     url.searchParams.set('cwd', '')
     let expected = getDefaultExpectedProfile()
-    expected.cwd = config.getDefaultCwd()
+    expected.cwd = atomXtermConfig.getDefaultCwd()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
@@ -764,20 +764,20 @@ describe('AtomXtermProfilesSingleton', () => {
 
   it('getDefaultProfile()', () => {
     let expected = {
-      command: config.getDefaultShellCommand(),
-      args: JSON.parse(config.getDefaultArgs()),
-      name: config.getDefaultTermType(),
-      cwd: config.getDefaultCwd(),
+      command: atomXtermConfig.getDefaultShellCommand(),
+      args: JSON.parse(atomXtermConfig.getDefaultArgs()),
+      name: atomXtermConfig.getDefaultTermType(),
+      cwd: atomXtermConfig.getDefaultCwd(),
       env: null,
-      setEnv: JSON.parse(config.getDefaultSetEnv()),
-      deleteEnv: JSON.parse(config.getDefaultDeleteEnv()),
+      setEnv: JSON.parse(atomXtermConfig.getDefaultSetEnv()),
+      deleteEnv: JSON.parse(atomXtermConfig.getDefaultDeleteEnv()),
       encoding: null,
-      fontSize: config.getDefaultFontSize(),
-      leaveOpenAfterExit: config.getDefaultLeaveOpenAfterExit(),
-      relaunchTerminalOnStartup: config.getDefaultRelaunchTerminalOnStartup(),
+      fontSize: atomXtermConfig.getDefaultFontSize(),
+      leaveOpenAfterExit: atomXtermConfig.getDefaultLeaveOpenAfterExit(),
+      relaunchTerminalOnStartup: atomXtermConfig.getDefaultRelaunchTerminalOnStartup(),
       title: null,
-      xtermOptions: JSON.parse(config.getDefaultXtermOptions()),
-      promptToStartup: config.getDefaultPromptToStartup()
+      xtermOptions: JSON.parse(atomXtermConfig.getDefaultXtermOptions()),
+      promptToStartup: atomXtermConfig.getDefaultPromptToStartup()
     }
     expect(AtomXtermProfilesSingleton.instance.getDefaultProfile()).toEqual(expected)
   })

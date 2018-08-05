@@ -20,7 +20,7 @@
 import * as nodePty from 'node-pty-prebuilt'
 import { shell } from 'electron'
 
-import * as config from '../src/lib/atom-xterm-config'
+import atomXtermConfig from '../src/lib/atom-xterm-config'
 import { AtomXtermElement } from '../src/lib/atom-xterm-element'
 import { AtomXtermModel } from '../src/lib/atom-xterm-model'
 
@@ -110,7 +110,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('getShellCommand()', () => {
-    expect(this.element.getShellCommand()).toBe(config.getDefaultShellCommand())
+    expect(this.element.getShellCommand()).toBe(atomXtermConfig.getDefaultShellCommand())
   })
 
   it('getShellCommand() command set in uri', (done) => {
@@ -143,7 +143,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('getTermType()', () => {
-    expect(this.element.getTermType()).toBe(config.getDefaultTermType())
+    expect(this.element.getTermType()).toBe(atomXtermConfig.getDefaultTermType())
   })
 
   it('getTermType() name set in uri', (done) => {
@@ -193,7 +193,7 @@ describe('AtomXtermElement', () => {
 
   it('getCwd()', (done) => {
     this.element.getCwd().then((cwd) => {
-      expect(cwd).toBe(config.getDefaultCwd())
+      expect(cwd).toBe(atomXtermConfig.getDefaultCwd())
       done()
     })
   })
@@ -238,7 +238,7 @@ describe('AtomXtermElement', () => {
     )
     createNewElement().then((element) => {
       element.getCwd().then((cwd) => {
-        expect(cwd).toBe(config.getDefaultCwd())
+        expect(cwd).toBe(atomXtermConfig.getDefaultCwd())
         done()
       })
     })
@@ -250,7 +250,7 @@ describe('AtomXtermElement', () => {
     let url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
       this.element.getCwd().then((cwd) => {
-        expect(cwd).toBe(config.getDefaultCwd())
+        expect(cwd).toBe(atomXtermConfig.getDefaultCwd())
         done()
       })
     })
@@ -260,7 +260,7 @@ describe('AtomXtermElement', () => {
     spyOn(atom.project, 'getPaths').and.returnValue([path.join(this.tmpdir, 'non-existent-dir')])
     createNewElement().then((element) => {
       element.getCwd().then((cwd) => {
-        expect(cwd).toBe(config.getDefaultCwd())
+        expect(cwd).toBe(atomXtermConfig.getDefaultCwd())
         done()
       })
     })
@@ -1264,23 +1264,23 @@ describe('AtomXtermElement', () => {
   })
 
   it('use ctrl+wheelScrollUp font already at maximum', () => {
-    this.element.model.profile.fontSize = config.getMaximumFontSize()
+    this.element.model.profile.fontSize = atomXtermConfig.getMaximumFontSize()
     let wheelEvent = new WheelEvent('wheel', {
       deltaY: -150,
       ctrlKey: true
     })
     this.element.terminalDiv.dispatchEvent(wheelEvent)
-    expect(this.element.model.profile.fontSize).toBe(config.getMaximumFontSize())
+    expect(this.element.model.profile.fontSize).toBe(atomXtermConfig.getMaximumFontSize())
   })
 
   it('use ctrl+wheelScrollDown font already at minimum', () => {
-    this.element.model.profile.fontSize = config.getMinimumFontSize()
+    this.element.model.profile.fontSize = atomXtermConfig.getMinimumFontSize()
     let wheelEvent = new WheelEvent('wheel', {
       deltaY: 150,
       ctrlKey: true
     })
     this.element.terminalDiv.dispatchEvent(wheelEvent)
-    expect(this.element.model.profile.fontSize).toBe(config.getMinimumFontSize())
+    expect(this.element.model.profile.fontSize).toBe(atomXtermConfig.getMinimumFontSize())
   })
 
   it('getXtermOptions() default options', () => {
