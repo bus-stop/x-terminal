@@ -21,7 +21,7 @@ function getConfig (entryName) {
   ]
   if (entryName === 'atom-xterm') {
     entry = {
-      'atom-xterm': './lib/atom-xterm'
+      'atom-xterm': './src/lib/atom-xterm'
     }
     pathValue = path.resolve(
       __dirname,
@@ -52,7 +52,7 @@ function getConfig (entryName) {
     )
   } else if (entryName === 'move-winpty-binaries') {
     entry = {
-      'move-winpty-binaries': './scripts/move-winpty-binaries'
+      'move-winpty-binaries': './src/scripts/move-winpty-binaries'
     }
     pathValue = path.resolve(
       __dirname,

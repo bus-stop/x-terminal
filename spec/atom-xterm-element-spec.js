@@ -20,9 +20,9 @@
 import * as nodePty from 'node-pty-prebuilt'
 import { shell } from 'electron'
 
-import * as config from '../lib/atom-xterm-config'
-import { AtomXtermElement } from '../lib/atom-xterm-element'
-import { AtomXtermModel } from '../lib/atom-xterm-model'
+import * as config from '../src/lib/atom-xterm-config'
+import { AtomXtermElement } from '../src/lib/atom-xterm-element'
+import { AtomXtermModel } from '../src/lib/atom-xterm-model'
 
 import path from 'path'
 
