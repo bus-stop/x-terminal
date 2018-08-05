@@ -57,6 +57,7 @@
     "deep-object-diff": "^1.1.0",
     "element-resize-detector": "^1.1.14",
     "eslint": "^5.3.0",
+    "eslint-config-medikoo-es5": "^1.6.0",
     "eslint-config-standard": "^12.0.0-alpha.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-node": "^7.0.1",
