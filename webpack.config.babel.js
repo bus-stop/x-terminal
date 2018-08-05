@@ -12,6 +12,7 @@ function getConfig (entryName) {
   let entry = null
   let pathValue = null
   let output = null
+  let devtool = 'source-map'
   let target = 'node'
   let plugins = [
     new webpack.EnvironmentPlugin({
@@ -56,16 +57,22 @@ function getConfig (entryName) {
     pathValue = path.resolve(
       __dirname,
       'dist',
-      'scripts'
+      'preinstallScripts'
     )
     output = {
       path: pathValue,
       filename: '[name].js'
     }
+    devtool = false
     plugins.push(
       new CleanWebpackPlugin(
         [pathValue]
       )
+    )
+    plugins.push(
+      new webpack.BannerPlugin({
+        banner: 'This file is auto-generated. Do not modify directly.'
+      })
     )
   } else {
     console.error(`Unknown entryName: ${entryName}`)
@@ -84,7 +91,7 @@ function getConfig (entryName) {
         }
       ]
     },
-    devtool: 'source-map',
+    devtool: devtool,
     target: target,
     externals: [
       /^atom$/,

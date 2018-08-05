@@ -87,7 +87,7 @@
     "jsdoc": "jsdoc -c .jsdocrc",
     "jsonlint": "jsonlint-cli keymaps/*.json menus/*.json package.json",
     "lint": "npm run eslint && npm run stylelint && npm run jsonlint",
-    "move-winpty-binaries": "node dist/scripts/move-winpty-binaries.js",
+    "move-winpty-binaries": "node dist/preinstallScripts/move-winpty-binaries.js",
     "preinstall": "npm run move-winpty-binaries",
     "prepare": "npm run build",
     "preuninstall": "npm run move-winpty-binaries",
