@@ -17,8 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import fsExtra from 'fs-extra'
-import fs from 'fs'
+import fs from 'fs-extra'
 import os from 'os'
 import path from 'path'
 
@@ -99,7 +98,7 @@ describe('move-winpty-binaries script', () => {
       spyOn(fs, 'renameSync')
       spyOn(os, 'homedir').and.returnValue(this.tmpdir)
       process.env.ATOM_HOME = path.join(this.tmpdir, '.atom')
-      fsExtra.ensureDirSync(process.env.ATOM_HOME)
+      fs.ensureDirSync(process.env.ATOM_HOME)
     })
 
     afterEach(() => {
@@ -136,10 +135,10 @@ describe('move-winpty-binaries script', () => {
         this.nodePtyBuildDebugPath = path.join(nodePtyPath, 'build', 'Debug')
         this.nodePtyPrebuiltBuildReleasePath = path.join(nodePtyPrebuiltPath, 'build', 'Release')
         this.nodePtyPrebuiltBuildDebugPath = path.join(nodePtyPrebuiltPath, 'build', 'Debug')
-        fsExtra.ensureDirSync(this.nodePtyBuildReleasePath)
-        fsExtra.ensureDirSync(this.nodePtyBuildDebugPath)
-        fsExtra.ensureDirSync(this.nodePtyPrebuiltBuildReleasePath)
-        fsExtra.ensureDirSync(this.nodePtyPrebuiltBuildDebugPath)
+        fs.ensureDirSync(this.nodePtyBuildReleasePath)
+        fs.ensureDirSync(this.nodePtyBuildDebugPath)
+        fs.ensureDirSync(this.nodePtyPrebuiltBuildReleasePath)
+        fs.ensureDirSync(this.nodePtyPrebuiltBuildDebugPath)
         Object.defineProperty(process, 'platform', {
           'value': 'win32'
         })
@@ -155,7 +154,7 @@ describe('move-winpty-binaries script', () => {
       })
 
       it('node-pty Release directory does not exist', () => {
-        fsExtra.removeSync(this.nodePtyBuildReleasePath)
+        fs.removeSync(this.nodePtyBuildReleasePath)
         script.main()
         expect(fs.renameSync.calls.count()).toBe(3)
         expect(fs.renameSync.calls.argsFor(0)[0]).toBe(this.nodePtyBuildDebugPath)
@@ -164,7 +163,7 @@ describe('move-winpty-binaries script', () => {
       })
 
       it('node-pty Debug directory does not exist', () => {
-        fsExtra.removeSync(this.nodePtyBuildDebugPath)
+        fs.removeSync(this.nodePtyBuildDebugPath)
         script.main()
         expect(fs.renameSync.calls.count()).toBe(3)
         expect(fs.renameSync.calls.argsFor(0)[0]).toBe(this.nodePtyBuildReleasePath)
@@ -173,8 +172,8 @@ describe('move-winpty-binaries script', () => {
       })
 
       it('node-pty Release and Debug directories do not exist', () => {
-        fsExtra.removeSync(this.nodePtyBuildReleasePath)
-        fsExtra.removeSync(this.nodePtyBuildDebugPath)
+        fs.removeSync(this.nodePtyBuildReleasePath)
+        fs.removeSync(this.nodePtyBuildDebugPath)
         script.main()
         expect(fs.renameSync.calls.count()).toBe(2)
         expect(fs.renameSync.calls.argsFor(0)[0]).toBe(this.nodePtyPrebuiltBuildReleasePath)
@@ -182,28 +181,28 @@ describe('move-winpty-binaries script', () => {
       })
 
       it('node-pty does not exist, node-pty-prebuilt Release directory does not exist', () => {
-        fsExtra.removeSync(this.nodePtyBuildReleasePath)
-        fsExtra.removeSync(this.nodePtyBuildDebugPath)
-        fsExtra.removeSync(this.nodePtyPrebuiltBuildReleasePath)
+        fs.removeSync(this.nodePtyBuildReleasePath)
+        fs.removeSync(this.nodePtyBuildDebugPath)
+        fs.removeSync(this.nodePtyPrebuiltBuildReleasePath)
         script.main()
         expect(fs.renameSync.calls.count()).toBe(1)
         expect(fs.renameSync.calls.argsFor(0)[0]).toBe(this.nodePtyPrebuiltBuildDebugPath)
       })
 
       it('node-pty does not exist, node-pty-prebuilt Debug directory does not exist', () => {
-        fsExtra.removeSync(this.nodePtyBuildReleasePath)
-        fsExtra.removeSync(this.nodePtyBuildDebugPath)
-        fsExtra.removeSync(this.nodePtyPrebuiltBuildDebugPath)
+        fs.removeSync(this.nodePtyBuildReleasePath)
+        fs.removeSync(this.nodePtyBuildDebugPath)
+        fs.removeSync(this.nodePtyPrebuiltBuildDebugPath)
         script.main()
         expect(fs.renameSync.calls.count()).toBe(1)
         expect(fs.renameSync.calls.argsFor(0)[0]).toBe(this.nodePtyPrebuiltBuildReleasePath)
       })
 
       it('node-pty does not exist, node-pty-prebuilt Release and Debug directories do not exist', () => {
-        fsExtra.removeSync(this.nodePtyBuildReleasePath)
-        fsExtra.removeSync(this.nodePtyBuildDebugPath)
-        fsExtra.removeSync(this.nodePtyPrebuiltBuildReleasePath)
-        fsExtra.removeSync(this.nodePtyPrebuiltBuildDebugPath)
+        fs.removeSync(this.nodePtyBuildReleasePath)
+        fs.removeSync(this.nodePtyBuildDebugPath)
+        fs.removeSync(this.nodePtyPrebuiltBuildReleasePath)
+        fs.removeSync(this.nodePtyPrebuiltBuildDebugPath)
         script.main()
         expect(fs.renameSync).not.toHaveBeenCalled()
       })
