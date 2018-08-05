@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as config from '../lib/atom-xterm-config'
+import atomXtermConfig from '../lib/atom-xterm-config'
 
 import os from 'os'
 import path from 'path'
@@ -44,7 +44,7 @@ describe('Call to getDefaultShellCommand()', () => {
     if (process.env.COMSPEC) {
       delete process.env.COMSPEC
     }
-    expect(config.getDefaultShellCommand()).toBe('cmd.exe')
+    expect(atomXtermConfig.getDefaultShellCommand()).toBe('cmd.exe')
   })
 
   it('on win32 with COMSPEC set', () => {
@@ -53,7 +53,7 @@ describe('Call to getDefaultShellCommand()', () => {
     })
     let expected = 'somecommand.exe'
     process.env.COMSPEC = expected
-    expect(config.getDefaultShellCommand()).toBe(expected)
+    expect(atomXtermConfig.getDefaultShellCommand()).toBe(expected)
   })
 
   it('on linux without SHELL set', () => {
@@ -63,7 +63,7 @@ describe('Call to getDefaultShellCommand()', () => {
     if (process.env.SHELL) {
       delete process.env.SHELL
     }
-    expect(config.getDefaultShellCommand()).toBe('/bin/sh')
+    expect(atomXtermConfig.getDefaultShellCommand()).toBe('/bin/sh')
   })
 
   it('on linux with SHELL set', () => {
@@ -72,13 +72,13 @@ describe('Call to getDefaultShellCommand()', () => {
     })
     let expected = 'somecommand'
     process.env.SHELL = expected
-    expect(config.getDefaultShellCommand()).toBe(expected)
+    expect(atomXtermConfig.getDefaultShellCommand()).toBe(expected)
   })
 })
 
 describe('Call to getDefaultArgs()', () => {
   it('return []', () => {
-    expect(config.getDefaultArgs()).toBe('[]')
+    expect(atomXtermConfig.getDefaultArgs()).toBe('[]')
   })
 })
 
@@ -97,13 +97,13 @@ describe('Call to getDefaultTermType()', () => {
     if (process.env.TERM) {
       delete process.env.TERM
     }
-    expect(config.getDefaultTermType()).toBe('xterm-256color')
+    expect(atomXtermConfig.getDefaultTermType()).toBe('xterm-256color')
   })
 
   it('with TERM set', () => {
     let expected = 'sometermtype'
     process.env.TERM = expected
-    expect(config.getDefaultTermType()).toBe(expected)
+    expect(atomXtermConfig.getDefaultTermType()).toBe(expected)
   })
 })
 
@@ -128,7 +128,7 @@ describe('Call to getDefaultCwd()', () => {
     })
     let expected = 'C:\\some\\dir'
     process.env.USERPROFILE = expected
-    expect(config.getDefaultCwd()).toBe(expected)
+    expect(atomXtermConfig.getDefaultCwd()).toBe(expected)
   })
 
   it('on linux', () => {
@@ -137,73 +137,73 @@ describe('Call to getDefaultCwd()', () => {
     })
     let expected = '/some/dir'
     process.env.HOME = expected
-    expect(config.getDefaultCwd()).toBe(expected)
+    expect(atomXtermConfig.getDefaultCwd()).toBe(expected)
   })
 })
 
 describe('Call to getDefaultEnv()', () => {
   it('return \'\'', () => {
-    expect(config.getDefaultEnv()).toBe('')
+    expect(atomXtermConfig.getDefaultEnv()).toBe('')
   })
 })
 
 describe('Call to getDefaultSetEnv()', () => {
   it('return {}', () => {
-    expect(config.getDefaultSetEnv()).toBe('{}')
+    expect(atomXtermConfig.getDefaultSetEnv()).toBe('{}')
   })
 })
 
 describe('Call to getDefaultDeleteEnv()', () => {
   it('return []', () => {
-    expect(config.getDefaultDeleteEnv()).toBe('[]')
+    expect(atomXtermConfig.getDefaultDeleteEnv()).toBe('[]')
   })
 })
 
 describe('Call to getDefaultEncoding()', () => {
   it('return \'\'', () => {
-    expect(config.getDefaultEncoding()).toBe('')
+    expect(atomXtermConfig.getDefaultEncoding()).toBe('')
   })
 })
 
 describe('Call to getDefaultFontSize()', () => {
   it('return 14', () => {
-    expect(config.getDefaultFontSize()).toBe(14)
+    expect(atomXtermConfig.getDefaultFontSize()).toBe(14)
   })
 })
 
 describe('Call to getMinimumFontSize()', () => {
   it('return 8', () => {
-    expect(config.getMinimumFontSize()).toBe(8)
+    expect(atomXtermConfig.getMinimumFontSize()).toBe(8)
   })
 })
 
 describe('Call to getMaximumFontSize()', () => {
   it('return 100', () => {
-    expect(config.getMaximumFontSize()).toBe(100)
+    expect(atomXtermConfig.getMaximumFontSize()).toBe(100)
   })
 })
 
 describe('Call to getDefaultLeaveOpenAfterExit()', () => {
   it('return true', () => {
-    expect(config.getDefaultLeaveOpenAfterExit()).toBe(true)
+    expect(atomXtermConfig.getDefaultLeaveOpenAfterExit()).toBe(true)
   })
 })
 
 describe('Call to getDefaultAllowRelaunchingTerminalsOnStartup()', () => {
   it('return true', () => {
-    expect(config.getDefaultAllowRelaunchingTerminalsOnStartup()).toBe(true)
+    expect(atomXtermConfig.getDefaultAllowRelaunchingTerminalsOnStartup()).toBe(true)
   })
 })
 
 describe('Call to getDefaultRelaunchTerminalOnStartup()', () => {
   it('return true', () => {
-    expect(config.getDefaultRelaunchTerminalOnStartup()).toBe(true)
+    expect(atomXtermConfig.getDefaultRelaunchTerminalOnStartup()).toBe(true)
   })
 })
 
 describe('Call to getDefaultXtermOptions()', () => {
   it('return {}', () => {
-    expect(config.getDefaultXtermOptions()).toBe('{}')
+    expect(atomXtermConfig.getDefaultXtermOptions()).toBe('{}')
   })
 })
 
@@ -230,7 +230,7 @@ describe('Call to getUserDataPath()', () => {
       delete process.env.APPDATA
     }
     let expected = path.join(os.homedir(), 'AppData', 'Roaming', 'atom-xterm')
-    expect(config.getUserDataPath()).toBe(expected)
+    expect(atomXtermConfig.getUserDataPath()).toBe(expected)
   })
 
   it('on win32 with APPDATA set', () => {
@@ -239,7 +239,7 @@ describe('Call to getUserDataPath()', () => {
     })
     process.env.APPDATA = path.join('/some', 'dir')
     let expected = path.join(process.env.APPDATA, 'atom-xterm')
-    expect(config.getUserDataPath()).toBe(expected)
+    expect(atomXtermConfig.getUserDataPath()).toBe(expected)
   })
 
   it('on darwin', () => {
@@ -247,7 +247,7 @@ describe('Call to getUserDataPath()', () => {
       'value': 'darwin'
     })
     let expected = path.join(os.homedir(), 'Library', 'Application Support', 'atom-xterm')
-    expect(config.getUserDataPath()).toBe(expected)
+    expect(atomXtermConfig.getUserDataPath()).toBe(expected)
   })
 
   it('on linux without XDG_CONFIG_HOME set', () => {
@@ -258,7 +258,7 @@ describe('Call to getUserDataPath()', () => {
       delete process.env.XDG_CONFIG_HOME
     }
     let expected = path.join(os.homedir(), '.config', 'atom-xterm')
-    expect(config.getUserDataPath()).toBe(expected)
+    expect(atomXtermConfig.getUserDataPath()).toBe(expected)
   })
 
   it('on linux with XDG_CONFIG_HOME set', () => {
@@ -267,18 +267,18 @@ describe('Call to getUserDataPath()', () => {
     })
     process.env.XDG_CONFIG_HOME = path.join('/some', 'dir')
     let expected = path.join(process.env.XDG_CONFIG_HOME, 'atom-xterm')
-    expect(config.getUserDataPath()).toBe(expected)
+    expect(atomXtermConfig.getUserDataPath()).toBe(expected)
   })
 })
 
 describe('Call to getDefaultTitle()', () => {
   it('return \'\'', () => {
-    expect(config.getDefaultTitle()).toBe('')
+    expect(atomXtermConfig.getDefaultTitle()).toBe('')
   })
 })
 
 describe('Call to getDefaultPromptToStartup()', () => {
   it('return false', () => {
-    expect(config.getDefaultPromptToStartup()).toBe(false)
+    expect(atomXtermConfig.getDefaultPromptToStartup()).toBe(false)
   })
 })

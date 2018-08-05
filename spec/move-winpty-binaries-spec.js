@@ -24,7 +24,7 @@ import path from 'path'
 
 import tmp from 'tmp'
 
-import * as script from '../scripts_src/move-winpty-binaries'
+import * as script from '../scripts/move-winpty-binaries'
 
 describe('move-winpty-binaries script', () => {
   beforeEach((done) => {
