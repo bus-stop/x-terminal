@@ -41,6 +41,11 @@ function getConfig (entryName) {
       )
     )
     plugins.push(
+      new webpack.BannerPlugin({
+        banner: 'This file is auto-generated. Do not modify directly.'
+      })
+    )
+    plugins.push(
       new CopyWebpackPlugin(
         [
           {
