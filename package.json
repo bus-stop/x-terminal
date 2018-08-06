@@ -78,7 +78,7 @@
   "scripts": {
     "build": "npm run webpack",
     "webpack": "webpack",
-    "eslint": "eslint ./",
+    "eslint": "eslint src/ spec/ webpack.config.babel.js",
     "jsonlint": "jsonlint-cli keymaps/*.json menus/*.json package.json",
     "lint": "npm run eslint && npm run stylelint && npm run jsonlint",
     "move-winpty-binaries": "node dist/preinstallScripts/move-winpty-binaries.js",
