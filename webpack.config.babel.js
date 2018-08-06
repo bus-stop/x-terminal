@@ -17,6 +17,9 @@ function getConfig (entryName) {
   let plugins = [
     new webpack.EnvironmentPlugin({
       NODE_ENV: NODE_ENV
+    }),
+    new webpack.BannerPlugin({
+      banner: 'This file is auto-generated. Do not modify directly.'
     })
   ]
   if (entryName === 'atom-xterm') {
@@ -39,11 +42,6 @@ function getConfig (entryName) {
       new CleanWebpackPlugin(
         [pathValue]
       )
-    )
-    plugins.push(
-      new webpack.BannerPlugin({
-        banner: 'This file is auto-generated. Do not modify directly.'
-      })
     )
     plugins.push(
       new CopyWebpackPlugin(
@@ -73,11 +71,6 @@ function getConfig (entryName) {
       new CleanWebpackPlugin(
         [pathValue]
       )
-    )
-    plugins.push(
-      new webpack.BannerPlugin({
-        banner: 'This file is auto-generated. Do not modify directly.'
-      })
     )
   } else {
     console.error(`Unknown entryName: ${entryName}`)
