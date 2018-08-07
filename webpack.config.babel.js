@@ -2,7 +2,8 @@ import path from 'path'
 
 import webpack from 'webpack'
 import CleanWebpackPlugin from 'clean-webpack-plugin'
-import CopyWebpackPlugin from 'copy-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 
 import packageJson from './package.json'
 
@@ -41,17 +42,18 @@ function getConfig (entryName) {
     plugins.push(
       new CleanWebpackPlugin(
         [pathValue]
-      )
-    )
-    plugins.push(
-      new CopyWebpackPlugin(
-        [
-          {
-            from: './node_modules/xterm/lib/xterm.css',
-            to: './xterm.css'
+      ),
+      new MiniCssExtractPlugin({
+        filename: '[name].css'
+      }),
+      new OptimizeCssAssetsPlugin({
+        assetNameRegExp: /\.css$/g,
+        cssProcessorOptions: {
+          map: {
+            inline: false
           }
-        ]
-      )
+        }
+      })
     )
   } else if (entryName === 'move-winpty-binaries') {
     entry = {
@@ -86,6 +88,35 @@ function getConfig (entryName) {
           use: {
             loader: 'babel-loader'
           }
+        },
+        {
+          test: /\.(?:sa|s?c)ss$/,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true
+              }
+            }
+          ]
         }
       ]
     },

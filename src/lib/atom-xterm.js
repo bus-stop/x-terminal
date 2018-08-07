@@ -18,6 +18,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import '../styles/atom-xterm.sass'
+
 import { CompositeDisposable } from 'atom'
 
 import atomXtermConfig from './atom-xterm-config'

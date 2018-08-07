@@ -199,5 +199,5 @@ atom-xterm-profile {
 .atom-xterm-notice-warning { .atom-xterm-notice-type(@text-color-warning; @background-color-warning); }
 .atom-xterm-notice-error { .atom-xterm-notice-type(@text-color-error; @background-color-error); }
 
-// The stylesheet from xterm.js will always be needed.
-@import (less) "../dist/lib/xterm.css";
+// Load the static styles here.
+@import (less) "../dist/lib/atom-xterm.css";
