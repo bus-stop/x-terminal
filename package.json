@@ -93,7 +93,8 @@
     "prepare": "npm run build",
     "preuninstall": "npm run move-winpty-binaries",
     "stylelint": "stylelint styles/*.less",
-    "test": "atom --test spec && npm run lint"
+    "atom-test": "atom --test spec",
+    "test": "npm run build && npm run atom-test && npm run lint"
   },
   "deserializers": {
     "AtomXtermModel": "deserializeAtomXtermModel"
