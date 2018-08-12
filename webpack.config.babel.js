@@ -38,7 +38,7 @@ function getConfig (entryName) {
       library: packageJson.name,
       libraryTarget: 'umd'
     }
-    target = 'electron-main'
+    target = 'electron-renderer'
     plugins.push(
       new CleanWebpackPlugin(
         [pathValue]
