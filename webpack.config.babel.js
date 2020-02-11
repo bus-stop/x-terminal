@@ -1,7 +1,7 @@
 import path from 'path'
 
 import webpack from 'webpack'
-import CleanWebpackPlugin from 'clean-webpack-plugin'
+import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin'
 
@@ -40,9 +40,7 @@ function getConfig (entryName) {
     }
     target = 'electron-renderer'
     plugins.push(
-      new CleanWebpackPlugin(
-        [pathValue]
-      ),
+      new CleanWebpackPlugin(),
       new MiniCssExtractPlugin({
         filename: '[name].css'
       }),
@@ -70,9 +68,7 @@ function getConfig (entryName) {
     }
     devtool = false
     plugins.push(
-      new CleanWebpackPlugin(
-        [pathValue]
-      )
+      new CleanWebpackPlugin()
     )
   } else {
     console.error(`Unknown entryName: ${entryName}`)
