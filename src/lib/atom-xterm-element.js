@@ -18,7 +18,7 @@
  */
 
 import { CompositeDisposable } from 'atom'
-import { spawn as spawnPty } from 'node-pty-prebuilt'
+import { spawn as spawnPty } from 'node-pty-prebuilt-multiarch'
 import { Terminal } from 'xterm'
 import * as fit from 'xterm/lib/addons/fit/fit'
 import urlRegex from 'url-regex'
