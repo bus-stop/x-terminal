@@ -130,7 +130,7 @@ describe('move-winpty-binaries script', () => {
           'atom-xterm'
         )
         let nodePtyPath = path.join(atomXtermPath, 'node_modules', 'node-pty')
-        let nodePtyPrebuiltPath = path.join(atomXtermPath, 'node_modules', 'node-pty-prebuilt')
+        let nodePtyPrebuiltPath = path.join(atomXtermPath, 'node_modules', 'node-pty-prebuilt-multiarch')
         this.nodePtyBuildReleasePath = path.join(nodePtyPath, 'build', 'Release')
         this.nodePtyBuildDebugPath = path.join(nodePtyPath, 'build', 'Debug')
         this.nodePtyPrebuiltBuildReleasePath = path.join(nodePtyPrebuiltPath, 'build', 'Release')
