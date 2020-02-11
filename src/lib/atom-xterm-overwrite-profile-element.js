@@ -35,14 +35,14 @@ class AtomXtermOverwriteProfileElementImpl extends HTMLElement {
   setNewPrompt (profileName, confirmHandler, cancelHandler) {
     clearDiv(this.messageDiv)
     clearDiv(this.promptButtonsDiv)
-    let text = 'Overwrite existing profile \'' + profileName + '\'?'
+    const text = 'Overwrite existing profile \'' + profileName + '\'?'
     this.messageDiv.appendChild(document.createTextNode(text))
-    let confirmButton = document.createElement('button')
+    const confirmButton = document.createElement('button')
     confirmButton.classList.add('atom-xterm-modal-button')
     confirmButton.appendChild(document.createTextNode('Confirm'))
     confirmButton.addEventListener('click', confirmHandler)
     this.promptButtonsDiv.appendChild(confirmButton)
-    let cancelButton = document.createElement('button')
+    const cancelButton = document.createElement('button')
     cancelButton.classList.add('atom-xterm-modal-button')
     cancelButton.appendChild(document.createTextNode('Cancel'))
     cancelButton.addEventListener('click', cancelHandler)

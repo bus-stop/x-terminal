@@ -25,7 +25,7 @@ function mkdtempSyncForRenamingDLLs (atomHome) {
   if (!atomHome) {
     throw new Error('must provide atomHome parameter')
   }
-  let tmp = path.join(atomHome, 'tmp')
+  const tmp = path.join(atomHome, 'tmp')
   if (!fs.existsSync(tmp)) fs.mkdirSync(tmp)
   return fs.mkdtempSync(path.join(tmp, 'moved-dll-'))
 }
@@ -64,7 +64,7 @@ function main () {
     if (!fs.existsSync(atomHome)) {
       console.log('atomHome = \'' + atomHome + '\' doesn\'t exist.')
       console.log('Checking if home directory is set to .node-gyp path')
-      let regexp = new RegExp(path.join('.atom', '.node-gyp').replace(/\.\\/g, '\\$&') + '$')
+      const regexp = new RegExp(path.join('.atom', '.node-gyp').replace(/\.\\/g, '\\$&') + '$')
       if (regexp.test(homeDir)) {
         homeDir = path.resolve(path.join(homeDir, '..', '..'))
         console.log('Setting homeDir = \'' + homeDir + '\' from two directories lower from previous homeDir.')
@@ -74,8 +74,8 @@ function main () {
     }
     if (!fs.existsSync(atomHome)) {
       console.log('Attempting use of HOMEDRIVE and HOMEPATH environment variables.')
-      let homeDrive = process.env.HOMEDRIVE
-      let homePath = process.env.HOMEPATH
+      const homeDrive = process.env.HOMEDRIVE
+      const homePath = process.env.HOMEPATH
       if (homeDrive && homePath) {
         homeDir = homeDrive + path.sep + homePath
         console.log('homeDir = \'' + homeDir + '\' derived from HOMEDRIVE and HOMEPATH environment variables.')
@@ -84,7 +84,7 @@ function main () {
     }
   }
   console.log('Using atomHome = \'' + atomHome + '\'')
-  let atomXtermPath = path.join(atomHome, 'packages', 'atom-xterm')
+  const atomXtermPath = path.join(atomHome, 'packages', 'atom-xterm')
   console.log('Using atomXtermPath = \'' + atomXtermPath + '\'')
   if (!fs.existsSync(atomXtermPath)) {
     console.log('atom-xterm not installed, exiting.')
@@ -94,21 +94,21 @@ function main () {
   // 'node-pty' has been replaced with 'node-pty-prebuilt-multiarch', this script will
   // still move the binaries in the 'node-pty' module to make upgrades
   // smoother for Windows users.
-  let nodePtyPath = path.join(atomXtermPath, 'node_modules', 'node-pty')
+  const nodePtyPath = path.join(atomXtermPath, 'node_modules', 'node-pty')
   console.log('Using nodePtyPath = \'' + nodePtyPath + '\'')
-  let nodePtyPrebuiltPath = path.join(atomXtermPath, 'node_modules', 'node-pty-prebuilt-multiarch')
+  const nodePtyPrebuiltPath = path.join(atomXtermPath, 'node_modules', 'node-pty-prebuilt-multiarch')
   console.log('Using nodePtyPrebuiltPath = \'' + nodePtyPrebuiltPath + '\'')
 
   // Move the directories containing the Windows binaries under a tmp
   // directory.
-  for (let nodePtyModulePath of [nodePtyPath, nodePtyPrebuiltPath]) {
-    let releaseBuildPath = path.join(nodePtyModulePath, 'build', 'Release')
-    let debugBuildPath = path.join(nodePtyModulePath, 'build', 'Debug')
-    for (let buildPath of [releaseBuildPath, debugBuildPath]) {
+  for (const nodePtyModulePath of [nodePtyPath, nodePtyPrebuiltPath]) {
+    const releaseBuildPath = path.join(nodePtyModulePath, 'build', 'Release')
+    const debugBuildPath = path.join(nodePtyModulePath, 'build', 'Debug')
+    for (const buildPath of [releaseBuildPath, debugBuildPath]) {
       console.log(`Checking if '${buildPath}' exists`)
       if (fs.existsSync(buildPath)) {
-        let tmpdir = mkdtempSyncForRenamingDLLs(atomHome)
-        let newPath = path.join(tmpdir, path.basename(buildPath))
+        const tmpdir = mkdtempSyncForRenamingDLLs(atomHome)
+        const newPath = path.join(tmpdir, path.basename(buildPath))
         console.log(`Moving '${buildPath}' to '${newPath}'.`)
         fs.renameSync(buildPath, newPath)
       }

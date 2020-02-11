@@ -33,13 +33,13 @@ describe('Call to getDefaultShellCommand()', () => {
   afterEach(() => {
     process.env = savedEnv
     Object.defineProperty(process, 'platform', {
-      'value': savedPlatform
+      value: savedPlatform
     })
   })
 
   it('on win32 without COMSPEC set', () => {
     Object.defineProperty(process, 'platform', {
-      'value': 'win32'
+      value: 'win32'
     })
     if (process.env.COMSPEC) {
       delete process.env.COMSPEC
@@ -49,16 +49,16 @@ describe('Call to getDefaultShellCommand()', () => {
 
   it('on win32 with COMSPEC set', () => {
     Object.defineProperty(process, 'platform', {
-      'value': 'win32'
+      value: 'win32'
     })
-    let expected = 'somecommand.exe'
+    const expected = 'somecommand.exe'
     process.env.COMSPEC = expected
     expect(atomXtermConfig.getDefaultShellCommand()).toBe(expected)
   })
 
   it('on linux without SHELL set', () => {
     Object.defineProperty(process, 'platform', {
-      'value': 'linux'
+      value: 'linux'
     })
     if (process.env.SHELL) {
       delete process.env.SHELL
@@ -68,9 +68,9 @@ describe('Call to getDefaultShellCommand()', () => {
 
   it('on linux with SHELL set', () => {
     Object.defineProperty(process, 'platform', {
-      'value': 'linux'
+      value: 'linux'
     })
-    let expected = 'somecommand'
+    const expected = 'somecommand'
     process.env.SHELL = expected
     expect(atomXtermConfig.getDefaultShellCommand()).toBe(expected)
   })
@@ -101,7 +101,7 @@ describe('Call to getDefaultTermType()', () => {
   })
 
   it('with TERM set', () => {
-    let expected = 'sometermtype'
+    const expected = 'sometermtype'
     process.env.TERM = expected
     expect(atomXtermConfig.getDefaultTermType()).toBe(expected)
   })
@@ -118,24 +118,24 @@ describe('Call to getDefaultCwd()', () => {
   afterEach(() => {
     process.env = savedEnv
     Object.defineProperty(process, 'platform', {
-      'value': savedPlatform
+      value: savedPlatform
     })
   })
 
   it('on win32', () => {
     Object.defineProperty(process, 'platform', {
-      'value': 'win32'
+      value: 'win32'
     })
-    let expected = 'C:\\some\\dir'
+    const expected = 'C:\\some\\dir'
     process.env.USERPROFILE = expected
     expect(atomXtermConfig.getDefaultCwd()).toBe(expected)
   })
 
   it('on linux', () => {
     Object.defineProperty(process, 'platform', {
-      'value': 'linux'
+      value: 'linux'
     })
-    let expected = '/some/dir'
+    const expected = '/some/dir'
     process.env.HOME = expected
     expect(atomXtermConfig.getDefaultCwd()).toBe(expected)
   })
@@ -218,55 +218,55 @@ describe('Call to getUserDataPath()', () => {
   afterEach(() => {
     process.env = savedEnv
     Object.defineProperty(process, 'platform', {
-      'value': savedPlatform
+      value: savedPlatform
     })
   })
 
   it('on win32 without APPDATA set', () => {
     Object.defineProperty(process, 'platform', {
-      'value': 'win32'
+      value: 'win32'
     })
     if (process.env.APPDATA) {
       delete process.env.APPDATA
     }
-    let expected = path.join(os.homedir(), 'AppData', 'Roaming', 'atom-xterm')
+    const expected = path.join(os.homedir(), 'AppData', 'Roaming', 'atom-xterm')
     expect(atomXtermConfig.getUserDataPath()).toBe(expected)
   })
 
   it('on win32 with APPDATA set', () => {
     Object.defineProperty(process, 'platform', {
-      'value': 'win32'
+      value: 'win32'
     })
     process.env.APPDATA = path.join('/some', 'dir')
-    let expected = path.join(process.env.APPDATA, 'atom-xterm')
+    const expected = path.join(process.env.APPDATA, 'atom-xterm')
     expect(atomXtermConfig.getUserDataPath()).toBe(expected)
   })
 
   it('on darwin', () => {
     Object.defineProperty(process, 'platform', {
-      'value': 'darwin'
+      value: 'darwin'
     })
-    let expected = path.join(os.homedir(), 'Library', 'Application Support', 'atom-xterm')
+    const expected = path.join(os.homedir(), 'Library', 'Application Support', 'atom-xterm')
     expect(atomXtermConfig.getUserDataPath()).toBe(expected)
   })
 
   it('on linux without XDG_CONFIG_HOME set', () => {
     Object.defineProperty(process, 'platform', {
-      'value': 'linux'
+      value: 'linux'
     })
     if (process.env.XDG_CONFIG_HOME) {
       delete process.env.XDG_CONFIG_HOME
     }
-    let expected = path.join(os.homedir(), '.config', 'atom-xterm')
+    const expected = path.join(os.homedir(), '.config', 'atom-xterm')
     expect(atomXtermConfig.getUserDataPath()).toBe(expected)
   })
 
   it('on linux with XDG_CONFIG_HOME set', () => {
     Object.defineProperty(process, 'platform', {
-      'value': 'linux'
+      value: 'linux'
     })
     process.env.XDG_CONFIG_HOME = path.join('/some', 'dir')
-    let expected = path.join(process.env.XDG_CONFIG_HOME, 'atom-xterm')
+    const expected = path.join(process.env.XDG_CONFIG_HOME, 'atom-xterm')
     expect(atomXtermConfig.getUserDataPath()).toBe(expected)
   })
 })

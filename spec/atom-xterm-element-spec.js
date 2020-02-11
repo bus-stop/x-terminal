@@ -34,17 +34,17 @@ describe('AtomXtermElement', () => {
   this.element = null
   this.tmpdirObj = null
 
-  let createNewElement = (uri = 'atom-xterm://somesessionid/') => {
+  const createNewElement = (uri = 'atom-xterm://somesessionid/') => {
     return new Promise((resolve, reject) => {
-      let terminalsSet = new Set()
-      let model = new AtomXtermModel({
+      const terminalsSet = new Set()
+      const model = new AtomXtermModel({
         uri: uri,
         terminals_set: terminalsSet
       })
       model.initializedPromise.then(() => {
         model.pane = jasmine.createSpyObj('pane',
           ['removeItem', 'getActiveItem', 'destroyItem'])
-        let element = new AtomXtermElement()
+        const element = new AtomXtermElement()
         element.initialize(model).then(() => {
           resolve(element)
         })
@@ -55,7 +55,7 @@ describe('AtomXtermElement', () => {
   beforeEach((done) => {
     atom.config.clear()
     atom.project.setPaths([])
-    let ptyProcess = jasmine.createSpyObj('ptyProcess',
+    const ptyProcess = jasmine.createSpyObj('ptyProcess',
       ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
     ptyProcess.process = jasmine.createSpy('process')
       .and.returnValue('sometestprocess')
@@ -63,7 +63,7 @@ describe('AtomXtermElement', () => {
     spyOn(shell, 'openExternal')
     createNewElement().then((element) => {
       this.element = element
-      tmp.dir({'unsafeCleanup': true}, (err, path, cleanupCallback) => {
+      tmp.dir({ unsafeCleanup: true }, (err, path, cleanupCallback) => {
         if (err) {
           throw err
         }
@@ -77,7 +77,7 @@ describe('AtomXtermElement', () => {
   afterEach(() => {
     this.element.destroy()
     Object.defineProperty(process, 'platform', {
-      'value': savedPlatform
+      value: savedPlatform
     })
     this.tmpdirCleanupCallback()
     atom.config.clear()
@@ -114,9 +114,9 @@ describe('AtomXtermElement', () => {
   })
 
   it('getShellCommand() command set in uri', (done) => {
-    let expected = 'somecommand'
-    let params = new URLSearchParams({'command': expected})
-    let url = new URL('atom-xterm://?' + params.toString())
+    const expected = 'somecommand'
+    const params = new URLSearchParams({ command: expected })
+    const url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
       expect(element.getShellCommand()).toBe(expected)
       done()
@@ -128,9 +128,9 @@ describe('AtomXtermElement', () => {
   })
 
   it('getArgs() args set in uri', (done) => {
-    let expected = ['some', 'extra', 'args']
-    let params = new URLSearchParams({'args': JSON.stringify(expected)})
-    let url = new URL('atom-xterm://?' + params.toString())
+    const expected = ['some', 'extra', 'args']
+    const params = new URLSearchParams({ args: JSON.stringify(expected) })
+    const url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
       expect(element.getArgs()).toEqual(expected)
       done()
@@ -147,9 +147,9 @@ describe('AtomXtermElement', () => {
   })
 
   it('getTermType() name set in uri', (done) => {
-    let expected = 'sometermtype'
-    let params = new URLSearchParams({'name': expected})
-    let url = new URL('atom-xterm://?' + params.toString())
+    const expected = 'sometermtype'
+    const params = new URLSearchParams({ name: expected })
+    const url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
       expect(element.getTermType()).toBe(expected)
       done()
@@ -199,9 +199,9 @@ describe('AtomXtermElement', () => {
   })
 
   it('getCwd() cwd set in uri', (done) => {
-    let expected = this.tmpdir
-    let params = new URLSearchParams({'cwd': expected})
-    let url = new URL('atom-xterm://?' + params.toString())
+    const expected = this.tmpdir
+    const params = new URLSearchParams({ cwd: expected })
+    const url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
       element.getCwd().then((cwd) => {
         expect(cwd).toBe(expected)
@@ -211,7 +211,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('getCwd() model getPath() returns valid path', (done) => {
-    let previousActiveItem = jasmine.createSpyObj(
+    const previousActiveItem = jasmine.createSpyObj(
       'previousActiveItem',
       ['getPath']
     )
@@ -228,7 +228,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('getCwd() model getPath() returns invalid path', (done) => {
-    let previousActiveItem = jasmine.createSpyObj(
+    const previousActiveItem = jasmine.createSpyObj(
       'previousActiveItem',
       ['getPath']
     )
@@ -245,9 +245,9 @@ describe('AtomXtermElement', () => {
   })
 
   it('getCwd() non-existent cwd set in uri', (done) => {
-    let dir = path.join(this.tmpdir, 'non-existent-dir')
-    let params = new URLSearchParams({'cwd': dir})
-    let url = new URL('atom-xterm://?' + params.toString())
+    const dir = path.join(this.tmpdir, 'non-existent-dir')
+    const params = new URLSearchParams({ cwd: dir })
+    const url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
       this.element.getCwd().then((cwd) => {
         expect(cwd).toBe(atomXtermConfig.getDefaultCwd())
@@ -271,9 +271,9 @@ describe('AtomXtermElement', () => {
   })
 
   it('getEnv() env set in uri', (done) => {
-    let expected = {'var1': 'value1', 'var2': 'value2'}
-    let params = new URLSearchParams({'env': JSON.stringify(expected)})
-    let url = new URL('atom-xterm://?' + params.toString())
+    const expected = { var1: 'value1', var2: 'value2' }
+    const params = new URLSearchParams({ env: JSON.stringify(expected) })
+    const url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
       expect(element.getEnv()).toEqual(expected)
       done()
@@ -286,35 +286,35 @@ describe('AtomXtermElement', () => {
   })
 
   it('getEnv() setEnv set in uri', (done) => {
-    let expected = {'var2': 'value2'}
-    let params = new URLSearchParams({'env': JSON.stringify({'var1': 'value1'}), 'setEnv': JSON.stringify(expected)})
-    let url = new URL('atom-xterm://?' + params.toString())
+    const expected = { var2: 'value2' }
+    const params = new URLSearchParams({ env: JSON.stringify({ var1: 'value1' }), setEnv: JSON.stringify(expected) })
+    const url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
-      expect(element.getEnv()['var2']).toEqual(expected['var2'])
+      expect(element.getEnv().var2).toEqual(expected.var2)
       done()
     })
   })
 
   it('getEnv() deleteEnv set in config', () => {
-    atom.config.set('atom-xterm.spawnPtySettings.env', JSON.stringify({'var1': 'value1'}))
+    atom.config.set('atom-xterm.spawnPtySettings.env', JSON.stringify({ var1: 'value1' }))
     atom.config.set('atom-xterm.spawnPtySettings.deleteEnv', JSON.stringify(['var1']))
-    expect(this.element.getEnv()['var1']).toBe(undefined)
+    expect(this.element.getEnv().var1).toBe(undefined)
   })
 
   it('getEnv() deleteEnv set in uri', (done) => {
-    let params = new URLSearchParams({'env': JSON.stringify({'var1': 'value1'}), 'deleteEnv': JSON.stringify(['var1'])})
-    let url = new URL('atom-xterm://?' + params.toString())
+    const params = new URLSearchParams({ env: JSON.stringify({ var1: 'value1' }), deleteEnv: JSON.stringify(['var1']) })
+    const url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
-      expect(this.element.getEnv()['var1']).toBe(undefined)
+      expect(this.element.getEnv().var1).toBe(undefined)
       done()
     })
   })
 
   it('getEnv() deleteEnv has precendence over senEnv', () => {
-    atom.config.set('atom-xterm.spawnPtySettings.env', JSON.stringify({'var1': 'value1'}))
-    atom.config.set('atom-xterm.spawnPtySettings.setEnv', JSON.stringify({'var2': 'value2'}))
+    atom.config.set('atom-xterm.spawnPtySettings.env', JSON.stringify({ var1: 'value1' }))
+    atom.config.set('atom-xterm.spawnPtySettings.setEnv', JSON.stringify({ var2: 'value2' }))
     atom.config.set('atom-xterm.spawnPtySettings.deleteEnv', JSON.stringify(['var2']))
-    expect(this.element.getEnv()['var2']).toBe(undefined)
+    expect(this.element.getEnv().var2).toBe(undefined)
   })
 
   it('getEncoding()', () => {
@@ -322,9 +322,9 @@ describe('AtomXtermElement', () => {
   })
 
   it('getEncoding() encoding set in uri', (done) => {
-    let expected = 'someencoding'
-    let params = new URLSearchParams({'encoding': expected})
-    let url = new URL('atom-xterm://?' + params.toString())
+    const expected = 'someencoding'
+    const params = new URLSearchParams({ encoding: expected })
+    const url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
       expect(element.getEncoding()).toBe(expected)
       done()
@@ -336,9 +336,9 @@ describe('AtomXtermElement', () => {
   })
 
   it('leaveOpenAfterExit() true set in uri', (done) => {
-    let expected = true
-    let params = new URLSearchParams({'leaveOpenAfterExit': expected})
-    let url = new URL('atom-xterm://?' + params.toString())
+    const expected = true
+    const params = new URLSearchParams({ leaveOpenAfterExit: expected })
+    const url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
       expect(element.leaveOpenAfterExit()).toBe(expected)
       done()
@@ -346,9 +346,9 @@ describe('AtomXtermElement', () => {
   })
 
   it('leaveOpenAfterExit() false set in uri', (done) => {
-    let expected = false
-    let params = new URLSearchParams({'leaveOpenAfterExit': expected})
-    let url = new URL('atom-xterm://?' + params.toString())
+    const expected = false
+    const params = new URLSearchParams({ leaveOpenAfterExit: expected })
+    const url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
       expect(element.leaveOpenAfterExit()).toBe(expected)
       done()
@@ -360,9 +360,9 @@ describe('AtomXtermElement', () => {
   })
 
   it('isPromptToStartup() false set in uri', (done) => {
-    let expected = false
-    let params = new URLSearchParams({'promptToStartup': expected})
-    let url = new URL('atom-xterm://?' + params.toString())
+    const expected = false
+    const params = new URLSearchParams({ promptToStartup: expected })
+    const url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
       expect(element.isPromptToStartup()).toBe(expected)
       done()
@@ -370,9 +370,9 @@ describe('AtomXtermElement', () => {
   })
 
   it('isPromptToStartup() true set in uri', (done) => {
-    let expected = true
-    let params = new URLSearchParams({'promptToStartup': expected})
-    let url = new URL('atom-xterm://?' + params.toString())
+    const expected = true
+    const params = new URLSearchParams({ promptToStartup: expected })
+    const url = new URL('atom-xterm://?' + params.toString())
     createNewElement(url.href).then((element) => {
       expect(element.isPromptToStartup()).toBe(expected)
       done()
@@ -406,8 +406,8 @@ describe('AtomXtermElement', () => {
   })
 
   it('restartPtyProcess() check new pty process created', (done) => {
-    let oldPtyProcess = this.element.ptyProcess
-    let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+    const oldPtyProcess = this.element.ptyProcess
+    const newPtyProcess = jasmine.createSpyObj('ptyProcess',
       ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
     newPtyProcess.process = jasmine.createSpy('process')
       .and.returnValue('sometestprocess')
@@ -420,7 +420,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('restartPtyProcess() check ptyProcessRunning set to true', (done) => {
-    let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+    const newPtyProcess = jasmine.createSpyObj('ptyProcess',
       ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
     newPtyProcess.process = jasmine.createSpy('process')
       .and.returnValue('sometestprocess')
@@ -434,7 +434,7 @@ describe('AtomXtermElement', () => {
   it('restartPtyProcess() command not found', (done) => {
     spyOn(this.element, 'showNotification')
     this.element.model.profile.command = 'somecommand'
-    let fakeCall = () => {
+    const fakeCall = () => {
       throw Error('File not found: somecommand')
     }
     nodePty.spawn.and.callFake(fakeCall)
@@ -454,7 +454,7 @@ describe('AtomXtermElement', () => {
   it('restartPtyProcess() some other error thrown', (done) => {
     spyOn(this.element, 'showNotification')
     this.element.model.profile.command = 'somecommand'
-    let fakeCall = () => {
+    const fakeCall = () => {
       throw Error('Something went wrong')
     }
     nodePty.spawn.and.callFake(fakeCall)
@@ -473,7 +473,7 @@ describe('AtomXtermElement', () => {
 
   it('ptyProcess exit handler set ptyProcessRunning to false', () => {
     let exitHandler
-    for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+    for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
       if (arg[0] === 'exit') {
         exitHandler = arg[1]
         break
@@ -487,7 +487,7 @@ describe('AtomXtermElement', () => {
 
   it('ptyProcess exit handler code 0 don\'t leave open', () => {
     let exitHandler
-    for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+    for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
       if (arg[0] === 'exit') {
         exitHandler = arg[1]
         break
@@ -501,7 +501,7 @@ describe('AtomXtermElement', () => {
 
   it('ptyProcess exit handler code 1 don\'t leave open', () => {
     let exitHandler
-    for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+    for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
       if (arg[0] === 'exit') {
         exitHandler = arg[1]
         break
@@ -515,7 +515,7 @@ describe('AtomXtermElement', () => {
 
   it('ptyProcess exit handler code 0 leave open', () => {
     let exitHandler
-    for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+    for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
       if (arg[0] === 'exit') {
         exitHandler = arg[1]
         break
@@ -529,7 +529,7 @@ describe('AtomXtermElement', () => {
 
   it('ptyProcess exit handler code 0 leave open check top message', () => {
     let exitHandler
-    for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+    for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
       if (arg[0] === 'exit') {
         exitHandler = arg[1]
         break
@@ -538,15 +538,15 @@ describe('AtomXtermElement', () => {
     spyOn(this.element.model, 'exit')
     spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
     exitHandler(0)
-    let successDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
-    let errorDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error')
+    const successDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
+    const errorDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error')
     expect(successDiv).not.toBeNull()
     expect(errorDiv).toBeNull()
   })
 
   it('ptyProcess exit handler code 1 leave open check top message', () => {
     let exitHandler
-    for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+    for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
       if (arg[0] === 'exit') {
         exitHandler = arg[1]
         break
@@ -555,15 +555,15 @@ describe('AtomXtermElement', () => {
     spyOn(this.element.model, 'exit')
     spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
     exitHandler(1)
-    let successDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
-    let errorDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error')
+    const successDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
+    const errorDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error')
     expect(successDiv).toBeNull()
     expect(errorDiv).not.toBeNull()
   })
 
   it('ptyProcess exit handler code 0 leave open check top message has restart button', () => {
     let exitHandler
-    for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+    for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
       if (arg[0] === 'exit') {
         exitHandler = arg[1]
         break
@@ -572,14 +572,14 @@ describe('AtomXtermElement', () => {
     spyOn(this.element.model, 'exit')
     spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
     exitHandler(0)
-    let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
-    let restartButton = messageDiv.querySelector('.btn-success')
+    const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
+    const restartButton = messageDiv.querySelector('.btn-success')
     expect(restartButton).not.toBeNull()
   })
 
   it('ptyProcess exit handler code 1 leave open check top message has restart button', () => {
     let exitHandler
-    for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+    for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
       if (arg[0] === 'exit') {
         exitHandler = arg[1]
         break
@@ -588,14 +588,14 @@ describe('AtomXtermElement', () => {
     spyOn(this.element.model, 'exit')
     spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
     exitHandler(1)
-    let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error')
-    let restartButton = messageDiv.querySelector('.btn-error')
+    const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error')
+    const restartButton = messageDiv.querySelector('.btn-error')
     expect(restartButton).not.toBeNull()
   })
 
   it('ptyProcess exit handler code 0 leave open check restart button click handler', () => {
     let exitHandler
-    for (let arg of this.element.ptyProcess.on.calls.allArgs()) {
+    for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
       if (arg[0] === 'exit') {
         exitHandler = arg[1]
         break
@@ -604,10 +604,10 @@ describe('AtomXtermElement', () => {
     spyOn(this.element.model, 'exit')
     spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
     exitHandler(0)
-    let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
-    let restartButton = messageDiv.querySelector('.btn-success')
+    const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
+    const restartButton = messageDiv.querySelector('.btn-success')
     spyOn(this.element, 'restartPtyProcess')
-    let mouseEvent = new MouseEvent('click')
+    const mouseEvent = new MouseEvent('click')
     restartButton.dispatchEvent(mouseEvent)
     expect(this.element.restartPtyProcess).toHaveBeenCalled()
   })
@@ -689,7 +689,7 @@ describe('AtomXtermElement', () => {
 
   it('refitTerminal() terminal size cols decreased platform win32', () => {
     Object.defineProperty(process, 'platform', {
-      'value': 'win32'
+      value: 'win32'
     })
     spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
       cols: this.element.terminal.cols - 1,
@@ -704,7 +704,7 @@ describe('AtomXtermElement', () => {
 
   it('refitTerminal() terminal size cols decreased platform not win32', () => {
     Object.defineProperty(process, 'platform', {
-      'value': 'linux'
+      value: 'linux'
     })
     spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
       cols: this.element.terminal.cols - 1,
@@ -826,7 +826,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() pty process size cols increased ptyProcess running check call args', () => {
-    let expected = {
+    const expected = {
       cols: this.element.ptyProcessCols + 1,
       rows: this.element.ptyProcessRows
     }
@@ -839,7 +839,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() pty process size rows increased ptyProcess running check call args', () => {
-    let expected = {
+    const expected = {
       cols: this.element.ptyProcessCols,
       rows: this.element.ptyProcessRows + 1
     }
@@ -852,7 +852,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() pty process size cols and rows increased ptyProcess running check call args', () => {
-    let expected = {
+    const expected = {
       cols: this.element.ptyProcessCols + 1,
       rows: this.element.ptyProcessRows + 1
     }
@@ -865,7 +865,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() pty process size cols decreased ptyProcess running check call args', () => {
-    let expected = {
+    const expected = {
       cols: this.element.ptyProcessCols - 1,
       rows: this.element.ptyProcessRows
     }
@@ -878,7 +878,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() pty process size rows decreased ptyProcess running check call args', () => {
-    let expected = {
+    const expected = {
       cols: this.element.ptyProcessCols,
       rows: this.element.ptyProcessRows - 1
     }
@@ -891,7 +891,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() pty process size cols and rows decreased ptyProcess running check call args', () => {
-    let expected = {
+    const expected = {
       cols: this.element.ptyProcessCols - 1,
       rows: this.element.ptyProcessRows - 1
     }
@@ -923,7 +923,7 @@ describe('AtomXtermElement', () => {
       ]
     )
     this.element.atomXtermProfileMenuElement.initializedPromise = Promise.resolve()
-    let toggleCallback = () => {
+    const toggleCallback = () => {
       done()
     }
     this.element.atomXtermProfileMenuElement.toggleProfileMenu.and.callFake(toggleCallback)
@@ -949,7 +949,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('setHoveredLink(\'https://atom.io\')', () => {
-    let expected = 'https://atom.io'
+    const expected = 'https://atom.io'
     this.element.setHoveredLink(expected)
     expect(this.element.hoveredLink).toBe(expected)
     expect(this.element.terminalDiv.classList.contains('atom-xterm-term-container-has-link')).toBe(true)
@@ -984,15 +984,15 @@ describe('AtomXtermElement', () => {
 
   it('on \'data\' handler no custom title on win32 platform', (done) => {
     Object.defineProperty(process, 'platform', {
-      'value': 'win32'
+      value: 'win32'
     })
-    let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+    const newPtyProcess = jasmine.createSpyObj('ptyProcess',
       ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
     newPtyProcess.process = 'sometestprocess'
     nodePty.spawn.and.returnValue(newPtyProcess)
     this.element.restartPtyProcess().then(() => {
-      let args = this.element.ptyProcess.on.calls.argsFor(0)
-      let onDataCallback = args[1]
+      const args = this.element.ptyProcess.on.calls.argsFor(0)
+      const onDataCallback = args[1]
       onDataCallback('')
       expect(this.element.model.title).toBe('Atom Xterm')
       done()
@@ -1001,15 +1001,15 @@ describe('AtomXtermElement', () => {
 
   it('on \'data\' handler no custom title on linux platform', (done) => {
     Object.defineProperty(process, 'platform', {
-      'value': 'linux'
+      value: 'linux'
     })
-    let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+    const newPtyProcess = jasmine.createSpyObj('ptyProcess',
       ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
     newPtyProcess.process = 'sometestprocess'
     nodePty.spawn.and.returnValue(newPtyProcess)
     this.element.restartPtyProcess().then(() => {
-      let args = this.element.ptyProcess.on.calls.argsFor(0)
-      let onDataCallback = args[1]
+      const args = this.element.ptyProcess.on.calls.argsFor(0)
+      const onDataCallback = args[1]
       onDataCallback('')
       expect(this.element.model.title).toBe('sometestprocess')
       done()
@@ -1018,16 +1018,16 @@ describe('AtomXtermElement', () => {
 
   it('on \'data\' handler custom title on win32 platform', (done) => {
     Object.defineProperty(process, 'platform', {
-      'value': 'win32'
+      value: 'win32'
     })
-    let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+    const newPtyProcess = jasmine.createSpyObj('ptyProcess',
       ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
     newPtyProcess.process = 'sometestprocess'
     nodePty.spawn.and.returnValue(newPtyProcess)
     this.element.model.profile.title = 'foo'
     this.element.restartPtyProcess().then(() => {
-      let args = this.element.ptyProcess.on.calls.argsFor(0)
-      let onDataCallback = args[1]
+      const args = this.element.ptyProcess.on.calls.argsFor(0)
+      const onDataCallback = args[1]
       onDataCallback('')
       expect(this.element.model.title).toBe('foo')
       done()
@@ -1036,16 +1036,16 @@ describe('AtomXtermElement', () => {
 
   it('on \'data\' handler custom title on linux platform', (done) => {
     Object.defineProperty(process, 'platform', {
-      'value': 'linux'
+      value: 'linux'
     })
-    let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+    const newPtyProcess = jasmine.createSpyObj('ptyProcess',
       ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
     newPtyProcess.process = 'sometestprocess'
     nodePty.spawn.and.returnValue(newPtyProcess)
     this.element.model.profile.title = 'foo'
     this.element.restartPtyProcess().then(() => {
-      let args = this.element.ptyProcess.on.calls.argsFor(0)
-      let onDataCallback = args[1]
+      const args = this.element.ptyProcess.on.calls.argsFor(0)
+      const onDataCallback = args[1]
       onDataCallback('')
       expect(this.element.model.title).toBe('foo')
       done()
@@ -1053,14 +1053,14 @@ describe('AtomXtermElement', () => {
   })
 
   it('on \'exit\' handler leave open after exit success', (done) => {
-    let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+    const newPtyProcess = jasmine.createSpyObj('ptyProcess',
       ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
     newPtyProcess.process = 'sometestprocess'
     nodePty.spawn.and.returnValue(newPtyProcess)
     this.element.model.profile.title = 'foo'
     this.element.restartPtyProcess().then(() => {
-      let args = this.element.ptyProcess.on.calls.argsFor(1)
-      let onExitCallback = args[1]
+      const args = this.element.ptyProcess.on.calls.argsFor(1)
+      const onExitCallback = args[1]
       this.element.model.profile.leaveOpenAfterExit = true
       onExitCallback(0)
       expect(this.element.querySelector('.atom-xterm-notice-success')).toBeTruthy()
@@ -1070,14 +1070,14 @@ describe('AtomXtermElement', () => {
   })
 
   it('on \'exit\' handler leave open after exit failure', (done) => {
-    let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+    const newPtyProcess = jasmine.createSpyObj('ptyProcess',
       ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
     newPtyProcess.process = 'sometestprocess'
     nodePty.spawn.and.returnValue(newPtyProcess)
     this.element.model.profile.title = 'foo'
     this.element.restartPtyProcess().then(() => {
-      let args = this.element.ptyProcess.on.calls.argsFor(1)
-      let onExitCallback = args[1]
+      const args = this.element.ptyProcess.on.calls.argsFor(1)
+      const onExitCallback = args[1]
       this.element.model.profile.leaveOpenAfterExit = true
       onExitCallback(1)
       expect(this.element.querySelector('.atom-xterm-notice-success')).toBe(null)
@@ -1087,14 +1087,14 @@ describe('AtomXtermElement', () => {
   })
 
   it('on \'exit\' handler do not leave open', (done) => {
-    let newPtyProcess = jasmine.createSpyObj('ptyProcess',
+    const newPtyProcess = jasmine.createSpyObj('ptyProcess',
       ['kill', 'write', 'resize', 'on', 'removeAllListeners'])
     newPtyProcess.process = 'sometestprocess'
     nodePty.spawn.and.returnValue(newPtyProcess)
     this.element.model.profile.title = 'foo'
     this.element.restartPtyProcess().then(() => {
-      let args = this.element.ptyProcess.on.calls.argsFor(1)
-      let onExitCallback = args[1]
+      const args = this.element.ptyProcess.on.calls.argsFor(1)
+      const onExitCallback = args[1]
       this.element.model.profile.leaveOpenAfterExit = false
       spyOn(this.element.model, 'exit')
       onExitCallback(1)
@@ -1108,7 +1108,7 @@ describe('AtomXtermElement', () => {
       'foo',
       'success'
     )
-    let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
+    const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
     expect(messageDiv.textContent).toBe('fooRestart')
   })
 
@@ -1117,7 +1117,7 @@ describe('AtomXtermElement', () => {
       'foo',
       'error'
     )
-    let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error')
+    const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error')
     expect(messageDiv.textContent).toBe('fooRestart')
   })
 
@@ -1158,7 +1158,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('showNotification() bogus info type with Atom notification', () => {
-    let call = () => {
+    const call = () => {
       this.element.showNotification(
         'foo',
         'bogus'
@@ -1173,25 +1173,25 @@ describe('AtomXtermElement', () => {
       'info',
       'Some text'
     )
-    let restartButton = this.element.topDiv.querySelector('.atom-xterm-restart-btn')
+    const restartButton = this.element.topDiv.querySelector('.atom-xterm-restart-btn')
     expect(restartButton.firstChild.nodeValue).toBe('Some text')
   })
 
   it('promptToStartup()', (done) => {
     this.element.promptToStartup().then(() => {
-      let restartButton = this.element.topDiv.querySelector('.atom-xterm-restart-btn')
+      const restartButton = this.element.topDiv.querySelector('.atom-xterm-restart-btn')
       expect(restartButton.firstChild.nodeValue).toBe('Start')
       done()
     })
   })
 
   it('promptToStartup() check message without title', (done) => {
-    let command = ['some_command', 'a', 'b', 'c']
+    const command = ['some_command', 'a', 'b', 'c']
     spyOn(this.element, 'getShellCommand').and.returnValue(command[0])
     spyOn(this.element, 'getArgs').and.returnValue(command.slice(1))
-    let expected = `New command ${JSON.stringify(command)} ready to start.`
+    const expected = `New command ${JSON.stringify(command)} ready to start.`
     this.element.promptToStartup().then(() => {
-      let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-info')
+      const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-info')
       expect(messageDiv.firstChild.nodeValue).toBe(expected)
       done()
     })
@@ -1199,16 +1199,16 @@ describe('AtomXtermElement', () => {
 
   it('promptToStartup() check message with title', (done) => {
     this.element.model.profile.title = 'My Profile'
-    let expected = `New command for profile My Profile ready to start.`
+    const expected = 'New command for profile My Profile ready to start.'
     this.element.promptToStartup().then(() => {
-      let messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-info')
+      const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-info')
       expect(messageDiv.firstChild.nodeValue).toBe(expected)
       done()
     })
   })
 
   it('use wheelScrollUp on terminal container', () => {
-    let wheelEvent = new WheelEvent('wheel', {
+    const wheelEvent = new WheelEvent('wheel', {
       deltaY: -150
     })
     this.element.terminalDiv.dispatchEvent(wheelEvent)
@@ -1216,7 +1216,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('use wheelScrollDown on terminal container', () => {
-    let wheelEvent = new WheelEvent('wheel', {
+    const wheelEvent = new WheelEvent('wheel', {
       deltaY: 150
     })
     this.element.terminalDiv.dispatchEvent(wheelEvent)
@@ -1225,7 +1225,7 @@ describe('AtomXtermElement', () => {
 
   it('use ctrl+wheelScrollUp on terminal container, editor.zoomFontWhenCtrlScrolling = true', () => {
     atom.config.set('editor.zoomFontWhenCtrlScrolling', true)
-    let wheelEvent = new WheelEvent('wheel', {
+    const wheelEvent = new WheelEvent('wheel', {
       deltaY: -150,
       ctrlKey: true
     })
@@ -1235,7 +1235,7 @@ describe('AtomXtermElement', () => {
 
   it('use ctrl+wheelScrollDown on terminal container, editor.zoomFontWhenCtrlScrolling = true', () => {
     atom.config.set('editor.zoomFontWhenCtrlScrolling', true)
-    let wheelEvent = new WheelEvent('wheel', {
+    const wheelEvent = new WheelEvent('wheel', {
       deltaY: 150,
       ctrlKey: true
     })
@@ -1245,7 +1245,7 @@ describe('AtomXtermElement', () => {
 
   it('use ctrl+wheelScrollUp on terminal container, editor.zoomFontWhenCtrlScrolling = false', () => {
     atom.config.set('editor.zoomFontWhenCtrlScrolling', false)
-    let wheelEvent = new WheelEvent('wheel', {
+    const wheelEvent = new WheelEvent('wheel', {
       deltaY: -150,
       ctrlKey: true
     })
@@ -1255,7 +1255,7 @@ describe('AtomXtermElement', () => {
 
   it('use ctrl+wheelScrollDown on terminal container, editor.zoomFontWhenCtrlScrolling = false', () => {
     atom.config.set('editor.zoomFontWhenCtrlScrolling', false)
-    let wheelEvent = new WheelEvent('wheel', {
+    const wheelEvent = new WheelEvent('wheel', {
       deltaY: 150,
       ctrlKey: true
     })
@@ -1265,7 +1265,7 @@ describe('AtomXtermElement', () => {
 
   it('use ctrl+wheelScrollUp font already at maximum', () => {
     this.element.model.profile.fontSize = atomXtermConfig.getMaximumFontSize()
-    let wheelEvent = new WheelEvent('wheel', {
+    const wheelEvent = new WheelEvent('wheel', {
       deltaY: -150,
       ctrlKey: true
     })
@@ -1275,7 +1275,7 @@ describe('AtomXtermElement', () => {
 
   it('use ctrl+wheelScrollDown font already at minimum', () => {
     this.element.model.profile.fontSize = atomXtermConfig.getMinimumFontSize()
-    let wheelEvent = new WheelEvent('wheel', {
+    const wheelEvent = new WheelEvent('wheel', {
       deltaY: 150,
       ctrlKey: true
     })
@@ -1284,7 +1284,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('getXtermOptions() default options', () => {
-    let expected = {
+    const expected = {
       cursorBlink: true,
       experimentalCharAtlas: 'dynamic',
       fontSize: 14
@@ -1298,7 +1298,7 @@ describe('AtomXtermElement', () => {
         background: '#FFF'
       }
     }
-    let expected = {
+    const expected = {
       cursorBlink: true,
       experimentalCharAtlas: 'dynamic',
       fontSize: 14,
@@ -1435,7 +1435,7 @@ describe('AtomXtermElement', () => {
 
   it('queueNewProfileChanges() no previous changes', () => {
     spyOn(this.element, 'applyPendingTerminalProfileOptions')
-    let profileChanges = {
+    const profileChanges = {
       command: 'somecommand'
     }
     this.element.queueNewProfileChanges(profileChanges)
@@ -1445,7 +1445,7 @@ describe('AtomXtermElement', () => {
   it('queueNewProfileChanges() previous command change made', () => {
     spyOn(this.element, 'applyPendingTerminalProfileOptions')
     this.element.pendingTerminalProfileOptions.command = 'somecommand'
-    let profileChanges = {
+    const profileChanges = {
       command: 'someothercommand'
     }
     this.element.queueNewProfileChanges(profileChanges)
@@ -1455,7 +1455,7 @@ describe('AtomXtermElement', () => {
   it('queueNewProfileChanges() another setting', () => {
     spyOn(this.element, 'applyPendingTerminalProfileOptions')
     this.element.pendingTerminalProfileOptions.command = 'somecommand'
-    let profileChanges = {
+    const profileChanges = {
       args: ['--foo', '--bar', '--baz']
     }
     this.element.queueNewProfileChanges(profileChanges)
@@ -1466,7 +1466,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('base profile changed, font size and xterm options remained the same', () => {
-    let profile = {
+    const profile = {
       fontSize: 14,
       xtermOptions: {
         theme: {
@@ -1484,7 +1484,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('base profile changed, font size changed, xterm options remained the same', () => {
-    let profile = {
+    const profile = {
       fontSize: 14,
       xtermOptions: {
         theme: {
@@ -1492,7 +1492,7 @@ describe('AtomXtermElement', () => {
         }
       }
     }
-    let newBaseProfile = this.element.profilesSingleton.deepClone(profile)
+    const newBaseProfile = this.element.profilesSingleton.deepClone(profile)
     newBaseProfile.fontSize = 15
     spyOn(this.element.model, 'getProfile').and.returnValue(profile)
     spyOn(this.element.model, 'applyProfileChanges')
@@ -1506,7 +1506,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('base profile changed, font size remained the same, xterm options changed', () => {
-    let profile = {
+    const profile = {
       fontSize: 14,
       xtermOptions: {
         theme: {
@@ -1514,7 +1514,7 @@ describe('AtomXtermElement', () => {
         }
       }
     }
-    let newBaseProfile = this.element.profilesSingleton.deepClone(profile)
+    const newBaseProfile = this.element.profilesSingleton.deepClone(profile)
     newBaseProfile.xtermOptions = {
       theme: {
         background: '#000'
@@ -1536,7 +1536,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('base profile changed, font size and xterm options changed', () => {
-    let profile = {
+    const profile = {
       fontSize: 14,
       xtermOptions: {
         theme: {
@@ -1544,7 +1544,7 @@ describe('AtomXtermElement', () => {
         }
       }
     }
-    let newBaseProfile = this.element.profilesSingleton.deepClone(profile)
+    const newBaseProfile = this.element.profilesSingleton.deepClone(profile)
     newBaseProfile.fontSize = 15
     newBaseProfile.xtermOptions = {
       theme: {
@@ -1568,7 +1568,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('base profile changed, font size and xterm options remained the same, command changed', () => {
-    let profile = {
+    const profile = {
       command: 'somecommand',
       fontSize: 14,
       xtermOptions: {
@@ -1577,7 +1577,7 @@ describe('AtomXtermElement', () => {
         }
       }
     }
-    let newBaseProfile = this.element.profilesSingleton.deepClone(profile)
+    const newBaseProfile = this.element.profilesSingleton.deepClone(profile)
     newBaseProfile.command = 'someothercommand'
     spyOn(this.element.model, 'getProfile').and.returnValue(profile)
     spyOn(this.element.model, 'applyProfileChanges')

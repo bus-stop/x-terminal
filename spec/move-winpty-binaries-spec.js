@@ -31,7 +31,7 @@ describe('move-winpty-binaries script', () => {
       throw new Error(`process.exit(${exitCode}) called`)
     })
     spyOn(console, 'log')
-    tmp.dir({'unsafeCleanup': true}, (err, _path, cleanupCallback) => {
+    tmp.dir({ unsafeCleanup: true }, (err, _path, cleanupCallback) => {
       if (err) {
         throw err
       }
@@ -50,16 +50,16 @@ describe('move-winpty-binaries script', () => {
   })
 
   it('mkdtempSyncForRenamingDLLs() correct template given', () => {
-    let atomHome = this.tmpdir
-    let expectedTemplate = path.join(atomHome, 'tmp', 'moved-dll-')
+    const atomHome = this.tmpdir
+    const expectedTemplate = path.join(atomHome, 'tmp', 'moved-dll-')
     spyOn(fs, 'mkdtempSync')
     script.mkdtempSyncForRenamingDLLs(atomHome)
     expect(fs.mkdtempSync.calls.argsFor(0)).toEqual([expectedTemplate])
   })
 
   it('mkdtempSyncForRenamingDLLs() path created', (done) => {
-    let atomHome = this.tmpdir
-    let tmpPath = script.mkdtempSyncForRenamingDLLs(atomHome)
+    const atomHome = this.tmpdir
+    const tmpPath = script.mkdtempSyncForRenamingDLLs(atomHome)
     fs.lstat(tmpPath, (err, stats) => {
       if (err) {
         fail(err)
@@ -70,8 +70,8 @@ describe('move-winpty-binaries script', () => {
   })
 
   it('mkdtempSyncForRenamingDLLs() correct leading directories created', (done) => {
-    let atomHome = this.tmpdir
-    let expectedTmpDir = path.join(atomHome, 'tmp')
+    const atomHome = this.tmpdir
+    const expectedTmpDir = path.join(atomHome, 'tmp')
     script.mkdtempSyncForRenamingDLLs(atomHome)
     fs.lstat(expectedTmpDir, (err, stats) => {
       if (err) {
@@ -83,9 +83,9 @@ describe('move-winpty-binaries script', () => {
   })
 
   it('mkdtempSyncForRenamingDLLs() different directory per call', () => {
-    let atomHome = this.tmpdir
-    let firstTmpPath = script.mkdtempSyncForRenamingDLLs(atomHome)
-    let secondTmpPath = script.mkdtempSyncForRenamingDLLs(atomHome)
+    const atomHome = this.tmpdir
+    const firstTmpPath = script.mkdtempSyncForRenamingDLLs(atomHome)
+    const secondTmpPath = script.mkdtempSyncForRenamingDLLs(atomHome)
     expect(firstTmpPath).not.toEqual(secondTmpPath)
   })
 
@@ -104,33 +104,33 @@ describe('move-winpty-binaries script', () => {
     afterEach(() => {
       process.env = savedEnv
       Object.defineProperty(process, 'platform', {
-        'value': savedPlatform
+        value: savedPlatform
       })
     })
 
     it('not win32', () => {
       Object.defineProperty(process, 'platform', {
-        'value': 'linux'
+        value: 'linux'
       })
       expect(() => script.main()).toThrow(new Error('process.exit(0) called'))
     })
 
     it('is win32 atom-xterm not installed', () => {
       Object.defineProperty(process, 'platform', {
-        'value': 'win32'
+        value: 'win32'
       })
       expect(() => script.main()).toThrow(new Error('process.exit(0) called'))
     })
 
     describe('is win32 atom-xterm installed', () => {
       beforeEach(() => {
-        let atomXtermPath = path.join(
+        const atomXtermPath = path.join(
           process.env.ATOM_HOME,
           'packages',
           'atom-xterm'
         )
-        let nodePtyPath = path.join(atomXtermPath, 'node_modules', 'node-pty')
-        let nodePtyPrebuiltPath = path.join(atomXtermPath, 'node_modules', 'node-pty-prebuilt-multiarch')
+        const nodePtyPath = path.join(atomXtermPath, 'node_modules', 'node-pty')
+        const nodePtyPrebuiltPath = path.join(atomXtermPath, 'node_modules', 'node-pty-prebuilt-multiarch')
         this.nodePtyBuildReleasePath = path.join(nodePtyPath, 'build', 'Release')
         this.nodePtyBuildDebugPath = path.join(nodePtyPath, 'build', 'Debug')
         this.nodePtyPrebuiltBuildReleasePath = path.join(nodePtyPrebuiltPath, 'build', 'Release')
@@ -140,7 +140,7 @@ describe('move-winpty-binaries script', () => {
         fs.ensureDirSync(this.nodePtyPrebuiltBuildReleasePath)
         fs.ensureDirSync(this.nodePtyPrebuiltBuildDebugPath)
         Object.defineProperty(process, 'platform', {
-          'value': 'win32'
+          value: 'win32'
         })
       })
 

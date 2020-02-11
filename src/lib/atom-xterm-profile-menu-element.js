@@ -29,26 +29,26 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
     this.model = model
     this.model.setElement(this)
     this.profilesSingleton = AtomXtermProfilesSingleton.instance
-    let topDiv = document.createElement('div')
+    const topDiv = document.createElement('div')
     topDiv.classList.add('atom-xterm-profile-menu-element-top-div')
     this.appendChild(topDiv)
-    let leftDiv = document.createElement('div')
+    const leftDiv = document.createElement('div')
     leftDiv.classList.add('atom-xterm-profile-menu-element-left-div')
     this.appendChild(leftDiv)
     this.mainDiv = document.createElement('div')
     this.mainDiv.classList.add('atom-xterm-profile-menu-element-main-div')
     this.appendChild(this.mainDiv)
-    let rightDiv = document.createElement('div')
+    const rightDiv = document.createElement('div')
     rightDiv.classList.add('atom-xterm-profile-menu-element-right-div')
     this.appendChild(rightDiv)
-    let bottomDiv = document.createElement('div')
+    const bottomDiv = document.createElement('div')
     bottomDiv.classList.add('atom-xterm-profile-menu-element-bottom-div')
     this.appendChild(bottomDiv)
     this.disposables = new CompositeDisposable()
     this.initializedPromise = new Promise((resolve, reject) => {
       this.createProfilesDropDown().then((profilesDiv) => {
-        let modelProfile = this.getModelProfile()
-        let baseProfile = this.profilesSingleton.getBaseProfile()
+        const modelProfile = this.getModelProfile()
+        const baseProfile = this.profilesSingleton.getBaseProfile()
         // Profiles
         this.mainDiv.appendChild(profilesDiv)
 
@@ -176,7 +176,7 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
 
         this.disposables.add(this.profilesSingleton.onDidReloadProfiles((profiles) => {
           this.createProfilesDropDownSelectItem().then((select) => {
-            let menuItemContainer = this.mainDiv.querySelector('#profiles-selection')
+            const menuItemContainer = this.mainDiv.querySelector('#profiles-selection')
             while (menuItemContainer.firstChild) {
               menuItemContainer.removeChild(menuItemContainer.firstChild)
             }
@@ -216,7 +216,7 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
   }
 
   getMenuElements () {
-    let menuElements = {}
+    const menuElements = {}
     menuElements.commandElement = this.mainDiv.querySelector('#command-textbox atom-text-editor')
     menuElements.argsElement = this.mainDiv.querySelector('#args-textbox atom-text-editor')
     menuElements.nameElement = this.mainDiv.querySelector('#name-textbox atom-text-editor')
@@ -235,9 +235,9 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
   }
 
   getProfileMenuSettings () {
-    let newProfile = {}
-    let baseProfile = this.profilesSingleton.getBaseProfile()
-    let menuElements = this.getMenuElements()
+    const newProfile = {}
+    const baseProfile = this.profilesSingleton.getBaseProfile()
+    const menuElements = this.getMenuElements()
     newProfile.command = menuElements.commandElement.getModel().getText() || baseProfile.command
     newProfile.args = this.parseJson(
       menuElements.argsElement.getModel().getText(),
@@ -290,16 +290,16 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
   }
 
   createMenuItemContainer (id, labelTitle, labelDescription) {
-    let menuItemContainer = document.createElement('div')
+    const menuItemContainer = document.createElement('div')
     menuItemContainer.classList.add('atom-xterm-profile-menu-item')
     menuItemContainer.setAttribute('id', id)
-    let menuItemLabel = document.createElement('label')
+    const menuItemLabel = document.createElement('label')
     menuItemLabel.classList.add('atom-xterm-profile-menu-item-label')
-    let titleDiv = document.createElement('div')
+    const titleDiv = document.createElement('div')
     titleDiv.classList.add('atom-xterm-profile-menu-item-title')
     titleDiv.appendChild(document.createTextNode(labelTitle))
     menuItemLabel.appendChild(titleDiv)
-    let descriptionDiv = document.createElement('div')
+    const descriptionDiv = document.createElement('div')
     descriptionDiv.classList.add('atom-xterm-profile-menu-item-description')
     descriptionDiv.appendChild(document.createTextNode(labelDescription))
     menuItemLabel.appendChild(descriptionDiv)
@@ -310,7 +310,7 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
   createProfilesDropDownSelectItem () {
     return new Promise((resolve, reject) => {
       this.profilesSingleton.getProfiles().then((profiles) => {
-        let select = document.createElement('select')
+        const select = document.createElement('select')
         select.setAttribute('id', 'profiles-dropdown')
         select.classList.add('atom-xterm-profile-menu-item-select')
         let option = document.createElement('option')
@@ -318,7 +318,7 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
         option.setAttribute('value', text)
         option.appendChild(text)
         select.appendChild(option)
-        for (let profile in profiles) {
+        for (const profile in profiles) {
           option = document.createElement('option')
           text = document.createTextNode(profile)
           option.setAttribute('value', text.textContent)
@@ -326,7 +326,7 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
           select.appendChild(option)
         }
         select.addEventListener('change', (event) => {
-          let profile = this.profilesSingleton.getBaseProfile()
+          const profile = this.profilesSingleton.getBaseProfile()
           if (!event.target.value) {
             this.setNewMenuSettings(profile, true)
           } else {
@@ -341,7 +341,7 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
   }
 
   createProfilesDropDown () {
-    let menuItemContainer = this.createMenuItemContainer(
+    const menuItemContainer = this.createMenuItemContainer(
       'profiles-selection',
       'Profiles',
       'Available profiles'
@@ -355,7 +355,7 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
   }
 
   createProfileMenuButtons () {
-    let buttonsContainer = document.createElement('div')
+    const buttonsContainer = document.createElement('div')
     buttonsContainer.classList.add('atom-xterm-profile-menu-buttons-div')
     let button = this.createButton()
     button.appendChild(document.createTextNode('Load Settings'))
@@ -391,18 +391,18 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
   }
 
   createButton () {
-    let button = document.createElement('button')
+    const button = document.createElement('button')
     button.classList.add('atom-xterm-profile-menu-button')
     return button
   }
 
   createTextbox (id, labelTitle, labelDescription, defaultValue, initialValue) {
-    let menuItemContainer = this.createMenuItemContainer(
+    const menuItemContainer = this.createMenuItemContainer(
       id,
       labelTitle,
       labelDescription
     )
-    let textbox = new TextEditor({
+    const textbox = new TextEditor({
       mini: true,
       placeholderText: defaultValue
     })
@@ -418,13 +418,13 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
   }
 
   createCheckbox (id, labelTitle, labelDescription, defaultValue, initialValue) {
-    let menuItemContainer = document.createElement('div')
+    const menuItemContainer = document.createElement('div')
     menuItemContainer.classList.add('atom-xterm-profile-menu-item')
     menuItemContainer.setAttribute('id', id)
-    let menuItemLabel = document.createElement('label')
+    const menuItemLabel = document.createElement('label')
     menuItemLabel.classList.add('atom-xterm-profile-menu-item-label')
     menuItemLabel.classList.add('atom-xterm-profile-menu-item-label-checkbox')
-    let checkbox = document.createElement('input')
+    const checkbox = document.createElement('input')
     checkbox.setAttribute('type', 'checkbox')
     checkbox.classList.add('atom-xterm-profile-menu-item-checkbox')
     checkbox.checked = defaultValue
@@ -432,12 +432,12 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
       checkbox.checked = initialValue
     }
     menuItemLabel.appendChild(checkbox)
-    let titleDiv = document.createElement('div')
+    const titleDiv = document.createElement('div')
     titleDiv.classList.add('atom-xterm-profile-menu-item-title')
     titleDiv.appendChild(document.createTextNode(labelTitle))
     menuItemLabel.appendChild(titleDiv)
     menuItemContainer.appendChild(menuItemLabel)
-    let descriptionDiv = document.createElement('div')
+    const descriptionDiv = document.createElement('div')
     descriptionDiv.classList.add('atom-xterm-profile-menu-item-description')
     descriptionDiv.classList.add('atom-xterm-profile-menu-item-description-checkbox')
     descriptionDiv.appendChild(document.createTextNode(labelDescription))
@@ -446,13 +446,13 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
   }
 
   isVisible () {
-    let style = window.getComputedStyle(this, null)
+    const style = window.getComputedStyle(this, null)
     return (style.visibility === 'visible')
   }
 
   hideProfileMenu () {
     this.style.visibility = 'hidden'
-    let e = this.model.getAtomXtermModelElement()
+    const e = this.model.getAtomXtermModelElement()
     e.showTerminal()
     e.focusOnTerminal()
   }
@@ -471,8 +471,8 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
   }
 
   getNewProfileAndChanges () {
-    let newProfile = this.getProfileMenuSettings()
-    let profileChanges = this.profilesSingleton.diffProfiles(
+    const newProfile = this.getProfileMenuSettings()
+    const profileChanges = this.profilesSingleton.diffProfiles(
       this.model.getAtomXtermModel().getProfile(),
       newProfile
     )
@@ -483,13 +483,13 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
   }
 
   loadProfile () {
-    let newProfileAndChanges = this.getNewProfileAndChanges()
+    const newProfileAndChanges = this.getNewProfileAndChanges()
     this.applyProfileChanges(newProfileAndChanges.profileChanges)
   }
 
   saveProfile () {
     // Get the current profile settings before entering the promise.
-    let newProfileAndChanges = this.getNewProfileAndChanges()
+    const newProfileAndChanges = this.getNewProfileAndChanges()
     this.promptForNewProfileName(
       newProfileAndChanges.newProfile,
       newProfileAndChanges.profileChanges
@@ -497,8 +497,8 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
   }
 
   deleteProfile () {
-    let e = this.mainDiv.querySelector('#profiles-dropdown')
-    let profileName = e.options[e.selectedIndex].text
+    const e = this.mainDiv.querySelector('#profiles-dropdown')
+    const profileName = e.options[e.selectedIndex].text
     if (!profileName) {
       atom.notifications.addWarning('Profile must be selected in order to delete it.')
       return
@@ -526,96 +526,96 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
   }
 
   setNewMenuSettings (profile, clear = false) {
-    let newTextList = []
+    const newTextList = []
     let value
     newTextList.push(
       // Command
       {
-        'id': 'command-textbox',
-        'value': profile.command
+        id: 'command-textbox',
+        value: profile.command
       }
     )
     value = JSON.stringify(profile.args)
     newTextList.push(
       // Arguments
       {
-        'id': 'args-textbox',
-        'value': value
+        id: 'args-textbox',
+        value: value
       }
     )
     newTextList.push(
       // Terminal type
       {
-        'id': 'name-textbox',
-        'value': profile.name
+        id: 'name-textbox',
+        value: profile.name
       }
     )
     newTextList.push(
       // Current working directory
       {
-        'id': 'cwd-textbox',
-        'value': profile.cwd
+        id: 'cwd-textbox',
+        value: profile.cwd
       }
     )
     value = this.convertNullToEmptyString(profile.env)
     newTextList.push(
       // Environment
       {
-        'id': 'env-textbox',
-        'value': value
+        id: 'env-textbox',
+        value: value
       }
     )
     value = JSON.stringify(profile.setEnv)
     newTextList.push(
       // Environment overrides
       {
-        'id': 'setenv-textbox',
-        'value': value
+        id: 'setenv-textbox',
+        value: value
       }
     )
     value = JSON.stringify(profile.deleteEnv)
     newTextList.push(
       // Environment deletions
       {
-        'id': 'deleteenv-textbox',
-        'value': value
+        id: 'deleteenv-textbox',
+        value: value
       }
     )
     value = this.convertNullToEmptyString(profile.encoding)
     newTextList.push(
       // Encoding
       {
-        'id': 'encoding-textbox',
-        'value': value
+        id: 'encoding-textbox',
+        value: value
       }
     )
     value = profile.fontSize
     newTextList.push(
       // Font size
       {
-        'id': 'fontsize-textbox',
-        'value': value
+        id: 'fontsize-textbox',
+        value: value
       }
     )
     value = profile.title || ''
     newTextList.push(
       // Title
       {
-        'id': 'title-textbox',
-        'value': value
+        id: 'title-textbox',
+        value: value
       }
     )
     value = JSON.stringify(profile.xtermOptions)
     newTextList.push(
       // xterm.js Terminal options
       {
-        'id': 'xtermoptions-textbox',
-        'value': value
+        id: 'xtermoptions-textbox',
+        value: value
       }
     )
-    for (let newText of newTextList) {
-      let selector = '#' + newText.id + ' > atom-text-editor'
-      let model = this.querySelector(selector).getModel()
+    for (const newText of newTextList) {
+      const selector = '#' + newText.id + ' > atom-text-editor'
+      const model = this.querySelector(selector).getModel()
       if (!clear) {
         model.setText(newText.value)
       } else {
@@ -623,26 +623,26 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
       }
     }
 
-    let newCheckboxList = [
+    const newCheckboxList = [
       // Leave open after terminal exit
       {
-        'id': 'leaveopenafterexit-checkbox',
-        'value': profile.leaveOpenAfterExit
+        id: 'leaveopenafterexit-checkbox',
+        value: profile.leaveOpenAfterExit
       },
       // Relaunch terminal on startup
       {
-        'id': 'relaunchterminalonstartup-checkbox',
-        'value': profile.relaunchTerminalOnStartup
+        id: 'relaunchterminalonstartup-checkbox',
+        value: profile.relaunchTerminalOnStartup
       },
       // Prompt to startup terminal command
       {
-        'id': 'prompttostartup-checkbox',
-        'value': profile.promptToStartup
+        id: 'prompttostartup-checkbox',
+        value: profile.promptToStartup
       }
     ]
-    for (let newCheckbox of newCheckboxList) {
-      let selector = '#' + newCheckbox.id + ' input'
-      let checkbox = this.querySelector(selector)
+    for (const newCheckbox of newCheckboxList) {
+      const selector = '#' + newCheckbox.id + ' input'
+      const checkbox = this.querySelector(selector)
       checkbox.checked = newCheckbox.value
     }
   }

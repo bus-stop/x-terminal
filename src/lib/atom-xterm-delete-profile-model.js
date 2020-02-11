@@ -51,7 +51,7 @@ class AtomXtermDeleteProfileModel {
 
   promptDelete (profileName) {
     this.panel.show()
-    let confirmHandler = (event) => {
+    const confirmHandler = (event) => {
       this.profilesSingleton.deleteProfile(profileName).then(() => {
         this.profilesSingleton.reloadProfiles()
         this.profilesSingleton.profilesLoadPromise.then(() => {
@@ -59,7 +59,7 @@ class AtomXtermDeleteProfileModel {
         })
       })
     }
-    let cancelHandler = (event) => {
+    const cancelHandler = (event) => {
       this.close()
     }
     this.getElement().setNewPrompt(

@@ -62,7 +62,7 @@ class AtomXtermSaveProfileModel {
   }
 
   confirm (newProfile, profileChanges) {
-    let profileName = this.textbox.getText()
+    const profileName = this.textbox.getText()
     if (!profileName) {
       // Simply do nothing.
       return
@@ -94,7 +94,7 @@ class AtomXtermSaveProfileModel {
     if (this.panel.isVisible() || !currentItemIsAtomXtermModel()) {
       return
     }
-    this.textbox = new TextEditor({mini: true})
+    this.textbox = new TextEditor({ mini: true })
     this.textbox.getElement().addEventListener('blur', (event) => {
       this.close()
     })

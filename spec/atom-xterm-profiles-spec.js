@@ -52,8 +52,8 @@ describe('AtomXtermProfilesSingleton', () => {
   }
 
   const getDefaultExpectedUrl = () => {
-    let url = new URL('atom-xterm://somesessionid')
-    let defaultProfile = getDefaultExpectedProfile()
+    const url = new URL('atom-xterm://somesessionid')
+    const defaultProfile = getDefaultExpectedProfile()
     url.searchParams.set('command', defaultProfile.command)
     url.searchParams.set('args', JSON.stringify(defaultProfile.args))
     url.searchParams.set('name', defaultProfile.name)
@@ -85,10 +85,10 @@ describe('AtomXtermProfilesSingleton', () => {
       return '/some/path'
     }
     if (key === 'atom-xterm.spawnPtySettings.env') {
-      return JSON.stringify({'PATH': '/usr/bin:/bin'})
+      return JSON.stringify({ PATH: '/usr/bin:/bin' })
     }
     if (key === 'atom-xterm.spawnPtySettings.setEnv') {
-      return JSON.stringify({'FOO': 'BAR'})
+      return JSON.stringify({ FOO: 'BAR' })
     }
     if (key === 'atom-xterm.spawnPtySettings.deleteEnv') {
       return JSON.stringify(['FOO'])
@@ -127,7 +127,7 @@ describe('AtomXtermProfilesSingleton', () => {
     this.origProfilesConfigPath = AtomXtermProfilesSingleton.instance.profilesConfigPath
     AtomXtermProfilesSingleton.instance.resetBaseProfile()
     AtomXtermProfilesSingleton.instance.profilesLoadPromise.then(() => {
-      tmp.dir({'unsafeCleanup': true}, (err, _path, cleanupCallback) => {
+      tmp.dir({ unsafeCleanup: true }, (err, _path, cleanupCallback) => {
         if (err) {
           throw err
         }
@@ -149,7 +149,7 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   it('AtomXtermProfilesSingleton cannot be instantiated directly', () => {
-    let cb = () => {
+    const cb = () => {
       return new AtomXtermProfilesSingleton()
     }
     expect(cb).toThrowError('AtomXtermProfilesSingleton cannot be instantiated directly.')
@@ -160,21 +160,21 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   it('has proper profiles.json path', () => {
-    let expected = path.join(atomXtermConfig.getUserDataPath(), 'profiles.json')
+    const expected = path.join(atomXtermConfig.getUserDataPath(), 'profiles.json')
     // Need to check to original profiles config path.
     expect(this.origProfilesConfigPath).toBe(expected)
   })
 
   it('sortProfiles()', () => {
-    let data = {
-      'z': 'z',
-      'y': 'y',
-      'x': 'x'
+    const data = {
+      z: 'z',
+      y: 'y',
+      x: 'x'
     }
-    let expected = {
-      'x': 'x',
-      'y': 'y',
-      'z': 'z'
+    const expected = {
+      x: 'x',
+      y: 'y',
+      z: 'z'
     }
     expect(AtomXtermProfilesSingleton.instance.sortProfiles(data)).toEqual(expected)
   })
@@ -197,8 +197,8 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   it('updateProfiles()', (done) => {
-    let expected = {
-      'foo': 'bar'
+    const expected = {
+      foo: 'bar'
     }
     AtomXtermProfilesSingleton.instance.updateProfiles(expected).then(() => {
       expect(AtomXtermProfilesSingleton.instance.profiles).toEqual(expected)
@@ -207,20 +207,20 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   it('deepClone()', () => {
-    let data = {
-      'z': 'z',
-      'y': 'y',
-      'x': 'x'
+    const data = {
+      z: 'z',
+      y: 'y',
+      x: 'x'
     }
     expect(AtomXtermProfilesSingleton.instance.deepClone(data)).toEqual(data)
     expect(AtomXtermProfilesSingleton.instance.deepClone(data)).not.toBe(data)
   })
 
   it('getBaseProfile()', () => {
-    let env = atom.config.get('atom-xterm.spawnPtySettings.env') || atomXtermConfig.getDefaultEnv()
-    let encoding = atom.config.get('atom-xterm.spawnPtySettings.encoding') || atomXtermConfig.getDefaultEncoding()
-    let title = atom.config.get('atom-xterm.terminalSettings.title') || atomXtermConfig.getDefaultTitle()
-    let expected = {
+    const env = atom.config.get('atom-xterm.spawnPtySettings.env') || atomXtermConfig.getDefaultEnv()
+    const encoding = atom.config.get('atom-xterm.spawnPtySettings.encoding') || atomXtermConfig.getDefaultEncoding()
+    const title = atom.config.get('atom-xterm.terminalSettings.title') || atomXtermConfig.getDefaultTitle()
+    const expected = {
       command: atom.config.get('atom-xterm.spawnPtySettings.command') || atomXtermConfig.getDefaultShellCommand(),
       args: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.args') || atomXtermConfig.getDefaultArgs()),
       name: atom.config.get('atom-xterm.spawnPtySettings.name') || atomXtermConfig.getDefaultTermType(),
@@ -242,13 +242,13 @@ describe('AtomXtermProfilesSingleton', () => {
   it('getBaseProfile() settings from atom.config', () => {
     spyOn(atom.config, 'get').and.callFake(fakeAtomConfigGet)
     AtomXtermProfilesSingleton.instance.resetBaseProfile()
-    let expected = {
+    const expected = {
       command: 'somecommand',
       args: ['foo', 'bar'],
       name: 'sometermtype',
       cwd: '/some/path',
-      env: {'PATH': '/usr/bin:/bin'},
-      setEnv: {'FOO': 'BAR'},
+      env: { PATH: '/usr/bin:/bin' },
+      setEnv: { FOO: 'BAR' },
       deleteEnv: ['FOO'],
       encoding: 'someencoding',
       fontSize: 20,
@@ -276,20 +276,20 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   it('sanitizeData() unknown key set', () => {
-    let data = {
+    const data = {
       foo: 'bar'
     }
     expect(AtomXtermProfilesSingleton.instance.sanitizeData(data)).toEqual({})
   })
 
   it('sanitizeData() check all valid keys', () => {
-    let data = getDefaultExpectedProfile()
+    const data = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.sanitizeData(data)).toEqual(data)
   })
 
   it('sanitizeData() valid and unknown keys set', () => {
-    let expected = getDefaultExpectedProfile()
-    let data = Object.assign({}, expected, {
+    const expected = getDefaultExpectedProfile()
+    const data = Object.assign({}, expected, {
       foo: 'bar',
       baz: null
     })
@@ -318,11 +318,11 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   it('isProfileExists() existent profile', (done) => {
-    let data = {
+    const data = {
       command: './manage.py',
       args: ['runserver', '9000']
     }
-    let profileName = 'Django module runserver'
+    const profileName = 'Django module runserver'
     AtomXtermProfilesSingleton.instance.setProfile(profileName, data).then(() => {
       AtomXtermProfilesSingleton.instance.isProfileExists(profileName).then((exists) => {
         expect(exists).toBe(true)
@@ -332,12 +332,12 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   it('setProfile()', (done) => {
-    let data = {
+    const data = {
       command: './manage.py',
       args: ['runserver', '9000']
     }
-    let expected = Object.assign({}, AtomXtermProfilesSingleton.instance.getBaseProfile(), data)
-    let profileName = 'Django module runserver'
+    const expected = Object.assign({}, AtomXtermProfilesSingleton.instance.getBaseProfile(), data)
+    const profileName = 'Django module runserver'
     AtomXtermProfilesSingleton.instance.setProfile(profileName, data).then(() => {
       AtomXtermProfilesSingleton.instance.getProfile(profileName).then((profile) => {
         expect(profile).toEqual(expected)
@@ -347,11 +347,11 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   it('deleteProfile()', (done) => {
-    let data = {
+    const data = {
       command: './manage.py',
       args: ['runserver', '9000']
     }
-    let profileName = 'Django module runserver'
+    const profileName = 'Django module runserver'
     AtomXtermProfilesSingleton.instance.setProfile(profileName, data).then(() => {
       AtomXtermProfilesSingleton.instance.deleteProfile(profileName).then(() => {
         AtomXtermProfilesSingleton.instance.isProfileExists(profileName).then((exists) => {
@@ -373,20 +373,20 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   it('generateNewUrlFromProfileData() empty data', () => {
-    let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData({})
+    const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData({})
     expect(url.searchParams.toString()).toBe('')
   })
 
   it('generateNewUrlFromProfileData() unknown key set', () => {
-    let data = {
+    const data = {
       foo: 'bar'
     }
-    let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(data)
+    const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(data)
     expect(url.searchParams.toString()).toBe('')
   })
 
   it('generateNewUrlFromProfileData() check all valid keys', () => {
-    let data = {
+    const data = {
       command: 'somecommand',
       args: [],
       name: 'sometermtype',
@@ -401,14 +401,14 @@ describe('AtomXtermProfilesSingleton', () => {
       title: '',
       promptToStartup: false
     }
-    let expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&promptToStartup=false&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title='
-    let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(data)
+    const expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&promptToStartup=false&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title='
+    const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(data)
     url.searchParams.sort()
     expect(url.searchParams.toString()).toBe(expected)
   })
 
   it('generateNewUrlFromProfileData() valid and unknown keys set', () => {
-    let validData = {
+    const validData = {
       command: 'somecommand',
       args: [],
       name: 'sometermtype',
@@ -428,19 +428,19 @@ describe('AtomXtermProfilesSingleton', () => {
       },
       promptToStartup: false
     }
-    let data = Object.assign({}, validData, {
+    const data = Object.assign({}, validData, {
       foo: 'bar',
       baz: null
     })
-    let expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&promptToStartup=false&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=&xtermOptions=%7B%22theme%22%3A%7B%22background%22%3A%22%23FFF%22%7D%7D'
-    let url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(data)
+    const expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&promptToStartup=false&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=&xtermOptions=%7B%22theme%22%3A%7B%22background%22%3A%22%23FFF%22%7D%7D'
+    const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(data)
     url.searchParams.sort()
     expect(url.searchParams.toString()).toEqual(expected)
   })
 
   it('createProfileDataFromUri() base URI', () => {
-    let url = new URL('atom-xterm://somesessionid/')
-    let expected = {}
+    const url = new URL('atom-xterm://somesessionid/')
+    const expected = {}
     expected.command = atomXtermConfig.getDefaultShellCommand()
     expected.args = JSON.parse(atomXtermConfig.getDefaultArgs())
     expected.name = atomXtermConfig.getDefaultTermType()
@@ -459,99 +459,99 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   it('createProfileDataFromUri() URI with all params set', () => {
-    let url = getDefaultExpectedUrl()
-    let expected = getDefaultExpectedProfile()
+    const url = getDefaultExpectedUrl()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI with all params set and invalid params set', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('foo', 'text')
     url.searchParams.set('bar', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI command set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('command', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expected.command = 'null'
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI command set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('command', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expected.command = atomXtermConfig.getDefaultShellCommand()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI args set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('args', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI args set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('args', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI name set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('name', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expected.name = 'null'
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI name set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('name', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expected.name = atomXtermConfig.getDefaultTermType()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI cwd set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('cwd', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expected.cwd = 'null'
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI cwd set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('cwd', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expected.cwd = atomXtermConfig.getDefaultCwd()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI env set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('env', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI env set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('env', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI env set to empty object', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('env', '{}')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     // Specifically defining an empty object for env will mean the
     // pty process will run with no environment.
     expected.env = {}
@@ -559,190 +559,190 @@ describe('AtomXtermProfilesSingleton', () => {
   })
 
   it('createProfileDataFromUri() URI setEnv set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('setEnv', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI setEnv set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('setEnv', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI deleteEnv set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('deleteEnv', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI deleteEnv set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('deleteEnv', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI encoding set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('encoding', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expected.encoding = null
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI encoding set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('encoding', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI fontSize set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('fontSize', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI fontSize set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('fontSize', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI leaveOpenAfterExit set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('leaveOpenAfterExit', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI leaveOpenAfterExit set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('leaveOpenAfterExit', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI relaunchTerminalOnStartup set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('relaunchTerminalOnStartup', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI relaunchTerminalOnStartup set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('relaunchTerminalOnStartup', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI title set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('title', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expected.title = null
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI title set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('title', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expected.title = null
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI xtermOptions set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('xtermOptions', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expected.xtermOptions = {}
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI xtermOptions set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('xtermOptions', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expected.xtermOptions = {}
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI promptToStartup set to null', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('promptToStartup', null)
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('createProfileDataFromUri() URI promptToStartup set to empty string', () => {
-    let url = getDefaultExpectedUrl()
+    const url = getDefaultExpectedUrl()
     url.searchParams.set('promptToStartup', '')
-    let expected = getDefaultExpectedProfile()
+    const expected = getDefaultExpectedProfile()
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
   it('diffProfiles() no change between objects', () => {
-    let baseProfile = AtomXtermProfilesSingleton.instance.getBaseProfile()
-    let expected = {}
-    let actual = AtomXtermProfilesSingleton.instance.diffProfiles(baseProfile, baseProfile)
+    const baseProfile = AtomXtermProfilesSingleton.instance.getBaseProfile()
+    const expected = {}
+    const actual = AtomXtermProfilesSingleton.instance.diffProfiles(baseProfile, baseProfile)
     expect(actual).toEqual(expected)
   })
 
   it('diffProfiles() removed entries', () => {
-    let baseProfile = AtomXtermProfilesSingleton.instance.getBaseProfile()
-    let profileChanges = {}
-    let expected = {}
-    let actual = AtomXtermProfilesSingleton.instance.diffProfiles(baseProfile, profileChanges)
+    const baseProfile = AtomXtermProfilesSingleton.instance.getBaseProfile()
+    const profileChanges = {}
+    const expected = {}
+    const actual = AtomXtermProfilesSingleton.instance.diffProfiles(baseProfile, profileChanges)
     expect(actual).toEqual(expected)
   })
 
   it('diffProfiles() modified entries', () => {
-    let baseProfile = AtomXtermProfilesSingleton.instance.getBaseProfile()
-    let profileChanges = {
+    const baseProfile = AtomXtermProfilesSingleton.instance.getBaseProfile()
+    const profileChanges = {
       command: 'someothercommand'
     }
-    let expected = {
+    const expected = {
       command: 'someothercommand'
     }
-    let actual = AtomXtermProfilesSingleton.instance.diffProfiles(baseProfile, profileChanges)
+    const actual = AtomXtermProfilesSingleton.instance.diffProfiles(baseProfile, profileChanges)
     expect(actual).toEqual(expected)
   })
 
   it('diffProfiles() added entries', () => {
-    let oldProfile = {
+    const oldProfile = {
       command: 'somecommand'
     }
-    let profileChanges = {
+    const profileChanges = {
       args: [
         '--foo',
         '--bar',
         '--baz'
       ]
     }
-    let expected = {
+    const expected = {
       args: [
         '--foo',
         '--bar',
         '--baz'
       ]
     }
-    let actual = AtomXtermProfilesSingleton.instance.diffProfiles(oldProfile, profileChanges)
+    const actual = AtomXtermProfilesSingleton.instance.diffProfiles(oldProfile, profileChanges)
     expect(actual).toEqual(expected)
   })
 
   it('diffProfiles() added and modified entries', () => {
-    let oldProfile = {
+    const oldProfile = {
       command: 'somecommand'
     }
-    let profileChanges = {
+    const profileChanges = {
       command: 'someothercommand',
       args: [
         '--foo',
@@ -750,7 +750,7 @@ describe('AtomXtermProfilesSingleton', () => {
         '--baz'
       ]
     }
-    let expected = {
+    const expected = {
       command: 'someothercommand',
       args: [
         '--foo',
@@ -758,12 +758,12 @@ describe('AtomXtermProfilesSingleton', () => {
         '--baz'
       ]
     }
-    let actual = AtomXtermProfilesSingleton.instance.diffProfiles(oldProfile, profileChanges)
+    const actual = AtomXtermProfilesSingleton.instance.diffProfiles(oldProfile, profileChanges)
     expect(actual).toEqual(expected)
   })
 
   it('getDefaultProfile()', () => {
-    let expected = {
+    const expected = {
       command: atomXtermConfig.getDefaultShellCommand(),
       args: JSON.parse(atomXtermConfig.getDefaultArgs()),
       name: atomXtermConfig.getDefaultTermType(),
@@ -784,7 +784,7 @@ describe('AtomXtermProfilesSingleton', () => {
 
   it('validateJsonConfigSetting() empty string config value', () => {
     spyOn(atom.config, 'get').and.returnValue('')
-    let actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
+    const actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
       'atom-xterm.spawnPtySettings.args',
       '["foo", "bar"]'
     )
@@ -793,7 +793,7 @@ describe('AtomXtermProfilesSingleton', () => {
 
   it('validateJsonConfigSetting() non-empty string config value', () => {
     spyOn(atom.config, 'get').and.returnValue('["baz"]')
-    let actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
+    const actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
       'atom-xterm.spawnPtySettings.args',
       '["foo", "bar"]'
     )
@@ -803,7 +803,7 @@ describe('AtomXtermProfilesSingleton', () => {
   it('validateJsonConfigSetting() bad JSON string config value', () => {
     spyOn(atom.config, 'get').and.returnValue('[]]')
     AtomXtermProfilesSingleton.instance.previousBaseProfile.args = ['baz']
-    let actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
+    const actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
       'atom-xterm.spawnPtySettings.args',
       '["foo", "bar"]'
     )
@@ -813,7 +813,7 @@ describe('AtomXtermProfilesSingleton', () => {
   it('validateJsonConfigSetting() empty string config value null default value', () => {
     spyOn(atom.config, 'get').and.returnValue('')
     AtomXtermProfilesSingleton.instance.previousBaseProfile.args = ['foo', 'bar']
-    let actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
+    const actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
       'atom-xterm.spawnPtySettings.args',
       'null'
     )
@@ -822,7 +822,7 @@ describe('AtomXtermProfilesSingleton', () => {
 
   it('validateJsonConfigSetting() non-empty string config value null default value', () => {
     spyOn(atom.config, 'get').and.returnValue('["baz"]')
-    let actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
+    const actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
       'atom-xterm.spawnPtySettings.args',
       'null'
     )
@@ -832,7 +832,7 @@ describe('AtomXtermProfilesSingleton', () => {
   it('validateJsonConfigSetting() bad JSON string config value null default value', () => {
     spyOn(atom.config, 'get').and.returnValue('[]]')
     AtomXtermProfilesSingleton.instance.previousBaseProfile.args = ['foo', 'bar']
-    let actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
+    const actual = AtomXtermProfilesSingleton.instance.validateJsonConfigSetting(
       'atom-xterm.spawnPtySettings.args',
       'null'
     )

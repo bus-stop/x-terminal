@@ -15,7 +15,7 @@ function getConfig (entryName) {
   let output = null
   let devtool = 'source-map'
   let target = 'node'
-  let plugins = [
+  const plugins = [
     new webpack.EnvironmentPlugin({
       NODE_ENV: NODE_ENV
     }),

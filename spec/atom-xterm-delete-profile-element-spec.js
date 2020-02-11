@@ -27,17 +27,17 @@ describe('AtomXtermDeleteProfileElement', () => {
   })
 
   it('initialize()', () => {
-    let element = new AtomXtermDeleteProfileElement()
+    const element = new AtomXtermDeleteProfileElement()
     element.initialize(this.model)
     expect(element.promptButtonsDiv.childElementCount).toBe(0)
   })
 
   it('setNewPrompt()', () => {
-    let element = new AtomXtermDeleteProfileElement()
+    const element = new AtomXtermDeleteProfileElement()
     element.initialize(this.model)
-    let profileName = 'foo'
-    let confirmHandler = () => {}
-    let cancelHandler = () => {}
+    const profileName = 'foo'
+    const confirmHandler = () => {}
+    const cancelHandler = () => {}
     element.setNewPrompt(profileName, confirmHandler, cancelHandler)
     expect(element.messageDiv.textContent).toBe('Delete existing profile \'foo\'?')
   })

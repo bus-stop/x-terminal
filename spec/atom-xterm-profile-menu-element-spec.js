@@ -23,7 +23,7 @@ describe('AtomXtermProfileMenuElement', () => {
   this.element = null
 
   beforeEach((done) => {
-    let model = jasmine.createSpyObj(
+    const model = jasmine.createSpyObj(
       'atomXtermProfileMenuModel',
       [
         'setElement',
@@ -40,7 +40,7 @@ describe('AtomXtermProfileMenuElement', () => {
     )
     model.atomXtermModel.getProfile.and.returnValue({})
     model.atomXtermModel.profile = {}
-    let mock = jasmine.createSpyObj(
+    const mock = jasmine.createSpyObj(
       'atomXtermElement',
       [
         'restartPtyProcess',
@@ -81,14 +81,14 @@ describe('AtomXtermProfileMenuElement', () => {
   })
 
   it('getModelProfile()', () => {
-    let mock = jasmine.createSpy('mock')
+    const mock = jasmine.createSpy('mock')
     this.element.model.atomXtermModel.profile = mock
     expect(this.element.getModelProfile()).toBe(mock)
   })
 
   it('parseJson() array type', () => {
-    let expected = ['foo']
-    let actual = this.element.parseJson(
+    const expected = ['foo']
+    const actual = this.element.parseJson(
       '["foo"]',
       null,
       Array
@@ -97,8 +97,8 @@ describe('AtomXtermProfileMenuElement', () => {
   })
 
   it('parseJson() object type', () => {
-    let expected = {'foo': 'bar'}
-    let actual = this.element.parseJson(
+    const expected = { foo: 'bar' }
+    const actual = this.element.parseJson(
       '{"foo": "bar"}',
       null,
       Object
@@ -107,8 +107,8 @@ describe('AtomXtermProfileMenuElement', () => {
   })
 
   it('parseJson() default value', () => {
-    let expected = ['foo']
-    let actual = this.element.parseJson(
+    const expected = ['foo']
+    const actual = this.element.parseJson(
       'null',
       expected,
       Array
@@ -117,7 +117,7 @@ describe('AtomXtermProfileMenuElement', () => {
   })
 
   it('parseJson() syntax error', () => {
-    let actual = this.element.parseJson(
+    const actual = this.element.parseJson(
       '[[',
       'foo',
       Array
@@ -130,8 +130,8 @@ describe('AtomXtermProfileMenuElement', () => {
   })
 
   it('getProfileMenuSettings()', () => {
-    let expected = this.element.profilesSingleton.getBaseProfile()
-    let actual = this.element.getProfileMenuSettings()
+    const expected = this.element.profilesSingleton.getBaseProfile()
+    const actual = this.element.getProfileMenuSettings()
     expect(actual).toEqual(expected)
   })
 
@@ -158,19 +158,19 @@ describe('AtomXtermProfileMenuElement', () => {
   })
 
   it('createMenuItemContainer() check id', () => {
-    let container = this.element.createMenuItemContainer('foo', 'bar', 'baz')
+    const container = this.element.createMenuItemContainer('foo', 'bar', 'baz')
     expect(container.getAttribute('id')).toBe('foo')
   })
 
   it('createMenuItemContainer() check title', () => {
-    let container = this.element.createMenuItemContainer('foo', 'bar', 'baz')
-    let titleDiv = container.querySelector('.atom-xterm-profile-menu-item-title')
+    const container = this.element.createMenuItemContainer('foo', 'bar', 'baz')
+    const titleDiv = container.querySelector('.atom-xterm-profile-menu-item-title')
     expect(titleDiv.textContent).toBe('bar')
   })
 
   it('createMenuItemContainer() check description', () => {
-    let container = this.element.createMenuItemContainer('foo', 'bar', 'baz')
-    let descriptionDiv = container.querySelector('.atom-xterm-profile-menu-item-description')
+    const container = this.element.createMenuItemContainer('foo', 'bar', 'baz')
+    const descriptionDiv = container.querySelector('.atom-xterm-profile-menu-item-description')
     expect(descriptionDiv.textContent).toBe('baz')
   })
 
@@ -196,22 +196,22 @@ describe('AtomXtermProfileMenuElement', () => {
   })
 
   it('createProfileMenuButtons()', () => {
-    let buttonsContainer = this.element.createProfileMenuButtons()
+    const buttonsContainer = this.element.createProfileMenuButtons()
     expect(buttonsContainer.classList.contains('atom-xterm-profile-menu-buttons-div')).toBe(true)
   })
 
   it('createButton()', () => {
-    let button = this.element.createButton()
+    const button = this.element.createButton()
     expect(button.classList.contains('atom-xterm-profile-menu-button')).toBe(true)
   })
 
   it('createTextbox()', () => {
-    let menuItemContainer = this.element.createTextbox('foo', 'bar', 'baz', 'cat', 'dog')
+    const menuItemContainer = this.element.createTextbox('foo', 'bar', 'baz', 'cat', 'dog')
     expect(menuItemContainer.getAttribute('id')).toBe('foo')
   })
 
   it('createCheckbox()', () => {
-    let menuItemContainer = this.element.createCheckbox('foo', 'bar', 'baz', true, false)
+    const menuItemContainer = this.element.createCheckbox('foo', 'bar', 'baz', true, false)
     expect(menuItemContainer.getAttribute('id')).toBe('foo')
   })
 
@@ -269,7 +269,7 @@ describe('AtomXtermProfileMenuElement', () => {
     this.element.model.atomXtermModel.getProfile.and.returnValue({
       command: 'somecommand'
     })
-    let expected = {
+    const expected = {
       newProfile: {
         args: [
           '--foo',
@@ -285,7 +285,7 @@ describe('AtomXtermProfileMenuElement', () => {
         ]
       }
     }
-    let actual = this.element.getNewProfileAndChanges()
+    const actual = this.element.getNewProfileAndChanges()
     expect(actual).toEqual(expected)
   })
 
@@ -309,8 +309,8 @@ describe('AtomXtermProfileMenuElement', () => {
 
   it('deleteProfile() option selected', () => {
     spyOn(this.element, 'promptDelete')
-    let mock = jasmine.createSpy('mock')
-    mock.options = [{'text': 'foo'}]
+    const mock = jasmine.createSpy('mock')
+    mock.options = [{ text: 'foo' }]
     mock.selectedIndex = 0
     spyOn(this.element.mainDiv, 'querySelector').and.returnValue(mock)
     this.element.deleteProfile()

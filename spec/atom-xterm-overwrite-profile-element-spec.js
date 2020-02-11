@@ -27,17 +27,17 @@ describe('AtomXtermOverwriteProfileElement', () => {
   })
 
   it('initialize()', () => {
-    let element = new AtomXtermOverwriteProfileElement()
+    const element = new AtomXtermOverwriteProfileElement()
     element.initialize(this.model)
     expect(element.promptButtonsDiv.childElementCount).toBe(0)
   })
 
   it('setNewPrompt()', () => {
-    let element = new AtomXtermOverwriteProfileElement()
+    const element = new AtomXtermOverwriteProfileElement()
     element.initialize(this.model)
-    let profileName = 'foo'
-    let confirmHandler = () => {}
-    let cancelHandler = () => {}
+    const profileName = 'foo'
+    const confirmHandler = () => {}
+    const cancelHandler = () => {}
     element.setNewPrompt(profileName, confirmHandler, cancelHandler)
     expect(element.messageDiv.textContent).toBe('Overwrite existing profile \'foo\'?')
   })

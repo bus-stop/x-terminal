@@ -73,7 +73,7 @@ class AtomXtermProfilesSingleton {
   }
 
   sortProfiles (profiles) {
-    let orderedProfiles = {}
+    const orderedProfiles = {}
     Object.keys(profiles).sort().forEach((key) => {
       orderedProfiles[key] = profiles[key]
     })
@@ -126,7 +126,7 @@ class AtomXtermProfilesSingleton {
 
   diffProfiles (oldProfile, newProfile) {
     // This method will return added or modified entries.
-    let diff = detailedDiff(oldProfile, newProfile)
+    const diff = detailedDiff(oldProfile, newProfile)
     return Object.assign(diff.added, diff.updated)
   }
 
@@ -154,8 +154,8 @@ class AtomXtermProfilesSingleton {
   }
 
   validateJsonConfigSetting (name, defaultJsonValue) {
-    let profileKey = CONFIG_KEY_TO_PROFILE_KEY_MAPPING[name]
-    let previousValue = this.previousBaseProfile[profileKey]
+    const profileKey = CONFIG_KEY_TO_PROFILE_KEY_MAPPING[name]
+    const previousValue = this.previousBaseProfile[profileKey]
     let value = atom.config.get(name)
     try {
       value = JSON.parse(value || defaultJsonValue) || previousValue
@@ -177,12 +177,12 @@ class AtomXtermProfilesSingleton {
     if (!env || env.constructor !== Object) {
       env = null
     }
-    let encoding = atom.config.get('atom-xterm.spawnPtySettings.encoding') || null
+    const encoding = atom.config.get('atom-xterm.spawnPtySettings.encoding') || null
     let leaveOpenAfterExit = atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit')
     if (leaveOpenAfterExit !== true && leaveOpenAfterExit !== false) leaveOpenAfterExit = atomXtermConfig.getDefaultLeaveOpenAfterExit()
     let relaunchTerminalOnStartup = atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup')
     if (relaunchTerminalOnStartup !== true && relaunchTerminalOnStartup !== false) relaunchTerminalOnStartup = atomXtermConfig.getDefaultRelaunchTerminalOnStartup()
-    let title = atom.config.get('atom-xterm.terminalSettings.title') || atomXtermConfig.getDefaultTitle()
+    const title = atom.config.get('atom-xterm.terminalSettings.title') || atomXtermConfig.getDefaultTitle()
     let promptToStartup = atom.config.get('atom-xterm.terminalSettings.promptToStartup')
     if (promptToStartup !== true && promptToStartup !== false) promptToStartup = atomXtermConfig.getDefaultPromptToStartup()
     this.baseProfile = {
@@ -205,7 +205,7 @@ class AtomXtermProfilesSingleton {
   }
 
   sanitizeData (data) {
-    let sanitizedData = {}
+    const sanitizedData = {}
     if ('command' in data) sanitizedData.command = data.command
     if ('args' in data) sanitizedData.args = data.args
     if ('name' in data) sanitizedData.name = data.name
@@ -224,8 +224,8 @@ class AtomXtermProfilesSingleton {
   }
 
   getSanitizedProfilesData () {
-    let retval = {}
-    for (let key in this.profiles) {
+    const retval = {}
+    for (const key in this.profiles) {
       retval[key] = this.sanitizeData(this.profiles[key])
     }
     return retval
@@ -262,12 +262,12 @@ class AtomXtermProfilesSingleton {
   setProfile (profileName, data) {
     return new Promise((resolve, reject) => {
       this.profilesLoadPromise.then(() => {
-        let profileData = Object.assign(
+        const profileData = Object.assign(
           {},
           this.deepClone(this.baseProfile),
           this.sanitizeData(data)
         )
-        let newProfilesConfigData = Object.assign(
+        const newProfilesConfigData = Object.assign(
           {},
           this.deepClone(this.profiles)
         )
@@ -282,7 +282,7 @@ class AtomXtermProfilesSingleton {
   deleteProfile (profileName) {
     return new Promise((resolve, reject) => {
       this.profilesLoadPromise.then(() => {
-        let newProfilesConfigData = Object.assign(
+        const newProfilesConfigData = Object.assign(
           {},
           this.deepClone(this.profiles)
         )
@@ -300,7 +300,7 @@ class AtomXtermProfilesSingleton {
 
   generateNewUrlFromProfileData (data) {
     data = this.sanitizeData(data)
-    let url = new URL(this.generateNewUri())
+    const url = new URL(this.generateNewUri())
     // Command to run, can be basename of command or full path to command.
     if ('command' in data) url.searchParams.set('command', data.command)
     // Arguments to pass to command. This should be in a JSON array.
@@ -342,9 +342,9 @@ class AtomXtermProfilesSingleton {
 
   createProfileDataFromUri (uri) {
     let param
-    let url = new URL(uri)
-    let baseProfile = this.getBaseProfile()
-    let newProfile = {}
+    const url = new URL(uri)
+    const baseProfile = this.getBaseProfile()
+    const newProfile = {}
     param = url.searchParams.get('command')
     if (param) newProfile.command = param
     if (!('command' in newProfile)) newProfile.command = baseProfile.command

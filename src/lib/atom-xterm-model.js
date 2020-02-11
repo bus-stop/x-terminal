@@ -40,7 +40,7 @@ class AtomXtermModel {
   constructor (options) {
     this.options = options
     this.uri = this.options.uri
-    let url = new URL(this.uri)
+    const url = new URL(this.uri)
     this.sessionId = url.host
     this.profilesSingleton = AtomXtermProfilesSingleton.instance
     this.profile = this.profilesSingleton.createProfileDataFromUri(this.uri)
@@ -61,13 +61,13 @@ class AtomXtermModel {
     // done.
     this.isInitialized = false
     this.initializedPromise = new Promise((resolve, reject) => {
-      let baseProfile = this.profilesSingleton.getBaseProfile()
-      let previousActiveItem = atom.workspace.getActivePaneItem()
+      const baseProfile = this.profilesSingleton.getBaseProfile()
+      const previousActiveItem = atom.workspace.getActivePaneItem()
       let cwd = this.profile.cwd
       if (typeof previousActiveItem !== 'undefined' && typeof previousActiveItem.getPath === 'function') {
         cwd = previousActiveItem.getPath()
       }
-      let dir = atom.project.relativizePath(cwd)[0]
+      const dir = atom.project.relativizePath(cwd)[0]
       if (dir) {
         // Use project paths whenever they are available by default.
         this.profile.cwd = dir
@@ -172,7 +172,7 @@ class AtomXtermModel {
     if (!this.pane) {
       this.pane = atom.workspace.paneForItem(this)
     }
-    let oldIsModified = this.modified
+    const oldIsModified = this.modified
     let item
     if (this.pane) {
       item = this.pane.getActiveItem()
@@ -192,7 +192,7 @@ class AtomXtermModel {
   }
 
   getSessionParameters () {
-    let url = this.profilesSingleton.generateNewUrlFromProfileData(this.profile)
+    const url = this.profilesSingleton.generateNewUrlFromProfileData(this.profile)
     url.searchParams.sort()
     return url.searchParams.toString()
   }
@@ -206,7 +206,7 @@ class AtomXtermModel {
 
   focusOnTerminal () {
     this.element.focusOnTerminal()
-    let oldIsModified = this.modified
+    const oldIsModified = this.modified
     this.modified = false
     if (oldIsModified !== this.modified) {
       this.emitter.emit('did-change-modified', this.modified)

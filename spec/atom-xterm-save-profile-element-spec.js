@@ -27,15 +27,15 @@ describe('AtomXtermSaveProfileElement', () => {
   })
 
   it('initialize()', () => {
-    let element = new AtomXtermSaveProfileElement()
+    const element = new AtomXtermSaveProfileElement()
     element.initialize(this.model)
     expect(element.messageDiv.textContent).toBe('Enter new profile name')
   })
 
   it('setNewTextbox()', () => {
-    let element = new AtomXtermSaveProfileElement()
+    const element = new AtomXtermSaveProfileElement()
     element.initialize(this.model)
-    let textbox = jasmine.createSpyObj('textbox', ['getElement'])
+    const textbox = jasmine.createSpyObj('textbox', ['getElement'])
     textbox.getElement.and.returnValue(document.createElement('div'))
     element.setNewTextbox(textbox)
     expect(textbox.getElement).toHaveBeenCalled()

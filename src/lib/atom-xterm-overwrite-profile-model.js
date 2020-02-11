@@ -55,7 +55,7 @@ class AtomXtermOverwriteProfileModel {
 
   promptOverwrite (profileName, newProfile, profileChanges) {
     this.panel.show()
-    let confirmHandler = (event) => {
+    const confirmHandler = (event) => {
       this.profilesSingleton.setProfile(profileName, newProfile).then(() => {
         this.profilesSingleton.reloadProfiles()
         this.profilesSingleton.profilesLoadPromise.then(() => {
@@ -64,7 +64,7 @@ class AtomXtermOverwriteProfileModel {
         })
       })
     }
-    let cancelHandler = (event) => {
+    const cancelHandler = (event) => {
       this.close(newProfile, profileChanges, true)
     }
     this.getElement().setNewPrompt(

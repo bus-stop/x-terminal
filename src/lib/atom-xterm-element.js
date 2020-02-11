@@ -35,7 +35,7 @@ import elementResizeDetectorMaker from 'element-resize-detector'
 
 Terminal.applyAddon(fit)
 
-const STRICT_URL_REGEX = new RegExp(`(${urlRegex({exact: false, strict: true}).source})`)
+const STRICT_URL_REGEX = new RegExp(`(${urlRegex({ exact: false, strict: true }).source})`)
 const PTY_PROCESS_OPTIONS = new Set([
   'command',
   'args',
@@ -97,7 +97,7 @@ class AtomXtermElementImpl extends HTMLElement {
             this.terminalDivIntersectionObserver = new IntersectionObserver((entries, observer) => {
               // NOTE: Only the terminal div should be observed therefore there
               // should only be one entry.
-              let entry = entries[0]
+              const entry = entries[0]
               this.terminalDivIntersectionRatio = entry.intersectionRatio
               this.applyPendingTerminalProfileOptions()
             }, {
@@ -116,19 +116,19 @@ class AtomXtermElementImpl extends HTMLElement {
                     if (fontSize > atomXtermConfig.getMaximumFontSize()) {
                       fontSize = atomXtermConfig.getMaximumFontSize()
                     }
-                    this.model.applyProfileChanges({fontSize: fontSize})
+                    this.model.applyProfileChanges({ fontSize: fontSize })
                     wheelEvent.stopPropagation()
                   } else if (wheelEvent.deltaY > 0) {
                     let fontSize = this.model.profile.fontSize - 1
                     if (fontSize < atomXtermConfig.getMinimumFontSize()) {
                       fontSize = atomXtermConfig.getMinimumFontSize()
                     }
-                    this.model.applyProfileChanges({fontSize: fontSize})
+                    this.model.applyProfileChanges({ fontSize: fontSize })
                     wheelEvent.stopPropagation()
                   }
                 }
               },
-              {capture: true}
+              { capture: true }
             )
             resolve()
           })
@@ -156,7 +156,7 @@ class AtomXtermElementImpl extends HTMLElement {
   }
 
   getArgs () {
-    let args = this.model.profile.args
+    const args = this.model.profile.args
     if (!Array.isArray(args)) {
       throw new Error('Arguments set are not an array.')
     }
@@ -222,12 +222,12 @@ class AtomXtermElementImpl extends HTMLElement {
     if (typeof env !== 'object' || Array.isArray(env)) {
       throw new Error('Environment set is not an object.')
     }
-    let setEnv = this.model.profile.setEnv
-    let deleteEnv = this.model.profile.deleteEnv
-    for (let key in setEnv) {
+    const setEnv = this.model.profile.setEnv
+    const deleteEnv = this.model.profile.deleteEnv
+    for (const key in setEnv) {
       env[key] = setEnv[key]
     }
-    for (let key of deleteEnv) {
+    for (const key of deleteEnv) {
       delete env[key]
     }
     return env
@@ -262,7 +262,7 @@ class AtomXtermElementImpl extends HTMLElement {
   }
 
   setMainBackgroundColor () {
-    let xtermOptions = this.getXtermOptions()
+    const xtermOptions = this.getXtermOptions()
     if (xtermOptions.theme && xtermOptions.theme.background) {
       this.style.backgroundColor = xtermOptions.theme.background
     } else {
@@ -302,7 +302,7 @@ class AtomXtermElementImpl extends HTMLElement {
       }
     )
     this.disposables.add(this.profilesSingleton.onDidResetBaseProfile((baseProfile) => {
-      let profileChanges = this.profilesSingleton.diffProfiles(
+      const profileChanges = this.profilesSingleton.diffProfiles(
         this.model.getProfile(),
         {
           // Only allow changes to settings related to the terminal front end
@@ -320,8 +320,8 @@ class AtomXtermElementImpl extends HTMLElement {
   }
 
   showNotification (message, infoType, restartButtonText = 'Restart') {
-    let messageDiv = document.createElement('div')
-    let restartButton = document.createElement('button')
+    const messageDiv = document.createElement('div')
+    const restartButton = document.createElement('button')
     restartButton.classList.add('btn')
     restartButton.appendChild(document.createTextNode(restartButtonText))
     restartButton.addEventListener('click', (event) => {
@@ -351,7 +351,7 @@ class AtomXtermElementImpl extends HTMLElement {
     return new Promise((resolve, reject) => {
       let message
       if (this.model.profile.title === null) {
-        let command = [this.getShellCommand()]
+        const command = [this.getShellCommand()]
         command.push(...this.getArgs())
         message = `New command ${JSON.stringify(command)} ready to start.`
       } else {
@@ -380,22 +380,22 @@ class AtomXtermElementImpl extends HTMLElement {
         // Setup pty process.
         this.ptyProcessCommand = this.getShellCommand()
         this.ptyProcessArgs = this.getArgs()
-        let name = this.getTermType()
-        let env = this.getEnv()
-        let encoding = this.getEncoding()
+        const name = this.getTermType()
+        const env = this.getEnv()
+        const encoding = this.getEncoding()
 
         // Attach pty process to terminal.
         // NOTE: This must be done after the terminal is attached to the
         // parent element and refitted.
         this.ptyProcessOptions = {
-          'name': name,
-          'cwd': cwd,
-          'env': env
+          name: name,
+          cwd: cwd,
+          env: env
         }
         if (encoding) {
           // There's some issue if 'encoding=null' is passed in the options,
           // therefore, only set it if there's an actual encoding to set.
-          this.ptyProcessOptions['encoding'] = encoding
+          this.ptyProcessOptions.encoding = encoding
         }
 
         this.ptyProcessOptions.cols = this.ptyProcessCols
@@ -418,7 +418,7 @@ class AtomXtermElementImpl extends HTMLElement {
         if (this.ptyProcess) {
           this.ptyProcessRunning = true
           this.ptyProcess.on('data', (data) => {
-            let oldTitle = this.model.title
+            const oldTitle = this.model.title
             if (this.model.profile.title !== null) {
               this.model.title = this.model.profile.title
             } else if (process.platform !== 'win32') {
@@ -459,11 +459,11 @@ class AtomXtermElementImpl extends HTMLElement {
     // For any changes involving the xterm.js Terminal object, only apply them
     // when the terminal is visible.
     if (this.terminalDivIntersectionRatio === 1.0) {
-      let xtermOptions = this.pendingTerminalProfileOptions.xtermOptions || {}
+      const xtermOptions = this.pendingTerminalProfileOptions.xtermOptions || {}
       // NOTE: For legacy reasons, the font size is defined from the 'fontSize'
       // key outside of any defined xterm.js Terminal options.
       delete xtermOptions.fontSize
-      if (this.pendingTerminalProfileOptions.hasOwnProperty('fontSize')) {
+      if ('fontSize' in this.pendingTerminalProfileOptions) {
         xtermOptions.fontSize = this.pendingTerminalProfileOptions.fontSize
         delete this.pendingTerminalProfileOptions.fontSize
       }
@@ -477,8 +477,8 @@ class AtomXtermElementImpl extends HTMLElement {
       // being made.
       // NOTE: When applying new pty settings, the terminal still needs to be
       // visible.
-      let a = new Set(Object.keys(this.pendingTerminalProfileOptions))
-      let intersection = new Set([...a].filter(x => PTY_PROCESS_OPTIONS.has(x)))
+      const a = new Set(Object.keys(this.pendingTerminalProfileOptions))
+      const intersection = new Set([...a].filter(x => PTY_PROCESS_OPTIONS.has(x)))
       if (intersection.size !== 0) {
         this.restartPtyProcess()
         for (const key of intersection) {
