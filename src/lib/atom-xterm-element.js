@@ -20,7 +20,7 @@
 import { CompositeDisposable } from 'atom'
 import { spawn as spawnPty } from 'node-pty-prebuilt-multiarch'
 import { Terminal } from 'xterm'
-import * as fit from 'xterm/lib/addons/fit/fit'
+import { FitAddon } from 'xterm-addon-fit'
 import urlRegex from 'url-regex'
 import { shell } from 'electron'
 
@@ -32,8 +32,6 @@ import { AtomXtermProfilesSingleton } from './atom-xterm-profiles'
 import fs from 'fs-extra'
 
 import elementResizeDetectorMaker from 'element-resize-detector'
-
-Terminal.applyAddon(fit)
 
 const STRICT_URL_REGEX = new RegExp(`(${urlRegex({ exact: false, strict: true }).source})`)
 const PTY_PROCESS_OPTIONS = new Set([
@@ -146,7 +144,7 @@ class AtomXtermElementImpl extends HTMLElement {
       this.ptyProcess.kill()
     }
     if (this.terminal) {
-      this.terminal.destroy()
+      this.terminal.dispose()
     }
     this.disposables.dispose()
   }
@@ -251,8 +249,7 @@ class AtomXtermElementImpl extends HTMLElement {
 
   getXtermOptions () {
     let xtermOptions = {
-      cursorBlink: true,
-      experimentalCharAtlas: 'dynamic'
+      cursorBlink: true
     }
     xtermOptions = Object.assign(xtermOptions, this.model.profile.xtermOptions)
     xtermOptions.fontSize = this.model.profile.fontSize
@@ -274,13 +271,15 @@ class AtomXtermElementImpl extends HTMLElement {
     // Attach terminal emulator to this element and refit.
     this.setMainBackgroundColor()
     this.terminal = new Terminal(this.getXtermOptions())
+    this.fitAddon = new FitAddon()
+    this.terminal.loadAddon(this.fitAddon)
     this.terminal.open(this.terminalDiv)
     this.ptyProcessCols = 80
     this.ptyProcessRows = 25
     this.refitTerminal()
     this.ptyProcess = null
     this.ptyProcessRunning = false
-    this.terminal.on('data', (data) => {
+    this.terminal.onData((data) => {
       if (this.isPtyProcessRunning()) {
         this.ptyProcess.write(data)
       }
@@ -499,29 +498,15 @@ class AtomXtermElementImpl extends HTMLElement {
   refitTerminal () {
     // Only refit the terminal when it is completely visible.
     if (this.terminalDivIntersectionRatio === 1.0) {
-      const geometry = this.terminal.proposeGeometry()
-      if (geometry) {
-        // Resize terminal
-        let newTerminalCols = geometry.cols
-        if (process.platform === 'win32' && newTerminalCols < this.terminal.cols) {
-          // In Windows, resizing to smaller amount of columns poses a problem.
-          // Workaround this by only allowing increasing the number of columns.
-          // See also
-          // https://github.com/amejia1/atom-xterm/issues/10 .
-          newTerminalCols = this.terminal.cols
-        }
-        if (geometry.rows !== this.terminal.rows || newTerminalCols !== this.terminal.cols) {
-          this.terminal.resize(newTerminalCols, geometry.rows)
-        }
-
+      this.fitAddon.fit()
+      const geometry = this.fitAddon.proposeDimensions()
+      if (geometry && this.isPtyProcessRunning()) {
         // Resize pty process
-        if (this.isPtyProcessRunning()) {
-          if (this.ptyProcessCols !== geometry.cols || this.ptyProcessRows !== geometry.rows) {
-            this.ptyProcess.resize(geometry.cols, geometry.rows)
-          }
+        if (this.ptyProcessCols !== geometry.cols || this.ptyProcessRows !== geometry.rows) {
+          this.ptyProcess.resize(geometry.cols, geometry.rows)
+          this.ptyProcessCols = geometry.cols
+          this.ptyProcessRows = geometry.rows
         }
-        this.ptyProcessCols = geometry.cols
-        this.ptyProcessRows = geometry.rows
       }
     }
   }
