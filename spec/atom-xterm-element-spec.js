@@ -98,9 +98,9 @@ describe('AtomXtermElement', () => {
   })
 
   it('destroy() check terminal destroyed', () => {
-    spyOn(this.element.terminal, 'destroy').and.callThrough()
+    spyOn(this.element.terminal, 'dispose').and.callThrough()
     this.element.destroy()
-    expect(this.element.terminal.destroy).toHaveBeenCalled()
+    expect(this.element.terminal.dispose).toHaveBeenCalled()
   })
 
   it('destroy() check disposables disposed', () => {
@@ -613,34 +613,34 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() initial state', () => {
-    spyOn(this.element.terminal, 'proposeGeometry')
+    spyOn(this.element.fitAddon, 'proposeDimensions')
     this.element.refitTerminal()
-    expect(this.element.terminal.proposeGeometry).not.toHaveBeenCalled()
+    expect(this.element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
   })
 
   it('refitTerminal() terminal not visible', () => {
-    spyOn(this.element.terminal, 'proposeGeometry')
+    spyOn(this.element.fitAddon, 'proposeDimensions')
     this.element.terminalDivIntersectionRatio = 0.0
     this.element.refitTerminal()
-    expect(this.element.terminal.proposeGeometry).not.toHaveBeenCalled()
+    expect(this.element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
   })
 
   it('refitTerminal() terminal partially visible', () => {
-    spyOn(this.element.terminal, 'proposeGeometry')
+    spyOn(this.element.fitAddon, 'proposeDimensions')
     this.element.terminalDivIntersectionRatio = 0.5
     this.element.refitTerminal()
-    expect(this.element.terminal.proposeGeometry).not.toHaveBeenCalled()
+    expect(this.element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
   })
 
   it('refitTerminal() terminal completely visible', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(null)
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(null)
     this.element.terminalDivIntersectionRatio = 1.0
     this.element.refitTerminal()
-    expect(this.element.terminal.proposeGeometry).toHaveBeenCalled()
+    expect(this.element.fitAddon.proposeDimensions).toHaveBeenCalled()
   })
 
   it('refitTerminal() terminal size not changed', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
       cols: this.element.terminal.cols,
       rows: this.element.terminal.rows
     })
@@ -652,7 +652,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() terminal size cols increased', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
       cols: this.element.terminal.cols + 1,
       rows: this.element.terminal.rows
     })
@@ -664,7 +664,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() terminal size rows increased', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
       cols: this.element.terminal.cols,
       rows: this.element.terminal.rows + 1
     })
@@ -676,7 +676,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() terminal size cols and rows increased', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
       cols: this.element.terminal.cols + 1,
       rows: this.element.terminal.rows + 1
     })
@@ -687,38 +687,8 @@ describe('AtomXtermElement', () => {
     expect(this.element.terminal.resize).toHaveBeenCalled()
   })
 
-  it('refitTerminal() terminal size cols decreased platform win32', () => {
-    Object.defineProperty(process, 'platform', {
-      value: 'win32'
-    })
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
-      cols: this.element.terminal.cols - 1,
-      rows: this.element.terminal.rows
-    })
-    spyOn(this.element.terminal, 'resize')
-    this.element.terminalDivIntersectionRatio = 1.0
-    this.element.ptyProcessRunning = false
-    this.element.refitTerminal()
-    expect(this.element.terminal.resize).not.toHaveBeenCalled()
-  })
-
-  it('refitTerminal() terminal size cols decreased platform not win32', () => {
-    Object.defineProperty(process, 'platform', {
-      value: 'linux'
-    })
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
-      cols: this.element.terminal.cols - 1,
-      rows: this.element.terminal.rows
-    })
-    spyOn(this.element.terminal, 'resize')
-    this.element.terminalDivIntersectionRatio = 1.0
-    this.element.ptyProcessRunning = false
-    this.element.refitTerminal()
-    expect(this.element.terminal.resize).toHaveBeenCalled()
-  })
-
   it('refitTerminal() terminal size rows decreased', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
       cols: this.element.terminal.cols,
       rows: this.element.terminal.rows - 1
     })
@@ -730,7 +700,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() terminal size cols and rows decreased', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
       cols: this.element.terminal.cols - 1,
       rows: this.element.terminal.rows - 1
     })
@@ -742,7 +712,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() pty process size not changed ptyProcess running', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
       cols: this.element.ptyProcessCols,
       rows: this.element.ptyProcessRows
     })
@@ -754,7 +724,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() pty process size cols increased ptyProcess running', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
       cols: this.element.ptyProcessCols + 1,
       rows: this.element.ptyProcessRows
     })
@@ -766,7 +736,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() pty process size rows increased ptyProcess running', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
       cols: this.element.ptyProcessCols,
       rows: this.element.ptyProcessRows + 1
     })
@@ -778,7 +748,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() pty process size cols and rows increased ptyProcess running', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
       cols: this.element.ptyProcessCols + 1,
       rows: this.element.ptyProcessRows + 1
     })
@@ -790,7 +760,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() pty process size cols decreased ptyProcess running', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
       cols: this.element.ptyProcessCols - 1,
       rows: this.element.ptyProcessRows
     })
@@ -802,7 +772,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() pty process size rows decreased ptyProcess running', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
       cols: this.element.ptyProcessCols,
       rows: this.element.ptyProcessRows - 1
     })
@@ -814,7 +784,7 @@ describe('AtomXtermElement', () => {
   })
 
   it('refitTerminal() pty process size cols and rows decreased ptyProcess running', () => {
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue({
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
       cols: this.element.ptyProcessCols - 1,
       rows: this.element.ptyProcessRows - 1
     })
@@ -830,7 +800,7 @@ describe('AtomXtermElement', () => {
       cols: this.element.ptyProcessCols + 1,
       rows: this.element.ptyProcessRows
     }
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(expected)
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
     spyOn(this.element.terminal, 'resize')
     this.element.terminalDivIntersectionRatio = 1.0
     this.element.ptyProcessRunning = true
@@ -843,7 +813,7 @@ describe('AtomXtermElement', () => {
       cols: this.element.ptyProcessCols,
       rows: this.element.ptyProcessRows + 1
     }
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(expected)
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
     spyOn(this.element.terminal, 'resize')
     this.element.terminalDivIntersectionRatio = 1.0
     this.element.ptyProcessRunning = true
@@ -856,7 +826,7 @@ describe('AtomXtermElement', () => {
       cols: this.element.ptyProcessCols + 1,
       rows: this.element.ptyProcessRows + 1
     }
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(expected)
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
     spyOn(this.element.terminal, 'resize')
     this.element.terminalDivIntersectionRatio = 1.0
     this.element.ptyProcessRunning = true
@@ -869,7 +839,7 @@ describe('AtomXtermElement', () => {
       cols: this.element.ptyProcessCols - 1,
       rows: this.element.ptyProcessRows
     }
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(expected)
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
     spyOn(this.element.terminal, 'resize')
     this.element.terminalDivIntersectionRatio = 1.0
     this.element.ptyProcessRunning = true
@@ -882,7 +852,7 @@ describe('AtomXtermElement', () => {
       cols: this.element.ptyProcessCols,
       rows: this.element.ptyProcessRows - 1
     }
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(expected)
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
     spyOn(this.element.terminal, 'resize')
     this.element.terminalDivIntersectionRatio = 1.0
     this.element.ptyProcessRunning = true
@@ -895,7 +865,7 @@ describe('AtomXtermElement', () => {
       cols: this.element.ptyProcessCols - 1,
       rows: this.element.ptyProcessRows - 1
     }
-    spyOn(this.element.terminal, 'proposeGeometry').and.returnValue(expected)
+    spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
     spyOn(this.element.terminal, 'resize')
     this.element.terminalDivIntersectionRatio = 1.0
     this.element.ptyProcessRunning = true
@@ -1286,7 +1256,6 @@ describe('AtomXtermElement', () => {
   it('getXtermOptions() default options', () => {
     const expected = {
       cursorBlink: true,
-      experimentalCharAtlas: 'dynamic',
       fontSize: 14
     }
     expect(this.element.getXtermOptions()).toEqual(expected)
@@ -1300,7 +1269,6 @@ describe('AtomXtermElement', () => {
     }
     const expected = {
       cursorBlink: true,
-      experimentalCharAtlas: 'dynamic',
       fontSize: 14,
       theme: {
         background: '#FFF'
