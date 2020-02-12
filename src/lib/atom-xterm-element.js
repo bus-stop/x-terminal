@@ -21,7 +21,8 @@ import { CompositeDisposable } from 'atom'
 import { spawn as spawnPty } from 'node-pty-prebuilt-multiarch'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
-import urlRegex from 'url-regex'
+import { WebLinksAddon } from 'xterm-addon-web-links'
+import { WebglAddon } from 'xterm-addon-webgl'
 import { shell } from 'electron'
 
 import atomXtermConfig from './atom-xterm-config'
@@ -33,7 +34,6 @@ import fs from 'fs-extra'
 
 import elementResizeDetectorMaker from 'element-resize-detector'
 
-const STRICT_URL_REGEX = new RegExp(`(${urlRegex({ exact: false, strict: true }).source})`)
 const PTY_PROCESS_OPTIONS = new Set([
   'command',
   'args',
@@ -273,7 +273,9 @@ class AtomXtermElementImpl extends HTMLElement {
     this.terminal = new Terminal(this.getXtermOptions())
     this.fitAddon = new FitAddon()
     this.terminal.loadAddon(this.fitAddon)
+    this.terminal.loadAddon(new WebLinksAddon())
     this.terminal.open(this.terminalDiv)
+    this.terminal.loadAddon(new WebglAddon())
     this.ptyProcessCols = 80
     this.ptyProcessRows = 25
     this.refitTerminal()
@@ -284,22 +286,6 @@ class AtomXtermElementImpl extends HTMLElement {
         this.ptyProcess.write(data)
       }
     })
-    this.terminal.registerLinkMatcher(
-      STRICT_URL_REGEX,
-      (mouseEvent, uri) => {
-        shell.openExternal(uri)
-      },
-      {
-        matchIndex: 1,
-        leaveCallback: () => {
-          this.clearHoveredLink()
-        },
-        priority: 100,
-        willLinkActivate: (mouseEvent, uri) => {
-          this.setHoveredLink(uri)
-        }
-      }
-    )
     this.disposables.add(this.profilesSingleton.onDidResetBaseProfile((baseProfile) => {
       const profileChanges = this.profilesSingleton.diffProfiles(
         this.model.getProfile(),
