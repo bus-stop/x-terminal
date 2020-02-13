@@ -78,7 +78,7 @@ export default {
   },
 
   getDefaultTheme () {
-    return ''
+    return 'Default'
   },
 
   getDefaultLeaveOpenAfterExit () {
