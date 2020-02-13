@@ -78,6 +78,7 @@ class AtomXtermSingleton {
       'atom-xterm.spawnPtySettings.deleteEnv',
       'atom-xterm.spawnPtySettings.encoding',
       'atom-xterm.terminalSettings.fontSize',
+      'atom-xterm.terminalSettings.fontFamily',
       'atom-xterm.terminalSettings.leaveOpenAfterExit',
       'atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup',
       'atom-xterm.terminalSettings.relaunchTerminalOnStartup',
@@ -505,6 +506,12 @@ export const config = {
         default: atomXtermConfig.getDefaultFontSize(),
         minimum: atomXtermConfig.getMinimumFontSize(),
         maximum: atomXtermConfig.getMaximumFontSize()
+      },
+      fontFamily: {
+        title: 'Font Family',
+        description: 'Font family used in terminal emulator.',
+        type: 'string',
+        default: atomXtermConfig.getDefaultFontFamily()
       },
       leaveOpenAfterExit: {
         title: 'Leave Open After Exit',

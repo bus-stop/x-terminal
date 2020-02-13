@@ -130,6 +130,14 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
           baseProfile.fontSize,
           modelProfile.fontSize
         ))
+        // Font family
+        this.mainDiv.appendChild(this.createTextbox(
+          'fontfamily-textbox',
+          'Font Family',
+          'The font family to use for the terminal.',
+          baseProfile.fontFamily,
+          modelProfile.fontFamily
+        ))
         // Leave open after terminal exit
         this.mainDiv.appendChild(this.createCheckbox(
           'leaveopenafterexit-checkbox',
@@ -226,6 +234,7 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
     menuElements.deleteEnvElement = this.mainDiv.querySelector('#deleteenv-textbox atom-text-editor')
     menuElements.encodingElement = this.mainDiv.querySelector('#encoding-textbox atom-text-editor')
     menuElements.fontSizeElement = this.mainDiv.querySelector('#fontsize-textbox atom-text-editor')
+    menuElements.fontFamilyElement = this.mainDiv.querySelector('#fontfamily-textbox atom-text-editor')
     menuElements.leaveOpenAfterExitElement = this.mainDiv.querySelector('#leaveopenafterexit-checkbox .atom-xterm-profile-menu-item-checkbox')
     menuElements.relaunchTerminalOnStartupElement = this.mainDiv.querySelector('#relaunchterminalonstartup-checkbox .atom-xterm-profile-menu-item-checkbox')
     menuElements.titleElement = this.mainDiv.querySelector('#title-textbox atom-text-editor')
@@ -267,6 +276,7 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
       baseProfile.fontSize,
       Number
     )
+    newProfile.fontFamily = menuElements.fontFamilyElement.getModel().getText() || baseProfile.fontFamily
     newProfile.leaveOpenAfterExit = menuElements.leaveOpenAfterExitElement.checked
     newProfile.relaunchTerminalOnStartup = menuElements.relaunchTerminalOnStartupElement.checked
     newProfile.title = menuElements.titleElement.getModel().getText() || baseProfile.title
@@ -594,6 +604,14 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
       // Font size
       {
         id: 'fontsize-textbox',
+        value: value
+      }
+    )
+    value = profile.fontFamily
+    newTextList.push(
+      // Font family
+      {
+        id: 'fontfamily-textbox',
         value: value
       }
     )

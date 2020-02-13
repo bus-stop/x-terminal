@@ -253,6 +253,7 @@ class AtomXtermElementImpl extends HTMLElement {
     }
     xtermOptions = Object.assign(xtermOptions, this.model.profile.xtermOptions)
     xtermOptions.fontSize = this.model.profile.fontSize
+    xtermOptions.fontFamily = this.model.profile.fontFamily
     // NOTE: The cloning is needed because the Terminal class modifies the
     // options passed to it.
     return this.profilesSingleton.deepClone(xtermOptions)
@@ -293,6 +294,7 @@ class AtomXtermElementImpl extends HTMLElement {
           // Only allow changes to settings related to the terminal front end
           // to be applied to existing terminals.
           fontSize: baseProfile.fontSize,
+          fontFamily: baseProfile.fontFamily,
           xtermOptions: baseProfile.xtermOptions
         }
       )
@@ -451,6 +453,11 @@ class AtomXtermElementImpl extends HTMLElement {
       if ('fontSize' in this.pendingTerminalProfileOptions) {
         xtermOptions.fontSize = this.pendingTerminalProfileOptions.fontSize
         delete this.pendingTerminalProfileOptions.fontSize
+      }
+      delete xtermOptions.fontFamily
+      if ('fontFamily' in this.pendingTerminalProfileOptions) {
+        xtermOptions.fontFamily = this.pendingTerminalProfileOptions.fontFamily
+        delete this.pendingTerminalProfileOptions.fontFamily
       }
       this.setMainBackgroundColor()
       for (const key of Object.keys(xtermOptions)) {
