@@ -438,7 +438,18 @@ class AtomXtermSingleton {
   }
 }
 
-export const config = {
+function configOrder (obj) {
+  let order = 1
+  for (const name in obj) {
+    obj[name].order = order++
+    if (obj[name].type === 'object' && 'properties' in obj[name]) {
+      configOrder(obj[name].properties)
+    }
+  }
+  return obj
+}
+
+export const config = configOrder({
   spawnPtySettings: {
     title: 'Shell Process Settings',
     description: 'Settings related to the process running the shell.',
@@ -551,7 +562,7 @@ export const config = {
       }
     }
   }
-}
+})
 
 export function activate (state) {
   return AtomXtermSingleton.instance.activate(state)

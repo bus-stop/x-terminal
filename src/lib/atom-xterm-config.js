@@ -64,10 +64,6 @@ export default {
     return 14
   },
 
-  getDefaultFontFamily () {
-    return 'monospace'
-  },
-
   getMinimumFontSize () {
     // NOTE: Atom will crash if the font is set below 8.
     return 8
@@ -75,6 +71,10 @@ export default {
 
   getMaximumFontSize () {
     return 100
+  },
+
+  getDefaultFontFamily () {
+    return 'monospace'
   },
 
   getDefaultLeaveOpenAfterExit () {
