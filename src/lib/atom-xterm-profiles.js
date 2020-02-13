@@ -41,6 +41,7 @@ const CONFIG_KEY_TO_PROFILE_KEY_MAPPING = {
   'atom-xterm.spawnPtySettings.encoding': 'encoding',
   'atom-xterm.terminalSettings.fontSize': 'fontSize',
   'atom-xterm.terminalSettings.fontFamily': 'fontFamily',
+  'atom-xterm.terminalSettings.theme': 'theme',
   'atom-xterm.terminalSettings.leaveOpenAfterExit': 'leaveOpenAfterExit',
   'atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup': 'allowRelaunchingTerminalsOnStartup',
   'atom-xterm.terminalSettings.relaunchTerminalOnStartup': 'relaunchTerminalOnStartup',
@@ -143,6 +144,7 @@ class AtomXtermProfilesSingleton {
       encoding: null,
       fontSize: atomXtermConfig.getDefaultFontSize(),
       fontFamily: atomXtermConfig.getDefaultFontFamily(),
+      theme: atomXtermConfig.getDefaultTheme(),
       leaveOpenAfterExit: atomXtermConfig.getDefaultLeaveOpenAfterExit(),
       relaunchTerminalOnStartup: atomXtermConfig.getDefaultRelaunchTerminalOnStartup(),
       title: null,
@@ -198,6 +200,7 @@ class AtomXtermProfilesSingleton {
       encoding: encoding,
       fontSize: atom.config.get('atom-xterm.terminalSettings.fontSize') || atomXtermConfig.getDefaultFontSize(),
       fontFamily: atom.config.get('atom-xterm.terminalSettings.fontFamily') || atomXtermConfig.getDefaultFontFamily(),
+      theme: atom.config.get('atom-xterm.terminalSettings.theme') || atomXtermConfig.getDefaultTheme(),
       leaveOpenAfterExit: leaveOpenAfterExit,
       relaunchTerminalOnStartup: relaunchTerminalOnStartup,
       title: title || null,
@@ -219,6 +222,7 @@ class AtomXtermProfilesSingleton {
     if ('encoding' in data) sanitizedData.encoding = data.encoding
     if ('fontSize' in data) sanitizedData.fontSize = data.fontSize
     if ('fontFamily' in data) sanitizedData.fontFamily = data.fontFamily
+    if ('theme' in data) sanitizedData.theme = data.theme
     if ('leaveOpenAfterExit' in data) sanitizedData.leaveOpenAfterExit = data.leaveOpenAfterExit
     if ('relaunchTerminalOnStartup' in data) sanitizedData.relaunchTerminalOnStartup = data.relaunchTerminalOnStartup
     if ('title' in data) sanitizedData.title = data.title
@@ -328,6 +332,8 @@ class AtomXtermProfilesSingleton {
     if ('fontSize' in data) url.searchParams.set('fontSize', JSON.stringify(data.fontSize))
     // Font family to use.
     if ('fontFamily' in data) url.searchParams.set('fontFamily', data.fontFamily)
+    // Theme to use.
+    if ('theme' in data) url.searchParams.set('theme', data.theme)
     // This determines whether to leave the terminal tab open when the command
     // has finished running.
     if ('leaveOpenAfterExit' in data) url.searchParams.set('leaveOpenAfterExit', JSON.stringify(data.leaveOpenAfterExit))
@@ -338,8 +344,7 @@ class AtomXtermProfilesSingleton {
     if ('title' in data) url.searchParams.set('title', data.title)
     // The options supported by the Terminal object in xterm.js. See also
     // https://github.com/xtermjs/xterm.js/blob/5f0217cdb0baf353b3deedfab25e6e9b49c3d45f/typings/xterm.d.ts#L31 .
-    // NOTE: The 'fontSize' setting defined in the options here is ignored.
-    // NOTE: The 'fontFamily' setting defined in the options here is ignored.
+    // NOTE: The 'fontSize', 'fontFamily', and 'theme' settings defined in the options here are ignored.
     if ('xtermOptions' in data) url.searchParams.set('xtermOptions', JSON.stringify(data.xtermOptions))
     // This determines whether to prompt the user to startup the terminal
     // process.
@@ -382,6 +387,9 @@ class AtomXtermProfilesSingleton {
     param = url.searchParams.get('fontFamily')
     if (param && param !== 'null') newProfile.fontFamily = param
     if (!('fontFamily' in newProfile)) newProfile.fontFamily = baseProfile.fontFamily
+    param = url.searchParams.get('theme')
+    if (param && param !== 'null') newProfile.theme = param
+    if (!('theme' in newProfile)) newProfile.theme = baseProfile.theme
     param = url.searchParams.get('leaveOpenAfterExit')
     if (param) newProfile.leaveOpenAfterExit = JSON.parse(param)
     if (!('leaveOpenAfterExit' in newProfile && newProfile.leaveOpenAfterExit !== null && newProfile.leaveOpenAfterExit !== '')) newProfile.leaveOpenAfterExit = baseProfile.leaveOpenAfterExit

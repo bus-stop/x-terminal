@@ -138,6 +138,7 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
           baseProfile.fontFamily,
           modelProfile.fontFamily
         ))
+        // TODO: create theme
         // Leave open after terminal exit
         this.mainDiv.appendChild(this.createCheckbox(
           'leaveopenafterexit-checkbox',

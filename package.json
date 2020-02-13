@@ -50,7 +50,7 @@
     "@babel/preset-env": "^7.8.4",
     "@babel/register": "^7.8.3",
     "@babel/runtime": "^7.8.4",
-    "atom-jasmine3-test-runner": "^4.4.0",
+    "atom-jasmine3-test-runner": "^4.4.1",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.4.2",

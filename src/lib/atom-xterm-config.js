@@ -77,6 +77,10 @@ export default {
     return 'monospace'
   },
 
+  getDefaultTheme () {
+    return ''
+  },
+
   getDefaultLeaveOpenAfterExit () {
     return true
   },

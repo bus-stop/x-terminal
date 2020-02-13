@@ -247,6 +247,243 @@ class AtomXtermElementImpl extends HTMLElement {
     return (this.ptyProcess && this.ptyProcessRunning)
   }
 
+  getTheme () {
+    // themes modified from https://github.com/bus-stop/terminus/tree/master/styles/themes
+    switch (this.model.profile.theme) {
+      case 'atom-dark':
+        return {
+          background: '#1d1f21',
+          foreground: '#c5c8c6',
+          selection: '#999',
+          cursor: '#fff'
+        }
+      case 'atom-light':
+        return {
+          background: '#fff',
+          foreground: '#555',
+          selection: '#afc4da',
+          cursor: '#000'
+        }
+      case 'base16-tomorrow-dark':
+        return {
+          background: '#1d1f21',
+          foreground: '#c5c8c6',
+          selection: '#b4b7b4',
+          // selectionForeground: '#e0e0e0',
+          cursor: '#fff'
+        }
+      case 'base16-tomorrow-light':
+        return {
+          background: '#fff',
+          foreground: '#1d1f21',
+          selection: '#282a2e',
+          // selectionForeground: '#e0e0e0',
+          cursor: '#1d1f21'
+        }
+      case 'christmas':
+        return {
+          background: '#0c0047',
+          foreground: '#f81705',
+          selection: '#298f16',
+          cursor: '#009f59'
+        }
+      case 'city-lights':
+        return {
+          background: '#181d23',
+          foreground: '#666d81',
+          selection: '#2a2f38',
+          // selectionForeground: '#b7c5d3',
+          cursor: '#528bff'
+        }
+      case 'dracula':
+        return {
+          background: '#1e1f29',
+          foreground: 'white',
+          selection: '#44475a',
+          cursor: '#999999'
+        }
+      case 'grass':
+        return {
+          background: 'rgb(19, 119, 61)',
+          foreground: 'rgb(255, 240, 165)',
+          selection: 'rgba(182, 73, 38, .99)',
+          cursor: 'rgb(142, 40, 0)'
+        }
+      case 'homebrew':
+        return {
+          background: '#000',
+          foreground: 'rgb(41, 254, 20)',
+          selection: 'rgba(7, 30, 155, .99)',
+          cursor: 'rgb(55, 254, 38)'
+        }
+      case 'inverse':
+        return {
+          background: '#fff',
+          foreground: '#000',
+          selection: 'rgba(178, 215, 255, .99)',
+          cursor: 'rgb(146, 146, 146)'
+        }
+      case 'linux':
+        return {
+          background: '#000',
+          foreground: 'rgb(230, 230, 230)',
+          selection: 'rgba(155, 30, 7, .99)',
+          cursor: 'rgb(200, 20, 25)'
+        }
+      case 'man-page':
+        return {
+          background: 'rgb(254, 244, 156)',
+          foreground: 'black',
+          selection: 'rgba(178, 215, 255, .99)',
+          cursor: 'rgb(146, 146, 146)'
+        }
+      case 'novel':
+        return {
+          background: 'rgb(223, 219, 196)',
+          foreground: 'rgb(77, 47, 46)',
+          selection: 'rgba(155, 153, 122, .99)',
+          cursor: 'rgb(115, 99, 89)'
+        }
+      case 'ocean':
+        return {
+          background: 'rgb(44, 102, 201)',
+          foreground: 'white',
+          selection: 'rgba(41, 134, 255, .99)',
+          cursor: 'rgb(146, 146, 146)'
+        }
+      case 'one-dark':
+        return {
+          background: '#282c34',
+          foreground: '#abb2bf',
+          selection: '#9196a1',
+          cursor: '#528bff'
+        }
+      case 'one-light':
+        return {
+          background: 'hsl(230, 1%, 98%)',
+          foreground: 'hsl(230, 8%, 24%)',
+          selection: 'hsl(230, 1%, 90%)',
+          cursor: 'hsl(230, 100%, 66%)'
+        }
+      case 'predawn':
+        return {
+          background: '#282828',
+          foreground: '#f1f1f1',
+          selection: 'rgba(255,255,255,0.25)',
+          cursor: '#f18260'
+        }
+      case 'pro':
+        return {
+          background: '#000',
+          foreground: 'rgb(244, 244, 244)',
+          selection: 'rgba(82, 82, 82, .99)',
+          cursor: 'rgb(96, 96, 96)'
+        }
+      case 'red-sands':
+        return {
+          background: 'rgb(143, 53, 39)',
+          foreground: 'rgb(215, 201, 167)',
+          selection: 'rgba(60, 25, 22, .99)',
+          cursor: 'white'
+        }
+      case 'red':
+        return {
+          background: '#000',
+          foreground: 'rgb(255, 38, 14)',
+          selection: 'rgba(7, 30, 155, .99)',
+          cursor: 'rgb(255, 38, 14)'
+        }
+      case 'silver-aerogel':
+        return {
+          background: 'rgb(146, 146, 146)',
+          foreground: '#000',
+          selection: 'rgba(120, 123, 156, .99)',
+          cursor: 'rgb(224, 224, 224)'
+        }
+      case 'solarized-dark':
+        return {
+          background: '#042029',
+          foreground: '#708284',
+          selection: '#839496',
+          cursor: '#819090'
+        }
+      case 'solarized-light':
+        return {
+          background: '#fdf6e3',
+          foreground: '#657a81',
+          selection: '#ece7d5',
+          cursor: '#586e75'
+        }
+      case 'solid-colors':
+        return {
+          background: 'rgb(120, 132, 151)',
+          foreground: '#000',
+          selection: 'rgba(178, 215, 255, .99)',
+          // selectionForeground: '#',
+          cursor: '#fff'
+        }
+      case 'standard': {
+        const root = getComputedStyle(document.documentElement)
+        return {
+          background: root.getPropertyValue('--standard-app-background-color'),
+          foreground: root.getPropertyValue('--standard-text-color'),
+          cursor: root.getPropertyValue('--standard-text-color-highlight')
+        }
+      }
+      default:
+        return null
+    }
+
+    // // strings can be any css color string
+    // // (e.g. 'color-name', '#rgb', '#rrggbb', 'rgb(r, g, b)', 'hsl(h, s, l)')
+    // // some values may have alpha channel
+    // // (e.g.  '#rgba', '#rrggbbaa', 'rgba(r, g, b, a)', 'hsla(h, s, l, a)')
+    // {
+    //   /** The default foreground color */
+    //   foreground: '',
+    //   /** The default background color */
+    //   background: '',
+    //   /** The cursor color (can be transparent) */
+    //   cursor: '',
+    //   /** The accent color of the cursor (fg color for a block cursor) (can be transparent) */
+    //   cursorAccent: '',
+    //   /** The selection background color (can be transparent) */
+    //   selection: '',
+    //   /** ANSI black (eg. `\x1b[30m`) */
+    //   black: '',
+    //   /** ANSI red (eg. `\x1b[31m`) */
+    //   red: '',
+    //   /** ANSI green (eg. `\x1b[32m`) */
+    //   green: '',
+    //   /** ANSI yellow (eg. `\x1b[33m`) */
+    //   yellow: '',
+    //   /** ANSI blue (eg. `\x1b[34m`) */
+    //   blue: '',
+    //   /** ANSI magenta (eg. `\x1b[35m`) */
+    //   magenta: '',
+    //   /** ANSI cyan (eg. `\x1b[36m`) */
+    //   cyan: '',
+    //   /** ANSI white (eg. `\x1b[37m`) */
+    //   white: '',
+    //   /** ANSI bright black (eg. `\x1b[1;30m`) */
+    //   brightBlack: '',
+    //   /** ANSI bright red (eg. `\x1b[1;31m`) */
+    //   brightRed: '',
+    //   /** ANSI bright green (eg. `\x1b[1;32m`) */
+    //   brightGreen: '',
+    //   /** ANSI bright yellow (eg. `\x1b[1;33m`) */
+    //   brightYellow: '',
+    //   /** ANSI bright blue (eg. `\x1b[1;34m`) */
+    //   brightBlue: '',
+    //   /** ANSI bright magenta (eg. `\x1b[1;35m`) */
+    //   brightMagenta: '',
+    //   /** ANSI bright cyan (eg. `\x1b[1;36m`) */
+    //   brightCyan: '',
+    //   /** ANSI bright white (eg. `\x1b[1;37m`) */
+    //   brightWhite: ''
+    // }
+  }
+
   getXtermOptions () {
     let xtermOptions = {
       cursorBlink: true
@@ -254,6 +491,10 @@ class AtomXtermElementImpl extends HTMLElement {
     xtermOptions = Object.assign(xtermOptions, this.model.profile.xtermOptions)
     xtermOptions.fontSize = this.model.profile.fontSize
     xtermOptions.fontFamily = this.model.profile.fontFamily
+    const theme = this.getTheme()
+    if (theme) {
+      xtermOptions.theme = theme
+    }
     // NOTE: The cloning is needed because the Terminal class modifies the
     // options passed to it.
     return this.profilesSingleton.deepClone(xtermOptions)
@@ -295,6 +536,7 @@ class AtomXtermElementImpl extends HTMLElement {
           // to be applied to existing terminals.
           fontSize: baseProfile.fontSize,
           fontFamily: baseProfile.fontFamily,
+          theme: baseProfile.theme,
           xtermOptions: baseProfile.xtermOptions
         }
       )
@@ -458,6 +700,11 @@ class AtomXtermElementImpl extends HTMLElement {
       if ('fontFamily' in this.pendingTerminalProfileOptions) {
         xtermOptions.fontFamily = this.pendingTerminalProfileOptions.fontFamily
         delete this.pendingTerminalProfileOptions.fontFamily
+      }
+      delete xtermOptions.theme
+      if ('theme' in this.pendingTerminalProfileOptions) {
+        xtermOptions.theme = this.pendingTerminalProfileOptions.theme
+        delete this.pendingTerminalProfileOptions.theme
       }
       this.setMainBackgroundColor()
       for (const key of Object.keys(xtermOptions)) {
