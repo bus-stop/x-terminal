@@ -1,15 +1,23 @@
-# [atom-xterm](https://atom.io/packages/atom-xterm)
+# [x-terminal](https://atom.io/packages/x-terminal)
+
+This is a fork of [atom-xterm](https://github.com/amejia1/atom-xterm/)
+
+## Updates
+
+1. Updated dependencies
+   - xterm v4 introduced new plugins
+   - faster performance with webgl
+2. Themes
+   - Easily change terminal colors in settings
+3. Font Family
+   - Change font family in settings
 
 Atom plugin for providing terminals inside your Atom workspace.
 
-[![Linux/macOS Tests](https://img.shields.io/travis/amejia1/atom-xterm/master.svg?label=Linux/macOS+Tests)](https://travis-ci.org/amejia1/atom-xterm)
-[![Windows Tests](https://img.shields.io/appveyor/ci/amejia1/atom-xterm/master.svg?label=Windows+Tests)](https://ci.appveyor.com/project/amejia1/atom-xterm)
-[![Depedencies](https://img.shields.io/david/amejia1/atom-xterm.svg)](https://david-dm.org/amejia1/atom-xterm)
-[![Downloads](https://img.shields.io/apm/dm/atom-xterm.svg)](https://atom.io/packages/atom-xterm)
-[![Latest release](https://img.shields.io/apm/v/atom-xterm.svg)](https://atom.io/packages/atom-xterm)
-[![Greenkeeper badge](https://badges.greenkeeper.io/amejia1/atom-xterm.svg)](https://greenkeeper.io/)
+![CI](https://github.com/UziTech/x-terminal/workflows/CI/badge.svg)
+[![dependencies Status](https://david-dm.org/UziTech/x-terminal/status.svg)](https://david-dm.org/UziTech/x-terminal)
 
-![Atom Xterm demo](https://github.com/amejia1/atom-xterm/raw/b7b9d4b073d9eea4f54806be5385d81d4fdd2393/resources/atom-xterm-demo.gif)
+![X-Terminal demo](https://github.com/UziTech/x-terminal/raw/b7b9d4b073d9eea4f54806be5385d81d4fdd2393/resources/atom-xterm-demo.gif)
 
 ## Built in Terminal for Atom Feature Request
 
@@ -20,24 +28,24 @@ give an explanation as to why you need a built-in terminal in Atom by default.
 
 # Installation
 
-To install, simply search for the *atom-xterm* package via Atom's package
+To install, simply search for the *x-terminal* package via Atom's package
 manager. It can also be installed via command-line with the
 [apm](https://github.com/atom/apm) command.
 
 ```
-apm install atom-xterm
+apm install x-terminal
 ```
 
 ## One time prerequisites
 
-The *atom-xterm* package requires
+The *x-terminal* package requires
 [node-pty](https://www.npmjs.com/package/node-pty). That package currently
 requires building some native bindings on the local system using
 [node-gyp](https://github.com/nodejs/node-gyp). Providing prebuilt binaries
 is still [work in progress](https://github.com/Microsoft/node-pty/issues/46)
 so for now, you'll need to install certain packages on your system before
-installing *atom-xterm*. Below are what you'll need to install only once before
-installing *atom-xterm*.
+installing *x-terminal*. Below are what you'll need to install only once before
+installing *x-terminal*.
 
 ### Windows
 
@@ -75,10 +83,10 @@ the programs listed [here](https://github.com/nodejs/node-gyp#on-mac-os-x)
 
 To open terminals, just open them through the menu.
 
-![Atom Xterm menu](https://raw.githubusercontent.com/amejia1/atom-xterm/9dfb79f31df4df67b12be74f541c39d498d2212f/resources/atom-xterm-menu.png)
+![X-Terminal menu](https://raw.githubusercontent.com/UziTech/x-terminal/9dfb79f31df4df67b12be74f541c39d498d2212f/resources/atom-xterm-menu.png)
 
 There's also various key bindings you can use to open terminals. See the
-available key bindings for the atom-xterm package.
+available key bindings for the x-terminal package.
 
 There's also menu items available for opening terminals via right clicking on a
 text editor or on a terminal.
@@ -95,44 +103,44 @@ And of course, there's the old fashion way of just moving the tabs where you
 want them. Feel free to place your terminal tabs anywhere in your workspace to
 include any of the docks.
 
-![Atom Xterm moving terminals demo](https://github.com/amejia1/atom-xterm/raw/b7b9d4b073d9eea4f54806be5385d81d4fdd2393/resources/atom-xterm-moving-terminals-demo.gif)
+![X-Terminal moving terminals demo](https://github.com/UziTech/x-terminal/raw/b7b9d4b073d9eea4f54806be5385d81d4fdd2393/resources/atom-xterm-moving-terminals-demo.gif)
 
 ## Profiles
 
-The atom-xterm package supports saving and loading profiles. What this allows
+The x-terminal package supports saving and loading profiles. What this allows
 you to do is save commonly used commands and settings for later use.
 
-![Atom Xterm profiles demo](https://raw.githubusercontent.com/amejia1/atom-xterm/5604f0433291a452ceffcc722c61fa2835d8b67a/resources/atom-xterm-profiles-demo.gif)
+![X-Terminal profiles demo](https://raw.githubusercontent.com/UziTech/x-terminal/5604f0433291a452ceffcc722c61fa2835d8b67a/resources/atom-xterm-profiles-demo.gif)
 
 ## Notifications
 
-The atom-xterm package provides notifications about terminal process exit
+The x-terminal package provides notifications about terminal process exit
 successes and failures. Notifications will appear in Atom's own notification
 manager as well as on the terminal tab triggering the notification.
 
 Success
 
-![Atom Xterm exit success](https://raw.githubusercontent.com/amejia1/atom-xterm/master/resources/atom-xterm-exit-success.png)
+![X-Terminal exit success](https://raw.githubusercontent.com/UziTech/x-terminal/master/resources/atom-xterm-exit-success.png)
 
 Failure
 
-![Atom Xterm exit failure](https://raw.githubusercontent.com/amejia1/atom-xterm/master/resources/atom-xterm-exit-failure.png)
+![X-Terminal exit failure](https://raw.githubusercontent.com/UziTech/x-terminal/master/resources/atom-xterm-exit-failure.png)
 
 There's also activity notifications for terminal tabs not in focus.
 
-![Atom Xterm activity notification](https://raw.githubusercontent.com/amejia1/atom-xterm/master/resources/atom-xterm-activity-notification.png)
+![X-Terminal activity notification](https://raw.githubusercontent.com/UziTech/x-terminal/master/resources/atom-xterm-activity-notification.png)
 
 ## Services
 
-For plugin writers, the `atom-xterm` package supports one service method which
+For plugin writers, the `x-terminal` package supports one service method which
 can be used to easily open terminals. This method is provided using Atom's [services](http://flight-manual.atom.io/behind-atom/sections/interacting-with-other-packages-via-services/)
-API. To use it, add a consumer method to consume the `atom-xterm` service, or
+API. To use it, add a consumer method to consume the `x-terminal` service, or
 rather a JavaScript object that provides an
-[openTerminal()](https://github.com/amejia1/atom-xterm/blob/b9578414e93b6fd164e19e03e2fbd5140934c3cb/lib/atom-xterm.js#L368) method. The `openTerminal()` method behaves just like Atom's
+[openTerminal()](https://github.com/UziTech/x-terminal/blob/b9578414e93b6fd164e19e03e2fbd5140934c3cb/lib/atom-xterm.js#L368) method. The `openTerminal()` method behaves just like Atom's
 [open()](https://github.com/atom/atom/blob/v1.23.3/src/workspace.js#L912)
 method except that the first argument must be a JSON object describing the
 terminal profile that should be opened. Docs about this JSON object can be
-found [here](https://github.com/amejia1/atom-xterm/blob/b9578414e93b6fd164e19e03e2fbd5140934c3cb/lib/atom-xterm-profiles.js#L295).
+found [here](https://github.com/UziTech/x-terminal/blob/b9578414e93b6fd164e19e03e2fbd5140934c3cb/lib/atom-xterm-profiles.js#L295).
 
 As an example on how to use the provided `openTerminal()` method, your
 `package.json` should have the following.
@@ -188,20 +196,20 @@ this.atomXtermService.openTerminal({
 
 # Development
 
-Want to help develop atom-xterm? Here's how to quickly get setup.
+Want to help develop x-terminal? Here's how to quickly get setup.
 
 First use the [apm](https://github.com/atom/apm) command to clone the
-[atom-xterm repo](https://github.com/amejia1/atom-xterm).
+[x-terminal repo](https://github.com/UziTech/x-terminal).
 
 ```
-apm develop atom-xterm
+apm develop x-terminal
 ```
 
-This should clone the atom-xterm package into the `$HOME/github/atom-xterm`
+This should clone the x-terminal package into the `$HOME/github/x-terminal`
 directory. Go into this directory and install its dependencies.
 
 ```
-cd $HOME/github/atom-xterm
+cd $HOME/github/x-terminal
 npm install
 ```
 
@@ -219,10 +227,10 @@ Finally, open this directory in Atom's dev mode and hack away.
 atom --dev
 ```
 
-There's a test suite available for automated testing of the atom-xterm package.
+There's a test suite available for automated testing of the x-terminal package.
 Simply go to `View > Developer > Run Package Specs` in Atom's main menu or
 use the hotkey. You can run the full test suite (which includes running lint
-tools) via command-line by running `npm run test` inside the atom-xterm
+tools) via command-line by running `npm run test` inside the x-terminal
 directory.
 
 Various lint tools are being used to keep the code "beautified". To run only
@@ -231,7 +239,7 @@ the lint tools, simply run `npm run lint`.
 ## Pull Requests
 
 Whenever you're ready to submit a pull request, be sure to submit it
-against a fork of the main [atom-xterm repo](https://github.com/amejia1/atom-xterm)
+against a fork of the main [x-terminal repo](https://github.com/UziTech/x-terminal)
 master branch that you'll own. Fork the repo using Github and make note of the
 new `git` URL. Set this new git URL as the URL for the `origin` remote in your
 already cloned git repo is follows.
@@ -252,7 +260,7 @@ such, often times it's necessary to make changes to xterm.js in order to fix
 some bug or implement new features.
 
 If you want to work on xterm.js for the benefit of a bug fix or feature to be
-supported in atom-xterm, here's how you can quickly get setup.
+supported in x-terminal, here's how you can quickly get setup.
 
 First make a fork of [xterm.js](https://github.com/xtermjs/xterm.js). Next,
 clone your newly created fork as follows.
@@ -292,15 +300,15 @@ Add a global link for xterm.js to your system.
 npm link
 ```
 
-Inside your atom-xterm directory, link against the global `xterm` link.
+Inside your x-terminal directory, link against the global `xterm` link.
 
 ```
-cd ${HOME}/github/atom-xterm
+cd ${HOME}/github/x-terminal
 npm link xterm
 ```
 
 Finally, perform a rebuild with the [apm](https://github.com/atom/apm) program
-inside the atom-xterm directory.
+inside the x-terminal directory.
 
 ```
 apm rebuild
@@ -316,11 +324,11 @@ See the [NOTICE](NOTICE) and [LICENSE](LICENSE) files for copyright and license
 info about this package respectively.
 
 See the [THIRD-PARTY](THIRD-PARTY) file for info about the dependencies used in
-the atom-xterm package.
+the x-terminal package.
 
 # Feedback
 
 Need to submit a bug report? Have a new feature you want to see implemented in
-*atom-xterm*? Please feel free to report them through the
-[issues page](https://github.com/amejia1/atom-xterm/issues). For bug reports,
+*x-terminal*? Please feel free to report them through the
+[issues page](https://github.com/UziTech/x-terminal/issues). For bug reports,
 please also provide images or demos showing your issues if you can.
