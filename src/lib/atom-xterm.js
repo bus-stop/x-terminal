@@ -587,7 +587,7 @@ export const config = configOrder({
           },
           foreground: {
             title: 'Text Color',
-            description: 'This will be overriden if the theme is not \'Custom\'.',
+            description: 'This will be overridden if the theme is not \'Custom\'.',
             type: 'color',
             default: atomXtermConfig.getDefaultColorForeground()
           },
