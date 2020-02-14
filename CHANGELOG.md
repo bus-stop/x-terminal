@@ -1,3 +1,10 @@
+## [6.5.1](https://github.com/UziTech/x-terminal/compare/v6.5.0...v6.5.1) (2020-02-14)
+
+
+### Bug Fixes
+
+* update all deps ([1c74d24](https://github.com/UziTech/x-terminal/commit/1c74d24ca42c74caf9fc65b284d02854858654c0))
+
 ## 6.5.0
 * Switch to babel 7 for generating move-winpty-binaries.js script.
 * Use eslint-config-standard@next release to fix test failures in AppVeyor.
