@@ -587,31 +587,31 @@ export const config = configOrder({
           },
           foreground: {
             title: 'Text Color',
-            description: 'This will be overriden by the theme text color.',
+            description: 'This will be overriden if the theme is not \'Custom\'.',
             type: 'color',
             default: atomXtermConfig.getDefaultColorForeground()
           },
           background: {
             title: 'Background Color',
-            description: 'This will be overriden by the theme background color.',
+            description: 'This will be overridden if the theme is not \'Custom\'.',
             type: 'color',
             default: atomXtermConfig.getDefaultColorBackground()
           },
           cursor: {
             title: 'Cursor Color',
-            description: 'Can be transparent. This will be overriden by the theme cursor color.',
+            description: 'Can be transparent. This will be overridden if the theme is not \'Custom\'.',
             type: 'color',
             default: atomXtermConfig.getDefaultColorCursor()
           },
           cursorAccent: {
             title: 'Cursor Text Color',
-            description: 'Can be transparent. This will be overriden by the theme cursor text color.',
+            description: 'Can be transparent. This will be overridden if the theme is not \'Custom\'.',
             type: 'color',
             default: atomXtermConfig.getDefaultColorCursorAccent()
           },
           selection: {
             title: 'Selection Background Color',
-            description: 'Can be transparent. This will be overriden by the theme selection background color.',
+            description: 'Can be transparent. This will be overridden if the theme is not \'Custom\'.',
             type: 'color',
             default: atomXtermConfig.getDefaultColorSelection()
           },
