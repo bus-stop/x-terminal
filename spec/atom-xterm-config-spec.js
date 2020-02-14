@@ -23,400 +23,400 @@ import os from 'os'
 import path from 'path'
 
 describe('Call to getDefaultShellCommand()', () => {
-  const savedPlatform = process.platform
-  let savedEnv
+	const savedPlatform = process.platform
+	let savedEnv
 
-  beforeEach(() => {
-    savedEnv = JSON.parse(JSON.stringify(process.env))
-  })
+	beforeEach(() => {
+		savedEnv = JSON.parse(JSON.stringify(process.env))
+	})
 
-  afterEach(() => {
-    process.env = savedEnv
-    Object.defineProperty(process, 'platform', {
-      value: savedPlatform
-    })
-  })
+	afterEach(() => {
+		process.env = savedEnv
+		Object.defineProperty(process, 'platform', {
+			value: savedPlatform,
+		})
+	})
 
-  it('on win32 without COMSPEC set', () => {
-    Object.defineProperty(process, 'platform', {
-      value: 'win32'
-    })
-    if (process.env.COMSPEC) {
-      delete process.env.COMSPEC
-    }
-    expect(atomXtermConfig.getDefaultShellCommand()).toBe('cmd.exe')
-  })
+	it('on win32 without COMSPEC set', () => {
+		Object.defineProperty(process, 'platform', {
+			value: 'win32',
+		})
+		if (process.env.COMSPEC) {
+			delete process.env.COMSPEC
+		}
+		expect(atomXtermConfig.getDefaultShellCommand()).toBe('cmd.exe')
+	})
 
-  it('on win32 with COMSPEC set', () => {
-    Object.defineProperty(process, 'platform', {
-      value: 'win32'
-    })
-    const expected = 'somecommand.exe'
-    process.env.COMSPEC = expected
-    expect(atomXtermConfig.getDefaultShellCommand()).toBe(expected)
-  })
+	it('on win32 with COMSPEC set', () => {
+		Object.defineProperty(process, 'platform', {
+			value: 'win32',
+		})
+		const expected = 'somecommand.exe'
+		process.env.COMSPEC = expected
+		expect(atomXtermConfig.getDefaultShellCommand()).toBe(expected)
+	})
 
-  it('on linux without SHELL set', () => {
-    Object.defineProperty(process, 'platform', {
-      value: 'linux'
-    })
-    if (process.env.SHELL) {
-      delete process.env.SHELL
-    }
-    expect(atomXtermConfig.getDefaultShellCommand()).toBe('/bin/sh')
-  })
+	it('on linux without SHELL set', () => {
+		Object.defineProperty(process, 'platform', {
+			value: 'linux',
+		})
+		if (process.env.SHELL) {
+			delete process.env.SHELL
+		}
+		expect(atomXtermConfig.getDefaultShellCommand()).toBe('/bin/sh')
+	})
 
-  it('on linux with SHELL set', () => {
-    Object.defineProperty(process, 'platform', {
-      value: 'linux'
-    })
-    const expected = 'somecommand'
-    process.env.SHELL = expected
-    expect(atomXtermConfig.getDefaultShellCommand()).toBe(expected)
-  })
+	it('on linux with SHELL set', () => {
+		Object.defineProperty(process, 'platform', {
+			value: 'linux',
+		})
+		const expected = 'somecommand'
+		process.env.SHELL = expected
+		expect(atomXtermConfig.getDefaultShellCommand()).toBe(expected)
+	})
 })
 
 describe('Call to getDefaultArgs()', () => {
-  it('return []', () => {
-    expect(atomXtermConfig.getDefaultArgs()).toBe('[]')
-  })
+	it('return []', () => {
+		expect(atomXtermConfig.getDefaultArgs()).toBe('[]')
+	})
 })
 
 describe('Call to getDefaultTermType()', () => {
-  let savedEnv
+	let savedEnv
 
-  beforeEach(() => {
-    savedEnv = JSON.parse(JSON.stringify(process.env))
-  })
+	beforeEach(() => {
+		savedEnv = JSON.parse(JSON.stringify(process.env))
+	})
 
-  afterEach(() => {
-    process.env = savedEnv
-  })
+	afterEach(() => {
+		process.env = savedEnv
+	})
 
-  it('without TERM set', () => {
-    if (process.env.TERM) {
-      delete process.env.TERM
-    }
-    expect(atomXtermConfig.getDefaultTermType()).toBe('xterm-256color')
-  })
+	it('without TERM set', () => {
+		if (process.env.TERM) {
+			delete process.env.TERM
+		}
+		expect(atomXtermConfig.getDefaultTermType()).toBe('xterm-256color')
+	})
 
-  it('with TERM set', () => {
-    const expected = 'sometermtype'
-    process.env.TERM = expected
-    expect(atomXtermConfig.getDefaultTermType()).toBe(expected)
-  })
+	it('with TERM set', () => {
+		const expected = 'sometermtype'
+		process.env.TERM = expected
+		expect(atomXtermConfig.getDefaultTermType()).toBe(expected)
+	})
 })
 
 describe('Call to getDefaultCwd()', () => {
-  const savedPlatform = process.platform
-  let savedEnv
+	const savedPlatform = process.platform
+	let savedEnv
 
-  beforeEach(() => {
-    savedEnv = JSON.parse(JSON.stringify(process.env))
-  })
+	beforeEach(() => {
+		savedEnv = JSON.parse(JSON.stringify(process.env))
+	})
 
-  afterEach(() => {
-    process.env = savedEnv
-    Object.defineProperty(process, 'platform', {
-      value: savedPlatform
-    })
-  })
+	afterEach(() => {
+		process.env = savedEnv
+		Object.defineProperty(process, 'platform', {
+			value: savedPlatform,
+		})
+	})
 
-  it('on win32', () => {
-    Object.defineProperty(process, 'platform', {
-      value: 'win32'
-    })
-    const expected = 'C:\\some\\dir'
-    process.env.USERPROFILE = expected
-    expect(atomXtermConfig.getDefaultCwd()).toBe(expected)
-  })
+	it('on win32', () => {
+		Object.defineProperty(process, 'platform', {
+			value: 'win32',
+		})
+		const expected = 'C:\\some\\dir'
+		process.env.USERPROFILE = expected
+		expect(atomXtermConfig.getDefaultCwd()).toBe(expected)
+	})
 
-  it('on linux', () => {
-    Object.defineProperty(process, 'platform', {
-      value: 'linux'
-    })
-    const expected = '/some/dir'
-    process.env.HOME = expected
-    expect(atomXtermConfig.getDefaultCwd()).toBe(expected)
-  })
+	it('on linux', () => {
+		Object.defineProperty(process, 'platform', {
+			value: 'linux',
+		})
+		const expected = '/some/dir'
+		process.env.HOME = expected
+		expect(atomXtermConfig.getDefaultCwd()).toBe(expected)
+	})
 })
 
 describe('Call to getDefaultEnv()', () => {
-  it('return \'\'', () => {
-    expect(atomXtermConfig.getDefaultEnv()).toBe('')
-  })
+	it('return \'\'', () => {
+		expect(atomXtermConfig.getDefaultEnv()).toBe('')
+	})
 })
 
 describe('Call to getDefaultSetEnv()', () => {
-  it('return {}', () => {
-    expect(atomXtermConfig.getDefaultSetEnv()).toBe('{}')
-  })
+	it('return {}', () => {
+		expect(atomXtermConfig.getDefaultSetEnv()).toBe('{}')
+	})
 })
 
 describe('Call to getDefaultDeleteEnv()', () => {
-  it('return []', () => {
-    expect(atomXtermConfig.getDefaultDeleteEnv()).toBe('[]')
-  })
+	it('return []', () => {
+		expect(atomXtermConfig.getDefaultDeleteEnv()).toBe('[]')
+	})
 })
 
 describe('Call to getDefaultEncoding()', () => {
-  it('return \'\'', () => {
-    expect(atomXtermConfig.getDefaultEncoding()).toBe('')
-  })
+	it('return \'\'', () => {
+		expect(atomXtermConfig.getDefaultEncoding()).toBe('')
+	})
 })
 
 describe('Call to getDefaultFontSize()', () => {
-  it('return 14', () => {
-    expect(atomXtermConfig.getDefaultFontSize()).toBe(14)
-  })
+	it('return 14', () => {
+		expect(atomXtermConfig.getDefaultFontSize()).toBe(14)
+	})
 })
 
 describe('Call to getMinimumFontSize()', () => {
-  it('return 8', () => {
-    expect(atomXtermConfig.getMinimumFontSize()).toBe(8)
-  })
+	it('return 8', () => {
+		expect(atomXtermConfig.getMinimumFontSize()).toBe(8)
+	})
 })
 
 describe('Call to getMaximumFontSize()', () => {
-  it('return 100', () => {
-    expect(atomXtermConfig.getMaximumFontSize()).toBe(100)
-  })
+	it('return 100', () => {
+		expect(atomXtermConfig.getMaximumFontSize()).toBe(100)
+	})
 })
 
 describe('Call to getDefaultFontFamily()', () => {
-  it('return \'monospace\'', () => {
-    expect(atomXtermConfig.getDefaultFontFamily()).toBe('monospace')
-  })
+	it('return \'monospace\'', () => {
+		expect(atomXtermConfig.getDefaultFontFamily()).toBe('monospace')
+	})
 })
 
 describe('Call to getDefaultTheme()', () => {
-  it('return \'Custom\'', () => {
-    expect(atomXtermConfig.getDefaultTheme()).toBe('Custom')
-  })
+	it('return \'Custom\'', () => {
+		expect(atomXtermConfig.getDefaultTheme()).toBe('Custom')
+	})
 })
 
 describe('Call to getDefaultColorForeground()', () => {
-  it('return \'#fff\'', () => {
-    expect(atomXtermConfig.getDefaultColorForeground()).toBe('#fff')
-  })
+	it('return \'#fff\'', () => {
+		expect(atomXtermConfig.getDefaultColorForeground()).toBe('#fff')
+	})
 })
 
 describe('Call to getDefaultColorBackground()', () => {
-  it('return \'#000\'', () => {
-    expect(atomXtermConfig.getDefaultColorBackground()).toBe('#000')
-  })
+	it('return \'#000\'', () => {
+		expect(atomXtermConfig.getDefaultColorBackground()).toBe('#000')
+	})
 })
 
 describe('Call to getDefaultColorCursor()', () => {
-  it('return \'#fff\'', () => {
-    expect(atomXtermConfig.getDefaultColorCursor()).toBe('#fff')
-  })
+	it('return \'#fff\'', () => {
+		expect(atomXtermConfig.getDefaultColorCursor()).toBe('#fff')
+	})
 })
 
 describe('Call to getDefaultColorCursorAccent()', () => {
-  it('return \'#000\'', () => {
-    expect(atomXtermConfig.getDefaultColorCursorAccent()).toBe('#000')
-  })
+	it('return \'#000\'', () => {
+		expect(atomXtermConfig.getDefaultColorCursorAccent()).toBe('#000')
+	})
 })
 
 describe('Call to getDefaultColorSelection()', () => {
-  it('return \'rgba(255, 255, 255, .3)\'', () => {
-    expect(atomXtermConfig.getDefaultColorSelection()).toBe('rgba(255, 255, 255, .3)')
-  })
+	it('return \'rgba(255, 255, 255, .3)\'', () => {
+		expect(atomXtermConfig.getDefaultColorSelection()).toBe('rgba(255, 255, 255, .3)')
+	})
 })
 
 describe('Call to getDefaultColorBlack()', () => {
-  it('return \'#2e3436\'', () => {
-    expect(atomXtermConfig.getDefaultColorBlack()).toBe('#2e3436')
-  })
+	it('return \'#2e3436\'', () => {
+		expect(atomXtermConfig.getDefaultColorBlack()).toBe('#2e3436')
+	})
 })
 
 describe('Call to getDefaultColorRed()', () => {
-  it('return \'#cc0000\'', () => {
-    expect(atomXtermConfig.getDefaultColorRed()).toBe('#cc0000')
-  })
+	it('return \'#cc0000\'', () => {
+		expect(atomXtermConfig.getDefaultColorRed()).toBe('#cc0000')
+	})
 })
 
 describe('Call to getDefaultColorGreen()', () => {
-  it('return \'#4e9a06\'', () => {
-    expect(atomXtermConfig.getDefaultColorGreen()).toBe('#4e9a06')
-  })
+	it('return \'#4e9a06\'', () => {
+		expect(atomXtermConfig.getDefaultColorGreen()).toBe('#4e9a06')
+	})
 })
 
 describe('Call to getDefaultColorYellow()', () => {
-  it('return \'#c4a000\'', () => {
-    expect(atomXtermConfig.getDefaultColorYellow()).toBe('#c4a000')
-  })
+	it('return \'#c4a000\'', () => {
+		expect(atomXtermConfig.getDefaultColorYellow()).toBe('#c4a000')
+	})
 })
 
 describe('Call to getDefaultColorBlue()', () => {
-  it('return \'#3465a4\'', () => {
-    expect(atomXtermConfig.getDefaultColorBlue()).toBe('#3465a4')
-  })
+	it('return \'#3465a4\'', () => {
+		expect(atomXtermConfig.getDefaultColorBlue()).toBe('#3465a4')
+	})
 })
 
 describe('Call to getDefaultColorMagenta()', () => {
-  it('return \'#75507b\'', () => {
-    expect(atomXtermConfig.getDefaultColorMagenta()).toBe('#75507b')
-  })
+	it('return \'#75507b\'', () => {
+		expect(atomXtermConfig.getDefaultColorMagenta()).toBe('#75507b')
+	})
 })
 
 describe('Call to getDefaultColorCyan()', () => {
-  it('return \'#06989a\'', () => {
-    expect(atomXtermConfig.getDefaultColorCyan()).toBe('#06989a')
-  })
+	it('return \'#06989a\'', () => {
+		expect(atomXtermConfig.getDefaultColorCyan()).toBe('#06989a')
+	})
 })
 
 describe('Call to getDefaultColorWhite()', () => {
-  it('return \'#d3d7cf\'', () => {
-    expect(atomXtermConfig.getDefaultColorWhite()).toBe('#d3d7cf')
-  })
+	it('return \'#d3d7cf\'', () => {
+		expect(atomXtermConfig.getDefaultColorWhite()).toBe('#d3d7cf')
+	})
 })
 
 describe('Call to getDefaultColorBrightBlack()', () => {
-  it('return \'#555753\'', () => {
-    expect(atomXtermConfig.getDefaultColorBrightBlack()).toBe('#555753')
-  })
+	it('return \'#555753\'', () => {
+		expect(atomXtermConfig.getDefaultColorBrightBlack()).toBe('#555753')
+	})
 })
 
 describe('Call to getDefaultColorBrightRed()', () => {
-  it('return \'#ef2929\'', () => {
-    expect(atomXtermConfig.getDefaultColorBrightRed()).toBe('#ef2929')
-  })
+	it('return \'#ef2929\'', () => {
+		expect(atomXtermConfig.getDefaultColorBrightRed()).toBe('#ef2929')
+	})
 })
 
 describe('Call to getDefaultColorBrightGreen()', () => {
-  it('return \'#8ae234\'', () => {
-    expect(atomXtermConfig.getDefaultColorBrightGreen()).toBe('#8ae234')
-  })
+	it('return \'#8ae234\'', () => {
+		expect(atomXtermConfig.getDefaultColorBrightGreen()).toBe('#8ae234')
+	})
 })
 
 describe('Call to getDefaultColorBrightYellow()', () => {
-  it('return \'#fce94f\'', () => {
-    expect(atomXtermConfig.getDefaultColorBrightYellow()).toBe('#fce94f')
-  })
+	it('return \'#fce94f\'', () => {
+		expect(atomXtermConfig.getDefaultColorBrightYellow()).toBe('#fce94f')
+	})
 })
 
 describe('Call to getDefaultColorBrightBlue()', () => {
-  it('return \'#729fcf\'', () => {
-    expect(atomXtermConfig.getDefaultColorBrightBlue()).toBe('#729fcf')
-  })
+	it('return \'#729fcf\'', () => {
+		expect(atomXtermConfig.getDefaultColorBrightBlue()).toBe('#729fcf')
+	})
 })
 
 describe('Call to getDefaultColorBrightMagenta()', () => {
-  it('return \'#ad7fa8\'', () => {
-    expect(atomXtermConfig.getDefaultColorBrightMagenta()).toBe('#ad7fa8')
-  })
+	it('return \'#ad7fa8\'', () => {
+		expect(atomXtermConfig.getDefaultColorBrightMagenta()).toBe('#ad7fa8')
+	})
 })
 
 describe('Call to getDefaultColorBrightCyan()', () => {
-  it('return \'#34e2e2\'', () => {
-    expect(atomXtermConfig.getDefaultColorBrightCyan()).toBe('#34e2e2')
-  })
+	it('return \'#34e2e2\'', () => {
+		expect(atomXtermConfig.getDefaultColorBrightCyan()).toBe('#34e2e2')
+	})
 })
 
 describe('Call to getDefaultColorBrightWhite()', () => {
-  it('return \'#eeeeec\'', () => {
-    expect(atomXtermConfig.getDefaultColorBrightWhite()).toBe('#eeeeec')
-  })
+	it('return \'#eeeeec\'', () => {
+		expect(atomXtermConfig.getDefaultColorBrightWhite()).toBe('#eeeeec')
+	})
 })
 
 describe('Call to getDefaultLeaveOpenAfterExit()', () => {
-  it('return true', () => {
-    expect(atomXtermConfig.getDefaultLeaveOpenAfterExit()).toBe(true)
-  })
+	it('return true', () => {
+		expect(atomXtermConfig.getDefaultLeaveOpenAfterExit()).toBe(true)
+	})
 })
 
 describe('Call to getDefaultAllowRelaunchingTerminalsOnStartup()', () => {
-  it('return true', () => {
-    expect(atomXtermConfig.getDefaultAllowRelaunchingTerminalsOnStartup()).toBe(true)
-  })
+	it('return true', () => {
+		expect(atomXtermConfig.getDefaultAllowRelaunchingTerminalsOnStartup()).toBe(true)
+	})
 })
 
 describe('Call to getDefaultRelaunchTerminalOnStartup()', () => {
-  it('return true', () => {
-    expect(atomXtermConfig.getDefaultRelaunchTerminalOnStartup()).toBe(true)
-  })
+	it('return true', () => {
+		expect(atomXtermConfig.getDefaultRelaunchTerminalOnStartup()).toBe(true)
+	})
 })
 
 describe('Call to getDefaultXtermOptions()', () => {
-  it('return {}', () => {
-    expect(atomXtermConfig.getDefaultXtermOptions()).toBe('{}')
-  })
+	it('return {}', () => {
+		expect(atomXtermConfig.getDefaultXtermOptions()).toBe('{}')
+	})
 })
 
 describe('Call to getUserDataPath()', () => {
-  const savedPlatform = process.platform
-  let savedEnv
+	const savedPlatform = process.platform
+	let savedEnv
 
-  beforeEach(() => {
-    savedEnv = JSON.parse(JSON.stringify(process.env))
-  })
+	beforeEach(() => {
+		savedEnv = JSON.parse(JSON.stringify(process.env))
+	})
 
-  afterEach(() => {
-    process.env = savedEnv
-    Object.defineProperty(process, 'platform', {
-      value: savedPlatform
-    })
-  })
+	afterEach(() => {
+		process.env = savedEnv
+		Object.defineProperty(process, 'platform', {
+			value: savedPlatform,
+		})
+	})
 
-  it('on win32 without APPDATA set', () => {
-    Object.defineProperty(process, 'platform', {
-      value: 'win32'
-    })
-    if (process.env.APPDATA) {
-      delete process.env.APPDATA
-    }
-    const expected = path.join(os.homedir(), 'AppData', 'Roaming', 'atom-xterm')
-    expect(atomXtermConfig.getUserDataPath()).toBe(expected)
-  })
+	it('on win32 without APPDATA set', () => {
+		Object.defineProperty(process, 'platform', {
+			value: 'win32',
+		})
+		if (process.env.APPDATA) {
+			delete process.env.APPDATA
+		}
+		const expected = path.join(os.homedir(), 'AppData', 'Roaming', 'atom-xterm')
+		expect(atomXtermConfig.getUserDataPath()).toBe(expected)
+	})
 
-  it('on win32 with APPDATA set', () => {
-    Object.defineProperty(process, 'platform', {
-      value: 'win32'
-    })
-    process.env.APPDATA = path.join('/some', 'dir')
-    const expected = path.join(process.env.APPDATA, 'atom-xterm')
-    expect(atomXtermConfig.getUserDataPath()).toBe(expected)
-  })
+	it('on win32 with APPDATA set', () => {
+		Object.defineProperty(process, 'platform', {
+			value: 'win32',
+		})
+		process.env.APPDATA = path.join('/some', 'dir')
+		const expected = path.join(process.env.APPDATA, 'atom-xterm')
+		expect(atomXtermConfig.getUserDataPath()).toBe(expected)
+	})
 
-  it('on darwin', () => {
-    Object.defineProperty(process, 'platform', {
-      value: 'darwin'
-    })
-    const expected = path.join(os.homedir(), 'Library', 'Application Support', 'atom-xterm')
-    expect(atomXtermConfig.getUserDataPath()).toBe(expected)
-  })
+	it('on darwin', () => {
+		Object.defineProperty(process, 'platform', {
+			value: 'darwin',
+		})
+		const expected = path.join(os.homedir(), 'Library', 'Application Support', 'atom-xterm')
+		expect(atomXtermConfig.getUserDataPath()).toBe(expected)
+	})
 
-  it('on linux without XDG_CONFIG_HOME set', () => {
-    Object.defineProperty(process, 'platform', {
-      value: 'linux'
-    })
-    if (process.env.XDG_CONFIG_HOME) {
-      delete process.env.XDG_CONFIG_HOME
-    }
-    const expected = path.join(os.homedir(), '.config', 'atom-xterm')
-    expect(atomXtermConfig.getUserDataPath()).toBe(expected)
-  })
+	it('on linux without XDG_CONFIG_HOME set', () => {
+		Object.defineProperty(process, 'platform', {
+			value: 'linux',
+		})
+		if (process.env.XDG_CONFIG_HOME) {
+			delete process.env.XDG_CONFIG_HOME
+		}
+		const expected = path.join(os.homedir(), '.config', 'atom-xterm')
+		expect(atomXtermConfig.getUserDataPath()).toBe(expected)
+	})
 
-  it('on linux with XDG_CONFIG_HOME set', () => {
-    Object.defineProperty(process, 'platform', {
-      value: 'linux'
-    })
-    process.env.XDG_CONFIG_HOME = path.join('/some', 'dir')
-    const expected = path.join(process.env.XDG_CONFIG_HOME, 'atom-xterm')
-    expect(atomXtermConfig.getUserDataPath()).toBe(expected)
-  })
+	it('on linux with XDG_CONFIG_HOME set', () => {
+		Object.defineProperty(process, 'platform', {
+			value: 'linux',
+		})
+		process.env.XDG_CONFIG_HOME = path.join('/some', 'dir')
+		const expected = path.join(process.env.XDG_CONFIG_HOME, 'atom-xterm')
+		expect(atomXtermConfig.getUserDataPath()).toBe(expected)
+	})
 })
 
 describe('Call to getDefaultTitle()', () => {
-  it('return \'\'', () => {
-    expect(atomXtermConfig.getDefaultTitle()).toBe('')
-  })
+	it('return \'\'', () => {
+		expect(atomXtermConfig.getDefaultTitle()).toBe('')
+	})
 })
 
 describe('Call to getDefaultPromptToStartup()', () => {
-  it('return false', () => {
-    expect(atomXtermConfig.getDefaultPromptToStartup()).toBe(false)
-  })
+	it('return false', () => {
+		expect(atomXtermConfig.getDefaultPromptToStartup()).toBe(false)
+	})
 })

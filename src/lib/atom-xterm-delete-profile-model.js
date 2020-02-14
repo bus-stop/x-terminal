@@ -20,56 +20,56 @@
 import { AtomXtermProfilesSingleton } from './atom-xterm-profiles'
 
 class AtomXtermDeleteProfileModel {
-  constructor (atomXtermProfileMenuElement) {
-    this.atomXtermProfileMenuElement = atomXtermProfileMenuElement
-    this.profilesSingleton = AtomXtermProfilesSingleton.instance
-    this.element = null
-    this.panel = atom.workspace.addModalPanel({
-      item: this,
-      visible: false
-    })
-  }
+	constructor (atomXtermProfileMenuElement) {
+		this.atomXtermProfileMenuElement = atomXtermProfileMenuElement
+		this.profilesSingleton = AtomXtermProfilesSingleton.instance
+		this.element = null
+		this.panel = atom.workspace.addModalPanel({
+			item: this,
+			visible: false,
+		})
+	}
 
-  getTitle () {
-    return 'atom-xterm Delete Profile Model'
-  }
+	getTitle () {
+		return 'atom-xterm Delete Profile Model'
+	}
 
-  getElement () {
-    return this.element
-  }
+	getElement () {
+		return this.element
+	}
 
-  setElement (element) {
-    this.element = element
-  }
+	setElement (element) {
+		this.element = element
+	}
 
-  close () {
-    if (!this.panel.isVisible()) {
-      return
-    }
-    this.panel.hide()
-  }
+	close () {
+		if (!this.panel.isVisible()) {
+			return
+		}
+		this.panel.hide()
+	}
 
-  promptDelete (profileName) {
-    this.panel.show()
-    const confirmHandler = (event) => {
-      this.profilesSingleton.deleteProfile(profileName).then(() => {
-        this.profilesSingleton.reloadProfiles()
-        this.profilesSingleton.profilesLoadPromise.then(() => {
-          this.close()
-        })
-      })
-    }
-    const cancelHandler = (event) => {
-      this.close()
-    }
-    this.getElement().setNewPrompt(
-      profileName,
-      confirmHandler,
-      cancelHandler
-    )
-  }
+	promptDelete (profileName) {
+		this.panel.show()
+		const confirmHandler = (event) => {
+			this.profilesSingleton.deleteProfile(profileName).then(() => {
+				this.profilesSingleton.reloadProfiles()
+				this.profilesSingleton.profilesLoadPromise.then(() => {
+					this.close()
+				})
+			})
+		}
+		const cancelHandler = (event) => {
+			this.close()
+		}
+		this.getElement().setNewPrompt(
+			profileName,
+			confirmHandler,
+			cancelHandler,
+		)
+	}
 }
 
 export {
-  AtomXtermDeleteProfileModel
+	AtomXtermDeleteProfileModel,
 }

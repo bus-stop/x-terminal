@@ -18,14 +18,14 @@
  */
 
 export function clearDiv (div) {
-  while (div.firstChild) {
-    div.removeChild(div.firstChild)
-  }
+	while (div.firstChild) {
+		div.removeChild(div.firstChild)
+	}
 }
 
 export function createHorizontalLine () {
-  const hLine = document.createElement('div')
-  hLine.classList.add('atom-xterm-profile-menu-element-hline')
-  hLine.appendChild(document.createTextNode('.'))
-  return hLine
+	const hLine = document.createElement('div')
+	hLine.classList.add('atom-xterm-profile-menu-element-hline')
+	hLine.appendChild(document.createTextNode('.'))
+	return hLine
 }

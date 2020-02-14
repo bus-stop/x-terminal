@@ -20,90 +20,90 @@
 import { AtomXtermOverwriteProfileModel } from '../src/lib/atom-xterm-overwrite-profile-model'
 
 describe('AtomXtermOverwriteProfileModel', () => {
-  this.atomXtermSaveProfileModel = null
+	this.atomXtermSaveProfileModel = null
 
-  beforeEach(() => {
-    this.atomXtermSaveProfileModel = jasmine.createSpyObj(
-      'atomXtermSaveProfileModel',
-      [
-        'promptForNewProfileName'
-      ]
-    )
-  })
+	beforeEach(() => {
+		this.atomXtermSaveProfileModel = jasmine.createSpyObj(
+			'atomXtermSaveProfileModel',
+			[
+				'promptForNewProfileName',
+			],
+		)
+	})
 
-  it('constructor()', () => {
-    const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
-    expect(model).not.toBeNull()
-  })
+	it('constructor()', () => {
+		const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
+		expect(model).not.toBeNull()
+	})
 
-  it('getTitle()', () => {
-    const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
-    expect(model.getTitle()).toBe('atom-xterm Overwrite Profile Model')
-  })
+	it('getTitle()', () => {
+		const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
+		expect(model.getTitle()).toBe('atom-xterm Overwrite Profile Model')
+	})
 
-  it('getElement()', () => {
-    const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
-    expect(model.getElement()).toBeNull()
-  })
+	it('getElement()', () => {
+		const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
+		expect(model.getElement()).toBeNull()
+	})
 
-  it('setElement()', () => {
-    const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
-    const element = jasmine.createSpy('atomXtermOverwriteProfileElement')
-    model.setElement(element)
-    expect(model.getElement()).toBe(element)
-  })
+	it('setElement()', () => {
+		const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
+		const element = jasmine.createSpy('atomXtermOverwriteProfileElement')
+		model.setElement(element)
+		expect(model.getElement()).toBe(element)
+	})
 
-  it('close() panel is not visible', () => {
-    const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
-    model.panel = jasmine.createSpyObj('panel', ['isVisible', 'hide'])
-    model.panel.isVisible.and.returnValue(false)
-    model.close('foo', 'bar')
-    expect(model.panel.hide).not.toHaveBeenCalled()
-    expect(model.atomXtermSaveProfileModel.promptForNewProfileName).not.toHaveBeenCalled()
-  })
+	it('close() panel is not visible', () => {
+		const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
+		model.panel = jasmine.createSpyObj('panel', ['isVisible', 'hide'])
+		model.panel.isVisible.and.returnValue(false)
+		model.close('foo', 'bar')
+		expect(model.panel.hide).not.toHaveBeenCalled()
+		expect(model.atomXtermSaveProfileModel.promptForNewProfileName).not.toHaveBeenCalled()
+	})
 
-  it('close() panel is visible', () => {
-    const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
-    model.panel = jasmine.createSpyObj('panel', ['isVisible', 'hide'])
-    model.panel.isVisible.and.returnValue(true)
-    model.close('foo', 'bar')
-    expect(model.panel.hide).toHaveBeenCalled()
-    expect(model.atomXtermSaveProfileModel.promptForNewProfileName).not.toHaveBeenCalled()
-  })
+	it('close() panel is visible', () => {
+		const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
+		model.panel = jasmine.createSpyObj('panel', ['isVisible', 'hide'])
+		model.panel.isVisible.and.returnValue(true)
+		model.close('foo', 'bar')
+		expect(model.panel.hide).toHaveBeenCalled()
+		expect(model.atomXtermSaveProfileModel.promptForNewProfileName).not.toHaveBeenCalled()
+	})
 
-  it('close() reprompt panel is not visible', () => {
-    const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
-    model.panel = jasmine.createSpyObj('panel', ['isVisible', 'hide'])
-    model.panel.isVisible.and.returnValue(false)
-    model.close('foo', 'bar', true)
-    expect(model.panel.hide).not.toHaveBeenCalled()
-    expect(model.atomXtermSaveProfileModel.promptForNewProfileName).not.toHaveBeenCalled()
-  })
+	it('close() reprompt panel is not visible', () => {
+		const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
+		model.panel = jasmine.createSpyObj('panel', ['isVisible', 'hide'])
+		model.panel.isVisible.and.returnValue(false)
+		model.close('foo', 'bar', true)
+		expect(model.panel.hide).not.toHaveBeenCalled()
+		expect(model.atomXtermSaveProfileModel.promptForNewProfileName).not.toHaveBeenCalled()
+	})
 
-  it('close() reprompt panel is visible', () => {
-    const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
-    model.panel = jasmine.createSpyObj('panel', ['isVisible', 'hide'])
-    model.panel.isVisible.and.returnValue(true)
-    model.close('foo', 'bar', true)
-    expect(model.panel.hide).toHaveBeenCalled()
-    expect(model.atomXtermSaveProfileModel.promptForNewProfileName).toHaveBeenCalled()
-  })
+	it('close() reprompt panel is visible', () => {
+		const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
+		model.panel = jasmine.createSpyObj('panel', ['isVisible', 'hide'])
+		model.panel.isVisible.and.returnValue(true)
+		model.close('foo', 'bar', true)
+		expect(model.panel.hide).toHaveBeenCalled()
+		expect(model.atomXtermSaveProfileModel.promptForNewProfileName).toHaveBeenCalled()
+	})
 
-  it('promptOverwrite() panel is shown', () => {
-    const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
-    model.panel = jasmine.createSpyObj('panel', ['show', 'isVisible', 'hide'])
-    model.panel.isVisible.and.returnValue(true)
-    model.element = jasmine.createSpyObj('atomXtermDeleteProfileElement', ['setNewPrompt'])
-    model.promptOverwrite('foo', 'bar', 'baz')
-    expect(model.panel.show).toHaveBeenCalled()
-  })
+	it('promptOverwrite() panel is shown', () => {
+		const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
+		model.panel = jasmine.createSpyObj('panel', ['show', 'isVisible', 'hide'])
+		model.panel.isVisible.and.returnValue(true)
+		model.element = jasmine.createSpyObj('atomXtermDeleteProfileElement', ['setNewPrompt'])
+		model.promptOverwrite('foo', 'bar', 'baz')
+		expect(model.panel.show).toHaveBeenCalled()
+	})
 
-  it('promptOverwrite() new prompt is set', () => {
-    const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
-    model.panel = jasmine.createSpyObj('panel', ['show', 'isVisible', 'hide'])
-    model.panel.isVisible.and.returnValue(true)
-    model.element = jasmine.createSpyObj('atomXtermDeleteProfileElement', ['setNewPrompt'])
-    model.promptOverwrite('foo', 'bar', 'baz')
-    expect(model.element.setNewPrompt).toHaveBeenCalled()
-  })
+	it('promptOverwrite() new prompt is set', () => {
+		const model = new AtomXtermOverwriteProfileModel(this.atomXtermSaveProfileModel)
+		model.panel = jasmine.createSpyObj('panel', ['show', 'isVisible', 'hide'])
+		model.panel.isVisible.and.returnValue(true)
+		model.element = jasmine.createSpyObj('atomXtermDeleteProfileElement', ['setNewPrompt'])
+		model.promptOverwrite('foo', 'bar', 'baz')
+		expect(model.element.setNewPrompt).toHaveBeenCalled()
+	})
 })

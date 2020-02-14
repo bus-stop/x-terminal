@@ -18,38 +18,38 @@
  */
 
 class AtomXtermProfileMenuModel {
-  constructor (atomXtermModel) {
-    this.atomXtermModel = atomXtermModel
-    this.element = null
-  }
+	constructor (atomXtermModel) {
+		this.atomXtermModel = atomXtermModel
+		this.element = null
+	}
 
-  destroy () {
-    if (this.element) {
-      this.element.destroy()
-    }
-  }
+	destroy () {
+		if (this.element) {
+			this.element.destroy()
+		}
+	}
 
-  getTitle () {
-    return 'Atom Xterm Profile Menu'
-  }
+	getTitle () {
+		return 'Atom Xterm Profile Menu'
+	}
 
-  getElement () {
-    return this.element
-  }
+	getElement () {
+		return this.element
+	}
 
-  setElement (element) {
-    this.element = element
-  }
+	setElement (element) {
+		this.element = element
+	}
 
-  getAtomXtermModelElement () {
-    return this.atomXtermModel.getElement()
-  }
+	getAtomXtermModelElement () {
+		return this.atomXtermModel.getElement()
+	}
 
-  getAtomXtermModel () {
-    return this.atomXtermModel
-  }
+	getAtomXtermModel () {
+		return this.atomXtermModel
+	}
 }
 
 export {
-  AtomXtermProfileMenuModel
+	AtomXtermProfileMenuModel,
 }

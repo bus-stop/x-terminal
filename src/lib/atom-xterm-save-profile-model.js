@@ -24,92 +24,92 @@ import { AtomXtermOverwriteProfileModel } from './atom-xterm-overwrite-profile-m
 import { currentItemIsAtomXtermModel } from './atom-xterm-model'
 
 class AtomXtermSaveProfileModel {
-  constructor (atomXtermProfileMenuElement) {
-    this.atomXtermProfileMenuElement = atomXtermProfileMenuElement
-    this.profilesSingleton = AtomXtermProfilesSingleton.instance
-    this.element = null
-    this.panel = atom.workspace.addModalPanel({
-      item: this,
-      visible: false
-    })
-    this.overwriteProfileModel = new AtomXtermOverwriteProfileModel(this)
-  }
+	constructor (atomXtermProfileMenuElement) {
+		this.atomXtermProfileMenuElement = atomXtermProfileMenuElement
+		this.profilesSingleton = AtomXtermProfilesSingleton.instance
+		this.element = null
+		this.panel = atom.workspace.addModalPanel({
+			item: this,
+			visible: false,
+		})
+		this.overwriteProfileModel = new AtomXtermOverwriteProfileModel(this)
+	}
 
-  getTitle () {
-    return 'atom-xterm Save Profile Model'
-  }
+	getTitle () {
+		return 'atom-xterm Save Profile Model'
+	}
 
-  getElement () {
-    return this.element
-  }
+	getElement () {
+		return this.element
+	}
 
-  setElement (element) {
-    this.element = element
-  }
+	setElement (element) {
+		this.element = element
+	}
 
-  getTextbox () {
-    return this.textbox
-  }
+	getTextbox () {
+		return this.textbox
+	}
 
-  updateProfile (profileName, newProfile, profileChanges) {
-    this.profilesSingleton.setProfile(profileName, newProfile).then(() => {
-      this.profilesSingleton.reloadProfiles()
-      this.profilesSingleton.profilesLoadPromise.then(() => {
-        this.close()
-        this.atomXtermProfileMenuElement.applyProfileChanges(profileChanges)
-      })
-    })
-  }
+	updateProfile (profileName, newProfile, profileChanges) {
+		this.profilesSingleton.setProfile(profileName, newProfile).then(() => {
+			this.profilesSingleton.reloadProfiles()
+			this.profilesSingleton.profilesLoadPromise.then(() => {
+				this.close()
+				this.atomXtermProfileMenuElement.applyProfileChanges(profileChanges)
+			})
+		})
+	}
 
-  confirm (newProfile, profileChanges) {
-    const profileName = this.textbox.getText()
-    if (!profileName) {
-      // Simply do nothing.
-      return
-    }
-    this.profilesSingleton.isProfileExists(profileName).then((exists) => {
-      if (exists) {
-        this.close(false)
-        this.overwriteProfileModel.promptOverwrite(profileName, newProfile, profileChanges)
-      } else {
-        this.updateProfile(profileName, newProfile, profileChanges)
-      }
-    })
-  }
+	confirm (newProfile, profileChanges) {
+		const profileName = this.textbox.getText()
+		if (!profileName) {
+			// Simply do nothing.
+			return
+		}
+		this.profilesSingleton.isProfileExists(profileName).then((exists) => {
+			if (exists) {
+				this.close(false)
+				this.overwriteProfileModel.promptOverwrite(profileName, newProfile, profileChanges)
+			} else {
+				this.updateProfile(profileName, newProfile, profileChanges)
+			}
+		})
+	}
 
-  close (focusMenuElement = true) {
-    if (!this.panel.isVisible()) {
-      return
-    }
-    this.textbox.setText('')
-    this.panel.hide()
-    if (this.atomXtermProfileMenuElement.isVisible() && focusMenuElement) {
-      this.atomXtermProfileMenuElement.focus()
-    }
-  }
+	close (focusMenuElement = true) {
+		if (!this.panel.isVisible()) {
+			return
+		}
+		this.textbox.setText('')
+		this.panel.hide()
+		if (this.atomXtermProfileMenuElement.isVisible() && focusMenuElement) {
+			this.atomXtermProfileMenuElement.focus()
+		}
+	}
 
-  promptForNewProfileName (newProfile, profileChanges) {
-    // TODO: Is it possible for the active item to change while the
-    // modal is displayed.
-    if (this.panel.isVisible() || !currentItemIsAtomXtermModel()) {
-      return
-    }
-    this.textbox = new TextEditor({ mini: true })
-    this.textbox.getElement().addEventListener('blur', (event) => {
-      this.close()
-    })
-    atom.commands.add(this.textbox.getElement(), 'core:confirm', () => {
-      this.confirm(newProfile, profileChanges)
-    })
-    atom.commands.add(this.textbox.getElement(), 'core:cancel', () => {
-      this.close()
-    })
-    this.element.setNewTextbox(this.textbox)
-    this.panel.show()
-    this.textbox.getElement().focus()
-  }
+	promptForNewProfileName (newProfile, profileChanges) {
+		// TODO: Is it possible for the active item to change while the
+		// modal is displayed.
+		if (this.panel.isVisible() || !currentItemIsAtomXtermModel()) {
+			return
+		}
+		this.textbox = new TextEditor({ mini: true })
+		this.textbox.getElement().addEventListener('blur', (event) => {
+			this.close()
+		})
+		atom.commands.add(this.textbox.getElement(), 'core:confirm', () => {
+			this.confirm(newProfile, profileChanges)
+		})
+		atom.commands.add(this.textbox.getElement(), 'core:cancel', () => {
+			this.close()
+		})
+		this.element.setNewTextbox(this.textbox)
+		this.panel.show()
+		this.textbox.getElement().focus()
+	}
 }
 
 export {
-  AtomXtermSaveProfileModel
+	AtomXtermSaveProfileModel,
 }

@@ -20,25 +20,25 @@
 import { AtomXtermOverwriteProfileElement } from '../src/lib/atom-xterm-overwrite-profile-element'
 
 describe('AtomXtermOverwriteProfileElement', () => {
-  this.model = null
+	this.model = null
 
-  beforeEach(() => {
-    this.model = jasmine.createSpyObj('model', ['setElement'])
-  })
+	beforeEach(() => {
+		this.model = jasmine.createSpyObj('model', ['setElement'])
+	})
 
-  it('initialize()', () => {
-    const element = new AtomXtermOverwriteProfileElement()
-    element.initialize(this.model)
-    expect(element.promptButtonsDiv.childElementCount).toBe(0)
-  })
+	it('initialize()', () => {
+		const element = new AtomXtermOverwriteProfileElement()
+		element.initialize(this.model)
+		expect(element.promptButtonsDiv.childElementCount).toBe(0)
+	})
 
-  it('setNewPrompt()', () => {
-    const element = new AtomXtermOverwriteProfileElement()
-    element.initialize(this.model)
-    const profileName = 'foo'
-    const confirmHandler = () => {}
-    const cancelHandler = () => {}
-    element.setNewPrompt(profileName, confirmHandler, cancelHandler)
-    expect(element.messageDiv.textContent).toBe('Overwrite existing profile \'foo\'?')
-  })
+	it('setNewPrompt()', () => {
+		const element = new AtomXtermOverwriteProfileElement()
+		element.initialize(this.model)
+		const profileName = 'foo'
+		const confirmHandler = () => {}
+		const cancelHandler = () => {}
+		element.setNewPrompt(profileName, confirmHandler, cancelHandler)
+		expect(element.messageDiv.textContent).toBe('Overwrite existing profile \'foo\'?')
+	})
 })

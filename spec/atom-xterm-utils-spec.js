@@ -20,25 +20,25 @@
 import * as utils from '../src/lib/atom-xterm-utils'
 
 describe('Utilities', () => {
-  it('clearDiv()', () => {
-    const div = document.createElement('div')
-    for (let i = 0; i < 10; i++) {
-      div.appendChild(document.createElement('div'))
-    }
-    utils.clearDiv(div)
-    expect(div.childElementCount).toBe(0)
-  })
+	it('clearDiv()', () => {
+		const div = document.createElement('div')
+		for (let i = 0; i < 10; i++) {
+			div.appendChild(document.createElement('div'))
+		}
+		utils.clearDiv(div)
+		expect(div.childElementCount).toBe(0)
+	})
 
-  it('clearDiv() empty div', () => {
-    const div = document.createElement('div')
-    utils.clearDiv(div)
-    expect(div.childElementCount).toBe(0)
-  })
+	it('clearDiv() empty div', () => {
+		const div = document.createElement('div')
+		utils.clearDiv(div)
+		expect(div.childElementCount).toBe(0)
+	})
 
-  it('createHorizontalLine()', () => {
-    const hLine = utils.createHorizontalLine()
-    expect(hLine.tagName).toBe('DIV')
-    expect(hLine.classList.contains('atom-xterm-profile-menu-element-hline')).toBe(true)
-    expect(hLine.textContent).toBe('.')
-  })
+	it('createHorizontalLine()', () => {
+		const hLine = utils.createHorizontalLine()
+		expect(hLine.tagName).toBe('DIV')
+		expect(hLine.classList.contains('atom-xterm-profile-menu-element-hline')).toBe(true)
+		expect(hLine.textContent).toBe('.')
+	})
 })

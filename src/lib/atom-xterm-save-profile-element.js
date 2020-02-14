@@ -20,28 +20,28 @@
 import { clearDiv } from './atom-xterm-utils'
 
 class AtomXtermSaveProfileElementImpl extends HTMLElement {
-  initialize (model) {
-    this.model = model
-    this.model.setElement(this)
-    this.textboxDiv = document.createElement('div')
-    this.textboxDiv.classList.add('atom-xterm-save-profile-textbox')
-    this.appendChild(this.textboxDiv)
-    this.messageDiv = document.createElement('div')
-    this.messageDiv.classList.add('atom-xterm-modal-message')
-    this.messageDiv.appendChild(document.createTextNode('Enter new profile name'))
-    this.appendChild(this.messageDiv)
-  }
+	initialize (model) {
+		this.model = model
+		this.model.setElement(this)
+		this.textboxDiv = document.createElement('div')
+		this.textboxDiv.classList.add('atom-xterm-save-profile-textbox')
+		this.appendChild(this.textboxDiv)
+		this.messageDiv = document.createElement('div')
+		this.messageDiv.classList.add('atom-xterm-modal-message')
+		this.messageDiv.appendChild(document.createTextNode('Enter new profile name'))
+		this.appendChild(this.messageDiv)
+	}
 
-  setNewTextbox (textbox) {
-    clearDiv(this.textboxDiv)
-    this.textboxDiv.appendChild(textbox.getElement())
-  }
+	setNewTextbox (textbox) {
+		clearDiv(this.textboxDiv)
+		this.textboxDiv.appendChild(textbox.getElement())
+	}
 }
 
 const AtomXtermSaveProfileElement = document.registerElement('atom-xterm-save-profile', {
-  prototype: AtomXtermSaveProfileElementImpl.prototype
+	prototype: AtomXtermSaveProfileElementImpl.prototype,
 })
 
 export {
-  AtomXtermSaveProfileElement
+	AtomXtermSaveProfileElement,
 }

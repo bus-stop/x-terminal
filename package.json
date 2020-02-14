@@ -1,5 +1,5 @@
 {
-  "name": "atom-xterm",
+  "name": "x-terminal",
   "main": "./dist/lib/atom-xterm",
   "module": "./dist/lib/atom-xterm",
   "version": "6.5.0",
@@ -20,14 +20,11 @@
     "powershell",
     "cmd"
   ],
-  "activationCommands": {
-    "atom-workspace": "atom-xterm:need-this-to-activate-package-for-tests-do-not-remove"
-  },
   "activationHooks": [
     "core:loaded-shell-environment"
   ],
   "atomTestRunner": "./spec/custom-runner",
-  "repository": "https://github.com/amejia1/atom-xterm",
+  "repository": "https://github.com/UziTech/x-terminal",
   "license": "MIT",
   "engines": {
     "atom": ">=1.23.1 <2.0.0"
@@ -50,6 +47,7 @@
     "@babel/preset-env": "^7.8.4",
     "@babel/register": "^7.8.3",
     "@babel/runtime": "^7.8.4",
+    "@semantic-release/apm-config": "^8.0.0",
     "atom-jasmine3-test-runner": "^4.4.1",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
@@ -71,6 +69,7 @@
     "postcss-loader": "^3.0.0",
     "prunk": "^1.3.1",
     "sass-loader": "^8.0.2",
+    "semantic-release": "^17.0.3",
     "style-loader": "^1.1.3",
     "stylelint": "^13.2.0",
     "stylelint-config-standard": "^20.0.0",

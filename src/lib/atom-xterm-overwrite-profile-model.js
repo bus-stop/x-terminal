@@ -20,61 +20,61 @@
 import { AtomXtermProfilesSingleton } from './atom-xterm-profiles'
 
 class AtomXtermOverwriteProfileModel {
-  constructor (atomXtermSaveProfileModel) {
-    this.atomXtermSaveProfileModel = atomXtermSaveProfileModel
-    this.atomXtermProfileMenuElement = this.atomXtermSaveProfileModel.atomXtermProfileMenuElement
-    this.profilesSingleton = AtomXtermProfilesSingleton.instance
-    this.element = null
-    this.panel = atom.workspace.addModalPanel({
-      item: this,
-      visible: false
-    })
-  }
+	constructor (atomXtermSaveProfileModel) {
+		this.atomXtermSaveProfileModel = atomXtermSaveProfileModel
+		this.atomXtermProfileMenuElement = this.atomXtermSaveProfileModel.atomXtermProfileMenuElement
+		this.profilesSingleton = AtomXtermProfilesSingleton.instance
+		this.element = null
+		this.panel = atom.workspace.addModalPanel({
+			item: this,
+			visible: false,
+		})
+	}
 
-  getTitle () {
-    return 'atom-xterm Overwrite Profile Model'
-  }
+	getTitle () {
+		return 'atom-xterm Overwrite Profile Model'
+	}
 
-  getElement () {
-    return this.element
-  }
+	getElement () {
+		return this.element
+	}
 
-  setElement (element) {
-    this.element = element
-  }
+	setElement (element) {
+		this.element = element
+	}
 
-  close (newProfile, profileChanges, rePrompt = false) {
-    if (!this.panel.isVisible()) {
-      return
-    }
-    this.panel.hide()
-    if (rePrompt) {
-      this.atomXtermSaveProfileModel.promptForNewProfileName(newProfile, profileChanges)
-    }
-  }
+	close (newProfile, profileChanges, rePrompt = false) {
+		if (!this.panel.isVisible()) {
+			return
+		}
+		this.panel.hide()
+		if (rePrompt) {
+			this.atomXtermSaveProfileModel.promptForNewProfileName(newProfile, profileChanges)
+		}
+	}
 
-  promptOverwrite (profileName, newProfile, profileChanges) {
-    this.panel.show()
-    const confirmHandler = (event) => {
-      this.profilesSingleton.setProfile(profileName, newProfile).then(() => {
-        this.profilesSingleton.reloadProfiles()
-        this.profilesSingleton.profilesLoadPromise.then(() => {
-          this.close(newProfile, profileChanges)
-          this.atomXtermProfileMenuElement.applyProfileChanges(profileChanges)
-        })
-      })
-    }
-    const cancelHandler = (event) => {
-      this.close(newProfile, profileChanges, true)
-    }
-    this.getElement().setNewPrompt(
-      profileName,
-      confirmHandler,
-      cancelHandler
-    )
-  }
+	promptOverwrite (profileName, newProfile, profileChanges) {
+		this.panel.show()
+		const confirmHandler = (event) => {
+			this.profilesSingleton.setProfile(profileName, newProfile).then(() => {
+				this.profilesSingleton.reloadProfiles()
+				this.profilesSingleton.profilesLoadPromise.then(() => {
+					this.close(newProfile, profileChanges)
+					this.atomXtermProfileMenuElement.applyProfileChanges(profileChanges)
+				})
+			})
+		}
+		const cancelHandler = (event) => {
+			this.close(newProfile, profileChanges, true)
+		}
+		this.getElement().setNewPrompt(
+			profileName,
+			confirmHandler,
+			cancelHandler,
+		)
+	}
 }
 
 export {
-  AtomXtermOverwriteProfileModel
+	AtomXtermOverwriteProfileModel,
 }

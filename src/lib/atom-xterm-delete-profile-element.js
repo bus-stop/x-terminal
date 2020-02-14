@@ -20,40 +20,40 @@
 import { clearDiv, createHorizontalLine } from './atom-xterm-utils'
 
 class AtomXtermDeleteProfileElementImpl extends HTMLElement {
-  initialize (model) {
-    this.model = model
-    this.model.setElement(this)
-    this.messageDiv = document.createElement('div')
-    this.messageDiv.classList.add('atom-xterm-modal-message')
-    this.appendChild(this.messageDiv)
-    this.appendChild(createHorizontalLine())
-    this.promptButtonsDiv = document.createElement('div')
-    this.promptButtonsDiv.classList.add('atom-xterm-modal-buttons-div')
-    this.appendChild(this.promptButtonsDiv)
-  }
+	initialize (model) {
+		this.model = model
+		this.model.setElement(this)
+		this.messageDiv = document.createElement('div')
+		this.messageDiv.classList.add('atom-xterm-modal-message')
+		this.appendChild(this.messageDiv)
+		this.appendChild(createHorizontalLine())
+		this.promptButtonsDiv = document.createElement('div')
+		this.promptButtonsDiv.classList.add('atom-xterm-modal-buttons-div')
+		this.appendChild(this.promptButtonsDiv)
+	}
 
-  setNewPrompt (profileName, confirmHandler, cancelHandler) {
-    clearDiv(this.messageDiv)
-    clearDiv(this.promptButtonsDiv)
-    const text = 'Delete existing profile \'' + profileName + '\'?'
-    this.messageDiv.appendChild(document.createTextNode(text))
-    const confirmButton = document.createElement('button')
-    confirmButton.classList.add('atom-xterm-modal-button')
-    confirmButton.appendChild(document.createTextNode('Confirm'))
-    confirmButton.addEventListener('click', confirmHandler)
-    this.promptButtonsDiv.appendChild(confirmButton)
-    const cancelButton = document.createElement('button')
-    cancelButton.classList.add('atom-xterm-modal-button')
-    cancelButton.appendChild(document.createTextNode('Cancel'))
-    cancelButton.addEventListener('click', cancelHandler)
-    this.promptButtonsDiv.appendChild(cancelButton)
-  }
+	setNewPrompt (profileName, confirmHandler, cancelHandler) {
+		clearDiv(this.messageDiv)
+		clearDiv(this.promptButtonsDiv)
+		const text = 'Delete existing profile \'' + profileName + '\'?'
+		this.messageDiv.appendChild(document.createTextNode(text))
+		const confirmButton = document.createElement('button')
+		confirmButton.classList.add('atom-xterm-modal-button')
+		confirmButton.appendChild(document.createTextNode('Confirm'))
+		confirmButton.addEventListener('click', confirmHandler)
+		this.promptButtonsDiv.appendChild(confirmButton)
+		const cancelButton = document.createElement('button')
+		cancelButton.classList.add('atom-xterm-modal-button')
+		cancelButton.appendChild(document.createTextNode('Cancel'))
+		cancelButton.addEventListener('click', cancelHandler)
+		this.promptButtonsDiv.appendChild(cancelButton)
+	}
 }
 
 const AtomXtermDeleteProfileElement = document.registerElement('atom-xterm-delete-profile', {
-  prototype: AtomXtermDeleteProfileElementImpl.prototype
+	prototype: AtomXtermDeleteProfileElementImpl.prototype,
 })
 
 export {
-  AtomXtermDeleteProfileElement
+	AtomXtermDeleteProfileElement,
 }

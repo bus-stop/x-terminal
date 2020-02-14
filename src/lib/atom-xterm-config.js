@@ -22,182 +22,182 @@ import path from 'path'
 
 export default {
 
-  getDefaultShellCommand () {
-    if (process.platform === 'win32') {
-      return process.env.COMSPEC || 'cmd.exe'
-    }
-    return process.env.SHELL || '/bin/sh'
-  },
+	getDefaultShellCommand () {
+		if (process.platform === 'win32') {
+			return process.env.COMSPEC || 'cmd.exe'
+		}
+		return process.env.SHELL || '/bin/sh'
+	},
 
-  getDefaultArgs () {
-    return '[]'
-  },
+	getDefaultArgs () {
+		return '[]'
+	},
 
-  getDefaultTermType () {
-    return process.env.TERM || 'xterm-256color'
-  },
+	getDefaultTermType () {
+		return process.env.TERM || 'xterm-256color'
+	},
 
-  getDefaultCwd () {
-    if (process.platform === 'win32') {
-      return process.env.USERPROFILE
-    }
-    return process.env.HOME
-  },
+	getDefaultCwd () {
+		if (process.platform === 'win32') {
+			return process.env.USERPROFILE
+		}
+		return process.env.HOME
+	},
 
-  getDefaultEnv () {
-    return ''
-  },
+	getDefaultEnv () {
+		return ''
+	},
 
-  getDefaultSetEnv () {
-    return '{}'
-  },
+	getDefaultSetEnv () {
+		return '{}'
+	},
 
-  getDefaultDeleteEnv () {
-    return '[]'
-  },
+	getDefaultDeleteEnv () {
+		return '[]'
+	},
 
-  getDefaultEncoding () {
-    return ''
-  },
+	getDefaultEncoding () {
+		return ''
+	},
 
-  getDefaultFontSize () {
-    return 14
-  },
+	getDefaultFontSize () {
+		return 14
+	},
 
-  getMinimumFontSize () {
-    // NOTE: Atom will crash if the font is set below 8.
-    return 8
-  },
+	getMinimumFontSize () {
+		// NOTE: Atom will crash if the font is set below 8.
+		return 8
+	},
 
-  getMaximumFontSize () {
-    return 100
-  },
+	getMaximumFontSize () {
+		return 100
+	},
 
-  getDefaultFontFamily () {
-    return 'monospace'
-  },
+	getDefaultFontFamily () {
+		return 'monospace'
+	},
 
-  getDefaultTheme () {
-    return 'Custom'
-  },
+	getDefaultTheme () {
+		return 'Custom'
+	},
 
-  getDefaultColorForeground () {
-    return '#fff'
-  },
+	getDefaultColorForeground () {
+		return '#fff'
+	},
 
-  getDefaultColorBackground () {
-    return '#000'
-  },
+	getDefaultColorBackground () {
+		return '#000'
+	},
 
-  getDefaultColorCursor () {
-    return '#fff'
-  },
+	getDefaultColorCursor () {
+		return '#fff'
+	},
 
-  getDefaultColorCursorAccent () {
-    return '#000'
-  },
+	getDefaultColorCursorAccent () {
+		return '#000'
+	},
 
-  getDefaultColorSelection () {
-    return 'rgba(255, 255, 255, .3)'
-  },
+	getDefaultColorSelection () {
+		return 'rgba(255, 255, 255, .3)'
+	},
 
-  getDefaultColorBlack () {
-    return '#2e3436'
-  },
+	getDefaultColorBlack () {
+		return '#2e3436'
+	},
 
-  getDefaultColorRed () {
-    return '#cc0000'
-  },
+	getDefaultColorRed () {
+		return '#cc0000'
+	},
 
-  getDefaultColorGreen () {
-    return '#4e9a06'
-  },
+	getDefaultColorGreen () {
+		return '#4e9a06'
+	},
 
-  getDefaultColorYellow () {
-    return '#c4a000'
-  },
+	getDefaultColorYellow () {
+		return '#c4a000'
+	},
 
-  getDefaultColorBlue () {
-    return '#3465a4'
-  },
+	getDefaultColorBlue () {
+		return '#3465a4'
+	},
 
-  getDefaultColorMagenta () {
-    return '#75507b'
-  },
+	getDefaultColorMagenta () {
+		return '#75507b'
+	},
 
-  getDefaultColorCyan () {
-    return '#06989a'
-  },
+	getDefaultColorCyan () {
+		return '#06989a'
+	},
 
-  getDefaultColorWhite () {
-    return '#d3d7cf'
-  },
+	getDefaultColorWhite () {
+		return '#d3d7cf'
+	},
 
-  getDefaultColorBrightBlack () {
-    return '#555753'
-  },
+	getDefaultColorBrightBlack () {
+		return '#555753'
+	},
 
-  getDefaultColorBrightRed () {
-    return '#ef2929'
-  },
+	getDefaultColorBrightRed () {
+		return '#ef2929'
+	},
 
-  getDefaultColorBrightGreen () {
-    return '#8ae234'
-  },
+	getDefaultColorBrightGreen () {
+		return '#8ae234'
+	},
 
-  getDefaultColorBrightYellow () {
-    return '#fce94f'
-  },
+	getDefaultColorBrightYellow () {
+		return '#fce94f'
+	},
 
-  getDefaultColorBrightBlue () {
-    return '#729fcf'
-  },
+	getDefaultColorBrightBlue () {
+		return '#729fcf'
+	},
 
-  getDefaultColorBrightMagenta () {
-    return '#ad7fa8'
-  },
+	getDefaultColorBrightMagenta () {
+		return '#ad7fa8'
+	},
 
-  getDefaultColorBrightCyan () {
-    return '#34e2e2'
-  },
+	getDefaultColorBrightCyan () {
+		return '#34e2e2'
+	},
 
-  getDefaultColorBrightWhite () {
-    return '#eeeeec'
-  },
+	getDefaultColorBrightWhite () {
+		return '#eeeeec'
+	},
 
-  getDefaultLeaveOpenAfterExit () {
-    return true
-  },
+	getDefaultLeaveOpenAfterExit () {
+		return true
+	},
 
-  getDefaultAllowRelaunchingTerminalsOnStartup () {
-    return true
-  },
+	getDefaultAllowRelaunchingTerminalsOnStartup () {
+		return true
+	},
 
-  getDefaultRelaunchTerminalOnStartup () {
-    return true
-  },
+	getDefaultRelaunchTerminalOnStartup () {
+		return true
+	},
 
-  getUserDataPath () {
-    let appDataPath
-    if (process.platform === 'win32') {
-      appDataPath = process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming')
-    } else if (process.platform === 'darwin') {
-      appDataPath = path.join(os.homedir(), 'Library', 'Application Support')
-    } else {
-      appDataPath = process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config')
-    }
-    return path.join(appDataPath, 'atom-xterm')
-  },
+	getUserDataPath () {
+		let appDataPath
+		if (process.platform === 'win32') {
+			appDataPath = process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming')
+		} else if (process.platform === 'darwin') {
+			appDataPath = path.join(os.homedir(), 'Library', 'Application Support')
+		} else {
+			appDataPath = process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config')
+		}
+		return path.join(appDataPath, 'atom-xterm')
+	},
 
-  getDefaultTitle () {
-    return ''
-  },
+	getDefaultTitle () {
+		return ''
+	},
 
-  getDefaultXtermOptions () {
-    return '{}'
-  },
+	getDefaultXtermOptions () {
+		return '{}'
+	},
 
-  getDefaultPromptToStartup () {
-    return false
-  }
+	getDefaultPromptToStartup () {
+		return false
+	},
 }

@@ -25,5 +25,5 @@ import prunk from 'prunk'
 prunk.suppress(/\.(?:sa|s?c)ss$/)
 
 module.exports = createRunner({
-  reporter: new SpecReporter()
+	reporter: new SpecReporter(),
 })

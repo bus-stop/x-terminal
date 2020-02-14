@@ -34,254 +34,254 @@ const DEFAULT_TITLE = 'Atom Xterm'
  * @class
  */
 class AtomXtermModel {
-  // NOTE: Though the class is publically accessible, all methods except for the
-  // ones defined at the very bottom of the class should be considered private
-  // and subject to change at any time.
-  constructor (options) {
-    this.options = options
-    this.uri = this.options.uri
-    const url = new URL(this.uri)
-    this.sessionId = url.host
-    this.profilesSingleton = AtomXtermProfilesSingleton.instance
-    this.profile = this.profilesSingleton.createProfileDataFromUri(this.uri)
-    this.terminals_set = this.options.terminals_set
-    this.element = null
-    this.pane = null
-    this.title = DEFAULT_TITLE
-    if (this.profile.title !== null) {
-      this.title = this.profile.title
-    }
-    this.modified = false
-    this.emitter = new Emitter()
-    this.terminals_set.add(this)
+	// NOTE: Though the class is publically accessible, all methods except for the
+	// ones defined at the very bottom of the class should be considered private
+	// and subject to change at any time.
+	constructor (options) {
+		this.options = options
+		this.uri = this.options.uri
+		const url = new URL(this.uri)
+		this.sessionId = url.host
+		this.profilesSingleton = AtomXtermProfilesSingleton.instance
+		this.profile = this.profilesSingleton.createProfileDataFromUri(this.uri)
+		this.terminals_set = this.options.terminals_set
+		this.element = null
+		this.pane = null
+		this.title = DEFAULT_TITLE
+		if (this.profile.title !== null) {
+			this.title = this.profile.title
+		}
+		this.modified = false
+		this.emitter = new Emitter()
+		this.terminals_set.add(this)
 
-    // Determine appropriate initial working directory based on previous
-    // active item. Since this involves async operations on the file
-    // system, a Promise will be used to indicate when initialization is
-    // done.
-    this.isInitialized = false
-    this.initializedPromise = new Promise((resolve, reject) => {
-      const baseProfile = this.profilesSingleton.getBaseProfile()
-      const previousActiveItem = atom.workspace.getActivePaneItem()
-      let cwd = this.profile.cwd
-      if (typeof previousActiveItem !== 'undefined' && typeof previousActiveItem.getPath === 'function') {
-        cwd = previousActiveItem.getPath()
-      }
-      const dir = atom.project.relativizePath(cwd)[0]
-      if (dir) {
-        // Use project paths whenever they are available by default.
-        this.profile.cwd = dir
-        resolve()
-      } else if (cwd) {
-        fs.exists(cwd, (exists) => {
-          if (exists) {
-            // Otherwise, if the path exists on the local file system, use the
-            // path or parent directory as appropriate.
-            fs.stat(cwd, (err, stats) => {
-              if (err) {
-                reject(err)
-              }
-              if (!stats.isDirectory()) {
-                cwd = path.dirname(cwd)
-                fs.stat(cwd, (err, stats) => {
-                  if (err) {
-                    reject(err)
-                  }
-                  if (!stats.isDirectory) {
-                    this.profile.cwd = baseProfile.cwd
-                    resolve()
-                  } else {
-                    this.profile.cwd = cwd
-                    resolve()
-                  }
-                })
-              } else {
-                this.profile.cwd = cwd
-                resolve()
-              }
-            })
-          } else {
-            this.profile.cwd = baseProfile.cwd
-            resolve()
-          }
-        })
-      } else {
-        this.profile.cwd = baseProfile.cwd
-        resolve()
-      }
-    }).then(() => {
-      this.isInitialized = true
-    })
-  }
+		// Determine appropriate initial working directory based on previous
+		// active item. Since this involves async operations on the file
+		// system, a Promise will be used to indicate when initialization is
+		// done.
+		this.isInitialized = false
+		this.initializedPromise = new Promise((resolve, reject) => {
+			const baseProfile = this.profilesSingleton.getBaseProfile()
+			const previousActiveItem = atom.workspace.getActivePaneItem()
+			let cwd = this.profile.cwd
+			if (typeof previousActiveItem !== 'undefined' && typeof previousActiveItem.getPath === 'function') {
+				cwd = previousActiveItem.getPath()
+			}
+			const dir = atom.project.relativizePath(cwd)[0]
+			if (dir) {
+				// Use project paths whenever they are available by default.
+				this.profile.cwd = dir
+				resolve()
+			} else if (cwd) {
+				fs.exists(cwd, (exists) => {
+					if (exists) {
+						// Otherwise, if the path exists on the local file system, use the
+						// path or parent directory as appropriate.
+						fs.stat(cwd, (err, stats) => {
+							if (err) {
+								reject(err)
+							}
+							if (!stats.isDirectory()) {
+								cwd = path.dirname(cwd)
+								fs.stat(cwd, (err, stats) => {
+									if (err) {
+										reject(err)
+									}
+									if (!stats.isDirectory) {
+										this.profile.cwd = baseProfile.cwd
+										resolve()
+									} else {
+										this.profile.cwd = cwd
+										resolve()
+									}
+								})
+							} else {
+								this.profile.cwd = cwd
+								resolve()
+							}
+						})
+					} else {
+						this.profile.cwd = baseProfile.cwd
+						resolve()
+					}
+				})
+			} else {
+				this.profile.cwd = baseProfile.cwd
+				resolve()
+			}
+		}).then(() => {
+			this.isInitialized = true
+		})
+	}
 
-  serialize () {
-    return {
-      deserializer: 'AtomXtermModel',
-      version: '2017-09-17',
-      uri: this.profilesSingleton.generateNewUrlFromProfileData(this.profile).href
-    }
-  }
+	serialize () {
+		return {
+			deserializer: 'AtomXtermModel',
+			version: '2017-09-17',
+			uri: this.profilesSingleton.generateNewUrlFromProfileData(this.profile).href,
+		}
+	}
 
-  destroy () {
-    if (this.element) {
-      this.element.destroy()
-    }
-    this.terminals_set.delete(this)
-  }
+	destroy () {
+		if (this.element) {
+			this.element.destroy()
+		}
+		this.terminals_set.delete(this)
+	}
 
-  getTitle () {
-    return this.title
-  }
+	getTitle () {
+		return this.title
+	}
 
-  getElement () {
-    return this.element
-  }
+	getElement () {
+		return this.element
+	}
 
-  getURI () {
-    return this.uri
-  }
+	getURI () {
+		return this.uri
+	}
 
-  getLongTitle () {
-    if (this.title === DEFAULT_TITLE) {
-      return DEFAULT_TITLE
-    }
-    return DEFAULT_TITLE + ' (' + this.title + ')'
-  }
+	getLongTitle () {
+		if (this.title === DEFAULT_TITLE) {
+			return DEFAULT_TITLE
+		}
+		return DEFAULT_TITLE + ' (' + this.title + ')'
+	}
 
-  onDidChangeTitle (callback) {
-    return this.emitter.on('did-change-title', callback)
-  }
+	onDidChangeTitle (callback) {
+		return this.emitter.on('did-change-title', callback)
+	}
 
-  getIconName () {
-    return 'terminal'
-  }
+	getIconName () {
+		return 'terminal'
+	}
 
-  getPath () {
-    return this.profile.cwd
-  }
+	getPath () {
+		return this.profile.cwd
+	}
 
-  isModified () {
-    return this.modified
-  }
+	isModified () {
+		return this.modified
+	}
 
-  onDidChangeModified (callback) {
-    return this.emitter.on('did-change-modified', callback)
-  }
+	onDidChangeModified (callback) {
+		return this.emitter.on('did-change-modified', callback)
+	}
 
-  handleNewDataArrival () {
-    if (!this.pane) {
-      this.pane = atom.workspace.paneForItem(this)
-    }
-    const oldIsModified = this.modified
-    let item
-    if (this.pane) {
-      item = this.pane.getActiveItem()
-    }
-    if (item === this) {
-      this.modified = false
-    } else {
-      this.modified = true
-    }
-    if (oldIsModified !== this.modified) {
-      this.emitter.emit('did-change-modified', this.modified)
-    }
-  }
+	handleNewDataArrival () {
+		if (!this.pane) {
+			this.pane = atom.workspace.paneForItem(this)
+		}
+		const oldIsModified = this.modified
+		let item
+		if (this.pane) {
+			item = this.pane.getActiveItem()
+		}
+		if (item === this) {
+			this.modified = false
+		} else {
+			this.modified = true
+		}
+		if (oldIsModified !== this.modified) {
+			this.emitter.emit('did-change-modified', this.modified)
+		}
+	}
 
-  getSessionId () {
-    return this.sessionId
-  }
+	getSessionId () {
+		return this.sessionId
+	}
 
-  getSessionParameters () {
-    const url = this.profilesSingleton.generateNewUrlFromProfileData(this.profile)
-    url.searchParams.sort()
-    return url.searchParams.toString()
-  }
+	getSessionParameters () {
+		const url = this.profilesSingleton.generateNewUrlFromProfileData(this.profile)
+		url.searchParams.sort()
+		return url.searchParams.toString()
+	}
 
-  refitTerminal () {
-    // Only refit if there's a DOM element attached to the model.
-    if (this.element) {
-      this.element.refitTerminal()
-    }
-  }
+	refitTerminal () {
+		// Only refit if there's a DOM element attached to the model.
+		if (this.element) {
+			this.element.refitTerminal()
+		}
+	}
 
-  focusOnTerminal () {
-    this.element.focusOnTerminal()
-    const oldIsModified = this.modified
-    this.modified = false
-    if (oldIsModified !== this.modified) {
-      this.emitter.emit('did-change-modified', this.modified)
-    }
-  }
+	focusOnTerminal () {
+		this.element.focusOnTerminal()
+		const oldIsModified = this.modified
+		this.modified = false
+		if (oldIsModified !== this.modified) {
+			this.emitter.emit('did-change-modified', this.modified)
+		}
+	}
 
-  exit () {
-    this.pane.destroyItem(this, true)
-  }
+	exit () {
+		this.pane.destroyItem(this, true)
+	}
 
-  restartPtyProcess () {
-    if (this.element) {
-      this.element.restartPtyProcess()
-    }
-  }
+	restartPtyProcess () {
+		if (this.element) {
+			this.element.restartPtyProcess()
+		}
+	}
 
-  copyFromTerminal () {
-    return this.element.terminal.getSelection()
-  }
+	copyFromTerminal () {
+		return this.element.terminal.getSelection()
+	}
 
-  pasteToTerminal (text) {
-    this.element.ptyProcess.write(text)
-  }
+	pasteToTerminal (text) {
+		this.element.ptyProcess.write(text)
+	}
 
-  setNewPane (pane) {
-    this.pane = pane
-  }
+	setNewPane (pane) {
+		this.pane = pane
+	}
 
-  openHoveredLink () {
-    this.element.openHoveredLink()
-  }
+	openHoveredLink () {
+		this.element.openHoveredLink()
+	}
 
-  getHoveredLink () {
-    return this.element.getHoveredLink()
-  }
+	getHoveredLink () {
+		return this.element.getHoveredLink()
+	}
 
-  toggleProfileMenu () {
-    this.element.toggleProfileMenu()
-  }
+	toggleProfileMenu () {
+		this.element.toggleProfileMenu()
+	}
 
-  /* Public methods are defined below this line. */
+	/* Public methods are defined below this line. */
 
-  /**
+	/**
    * Retrieve profile for this {@link AtomXtermModel} instance.
    *
    * @function
    * @return {Object} Profile for {@link AtomXtermModel} instance.
    */
-  getProfile () {
-    return this.profile
-  }
+	getProfile () {
+		return this.profile
+	}
 
-  /**
+	/**
    * Apply profile changes to {@link AtomXtermModel} instance.
    *
    * @function
    * @param {Object} profileChanges Profile changes to apply.
    */
-  applyProfileChanges (profileChanges) {
-    profileChanges = this.profilesSingleton.sanitizeData(profileChanges)
-    this.profile = this.profilesSingleton.deepClone(Object.assign(this.profile, profileChanges))
-    this.element.queueNewProfileChanges(profileChanges)
-  }
+	applyProfileChanges (profileChanges) {
+		profileChanges = this.profilesSingleton.sanitizeData(profileChanges)
+		this.profile = this.profilesSingleton.deepClone(Object.assign(this.profile, profileChanges))
+		this.element.queueNewProfileChanges(profileChanges)
+	}
 }
 
 function isAtomXtermModel (item) {
-  return (item instanceof AtomXtermModel)
+	return (item instanceof AtomXtermModel)
 }
 
 function currentItemIsAtomXtermModel () {
-  return isAtomXtermModel(atom.workspace.getActivePaneItem())
+	return isAtomXtermModel(atom.workspace.getActivePaneItem())
 }
 
 export {
-  AtomXtermModel,
-  isAtomXtermModel,
-  currentItemIsAtomXtermModel
+	AtomXtermModel,
+	isAtomXtermModel,
+	currentItemIsAtomXtermModel,
 }

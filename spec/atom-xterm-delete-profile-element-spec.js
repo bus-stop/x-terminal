@@ -20,25 +20,25 @@
 import { AtomXtermDeleteProfileElement } from '../src/lib/atom-xterm-delete-profile-element'
 
 describe('AtomXtermDeleteProfileElement', () => {
-  this.model = null
+	this.model = null
 
-  beforeEach(() => {
-    this.model = jasmine.createSpyObj('model', ['setElement'])
-  })
+	beforeEach(() => {
+		this.model = jasmine.createSpyObj('model', ['setElement'])
+	})
 
-  it('initialize()', () => {
-    const element = new AtomXtermDeleteProfileElement()
-    element.initialize(this.model)
-    expect(element.promptButtonsDiv.childElementCount).toBe(0)
-  })
+	it('initialize()', () => {
+		const element = new AtomXtermDeleteProfileElement()
+		element.initialize(this.model)
+		expect(element.promptButtonsDiv.childElementCount).toBe(0)
+	})
 
-  it('setNewPrompt()', () => {
-    const element = new AtomXtermDeleteProfileElement()
-    element.initialize(this.model)
-    const profileName = 'foo'
-    const confirmHandler = () => {}
-    const cancelHandler = () => {}
-    element.setNewPrompt(profileName, confirmHandler, cancelHandler)
-    expect(element.messageDiv.textContent).toBe('Delete existing profile \'foo\'?')
-  })
+	it('setNewPrompt()', () => {
+		const element = new AtomXtermDeleteProfileElement()
+		element.initialize(this.model)
+		const profileName = 'foo'
+		const confirmHandler = () => {}
+		const cancelHandler = () => {}
+		element.setNewPrompt(profileName, confirmHandler, cancelHandler)
+		expect(element.messageDiv.textContent).toBe('Delete existing profile \'foo\'?')
+	})
 })
