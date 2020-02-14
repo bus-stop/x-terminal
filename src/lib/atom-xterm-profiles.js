@@ -41,7 +41,28 @@ const CONFIG_KEY_TO_PROFILE_KEY_MAPPING = {
   'atom-xterm.spawnPtySettings.encoding': 'encoding',
   'atom-xterm.terminalSettings.fontSize': 'fontSize',
   'atom-xterm.terminalSettings.fontFamily': 'fontFamily',
-  'atom-xterm.terminalSettings.theme': 'theme',
+  'atom-xterm.terminalSettings.colors.theme': 'theme',
+  'atom-xterm.terminalSettings.colors.foreground': 'colorForeground',
+  'atom-xterm.terminalSettings.colors.background': 'colorBackground',
+  'atom-xterm.terminalSettings.colors.cursor': 'colorCursor',
+  'atom-xterm.terminalSettings.colors.cursorAccent': 'colorCursorAccent',
+  'atom-xterm.terminalSettings.colors.selection': 'colorSelection',
+  'atom-xterm.terminalSettings.colors.black': 'colorBlack',
+  'atom-xterm.terminalSettings.colors.red': 'colorRed',
+  'atom-xterm.terminalSettings.colors.green': 'colorGreen',
+  'atom-xterm.terminalSettings.colors.yellow': 'colorYellow',
+  'atom-xterm.terminalSettings.colors.blue': 'colorBlue',
+  'atom-xterm.terminalSettings.colors.magenta': 'colorMagenta',
+  'atom-xterm.terminalSettings.colors.cyan': 'colorCyan',
+  'atom-xterm.terminalSettings.colors.white': 'colorWhite',
+  'atom-xterm.terminalSettings.colors.brightBlack': 'colorBrightBlack',
+  'atom-xterm.terminalSettings.colors.brightRed': 'colorBrightRed',
+  'atom-xterm.terminalSettings.colors.brightGreen': 'colorBrightGreen',
+  'atom-xterm.terminalSettings.colors.brightYellow': 'colorBrightYellow',
+  'atom-xterm.terminalSettings.colors.brightBlue': 'colorBrightBlue',
+  'atom-xterm.terminalSettings.colors.brightMagenta': 'colorBrightMagenta',
+  'atom-xterm.terminalSettings.colors.brightCyan': 'colorBrightCyan',
+  'atom-xterm.terminalSettings.colors.brightWhite': 'colorBrightWhite',
   'atom-xterm.terminalSettings.leaveOpenAfterExit': 'leaveOpenAfterExit',
   'atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup': 'allowRelaunchingTerminalsOnStartup',
   'atom-xterm.terminalSettings.relaunchTerminalOnStartup': 'relaunchTerminalOnStartup',
@@ -145,6 +166,27 @@ class AtomXtermProfilesSingleton {
       fontSize: atomXtermConfig.getDefaultFontSize(),
       fontFamily: atomXtermConfig.getDefaultFontFamily(),
       theme: atomXtermConfig.getDefaultTheme(),
+      colorForeground: atomXtermConfig.getDefaultColorForeground(),
+      colorBackground: atomXtermConfig.getDefaultColorBackground(),
+      colorCursor: atomXtermConfig.getDefaultColorCursor(),
+      colorCursorAccent: atomXtermConfig.getDefaultColorCursorAccent(),
+      colorSelection: atomXtermConfig.getDefaultColorSelection(),
+      colorBlack: atomXtermConfig.getDefaultColorBlack(),
+      colorRed: atomXtermConfig.getDefaultColorRed(),
+      colorGreen: atomXtermConfig.getDefaultColorGreen(),
+      colorYellow: atomXtermConfig.getDefaultColorYellow(),
+      colorBlue: atomXtermConfig.getDefaultColorBlue(),
+      colorMagenta: atomXtermConfig.getDefaultColorMagenta(),
+      colorCyan: atomXtermConfig.getDefaultColorCyan(),
+      colorWhite: atomXtermConfig.getDefaultColorWhite(),
+      colorBrightBlack: atomXtermConfig.getDefaultColorBrightBlack(),
+      colorBrightRed: atomXtermConfig.getDefaultColorBrightRed(),
+      colorBrightGreen: atomXtermConfig.getDefaultColorBrightGreen(),
+      colorBrightYellow: atomXtermConfig.getDefaultColorBrightYellow(),
+      colorBrightBlue: atomXtermConfig.getDefaultColorBrightBlue(),
+      colorBrightMagenta: atomXtermConfig.getDefaultColorBrightMagenta(),
+      colorBrightCyan: atomXtermConfig.getDefaultColorBrightCyan(),
+      colorBrightWhite: atomXtermConfig.getDefaultColorBrightWhite(),
       leaveOpenAfterExit: atomXtermConfig.getDefaultLeaveOpenAfterExit(),
       relaunchTerminalOnStartup: atomXtermConfig.getDefaultRelaunchTerminalOnStartup(),
       title: null,
@@ -200,7 +242,28 @@ class AtomXtermProfilesSingleton {
       encoding: encoding,
       fontSize: atom.config.get('atom-xterm.terminalSettings.fontSize') || atomXtermConfig.getDefaultFontSize(),
       fontFamily: atom.config.get('atom-xterm.terminalSettings.fontFamily') || atomXtermConfig.getDefaultFontFamily(),
-      theme: atom.config.get('atom-xterm.terminalSettings.theme') || atomXtermConfig.getDefaultTheme(),
+      theme: atom.config.get('atom-xterm.terminalSettings.colors.theme') || atomXtermConfig.getDefaultTheme(),
+      colorForeground: atom.config.get('atom-xterm.terminalSettings.colors.foreground') || atomXtermConfig.getDefaultColorForeground(),
+      colorBackground: atom.config.get('atom-xterm.terminalSettings.colors.background') || atomXtermConfig.getDefaultColorBackground(),
+      colorCursor: atom.config.get('atom-xterm.terminalSettings.colors.cursor') || atomXtermConfig.getDefaultColorCursor(),
+      colorCursorAccent: atom.config.get('atom-xterm.terminalSettings.colors.cursorAccent') || atomXtermConfig.getDefaultColorCursorAccent(),
+      colorSelection: atom.config.get('atom-xterm.terminalSettings.colors.selection') || atomXtermConfig.getDefaultColorSelection(),
+      colorBlack: atom.config.get('atom-xterm.terminalSettings.colors.black') || atomXtermConfig.getDefaultColorBlack(),
+      colorRed: atom.config.get('atom-xterm.terminalSettings.colors.red') || atomXtermConfig.getDefaultColorRed(),
+      colorGreen: atom.config.get('atom-xterm.terminalSettings.colors.green') || atomXtermConfig.getDefaultColorGreen(),
+      colorYellow: atom.config.get('atom-xterm.terminalSettings.colors.yellow') || atomXtermConfig.getDefaultColorYellow(),
+      colorBlue: atom.config.get('atom-xterm.terminalSettings.colors.blue') || atomXtermConfig.getDefaultColorBlue(),
+      colorMagenta: atom.config.get('atom-xterm.terminalSettings.colors.magenta') || atomXtermConfig.getDefaultColorMagenta(),
+      colorCyan: atom.config.get('atom-xterm.terminalSettings.colors.cyan') || atomXtermConfig.getDefaultColorCyan(),
+      colorWhite: atom.config.get('atom-xterm.terminalSettings.colors.white') || atomXtermConfig.getDefaultColorWhite(),
+      colorBrightBlack: atom.config.get('atom-xterm.terminalSettings.colors.brightBlack') || atomXtermConfig.getDefaultColorBrightBlack(),
+      colorBrightRed: atom.config.get('atom-xterm.terminalSettings.colors.brightRed') || atomXtermConfig.getDefaultColorBrightRed(),
+      colorBrightGreen: atom.config.get('atom-xterm.terminalSettings.colors.brightGreen') || atomXtermConfig.getDefaultColorBrightGreen(),
+      colorBrightYellow: atom.config.get('atom-xterm.terminalSettings.colors.brightYellow') || atomXtermConfig.getDefaultColorBrightYellow(),
+      colorBrightBlue: atom.config.get('atom-xterm.terminalSettings.colors.brightBlue') || atomXtermConfig.getDefaultColorBrightBlue(),
+      colorBrightMagenta: atom.config.get('atom-xterm.terminalSettings.colors.brightMagenta') || atomXtermConfig.getDefaultColorBrightMagenta(),
+      colorBrightCyan: atom.config.get('atom-xterm.terminalSettings.colors.brightCyan') || atomXtermConfig.getDefaultColorBrightCyan(),
+      colorBrightWhite: atom.config.get('atom-xterm.terminalSettings.colors.brightWhite') || atomXtermConfig.getDefaultColorBrightWhite(),
       leaveOpenAfterExit: leaveOpenAfterExit,
       relaunchTerminalOnStartup: relaunchTerminalOnStartup,
       title: title || null,
@@ -223,6 +286,27 @@ class AtomXtermProfilesSingleton {
     if ('fontSize' in data) sanitizedData.fontSize = data.fontSize
     if ('fontFamily' in data) sanitizedData.fontFamily = data.fontFamily
     if ('theme' in data) sanitizedData.theme = data.theme
+    if ('colorForeground' in data) sanitizedData.colorForeground = data.colorForeground
+    if ('colorBackground' in data) sanitizedData.colorBackground = data.colorBackground
+    if ('colorCursor' in data) sanitizedData.colorCursor = data.colorCursor
+    if ('colorCursorAccent' in data) sanitizedData.colorCursorAccent = data.colorCursorAccent
+    if ('colorSelection' in data) sanitizedData.colorSelection = data.colorSelection
+    if ('colorBlack' in data) sanitizedData.colorBlack = data.colorBlack
+    if ('colorRed' in data) sanitizedData.colorRed = data.colorRed
+    if ('colorGreen' in data) sanitizedData.colorGreen = data.colorGreen
+    if ('colorYellow' in data) sanitizedData.colorYellow = data.colorYellow
+    if ('colorBlue' in data) sanitizedData.colorBlue = data.colorBlue
+    if ('colorMagenta' in data) sanitizedData.colorMagenta = data.colorMagenta
+    if ('colorCyan' in data) sanitizedData.colorCyan = data.colorCyan
+    if ('colorWhite' in data) sanitizedData.colorWhite = data.colorWhite
+    if ('colorBrightBlack' in data) sanitizedData.colorBrightBlack = data.colorBrightBlack
+    if ('colorBrightRed' in data) sanitizedData.colorBrightRed = data.colorBrightRed
+    if ('colorBrightGreen' in data) sanitizedData.colorBrightGreen = data.colorBrightGreen
+    if ('colorBrightYellow' in data) sanitizedData.colorBrightYellow = data.colorBrightYellow
+    if ('colorBrightBlue' in data) sanitizedData.colorBrightBlue = data.colorBrightBlue
+    if ('colorBrightMagenta' in data) sanitizedData.colorBrightMagenta = data.colorBrightMagenta
+    if ('colorBrightCyan' in data) sanitizedData.colorBrightCyan = data.colorBrightCyan
+    if ('colorBrightWhite' in data) sanitizedData.colorBrightWhite = data.colorBrightWhite
     if ('leaveOpenAfterExit' in data) sanitizedData.leaveOpenAfterExit = data.leaveOpenAfterExit
     if ('relaunchTerminalOnStartup' in data) sanitizedData.relaunchTerminalOnStartup = data.relaunchTerminalOnStartup
     if ('title' in data) sanitizedData.title = data.title
@@ -334,6 +418,28 @@ class AtomXtermProfilesSingleton {
     if ('fontFamily' in data) url.searchParams.set('fontFamily', data.fontFamily)
     // Theme to use.
     if ('theme' in data) url.searchParams.set('theme', data.theme)
+    // Colors
+    if ('colorForeground' in data) url.searchParams.set('colorForeground', data.colorForeground)
+    if ('colorBackground' in data) url.searchParams.set('colorBackground', data.colorBackground)
+    if ('colorCursor' in data) url.searchParams.set('colorCursor', data.colorCursor)
+    if ('colorCursorAccent' in data) url.searchParams.set('colorCursorAccent', data.colorCursorAccent)
+    if ('colorSelection' in data) url.searchParams.set('colorSelection', data.colorSelection)
+    if ('colorBlack' in data) url.searchParams.set('colorBlack', data.colorBlack)
+    if ('colorRed' in data) url.searchParams.set('colorRed', data.colorRed)
+    if ('colorGreen' in data) url.searchParams.set('colorGreen', data.colorGreen)
+    if ('colorYellow' in data) url.searchParams.set('colorYellow', data.colorYellow)
+    if ('colorBlue' in data) url.searchParams.set('colorBlue', data.colorBlue)
+    if ('colorMagenta' in data) url.searchParams.set('colorMagenta', data.colorMagenta)
+    if ('colorCyan' in data) url.searchParams.set('colorCyan', data.colorCyan)
+    if ('colorWhite' in data) url.searchParams.set('colorWhite', data.colorWhite)
+    if ('colorBrightBlack' in data) url.searchParams.set('colorBrightBlack', data.colorBrightBlack)
+    if ('colorBrightRed' in data) url.searchParams.set('colorBrightRed', data.colorBrightRed)
+    if ('colorBrightGreen' in data) url.searchParams.set('colorBrightGreen', data.colorBrightGreen)
+    if ('colorBrightYellow' in data) url.searchParams.set('colorBrightYellow', data.colorBrightYellow)
+    if ('colorBrightBlue' in data) url.searchParams.set('colorBrightBlue', data.colorBrightBlue)
+    if ('colorBrightMagenta' in data) url.searchParams.set('colorBrightMagenta', data.colorBrightMagenta)
+    if ('colorBrightCyan' in data) url.searchParams.set('colorBrightCyan', data.colorBrightCyan)
+    if ('colorBrightWhite' in data) url.searchParams.set('colorBrightWhite', data.colorBrightWhite)
     // This determines whether to leave the terminal tab open when the command
     // has finished running.
     if ('leaveOpenAfterExit' in data) url.searchParams.set('leaveOpenAfterExit', JSON.stringify(data.leaveOpenAfterExit))
@@ -385,11 +491,74 @@ class AtomXtermProfilesSingleton {
     if (param) newProfile.fontSize = JSON.parse(param)
     if (!('fontSize' in newProfile && newProfile.fontSize)) newProfile.fontSize = baseProfile.fontSize
     param = url.searchParams.get('fontFamily')
-    if (param && param !== 'null') newProfile.fontFamily = param
+    if (param) newProfile.fontFamily = param
     if (!('fontFamily' in newProfile)) newProfile.fontFamily = baseProfile.fontFamily
     param = url.searchParams.get('theme')
-    if (param && param !== 'null') newProfile.theme = param
+    if (param) newProfile.theme = param
     if (!('theme' in newProfile)) newProfile.theme = baseProfile.theme
+    param = url.searchParams.get('colorForeground')
+    if (param) newProfile.colorForeground = param
+    if (!('colorForeground' in newProfile)) newProfile.colorForeground = baseProfile.colorForeground
+    param = url.searchParams.get('colorBackground')
+    if (param) newProfile.colorBackground = param
+    if (!('colorBackground' in newProfile)) newProfile.colorBackground = baseProfile.colorBackground
+    param = url.searchParams.get('colorCursor')
+    if (param) newProfile.colorCursor = param
+    if (!('colorCursor' in newProfile)) newProfile.colorCursor = baseProfile.colorCursor
+    param = url.searchParams.get('colorCursorAccent')
+    if (param) newProfile.colorCursorAccent = param
+    if (!('colorCursorAccent' in newProfile)) newProfile.colorCursorAccent = baseProfile.colorCursorAccent
+    param = url.searchParams.get('colorSelection')
+    if (param) newProfile.colorSelection = param
+    if (!('colorSelection' in newProfile)) newProfile.colorSelection = baseProfile.colorSelection
+    param = url.searchParams.get('colorBlack')
+    if (param) newProfile.colorBlack = param
+    if (!('colorBlack' in newProfile)) newProfile.colorBlack = baseProfile.colorBlack
+    param = url.searchParams.get('colorRed')
+    if (param) newProfile.colorRed = param
+    if (!('colorRed' in newProfile)) newProfile.colorRed = baseProfile.colorRed
+    param = url.searchParams.get('colorGreen')
+    if (param) newProfile.colorGreen = param
+    if (!('colorGreen' in newProfile)) newProfile.colorGreen = baseProfile.colorGreen
+    param = url.searchParams.get('colorYellow')
+    if (param) newProfile.colorYellow = param
+    if (!('colorYellow' in newProfile)) newProfile.colorYellow = baseProfile.colorYellow
+    param = url.searchParams.get('colorBlue')
+    if (param) newProfile.colorBlue = param
+    if (!('colorBlue' in newProfile)) newProfile.colorBlue = baseProfile.colorBlue
+    param = url.searchParams.get('colorMagenta')
+    if (param) newProfile.colorMagenta = param
+    if (!('colorMagenta' in newProfile)) newProfile.colorMagenta = baseProfile.colorMagenta
+    param = url.searchParams.get('colorCyan')
+    if (param) newProfile.colorCyan = param
+    if (!('colorCyan' in newProfile)) newProfile.colorCyan = baseProfile.colorCyan
+    param = url.searchParams.get('colorWhite')
+    if (param) newProfile.colorWhite = param
+    if (!('colorWhite' in newProfile)) newProfile.colorWhite = baseProfile.colorWhite
+    param = url.searchParams.get('colorBrightBlack')
+    if (param) newProfile.colorBrightBlack = param
+    if (!('colorBrightBlack' in newProfile)) newProfile.colorBrightBlack = baseProfile.colorBrightBlack
+    param = url.searchParams.get('colorBrightRed')
+    if (param) newProfile.colorBrightRed = param
+    if (!('colorBrightRed' in newProfile)) newProfile.colorBrightRed = baseProfile.colorBrightRed
+    param = url.searchParams.get('colorBrightGreen')
+    if (param) newProfile.colorBrightGreen = param
+    if (!('colorBrightGreen' in newProfile)) newProfile.colorBrightGreen = baseProfile.colorBrightGreen
+    param = url.searchParams.get('colorBrightYellow')
+    if (param) newProfile.colorBrightYellow = param
+    if (!('colorBrightYellow' in newProfile)) newProfile.colorBrightYellow = baseProfile.colorBrightYellow
+    param = url.searchParams.get('colorBrightBlue')
+    if (param) newProfile.colorBrightBlue = param
+    if (!('colorBrightBlue' in newProfile)) newProfile.colorBrightBlue = baseProfile.colorBrightBlue
+    param = url.searchParams.get('colorBrightMagenta')
+    if (param) newProfile.colorBrightMagenta = param
+    if (!('colorBrightMagenta' in newProfile)) newProfile.colorBrightMagenta = baseProfile.colorBrightMagenta
+    param = url.searchParams.get('colorBrightCyan')
+    if (param) newProfile.colorBrightCyan = param
+    if (!('colorBrightCyan' in newProfile)) newProfile.colorBrightCyan = baseProfile.colorBrightCyan
+    param = url.searchParams.get('colorBrightWhite')
+    if (param) newProfile.colorBrightWhite = param
+    if (!('colorBrightWhite' in newProfile)) newProfile.colorBrightWhite = baseProfile.colorBrightWhite
     param = url.searchParams.get('leaveOpenAfterExit')
     if (param) newProfile.leaveOpenAfterExit = JSON.parse(param)
     if (!('leaveOpenAfterExit' in newProfile && newProfile.leaveOpenAfterExit !== null && newProfile.leaveOpenAfterExit !== '')) newProfile.leaveOpenAfterExit = baseProfile.leaveOpenAfterExit

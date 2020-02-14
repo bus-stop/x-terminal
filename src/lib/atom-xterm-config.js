@@ -78,7 +78,91 @@ export default {
   },
 
   getDefaultTheme () {
-    return 'Default'
+    return 'Custom'
+  },
+
+  getDefaultColorForeground () {
+    return '#fff'
+  },
+
+  getDefaultColorBackground () {
+    return '#000'
+  },
+
+  getDefaultColorCursor () {
+    return '#fff'
+  },
+
+  getDefaultColorCursorAccent () {
+    return '#000'
+  },
+
+  getDefaultColorSelection () {
+    return 'rgba(255, 255, 255, .3)'
+  },
+
+  getDefaultColorBlack () {
+    return '#2e3436'
+  },
+
+  getDefaultColorRed () {
+    return '#cc0000'
+  },
+
+  getDefaultColorGreen () {
+    return '#4e9a06'
+  },
+
+  getDefaultColorYellow () {
+    return '#c4a000'
+  },
+
+  getDefaultColorBlue () {
+    return '#3465a4'
+  },
+
+  getDefaultColorMagenta () {
+    return '#75507b'
+  },
+
+  getDefaultColorCyan () {
+    return '#06989a'
+  },
+
+  getDefaultColorWhite () {
+    return '#d3d7cf'
+  },
+
+  getDefaultColorBrightBlack () {
+    return '#555753'
+  },
+
+  getDefaultColorBrightRed () {
+    return '#ef2929'
+  },
+
+  getDefaultColorBrightGreen () {
+    return '#8ae234'
+  },
+
+  getDefaultColorBrightYellow () {
+    return '#fce94f'
+  },
+
+  getDefaultColorBrightBlue () {
+    return '#729fcf'
+  },
+
+  getDefaultColorBrightMagenta () {
+    return '#ad7fa8'
+  },
+
+  getDefaultColorBrightCyan () {
+    return '#34e2e2'
+  },
+
+  getDefaultColorBrightWhite () {
+    return '#eeeeec'
   },
 
   getDefaultLeaveOpenAfterExit () {

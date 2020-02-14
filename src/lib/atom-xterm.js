@@ -79,7 +79,28 @@ class AtomXtermSingleton {
       'atom-xterm.spawnPtySettings.encoding',
       'atom-xterm.terminalSettings.fontSize',
       'atom-xterm.terminalSettings.fontFamily',
-      'atom-xterm.terminalSettings.theme',
+      'atom-xterm.terminalSettings.colors.theme',
+      'atom-xterm.terminalSettings.colors.foreground',
+      'atom-xterm.terminalSettings.colors.background',
+      'atom-xterm.terminalSettings.colors.cursor',
+      'atom-xterm.terminalSettings.colors.cursorAccent',
+      'atom-xterm.terminalSettings.colors.selection',
+      'atom-xterm.terminalSettings.colors.black',
+      'atom-xterm.terminalSettings.colors.red',
+      'atom-xterm.terminalSettings.colors.green',
+      'atom-xterm.terminalSettings.colors.yellow',
+      'atom-xterm.terminalSettings.colors.blue',
+      'atom-xterm.terminalSettings.colors.magenta',
+      'atom-xterm.terminalSettings.colors.cyan',
+      'atom-xterm.terminalSettings.colors.white',
+      'atom-xterm.terminalSettings.colors.brightBlack',
+      'atom-xterm.terminalSettings.colors.brightRed',
+      'atom-xterm.terminalSettings.colors.brightGreen',
+      'atom-xterm.terminalSettings.colors.brightYellow',
+      'atom-xterm.terminalSettings.colors.brightBlue',
+      'atom-xterm.terminalSettings.colors.brightMagenta',
+      'atom-xterm.terminalSettings.colors.brightCyan',
+      'atom-xterm.terminalSettings.colors.brightWhite',
       'atom-xterm.terminalSettings.leaveOpenAfterExit',
       'atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup',
       'atom-xterm.terminalSettings.relaunchTerminalOnStartup',
@@ -525,39 +546,172 @@ export const config = configOrder({
         type: 'string',
         default: atomXtermConfig.getDefaultFontFamily()
       },
-      theme: {
-        title: 'Theme',
-        description: 'Theme used in terminal emulator.',
-        type: 'string',
-        enum: [
-          'Default',
-          'Atom Dark',
-          'Atom Light',
-          'Base16 Tomorrow Dark',
-          'Base16 Tomorrow Light',
-          'Christmas',
-          'City Lights',
-          'Dracula',
-          'Grass',
-          'Homebrew',
-          'Inverse',
-          'Linux',
-          'Man Page',
-          'Novel',
-          'Ocean',
-          'One Dark',
-          'One Light',
-          'Predawn',
-          'Pro',
-          'Red Sands',
-          'Red',
-          'Silver Aerogel',
-          'Solarized Dark',
-          'Solarized Light',
-          'Solid Colors',
-          'Standard'
-        ],
-        default: atomXtermConfig.getDefaultTheme()
+      colors: {
+        title: 'Colors',
+        description: 'Settings for the terminal colors.',
+        type: 'object',
+        properties: {
+          theme: {
+            title: 'Theme',
+            description: 'Theme used in terminal emulator.',
+            type: 'string',
+            enum: [
+              'Custom',
+              'Atom Dark',
+              'Atom Light',
+              'Base16 Tomorrow Dark',
+              'Base16 Tomorrow Light',
+              'Christmas',
+              'City Lights',
+              'Dracula',
+              'Grass',
+              'Homebrew',
+              'Inverse',
+              'Linux',
+              'Man Page',
+              'Novel',
+              'Ocean',
+              'One Dark',
+              'One Light',
+              'Predawn',
+              'Pro',
+              'Red Sands',
+              'Red',
+              'Silver Aerogel',
+              'Solarized Dark',
+              'Solarized Light',
+              'Solid Colors',
+              'Standard'
+            ],
+            default: atomXtermConfig.getDefaultTheme()
+          },
+          foreground: {
+            title: 'Text Color',
+            description: 'This will be overriden by the theme text color.',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorForeground()
+          },
+          background: {
+            title: 'Background Color',
+            description: 'This will be overriden by the theme background color.',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorBackground()
+          },
+          cursor: {
+            title: 'Cursor Color',
+            description: 'Can be transparent. This will be overriden by the theme cursor color.',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorCursor()
+          },
+          cursorAccent: {
+            title: 'Cursor Text Color',
+            description: 'Can be transparent. This will be overriden by the theme cursor text color.',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorCursorAccent()
+          },
+          selection: {
+            title: 'Selection Background Color',
+            description: 'Can be transparent. This will be overriden by the theme selection background color.',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorSelection()
+          },
+          black: {
+            title: 'ANSI Black',
+            description: '`\\x1b[30m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorBlack()
+          },
+          red: {
+            title: 'ANSI Red',
+            description: '`\\x1b[31m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorRed()
+          },
+          green: {
+            title: 'ANSI Green',
+            description: '`\\x1b[32m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorGreen()
+          },
+          yellow: {
+            title: 'ANSI Yellow',
+            description: '`\\x1b[33m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorYellow()
+          },
+          blue: {
+            title: 'ANSI Blue',
+            description: '`\\x1b[34m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorBlue()
+          },
+          magenta: {
+            title: 'ANSI Magenta',
+            description: '`\\x1b[35m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorMagenta()
+          },
+          cyan: {
+            title: 'ANSI Cyan',
+            description: '`\\x1b[36m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorCyan()
+          },
+          white: {
+            title: 'ANSI White',
+            description: '`\\x1b[37m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorWhite()
+          },
+          brightBlack: {
+            title: 'ANSI Bright Black',
+            description: '`\\x1b[1;30m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorBrightBlack()
+          },
+          brightRed: {
+            title: 'ANSI Bright Red',
+            description: '`\\x1b[1;31m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorBrightRed()
+          },
+          brightGreen: {
+            title: 'ANSI Bright Green',
+            description: '`\\x1b[1;32m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorBrightGreen()
+          },
+          brightYellow: {
+            title: 'ANSI Bright Yellow',
+            description: '`\\x1b[1;33m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorBrightYellow()
+          },
+          brightBlue: {
+            title: 'ANSI Bright Blue',
+            description: '`\\x1b[1;34m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorBrightBlue()
+          },
+          brightMagenta: {
+            title: 'ANSI Bright Magenta',
+            description: '`\\x1b[1;35m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorBrightMagenta()
+          },
+          brightCyan: {
+            title: 'ANSI Bright Cyan',
+            description: '`\\x1b[1;36m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorBrightCyan()
+          },
+          brightWhite: {
+            title: 'ANSI Bright White',
+            description: '`\\x1b[1;37m`',
+            type: 'color',
+            default: atomXtermConfig.getDefaultColorBrightWhite()
+          }
+        }
       },
       leaveOpenAfterExit: {
         title: 'Leave Open After Exit',
