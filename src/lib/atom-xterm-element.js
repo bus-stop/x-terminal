@@ -523,7 +523,6 @@ class AtomXtermElementImpl extends HTMLElement {
       }
     })
     this.disposables.add(this.profilesSingleton.onDidResetBaseProfile((baseProfile) => {
-      console.dir(this.model.getProfile(), baseProfile);
       const profileChanges = this.profilesSingleton.diffProfiles(
         this.model.getProfile(),
         {
@@ -556,7 +555,6 @@ class AtomXtermElementImpl extends HTMLElement {
           xtermOptions: baseProfile.xtermOptions
         }
       )
-      console.log("changes", profileChanges);
       this.model.applyProfileChanges(profileChanges)
     }))
     if (this.isPromptToStartup()) {
