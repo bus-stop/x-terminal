@@ -183,6 +183,144 @@ describe('Call to getMaximumFontSize()', () => {
   })
 })
 
+describe('Call to getDefaultFontFamily()', () => {
+  it('return \'monospace\'', () => {
+    expect(atomXtermConfig.getDefaultFontFamily()).toBe('monospace')
+  })
+})
+
+describe('Call to getDefaultTheme()', () => {
+  it('return \'Custom\'', () => {
+    expect(atomXtermConfig.getDefaultTheme()).toBe('Custom')
+  })
+})
+
+describe('Call to getDefaultColorForeground()', () => {
+  it('return \'#fff\'', () => {
+    expect(atomXtermConfig.getDefaultColorForeground()).toBe('#fff')
+  })
+})
+
+describe('Call to getDefaultColorBackground()', () => {
+  it('return \'#000\'', () => {
+    expect(atomXtermConfig.getDefaultColorBackground()).toBe('#000')
+  })
+})
+
+describe('Call to getDefaultColorCursor()', () => {
+  it('return \'#fff\'', () => {
+    expect(atomXtermConfig.getDefaultColorCursor()).toBe('#fff')
+  })
+})
+
+describe('Call to getDefaultColorCursorAccent()', () => {
+  it('return \'#000\'', () => {
+    expect(atomXtermConfig.getDefaultColorCursorAccent()).toBe('#000')
+  })
+})
+
+describe('Call to getDefaultColorSelection()', () => {
+  it('return \'rgba(255, 255, 255, .3)\'', () => {
+    expect(atomXtermConfig.getDefaultColorSelection()).toBe('rgba(255, 255, 255, .3)')
+  })
+})
+
+describe('Call to getDefaultColorBlack()', () => {
+  it('return \'#2e3436\'', () => {
+    expect(atomXtermConfig.getDefaultColorBlack()).toBe('#2e3436')
+  })
+})
+
+describe('Call to getDefaultColorRed()', () => {
+  it('return \'#cc0000\'', () => {
+    expect(atomXtermConfig.getDefaultColorRed()).toBe('#cc0000')
+  })
+})
+
+describe('Call to getDefaultColorGreen()', () => {
+  it('return \'#4e9a06\'', () => {
+    expect(atomXtermConfig.getDefaultColorGreen()).toBe('#4e9a06')
+  })
+})
+
+describe('Call to getDefaultColorYellow()', () => {
+  it('return \'#c4a000\'', () => {
+    expect(atomXtermConfig.getDefaultColorYellow()).toBe('#c4a000')
+  })
+})
+
+describe('Call to getDefaultColorBlue()', () => {
+  it('return \'#3465a4\'', () => {
+    expect(atomXtermConfig.getDefaultColorBlue()).toBe('#3465a4')
+  })
+})
+
+describe('Call to getDefaultColorMagenta()', () => {
+  it('return \'#75507b\'', () => {
+    expect(atomXtermConfig.getDefaultColorMagenta()).toBe('#75507b')
+  })
+})
+
+describe('Call to getDefaultColorCyan()', () => {
+  it('return \'#06989a\'', () => {
+    expect(atomXtermConfig.getDefaultColorCyan()).toBe('#06989a')
+  })
+})
+
+describe('Call to getDefaultColorWhite()', () => {
+  it('return \'#d3d7cf\'', () => {
+    expect(atomXtermConfig.getDefaultColorWhite()).toBe('#d3d7cf')
+  })
+})
+
+describe('Call to getDefaultColorBrightBlack()', () => {
+  it('return \'#555753\'', () => {
+    expect(atomXtermConfig.getDefaultColorBrightBlack()).toBe('#555753')
+  })
+})
+
+describe('Call to getDefaultColorBrightRed()', () => {
+  it('return \'#ef2929\'', () => {
+    expect(atomXtermConfig.getDefaultColorBrightRed()).toBe('#ef2929')
+  })
+})
+
+describe('Call to getDefaultColorBrightGreen()', () => {
+  it('return \'#8ae234\'', () => {
+    expect(atomXtermConfig.getDefaultColorBrightGreen()).toBe('#8ae234')
+  })
+})
+
+describe('Call to getDefaultColorBrightYellow()', () => {
+  it('return \'#fce94f\'', () => {
+    expect(atomXtermConfig.getDefaultColorBrightYellow()).toBe('#fce94f')
+  })
+})
+
+describe('Call to getDefaultColorBrightBlue()', () => {
+  it('return \'#729fcf\'', () => {
+    expect(atomXtermConfig.getDefaultColorBrightBlue()).toBe('#729fcf')
+  })
+})
+
+describe('Call to getDefaultColorBrightMagenta()', () => {
+  it('return \'#ad7fa8\'', () => {
+    expect(atomXtermConfig.getDefaultColorBrightMagenta()).toBe('#ad7fa8')
+  })
+})
+
+describe('Call to getDefaultColorBrightCyan()', () => {
+  it('return \'#34e2e2\'', () => {
+    expect(atomXtermConfig.getDefaultColorBrightCyan()).toBe('#34e2e2')
+  })
+})
+
+describe('Call to getDefaultColorBrightWhite()', () => {
+  it('return \'#eeeeec\'', () => {
+    expect(atomXtermConfig.getDefaultColorBrightWhite()).toBe('#eeeeec')
+  })
+})
+
 describe('Call to getDefaultLeaveOpenAfterExit()', () => {
   it('return true', () => {
     expect(atomXtermConfig.getDefaultLeaveOpenAfterExit()).toBe(true)

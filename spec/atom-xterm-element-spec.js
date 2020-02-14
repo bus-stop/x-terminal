@@ -397,6 +397,714 @@ describe('AtomXtermElement', () => {
     expect(this.element.isPtyProcessRunning()).toBeTruthy()
   })
 
+  describe('getTheme()', () => {
+    it('Custom', () => {
+      const theme = this.element.getTheme({ theme: 'Custom' })
+      expect(theme).toEqual({
+        background: '#000',
+        foreground: '#fff',
+        selection: 'rgba(255, 255, 255, .3)',
+        cursor: '#fff',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Atom Dark', () => {
+      const theme = this.element.getTheme({ theme: 'Atom Dark' })
+      expect(theme).toEqual({
+        background: '#1d1f21',
+        foreground: '#c5c8c6',
+        selection: '#999',
+        cursor: '#fff',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Atom Light', () => {
+      const theme = this.element.getTheme({ theme: 'Atom Light' })
+      expect(theme).toEqual({
+        background: '#fff',
+        foreground: '#555',
+        selection: '#afc4da',
+        cursor: '#000',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Base16 Tomorrow Dark', () => {
+      const theme = this.element.getTheme({ theme: 'Base16 Tomorrow Dark' })
+      expect(theme).toEqual({
+        background: '#1d1f21',
+        foreground: '#c5c8c6',
+        selection: '#b4b7b4',
+        // selectionForeground: '#e0e0e0',
+        cursor: '#fff',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Base16 Tomorrow Light', () => {
+      const theme = this.element.getTheme({ theme: 'Base16 Tomorrow Light' })
+      expect(theme).toEqual({
+        background: '#fff',
+        foreground: '#1d1f21',
+        selection: '#282a2e',
+        // selectionForeground: '#e0e0e0',
+        cursor: '#1d1f21',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Christmas', () => {
+      const theme = this.element.getTheme({ theme: 'Christmas' })
+      expect(theme).toEqual({
+        background: '#0c0047',
+        foreground: '#f81705',
+        selection: '#298f16',
+        cursor: '#009f59',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('City Lights', () => {
+      const theme = this.element.getTheme({ theme: 'City Lights' })
+      expect(theme).toEqual({
+        background: '#181d23',
+        foreground: '#666d81',
+        selection: '#2a2f38',
+        // selectionForeground: '#b7c5d3',
+        cursor: '#528bff',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Dracula', () => {
+      const theme = this.element.getTheme({ theme: 'Dracula' })
+      expect(theme).toEqual({
+        background: '#1e1f29',
+        foreground: 'white',
+        selection: '#44475a',
+        cursor: '#999999',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Grass', () => {
+      const theme = this.element.getTheme({ theme: 'Grass' })
+      expect(theme).toEqual({
+        background: 'rgb(19, 119, 61)',
+        foreground: 'rgb(255, 240, 165)',
+        selection: 'rgba(182, 73, 38, .99)',
+        cursor: 'rgb(142, 40, 0)',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Homebrew', () => {
+      const theme = this.element.getTheme({ theme: 'Homebrew' })
+      expect(theme).toEqual({
+        background: '#000',
+        foreground: 'rgb(41, 254, 20)',
+        selection: 'rgba(7, 30, 155, .99)',
+        cursor: 'rgb(55, 254, 38)',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Inverse', () => {
+      const theme = this.element.getTheme({ theme: 'Inverse' })
+      expect(theme).toEqual({
+        background: '#fff',
+        foreground: '#000',
+        selection: 'rgba(178, 215, 255, .99)',
+        cursor: 'rgb(146, 146, 146)',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Linux', () => {
+      const theme = this.element.getTheme({ theme: 'Linux' })
+      expect(theme).toEqual({
+        background: '#000',
+        foreground: 'rgb(230, 230, 230)',
+        selection: 'rgba(155, 30, 7, .99)',
+        cursor: 'rgb(200, 20, 25)',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Man Page', () => {
+      const theme = this.element.getTheme({ theme: 'Man Page' })
+      expect(theme).toEqual({
+        background: 'rgb(254, 244, 156)',
+        foreground: 'black',
+        selection: 'rgba(178, 215, 255, .99)',
+        cursor: 'rgb(146, 146, 146)',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Novel', () => {
+      const theme = this.element.getTheme({ theme: 'Novel' })
+      expect(theme).toEqual({
+        background: 'rgb(223, 219, 196)',
+        foreground: 'rgb(77, 47, 46)',
+        selection: 'rgba(155, 153, 122, .99)',
+        cursor: 'rgb(115, 99, 89)',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Ocean', () => {
+      const theme = this.element.getTheme({ theme: 'Ocean' })
+      expect(theme).toEqual({
+        background: 'rgb(44, 102, 201)',
+        foreground: 'white',
+        selection: 'rgba(41, 134, 255, .99)',
+        cursor: 'rgb(146, 146, 146)',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('One Dark', () => {
+      const theme = this.element.getTheme({ theme: 'One Dark' })
+      expect(theme).toEqual({
+        background: '#282c34',
+        foreground: '#abb2bf',
+        selection: '#9196a1',
+        cursor: '#528bff',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('One Light', () => {
+      const theme = this.element.getTheme({ theme: 'One Light' })
+      expect(theme).toEqual({
+        background: 'hsl(230, 1%, 98%)',
+        foreground: 'hsl(230, 8%, 24%)',
+        selection: 'hsl(230, 1%, 90%)',
+        cursor: 'hsl(230, 100%, 66%)',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Predawn', () => {
+      const theme = this.element.getTheme({ theme: 'Predawn' })
+      expect(theme).toEqual({
+        background: '#282828',
+        foreground: '#f1f1f1',
+        selection: 'rgba(255,255,255,0.25)',
+        cursor: '#f18260',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Pro', () => {
+      const theme = this.element.getTheme({ theme: 'Pro' })
+      expect(theme).toEqual({
+        background: '#000',
+        foreground: 'rgb(244, 244, 244)',
+        selection: 'rgba(82, 82, 82, .99)',
+        cursor: 'rgb(96, 96, 96)',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Red Sands', () => {
+      const theme = this.element.getTheme({ theme: 'Red Sands' })
+      expect(theme).toEqual({
+        background: 'rgb(143, 53, 39)',
+        foreground: 'rgb(215, 201, 167)',
+        selection: 'rgba(60, 25, 22, .99)',
+        cursor: 'white',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Red', () => {
+      const theme = this.element.getTheme({ theme: 'Red' })
+      expect(theme).toEqual({
+        background: '#000',
+        foreground: 'rgb(255, 38, 14)',
+        selection: 'rgba(7, 30, 155, .99)',
+        cursor: 'rgb(255, 38, 14)',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Silver Aerogel', () => {
+      const theme = this.element.getTheme({ theme: 'Silver Aerogel' })
+      expect(theme).toEqual({
+        background: 'rgb(146, 146, 146)',
+        foreground: '#000',
+        selection: 'rgba(120, 123, 156, .99)',
+        cursor: 'rgb(224, 224, 224)',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Solarized Dark', () => {
+      const theme = this.element.getTheme({ theme: 'Solarized Dark' })
+      expect(theme).toEqual({
+        background: '#042029',
+        foreground: '#708284',
+        selection: '#839496',
+        cursor: '#819090',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Solarized Light', () => {
+      const theme = this.element.getTheme({ theme: 'Solarized Light' })
+      expect(theme).toEqual({
+        background: '#fdf6e3',
+        foreground: '#657a81',
+        selection: '#ece7d5',
+        cursor: '#586e75',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Solid Colors', () => {
+      const theme = this.element.getTheme({ theme: 'Solid Colors' })
+      expect(theme).toEqual({
+        background: 'rgb(120, 132, 151)',
+        foreground: '#000',
+        selection: 'rgba(178, 215, 255, .99)',
+        cursor: '#fff',
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+
+    it('Standard', () => {
+      const theme = this.element.getTheme({ theme: 'Standard' })
+      const root = getComputedStyle(document.documentElement)
+      expect(theme).toEqual({
+        background: root.getPropertyValue('--standard-app-background-color'),
+        foreground: root.getPropertyValue('--standard-text-color'),
+        selection: 'rgba(255, 255, 255, .3)',
+        cursor: root.getPropertyValue('--standard-text-color-highlight'),
+        cursorAccent: '#000',
+        black: '#2e3436',
+        red: '#cc0000',
+        green: '#4e9a06',
+        yellow: '#c4a000',
+        blue: '#3465a4',
+        magenta: '#75507b',
+        cyan: '#06989a',
+        white: '#d3d7cf',
+        brightBlack: '#555753',
+        brightRed: '#ef2929',
+        brightGreen: '#8ae234',
+        brightYellow: '#fce94f',
+        brightBlue: '#729fcf',
+        brightMagenta: '#ad7fa8',
+        brightCyan: '#34e2e2',
+        brightWhite: '#eeeeec'
+      })
+    })
+  })
+
   it('createTerminal() check terminal object', () => {
     expect(this.element.terminal).toBeTruthy()
   })
@@ -1256,23 +1964,22 @@ describe('AtomXtermElement', () => {
   it('getXtermOptions() default options', () => {
     const expected = {
       cursorBlink: true,
-      fontSize: 14
+      fontSize: 14,
+      fontFamily: 'monospace',
+      theme: this.element.getTheme()
     }
     expect(this.element.getXtermOptions()).toEqual(expected)
   })
 
   it('getXtermOptions() xtermOptions in profile', () => {
     this.element.model.profile.xtermOptions = {
-      theme: {
-        background: '#FFF'
-      }
+      cursorBlink: true
     }
     const expected = {
       cursorBlink: true,
       fontSize: 14,
-      theme: {
-        background: '#FFF'
-      }
+      fontFamily: 'monospace',
+      theme: this.element.getTheme()
     }
     expect(this.element.getXtermOptions()).toEqual(expected)
   })
@@ -1304,9 +2011,7 @@ describe('AtomXtermElement', () => {
     spyOn(this.element.terminal, 'setOption')
     this.element.terminalDivIntersectionRatio = 1.0
     this.element.pendingTerminalProfileOptions.xtermOptions = {
-      theme: {
-        background: '#FFF'
-      }
+      cursorBlink: true
     }
     this.element.applyPendingTerminalProfileOptions()
     expect(this.element.setMainBackgroundColor).toHaveBeenCalled()
@@ -1336,9 +2041,7 @@ describe('AtomXtermElement', () => {
     spyOn(this.element.terminal, 'setOption')
     this.element.terminalDivIntersectionRatio = 1.0
     this.element.pendingTerminalProfileOptions.xtermOptions = {
-      theme: {
-        background: '#FFF'
-      }
+      cursorBlink: true
     }
     this.element.pendingTerminalProfileOptions.command = 'somecommand'
     this.element.applyPendingTerminalProfileOptions()
@@ -1352,17 +2055,13 @@ describe('AtomXtermElement', () => {
     spyOn(this.element, 'refitTerminal')
     this.element.terminalDivIntersectionRatio = 0.0
     this.element.pendingTerminalProfileOptions.xtermOptions = {
-      theme: {
-        background: '#FFF'
-      }
+      cursorBlink: true
     }
     this.element.pendingTerminalProfileOptions.command = 'somecommand'
     this.element.applyPendingTerminalProfileOptions()
     expect(this.element.pendingTerminalProfileOptions).toEqual({
       xtermOptions: {
-        theme: {
-          background: '#FFF'
-        }
+        cursorBlink: true
       },
       command: 'somecommand'
     })
@@ -1372,9 +2071,7 @@ describe('AtomXtermElement', () => {
     spyOn(this.element, 'refitTerminal')
     this.element.terminalDivIntersectionRatio = 1.0
     this.element.pendingTerminalProfileOptions.xtermOptions = {
-      theme: {
-        background: '#FFF'
-      }
+      cursorBlink: true
     }
     this.element.pendingTerminalProfileOptions.command = 'somecommand'
     this.element.applyPendingTerminalProfileOptions()
@@ -1436,10 +2133,31 @@ describe('AtomXtermElement', () => {
   it('base profile changed, font size and xterm options remained the same', () => {
     const profile = {
       fontSize: 14,
+      fontFamily: 'monospace',
+      theme: 'Custom',
+      colorForeground: '#fff',
+      colorBackground: '#000',
+      colorCursor: '#fff',
+      colorCursorAccent: '#000',
+      colorSelection: 'rgba(255, 255, 255, .3)',
+      colorBlack: '#2e3436',
+      colorRed: '#cc0000',
+      colorGreen: '#4e9a06',
+      colorYellow: '#c4a000',
+      colorBlue: '#3465a4',
+      colorMagenta: '#75507b',
+      colorCyan: '#06989a',
+      colorWhite: '#d3d7cf',
+      colorBrightBlack: '#555753',
+      colorBrightRed: '#ef2929',
+      colorBrightGreen: '#8ae234',
+      colorBrightYellow: '#fce94f',
+      colorBrightBlue: '#729fcf',
+      colorBrightMagenta: '#ad7fa8',
+      colorBrightCyan: '#34e2e2',
+      colorBrightWhite: '#eeeeec',
       xtermOptions: {
-        theme: {
-          background: '#FFF'
-        }
+        cursorBlink: true
       }
     }
     spyOn(this.element.model, 'getProfile').and.returnValue(profile)
@@ -1454,10 +2172,31 @@ describe('AtomXtermElement', () => {
   it('base profile changed, font size changed, xterm options remained the same', () => {
     const profile = {
       fontSize: 14,
+      fontFamily: 'monospace',
+      theme: 'Custom',
+      colorForeground: '#fff',
+      colorBackground: '#000',
+      colorCursor: '#fff',
+      colorCursorAccent: '#000',
+      colorSelection: 'rgba(255, 255, 255, .3)',
+      colorBlack: '#2e3436',
+      colorRed: '#cc0000',
+      colorGreen: '#4e9a06',
+      colorYellow: '#c4a000',
+      colorBlue: '#3465a4',
+      colorMagenta: '#75507b',
+      colorCyan: '#06989a',
+      colorWhite: '#d3d7cf',
+      colorBrightBlack: '#555753',
+      colorBrightRed: '#ef2929',
+      colorBrightGreen: '#8ae234',
+      colorBrightYellow: '#fce94f',
+      colorBrightBlue: '#729fcf',
+      colorBrightMagenta: '#ad7fa8',
+      colorBrightCyan: '#34e2e2',
+      colorBrightWhite: '#eeeeec',
       xtermOptions: {
-        theme: {
-          background: '#FFF'
-        }
+        cursorBlink: true
       }
     }
     const newBaseProfile = this.element.profilesSingleton.deepClone(profile)
@@ -1476,17 +2215,36 @@ describe('AtomXtermElement', () => {
   it('base profile changed, font size remained the same, xterm options changed', () => {
     const profile = {
       fontSize: 14,
+      fontFamily: 'monospace',
+      theme: 'Custom',
+      colorForeground: '#fff',
+      colorBackground: '#000',
+      colorCursor: '#fff',
+      colorCursorAccent: '#000',
+      colorSelection: 'rgba(255, 255, 255, .3)',
+      colorBlack: '#2e3436',
+      colorRed: '#cc0000',
+      colorGreen: '#4e9a06',
+      colorYellow: '#c4a000',
+      colorBlue: '#3465a4',
+      colorMagenta: '#75507b',
+      colorCyan: '#06989a',
+      colorWhite: '#d3d7cf',
+      colorBrightBlack: '#555753',
+      colorBrightRed: '#ef2929',
+      colorBrightGreen: '#8ae234',
+      colorBrightYellow: '#fce94f',
+      colorBrightBlue: '#729fcf',
+      colorBrightMagenta: '#ad7fa8',
+      colorBrightCyan: '#34e2e2',
+      colorBrightWhite: '#eeeeec',
       xtermOptions: {
-        theme: {
-          background: '#FFF'
-        }
+        cursorBlink: true
       }
     }
     const newBaseProfile = this.element.profilesSingleton.deepClone(profile)
     newBaseProfile.xtermOptions = {
-      theme: {
-        background: '#000'
-      }
+      cursorBlink: false
     }
     spyOn(this.element.model, 'getProfile').and.returnValue(profile)
     spyOn(this.element.model, 'applyProfileChanges')
@@ -1496,9 +2254,7 @@ describe('AtomXtermElement', () => {
     )
     expect(this.element.model.applyProfileChanges).toHaveBeenCalledWith({
       xtermOptions: {
-        theme: {
-          background: '#000'
-        }
+        cursorBlink: false
       }
     })
   })
@@ -1506,18 +2262,37 @@ describe('AtomXtermElement', () => {
   it('base profile changed, font size and xterm options changed', () => {
     const profile = {
       fontSize: 14,
+      fontFamily: 'monospace',
+      theme: 'Custom',
+      colorForeground: '#fff',
+      colorBackground: '#000',
+      colorCursor: '#fff',
+      colorCursorAccent: '#000',
+      colorSelection: 'rgba(255, 255, 255, .3)',
+      colorBlack: '#2e3436',
+      colorRed: '#cc0000',
+      colorGreen: '#4e9a06',
+      colorYellow: '#c4a000',
+      colorBlue: '#3465a4',
+      colorMagenta: '#75507b',
+      colorCyan: '#06989a',
+      colorWhite: '#d3d7cf',
+      colorBrightBlack: '#555753',
+      colorBrightRed: '#ef2929',
+      colorBrightGreen: '#8ae234',
+      colorBrightYellow: '#fce94f',
+      colorBrightBlue: '#729fcf',
+      colorBrightMagenta: '#ad7fa8',
+      colorBrightCyan: '#34e2e2',
+      colorBrightWhite: '#eeeeec',
       xtermOptions: {
-        theme: {
-          background: '#FFF'
-        }
+        cursorBlink: true
       }
     }
     const newBaseProfile = this.element.profilesSingleton.deepClone(profile)
     newBaseProfile.fontSize = 15
     newBaseProfile.xtermOptions = {
-      theme: {
-        background: '#000'
-      }
+      cursorBlink: false
     }
     spyOn(this.element.model, 'getProfile').and.returnValue(profile)
     spyOn(this.element.model, 'applyProfileChanges')
@@ -1528,9 +2303,7 @@ describe('AtomXtermElement', () => {
     expect(this.element.model.applyProfileChanges).toHaveBeenCalledWith({
       fontSize: 15,
       xtermOptions: {
-        theme: {
-          background: '#000'
-        }
+        cursorBlink: false
       }
     })
   })
@@ -1539,10 +2312,31 @@ describe('AtomXtermElement', () => {
     const profile = {
       command: 'somecommand',
       fontSize: 14,
+      fontFamily: 'monospace',
+      theme: 'Custom',
+      colorForeground: '#fff',
+      colorBackground: '#000',
+      colorCursor: '#fff',
+      colorCursorAccent: '#000',
+      colorSelection: 'rgba(255, 255, 255, .3)',
+      colorBlack: '#2e3436',
+      colorRed: '#cc0000',
+      colorGreen: '#4e9a06',
+      colorYellow: '#c4a000',
+      colorBlue: '#3465a4',
+      colorMagenta: '#75507b',
+      colorCyan: '#06989a',
+      colorWhite: '#d3d7cf',
+      colorBrightBlack: '#555753',
+      colorBrightRed: '#ef2929',
+      colorBrightGreen: '#8ae234',
+      colorBrightYellow: '#fce94f',
+      colorBrightBlue: '#729fcf',
+      colorBrightMagenta: '#ad7fa8',
+      colorBrightCyan: '#34e2e2',
+      colorBrightWhite: '#eeeeec',
       xtermOptions: {
-        theme: {
-          background: '#FFF'
-        }
+        cursorBlink: true
       }
     }
     const newBaseProfile = this.element.profilesSingleton.deepClone(profile)

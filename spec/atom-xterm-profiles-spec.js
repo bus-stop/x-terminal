@@ -39,6 +39,29 @@ describe('AtomXtermProfilesSingleton', () => {
       deleteEnv: [],
       encoding: null,
       fontSize: 14,
+      fontFamily: 'monospace',
+      theme: 'Custom',
+      colorForeground: '#fff',
+      colorBackground: '#000',
+      colorCursor: '#fff',
+      colorCursorAccent: '#000',
+      colorSelection: 'rgba(255, 255, 255, .3)',
+      colorBlack: '#2e3436',
+      colorRed: '#cc0000',
+      colorGreen: '#4e9a06',
+      colorYellow: '#c4a000',
+      colorBlue: '#3465a4',
+      colorMagenta: '#75507b',
+      colorCyan: '#06989a',
+      colorWhite: '#d3d7cf',
+      colorBrightBlack: '#555753',
+      colorBrightRed: '#ef2929',
+      colorBrightGreen: '#8ae234',
+      colorBrightYellow: '#fce94f',
+      colorBrightBlue: '#729fcf',
+      colorBrightMagenta: '#ad7fa8',
+      colorBrightCyan: '#34e2e2',
+      colorBrightWhite: '#eeeeec',
       leaveOpenAfterExit: true,
       relaunchTerminalOnStartup: true,
       title: 'foo',
@@ -98,6 +121,75 @@ describe('AtomXtermProfilesSingleton', () => {
     }
     if (key === 'atom-xterm.terminalSettings.fontSize') {
       return 20
+    }
+    if (key === 'atom-xterm.terminalSettings.fontFamily') {
+      return 'test'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.theme') {
+      return 'Homebrew'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.foreground') {
+      return '#123456'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.background') {
+      return '#123457'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.cursor') {
+      return '#123458'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.cursorAccent') {
+      return '#123459'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.selection') {
+      return '#123460'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.black') {
+      return '#123461'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.red') {
+      return '#123462'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.green') {
+      return '#123463'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.yellow') {
+      return '#123464'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.blue') {
+      return '#123465'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.magenta') {
+      return '#123466'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.cyan') {
+      return '#123467'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.white') {
+      return '#123468'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.brightBlack') {
+      return '#123469'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.brightRed') {
+      return '#123470'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.brightGreen') {
+      return '#123471'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.brightYellow') {
+      return '#123472'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.brightBlue') {
+      return '#123473'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.brightMagenta') {
+      return '#123474'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.brightCyan') {
+      return '#123475'
+    }
+    if (key === 'atom-xterm.terminalSettings.colors.brightWhite') {
+      return '#123476'
     }
     if (key === 'atom-xterm.terminalSettings.leaveOpenAfterExit') {
       return false
@@ -230,6 +322,29 @@ describe('AtomXtermProfilesSingleton', () => {
       deleteEnv: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.deleteEnv') || atomXtermConfig.getDefaultDeleteEnv()),
       encoding: encoding || null,
       fontSize: atom.config.get('atom-xterm.terminalSettings.fontSize') || atomXtermConfig.getDefaultFontSize(),
+      fontFamily: atom.config.get('atom-xterm.terminalSettings.fontFamily') || atomXtermConfig.getDefaultFontFamily(),
+      theme: atom.config.get('atom-xterm.terminalSettings.colors.theme') || atomXtermConfig.getDefaultTheme(),
+      colorForeground: atom.config.get('atom-xterm.terminalSettings.colors.foreground') || atomXtermConfig.getDefaultColorForeground(),
+      colorBackground: atom.config.get('atom-xterm.terminalSettings.colors.background') || atomXtermConfig.getDefaultColorBackground(),
+      colorCursor: atom.config.get('atom-xterm.terminalSettings.colors.cursor') || atomXtermConfig.getDefaultColorCursor(),
+      colorCursorAccent: atom.config.get('atom-xterm.terminalSettings.colors.cursorAccent') || atomXtermConfig.getDefaultColorCursorAccent(),
+      colorSelection: atom.config.get('atom-xterm.terminalSettings.colors.selection') || atomXtermConfig.getDefaultColorSelection(),
+      colorBlack: atom.config.get('atom-xterm.terminalSettings.colors.black') || atomXtermConfig.getDefaultColorBlack(),
+      colorRed: atom.config.get('atom-xterm.terminalSettings.colors.red') || atomXtermConfig.getDefaultColorRed(),
+      colorGreen: atom.config.get('atom-xterm.terminalSettings.colors.green') || atomXtermConfig.getDefaultColorGreen(),
+      colorYellow: atom.config.get('atom-xterm.terminalSettings.colors.Yellow') || atomXtermConfig.getDefaultColorYellow(),
+      colorBlue: atom.config.get('atom-xterm.terminalSettings.colors.blue') || atomXtermConfig.getDefaultColorBlue(),
+      colorMagenta: atom.config.get('atom-xterm.terminalSettings.colors.Magenta') || atomXtermConfig.getDefaultColorMagenta(),
+      colorCyan: atom.config.get('atom-xterm.terminalSettings.colors.cyan') || atomXtermConfig.getDefaultColorCyan(),
+      colorWhite: atom.config.get('atom-xterm.terminalSettings.colors.White') || atomXtermConfig.getDefaultColorWhite(),
+      colorBrightBlack: atom.config.get('atom-xterm.terminalSettings.colors.brightBlack') || atomXtermConfig.getDefaultColorBrightBlack(),
+      colorBrightRed: atom.config.get('atom-xterm.terminalSettings.colors.brightRed') || atomXtermConfig.getDefaultColorBrightRed(),
+      colorBrightGreen: atom.config.get('atom-xterm.terminalSettings.colors.brightGreen') || atomXtermConfig.getDefaultColorBrightGreen(),
+      colorBrightYellow: atom.config.get('atom-xterm.terminalSettings.colors.brightYellow') || atomXtermConfig.getDefaultColorBrightYellow(),
+      colorBrightBlue: atom.config.get('atom-xterm.terminalSettings.colors.brightBlue') || atomXtermConfig.getDefaultColorBrightBlue(),
+      colorBrightMagenta: atom.config.get('atom-xterm.terminalSettings.colors.brightMagenta') || atomXtermConfig.getDefaultColorBrightMagenta(),
+      colorBrightCyan: atom.config.get('atom-xterm.terminalSettings.colors.brightCyan') || atomXtermConfig.getDefaultColorBrightCyan(),
+      colorBrightWhite: atom.config.get('atom-xterm.terminalSettings.colors.brightWhite') || atomXtermConfig.getDefaultColorBrightWhite(),
       leaveOpenAfterExit: atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit') || atomXtermConfig.getDefaultLeaveOpenAfterExit(),
       relaunchTerminalOnStartup: atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup') || atomXtermConfig.getDefaultRelaunchTerminalOnStartup(),
       title: title || null,
@@ -252,6 +367,29 @@ describe('AtomXtermProfilesSingleton', () => {
       deleteEnv: ['FOO'],
       encoding: 'someencoding',
       fontSize: 20,
+      fontFamily: 'test',
+      theme: 'Homebrew',
+      colorForeground: '#123456',
+      colorBackground: '#123457',
+      colorCursor: '#123458',
+      colorCursorAccent: '#123459',
+      colorSelection: '#123460',
+      colorBlack: '#123461',
+      colorRed: '#123462',
+      colorGreen: '#123463',
+      colorYellow: '#123464',
+      colorBlue: '#123465',
+      colorMagenta: '#123466',
+      colorCyan: '#123467',
+      colorWhite: '#123468',
+      colorBrightBlack: '#123469',
+      colorBrightRed: '#123470',
+      colorBrightGreen: '#123471',
+      colorBrightYellow: '#123472',
+      colorBrightBlue: '#123473',
+      colorBrightMagenta: '#123474',
+      colorBrightCyan: '#123475',
+      colorBrightWhite: '#123476',
       leaveOpenAfterExit: false,
       relaunchTerminalOnStartup: false,
       title: 'foo',
@@ -440,21 +578,45 @@ describe('AtomXtermProfilesSingleton', () => {
 
   it('createProfileDataFromUri() base URI', () => {
     const url = new URL('atom-xterm://somesessionid/')
-    const expected = {}
-    expected.command = atomXtermConfig.getDefaultShellCommand()
-    expected.args = JSON.parse(atomXtermConfig.getDefaultArgs())
-    expected.name = atomXtermConfig.getDefaultTermType()
-    expected.cwd = atomXtermConfig.getDefaultCwd()
-    expected.env = null
-    expected.setEnv = JSON.parse(atomXtermConfig.getDefaultSetEnv())
-    expected.deleteEnv = JSON.parse(atomXtermConfig.getDefaultDeleteEnv())
-    expected.encoding = null
-    expected.fontSize = atomXtermConfig.getDefaultFontSize()
-    expected.leaveOpenAfterExit = atomXtermConfig.getDefaultLeaveOpenAfterExit()
-    expected.relaunchTerminalOnStartup = atomXtermConfig.getDefaultRelaunchTerminalOnStartup()
-    expected.title = null
-    expected.xtermOptions = JSON.parse(atomXtermConfig.getDefaultXtermOptions())
-    expected.promptToStartup = atomXtermConfig.getDefaultPromptToStartup()
+    const expected = {
+      command: atomXtermConfig.getDefaultShellCommand(),
+      args: JSON.parse(atomXtermConfig.getDefaultArgs()),
+      name: atomXtermConfig.getDefaultTermType(),
+      cwd: atomXtermConfig.getDefaultCwd(),
+      env: null,
+      setEnv: JSON.parse(atomXtermConfig.getDefaultSetEnv()),
+      deleteEnv: JSON.parse(atomXtermConfig.getDefaultDeleteEnv()),
+      encoding: null,
+      fontSize: atomXtermConfig.getDefaultFontSize(),
+      fontFamily: atomXtermConfig.getDefaultFontFamily(),
+      theme: atomXtermConfig.getDefaultTheme(),
+      colorForeground: atomXtermConfig.getDefaultColorForeground(),
+      colorBackground: atomXtermConfig.getDefaultColorBackground(),
+      colorCursor: atomXtermConfig.getDefaultColorCursor(),
+      colorCursorAccent: atomXtermConfig.getDefaultColorCursorAccent(),
+      colorSelection: atomXtermConfig.getDefaultColorSelection(),
+      colorBlack: atomXtermConfig.getDefaultColorBlack(),
+      colorRed: atomXtermConfig.getDefaultColorRed(),
+      colorGreen: atomXtermConfig.getDefaultColorGreen(),
+      colorYellow: atomXtermConfig.getDefaultColorYellow(),
+      colorBlue: atomXtermConfig.getDefaultColorBlue(),
+      colorMagenta: atomXtermConfig.getDefaultColorMagenta(),
+      colorCyan: atomXtermConfig.getDefaultColorCyan(),
+      colorWhite: atomXtermConfig.getDefaultColorWhite(),
+      colorBrightBlack: atomXtermConfig.getDefaultColorBrightBlack(),
+      colorBrightRed: atomXtermConfig.getDefaultColorBrightRed(),
+      colorBrightGreen: atomXtermConfig.getDefaultColorBrightGreen(),
+      colorBrightYellow: atomXtermConfig.getDefaultColorBrightYellow(),
+      colorBrightBlue: atomXtermConfig.getDefaultColorBrightBlue(),
+      colorBrightMagenta: atomXtermConfig.getDefaultColorBrightMagenta(),
+      colorBrightCyan: atomXtermConfig.getDefaultColorBrightCyan(),
+      colorBrightWhite: atomXtermConfig.getDefaultColorBrightWhite(),
+      leaveOpenAfterExit: atomXtermConfig.getDefaultLeaveOpenAfterExit(),
+      relaunchTerminalOnStartup: atomXtermConfig.getDefaultRelaunchTerminalOnStartup(),
+      title: null,
+      xtermOptions: JSON.parse(atomXtermConfig.getDefaultXtermOptions()),
+      promptToStartup: atomXtermConfig.getDefaultPromptToStartup()
+    }
     expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
   })
 
@@ -773,6 +935,29 @@ describe('AtomXtermProfilesSingleton', () => {
       deleteEnv: JSON.parse(atomXtermConfig.getDefaultDeleteEnv()),
       encoding: null,
       fontSize: atomXtermConfig.getDefaultFontSize(),
+      fontFamily: atomXtermConfig.getDefaultFontFamily(),
+      theme: atomXtermConfig.getDefaultTheme(),
+      colorForeground: atomXtermConfig.getDefaultColorForeground(),
+      colorBackground: atomXtermConfig.getDefaultColorBackground(),
+      colorCursor: atomXtermConfig.getDefaultColorCursor(),
+      colorCursorAccent: atomXtermConfig.getDefaultColorCursorAccent(),
+      colorSelection: atomXtermConfig.getDefaultColorSelection(),
+      colorBlack: atomXtermConfig.getDefaultColorBlack(),
+      colorRed: atomXtermConfig.getDefaultColorRed(),
+      colorGreen: atomXtermConfig.getDefaultColorGreen(),
+      colorYellow: atomXtermConfig.getDefaultColorYellow(),
+      colorBlue: atomXtermConfig.getDefaultColorBlue(),
+      colorMagenta: atomXtermConfig.getDefaultColorMagenta(),
+      colorCyan: atomXtermConfig.getDefaultColorCyan(),
+      colorWhite: atomXtermConfig.getDefaultColorWhite(),
+      colorBrightBlack: atomXtermConfig.getDefaultColorBrightBlack(),
+      colorBrightRed: atomXtermConfig.getDefaultColorBrightRed(),
+      colorBrightGreen: atomXtermConfig.getDefaultColorBrightGreen(),
+      colorBrightYellow: atomXtermConfig.getDefaultColorBrightYellow(),
+      colorBrightBlue: atomXtermConfig.getDefaultColorBrightBlue(),
+      colorBrightMagenta: atomXtermConfig.getDefaultColorBrightMagenta(),
+      colorBrightCyan: atomXtermConfig.getDefaultColorBrightCyan(),
+      colorBrightWhite: atomXtermConfig.getDefaultColorBrightWhite(),
       leaveOpenAfterExit: atomXtermConfig.getDefaultLeaveOpenAfterExit(),
       relaunchTerminalOnStartup: atomXtermConfig.getDefaultRelaunchTerminalOnStartup(),
       title: null,

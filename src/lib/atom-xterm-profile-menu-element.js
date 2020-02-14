@@ -139,6 +139,7 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
           modelProfile.fontFamily
         ))
         // TODO: create theme
+        // TODO: create colors
         // Leave open after terminal exit
         this.mainDiv.appendChild(this.createCheckbox(
           'leaveopenafterexit-checkbox',
@@ -236,6 +237,8 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
     menuElements.encodingElement = this.mainDiv.querySelector('#encoding-textbox atom-text-editor')
     menuElements.fontSizeElement = this.mainDiv.querySelector('#fontsize-textbox atom-text-editor')
     menuElements.fontFamilyElement = this.mainDiv.querySelector('#fontfamily-textbox atom-text-editor')
+    // TODO: theme
+    // TODO: colors
     menuElements.leaveOpenAfterExitElement = this.mainDiv.querySelector('#leaveopenafterexit-checkbox .atom-xterm-profile-menu-item-checkbox')
     menuElements.relaunchTerminalOnStartupElement = this.mainDiv.querySelector('#relaunchterminalonstartup-checkbox .atom-xterm-profile-menu-item-checkbox')
     menuElements.titleElement = this.mainDiv.querySelector('#title-textbox atom-text-editor')
@@ -278,6 +281,30 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
       Number
     )
     newProfile.fontFamily = menuElements.fontFamilyElement.getModel().getText() || baseProfile.fontFamily
+    // TODO: theme
+    newProfile.theme = baseProfile.theme
+    // TODO: colors
+    newProfile.colorForeground = baseProfile.colorForeground
+    newProfile.colorBackground = baseProfile.colorBackground
+    newProfile.colorCursor = baseProfile.colorCursor
+    newProfile.colorCursorAccent = baseProfile.colorCursorAccent
+    newProfile.colorSelection = baseProfile.colorSelection
+    newProfile.colorBlack = baseProfile.colorBlack
+    newProfile.colorRed = baseProfile.colorRed
+    newProfile.colorGreen = baseProfile.colorGreen
+    newProfile.colorYellow = baseProfile.colorYellow
+    newProfile.colorBlue = baseProfile.colorBlue
+    newProfile.colorMagenta = baseProfile.colorMagenta
+    newProfile.colorCyan = baseProfile.colorCyan
+    newProfile.colorWhite = baseProfile.colorWhite
+    newProfile.colorBrightBlack = baseProfile.colorBrightBlack
+    newProfile.colorBrightRed = baseProfile.colorBrightRed
+    newProfile.colorBrightGreen = baseProfile.colorBrightGreen
+    newProfile.colorBrightYellow = baseProfile.colorBrightYellow
+    newProfile.colorBrightBlue = baseProfile.colorBrightBlue
+    newProfile.colorBrightMagenta = baseProfile.colorBrightMagenta
+    newProfile.colorBrightCyan = baseProfile.colorBrightCyan
+    newProfile.colorBrightWhite = baseProfile.colorBrightWhite
     newProfile.leaveOpenAfterExit = menuElements.leaveOpenAfterExitElement.checked
     newProfile.relaunchTerminalOnStartup = menuElements.relaunchTerminalOnStartupElement.checked
     newProfile.title = menuElements.titleElement.getModel().getText() || baseProfile.title
@@ -616,6 +643,8 @@ class AtomXtermProfileMenuElementImpl extends HTMLElement {
         value: value
       }
     )
+    // TODO: theme
+    // TODO: colors
     value = profile.title || ''
     newTextList.push(
       // Title
