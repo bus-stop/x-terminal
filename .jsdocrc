@@ -1,6 +1,6 @@
 {
   "source": {
-    "include": ["lib/atom-xterm.js","lib/atom-xterm-model.js"]
+    "include": ["lib/x-terminal.js","lib/model.js"]
   },
   "opts": {
     "destination": "./docs/"

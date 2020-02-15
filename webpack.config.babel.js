@@ -23,9 +23,9 @@ function getConfig (entryName) {
 			banner: 'This file is auto-generated. Do not modify directly.',
 		}),
 	]
-	if (entryName === 'atom-xterm') {
+	if (entryName === 'x-terminal') {
 		entry = {
-			'atom-xterm': './src/lib/atom-xterm',
+			'x-terminal': './src/lib/x-terminal',
 		}
 		pathValue = path.resolve(
 			__dirname,
@@ -128,6 +128,6 @@ function getConfig (entryName) {
 }
 
 export default [
-	getConfig('atom-xterm'),
+	getConfig('x-terminal'),
 	getConfig('move-winpty-binaries'),
 ]

@@ -1,5 +1,5 @@
 /** @babel */
-/** @module atom-xterm */
+/** @module x-terminal */
 /*
  * Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * Copyright 2017-2018 Andres Mejia <amejia004@gmail.com>. All Rights Reserved.
@@ -18,44 +18,44 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import '../styles/atom-xterm.sass'
+import '../styles/x-terminal.sass'
 
 import { CompositeDisposable } from 'atom'
 
 import { COLORS } from './config'
-import { AtomXtermElement } from './element'
-import { AtomXtermModel, isAtomXtermModel } from './model'
-import { ATOM_XTERM_BASE_URI, AtomXtermProfilesSingleton } from './profiles'
-import { AtomXtermProfileMenuElement } from './profile-menu-element'
-import { AtomXtermProfileMenuModel } from './profile-menu-model'
-import { AtomXtermDeleteProfileElement } from './delete-profile-element'
-import { AtomXtermDeleteProfileModel } from './delete-profile-model'
-import { AtomXtermOverwriteProfileElement } from './overwrite-profile-element'
-import { AtomXtermOverwriteProfileModel } from './overwrite-profile-model'
-import { AtomXtermSaveProfileElement } from './save-profile-element'
-import { AtomXtermSaveProfileModel } from './save-profile-model'
+import { XTerminalElement } from './element'
+import { XTerminalModel, isXTerminalModel } from './model'
+import { X_TERMINAL_BASE_URI, XTerminalProfilesSingleton } from './profiles'
+import { XTerminalProfileMenuElement } from './profile-menu-element'
+import { XTerminalProfileMenuModel } from './profile-menu-model'
+import { XTerminalDeleteProfileElement } from './delete-profile-element'
+import { XTerminalDeleteProfileModel } from './delete-profile-model'
+import { XTerminalOverwriteProfileElement } from './overwrite-profile-element'
+import { XTerminalOverwriteProfileModel } from './overwrite-profile-model'
+import { XTerminalSaveProfileElement } from './save-profile-element'
+import { XTerminalSaveProfileModel } from './save-profile-model'
 
 import { URL } from 'whatwg-url'
 
-const AtomXtermSingletonSymbol = Symbol('AtomXtermSingleton sentinel')
+const XTerminalSingletonSymbol = Symbol('XTerminalSingleton sentinel')
 
-class AtomXtermSingleton {
+class XTerminalSingleton {
 	constructor (symbolCheck) {
-		if (AtomXtermSingletonSymbol !== symbolCheck) {
-			throw new Error('AtomXtermSingleton cannot be instantiated directly.')
+		if (XTerminalSingletonSymbol !== symbolCheck) {
+			throw new Error('XTerminalSingleton cannot be instantiated directly.')
 		}
 	}
 
 	static get instance () {
-		if (!this[AtomXtermSingletonSymbol]) {
-			this[AtomXtermSingletonSymbol] = new AtomXtermSingleton(AtomXtermSingletonSymbol)
+		if (!this[XTerminalSingletonSymbol]) {
+			this[XTerminalSingletonSymbol] = new XTerminalSingleton(XTerminalSingletonSymbol)
 		}
-		return this[AtomXtermSingletonSymbol]
+		return this[XTerminalSingletonSymbol]
 	}
 
 	activate (state) {
 		// Load profiles configuration.
-		this.profilesSingleton = AtomXtermProfilesSingleton.instance
+		this.profilesSingleton = XTerminalProfilesSingleton.instance
 
 		// Reset base profile in case this package was deactivated then
 		// reactivated.
@@ -69,24 +69,24 @@ class AtomXtermSingleton {
 
 		// Monitor for changes to all config values.
 		const configKeys = [
-			'atom-xterm.spawnPtySettings.command',
-			'atom-xterm.spawnPtySettings.args',
-			'atom-xterm.spawnPtySettings.name',
-			'atom-xterm.spawnPtySettings.cwd',
-			'atom-xterm.spawnPtySettings.env',
-			'atom-xterm.spawnPtySettings.setEnv',
-			'atom-xterm.spawnPtySettings.deleteEnv',
-			'atom-xterm.spawnPtySettings.encoding',
-			'atom-xterm.terminalSettings.fontSize',
-			'atom-xterm.terminalSettings.fontFamily',
-			'atom-xterm.terminalSettings.colors.theme',
-			...Object.keys(COLORS).map(c => `atom-xterm.terminalSettings.colors.${c}`),
-			'atom-xterm.terminalSettings.leaveOpenAfterExit',
-			'atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup',
-			'atom-xterm.terminalSettings.relaunchTerminalOnStartup',
-			'atom-xterm.terminalSettings.title',
-			'atom-xterm.terminalSettings.xtermOptions',
-			'atom-xterm.terminalSettings.promptToStartup',
+			'x-terminal.spawnPtySettings.command',
+			'x-terminal.spawnPtySettings.args',
+			'x-terminal.spawnPtySettings.name',
+			'x-terminal.spawnPtySettings.cwd',
+			'x-terminal.spawnPtySettings.env',
+			'x-terminal.spawnPtySettings.setEnv',
+			'x-terminal.spawnPtySettings.deleteEnv',
+			'x-terminal.spawnPtySettings.encoding',
+			'x-terminal.terminalSettings.fontSize',
+			'x-terminal.terminalSettings.fontFamily',
+			'x-terminal.terminalSettings.colors.theme',
+			...Object.keys(COLORS).map(c => `x-terminal.terminalSettings.colors.${c}`),
+			'x-terminal.terminalSettings.leaveOpenAfterExit',
+			'x-terminal.terminalSettings.allowRelaunchingTerminalsOnStartup',
+			'x-terminal.terminalSettings.relaunchTerminalOnStartup',
+			'x-terminal.terminalSettings.title',
+			'x-terminal.terminalSettings.xtermOptions',
+			'x-terminal.terminalSettings.promptToStartup',
 		]
 		for (const key of configKeys) {
 			this.disposables.add(atom.config.onDidChange(key, ({ newValue, oldValue }) => {
@@ -95,40 +95,40 @@ class AtomXtermSingleton {
 		}
 
 		// Register view provider for terminal emulator item.
-		this.disposables.add(atom.views.addViewProvider(AtomXtermModel, (atomXtermModel) => {
-			const atomXtermElement = new AtomXtermElement()
+		this.disposables.add(atom.views.addViewProvider(XTerminalModel, (atomXtermModel) => {
+			const atomXtermElement = new XTerminalElement()
 			atomXtermElement.initialize(atomXtermModel)
 			return atomXtermElement
 		}))
 
 		// Register view provider for terminal emulator profile menu item.
-		this.disposables.add(atom.views.addViewProvider(AtomXtermProfileMenuModel, (atomXtermProfileMenuModel) => {
-			const atomXtermProfileMenuElement = new AtomXtermProfileMenuElement()
+		this.disposables.add(atom.views.addViewProvider(XTerminalProfileMenuModel, (atomXtermProfileMenuModel) => {
+			const atomXtermProfileMenuElement = new XTerminalProfileMenuElement()
 			atomXtermProfileMenuElement.initialize(atomXtermProfileMenuModel)
 			return atomXtermProfileMenuElement
 		}))
 
 		// Register view profile for modal items.
-		this.disposables.add(atom.views.addViewProvider(AtomXtermDeleteProfileModel, (atomXtermDeleteProfileModel) => {
-			const atomXtermDeleteProfileElement = new AtomXtermDeleteProfileElement()
+		this.disposables.add(atom.views.addViewProvider(XTerminalDeleteProfileModel, (atomXtermDeleteProfileModel) => {
+			const atomXtermDeleteProfileElement = new XTerminalDeleteProfileElement()
 			atomXtermDeleteProfileElement.initialize(atomXtermDeleteProfileModel)
 			return atomXtermDeleteProfileElement
 		}))
-		this.disposables.add(atom.views.addViewProvider(AtomXtermOverwriteProfileModel, (atomXtermOverwriteProfileModel) => {
-			const atomXtermOverwriteProfileElement = new AtomXtermOverwriteProfileElement()
+		this.disposables.add(atom.views.addViewProvider(XTerminalOverwriteProfileModel, (atomXtermOverwriteProfileModel) => {
+			const atomXtermOverwriteProfileElement = new XTerminalOverwriteProfileElement()
 			atomXtermOverwriteProfileElement.initialize(atomXtermOverwriteProfileModel)
 			return atomXtermOverwriteProfileElement
 		}))
-		this.disposables.add(atom.views.addViewProvider(AtomXtermSaveProfileModel, (atomXtermSaveProfileModel) => {
-			const atomXtermSaveProfileElement = new AtomXtermSaveProfileElement()
+		this.disposables.add(atom.views.addViewProvider(XTerminalSaveProfileModel, (atomXtermSaveProfileModel) => {
+			const atomXtermSaveProfileElement = new XTerminalSaveProfileElement()
 			atomXtermSaveProfileElement.initialize(atomXtermSaveProfileModel)
 			return atomXtermSaveProfileElement
 		}))
 
 		// Add opener for terminal emulator item.
 		this.disposables.add(atom.workspace.addOpener((uri) => {
-			if (uri.startsWith(ATOM_XTERM_BASE_URI)) {
-				const item = new AtomXtermModel({
+			if (uri.startsWith(X_TERMINAL_BASE_URI)) {
+				const item = new XTerminalModel({
 					uri: uri,
 					terminals_set: this.terminals_set,
 				})
@@ -141,7 +141,7 @@ class AtomXtermSingleton {
 			// In callback, set another callback to run on current and future items.
 			this.disposables.add(pane.observeItems((item) => {
 				// In callback, set current pane for terminal items.
-				if (isAtomXtermModel(item)) {
+				if (isXTerminalModel(item)) {
 					item.setNewPane(pane)
 				}
 			}))
@@ -150,59 +150,59 @@ class AtomXtermSingleton {
 		// Add callbacks to run for current and future active items on active panes.
 		this.disposables.add(atom.workspace.observeActivePaneItem((item) => {
 			// In callback, focus specifically on terminal when item is terminal item.
-			if (isAtomXtermModel(item)) {
+			if (isXTerminalModel(item)) {
 				item.focusOnTerminal()
 			}
 		}))
 
 		// Add commands.
 		this.disposables.add(atom.commands.add('atom-workspace', {
-			'atom-xterm:open': () => {
+			'x-terminal:open': () => {
 				this.openInCenterOrDock(atom.workspace)
 			},
-			'atom-xterm:open-split-up': () => this.open(
+			'x-terminal:open-split-up': () => this.open(
 				this.profilesSingleton.generateNewUri(),
 				{ split: 'up' },
 			),
-			'atom-xterm:open-split-down': () => this.open(
+			'x-terminal:open-split-down': () => this.open(
 				this.profilesSingleton.generateNewUri(),
 				{ split: 'down' },
 			),
-			'atom-xterm:open-split-left': () => this.open(
+			'x-terminal:open-split-left': () => this.open(
 				this.profilesSingleton.generateNewUri(),
 				{ split: 'left' },
 			),
-			'atom-xterm:open-split-right': () => this.open(
+			'x-terminal:open-split-right': () => this.open(
 				this.profilesSingleton.generateNewUri(),
 				{ split: 'right' },
 			),
-			'atom-xterm:open-split-bottom-dock': () => {
+			'x-terminal:open-split-bottom-dock': () => {
 				this.openInCenterOrDock(atom.workspace.getBottomDock())
 			},
-			'atom-xterm:open-split-left-dock': () => {
+			'x-terminal:open-split-left-dock': () => {
 				this.openInCenterOrDock(atom.workspace.getLeftDock())
 			},
-			'atom-xterm:open-split-right-dock': () => {
+			'x-terminal:open-split-right-dock': () => {
 				this.openInCenterOrDock(atom.workspace.getRightDock())
 			},
-			'atom-xterm:toggle-profile-menu': () => this.toggleProfileMenu(),
-			'atom-xterm:reorganize': () => this.reorganize('current'),
-			'atom-xterm:reorganize-top': () => this.reorganize('top'),
-			'atom-xterm:reorganize-bottom': () => this.reorganize('bottom'),
-			'atom-xterm:reorganize-left': () => this.reorganize('left'),
-			'atom-xterm:reorganize-right': () => this.reorganize('right'),
-			'atom-xterm:reorganize-bottom-dock': () => this.reorganize('bottom-dock'),
-			'atom-xterm:reorganize-left-dock': () => this.reorganize('left-dock'),
-			'atom-xterm:reorganize-right-dock': () => this.reorganize('right-dock'),
-			'atom-xterm:close-all': () => this.exitAllTerminals(),
+			'x-terminal:toggle-profile-menu': () => this.toggleProfileMenu(),
+			'x-terminal:reorganize': () => this.reorganize('current'),
+			'x-terminal:reorganize-top': () => this.reorganize('top'),
+			'x-terminal:reorganize-bottom': () => this.reorganize('bottom'),
+			'x-terminal:reorganize-left': () => this.reorganize('left'),
+			'x-terminal:reorganize-right': () => this.reorganize('right'),
+			'x-terminal:reorganize-bottom-dock': () => this.reorganize('bottom-dock'),
+			'x-terminal:reorganize-left-dock': () => this.reorganize('left-dock'),
+			'x-terminal:reorganize-right-dock': () => this.reorganize('right-dock'),
+			'x-terminal:close-all': () => this.exitAllTerminals(),
 		}))
-		this.disposables.add(atom.commands.add('atom-xterm', {
-			'atom-xterm:close': () => this.close(),
-			'atom-xterm:restart': () => this.restart(),
-			'atom-xterm:copy': () => this.copy(),
-			'atom-xterm:paste': () => this.paste(),
-			'atom-xterm:open-link': () => this.openLink(),
-			'atom-xterm:copy-link': () => this.copyLink(),
+		this.disposables.add(atom.commands.add('x-terminal', {
+			'x-terminal:close': () => this.close(),
+			'x-terminal:restart': () => this.restart(),
+			'x-terminal:copy': () => this.copy(),
+			'x-terminal:paste': () => this.paste(),
+			'x-terminal:open-link': () => this.openLink(),
+			'x-terminal:copy-link': () => this.copyLink(),
 		}))
 	}
 
@@ -211,11 +211,11 @@ class AtomXtermSingleton {
 		this.disposables.dispose()
 	}
 
-	deserializeAtomXtermModel (serializedModel, atomEnvironment) {
-		const pack = atom.packages.enablePackage('atom-xterm')
+	deserializeXTerminalModel (serializedModel, atomEnvironment) {
+		const pack = atom.packages.enablePackage('x-terminal')
 		pack.preload()
 		pack.activateNow()
-		const allowRelaunchingTerminalsOnStartup = atom.config.get('atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup')
+		const allowRelaunchingTerminalsOnStartup = atom.config.get('x-terminal.terminalSettings.allowRelaunchingTerminalsOnStartup')
 		if (!allowRelaunchingTerminalsOnStartup) {
 			return
 		}
@@ -224,7 +224,7 @@ class AtomXtermSingleton {
 		if (relaunchTerminalOnStartup === 'false') {
 			return
 		}
-		return new AtomXtermModel({
+		return new XTerminalModel({
 			uri: url.href,
 			terminals_set: this.terminals_set,
 		})
@@ -284,17 +284,17 @@ class AtomXtermSingleton {
    * @function
    * @param {Object} profile Profile data to use when opening terminal.
    * @param {Object} options Options to pass to call to 'atom.workspace.open()'.
-   * @return {AtomXtermModel} Instance of AtomXtermModel.
+   * @return {XTerminalModel} Instance of XTerminalModel.
    */
 	async openTerminal (profile, options = {}) {
 		return this.open(
-			AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(profile),
+			XTerminalProfilesSingleton.instance.generateNewUrlFromProfileData(profile),
 			options,
 		)
 	}
 
 	/**
-   * Function providing service functions offered by 'atom-xterm' package.
+   * Function providing service functions offered by 'x-terminal' package.
    *
    * @function
    * @returns {Object} Object holding service functions.
@@ -309,7 +309,7 @@ class AtomXtermSingleton {
 
 	performOperationOnItem (operation) {
 		const item = atom.workspace.getActivePaneItem()
-		if (isAtomXtermModel(item)) {
+		if (isXTerminalModel(item)) {
 			switch (operation) {
 				case 'close':
 					item.exit()
@@ -365,7 +365,7 @@ class AtomXtermSingleton {
 
 	toggleProfileMenu () {
 		const item = atom.workspace.getActivePaneItem()
-		if (isAtomXtermModel(item)) {
+		if (isXTerminalModel(item)) {
 			item.toggleProfileMenu()
 		}
 	}
@@ -408,7 +408,7 @@ class AtomXtermSingleton {
 		for (const item of this.terminals_set) {
 			item.pane.moveItemToPane(item, newPane, -1)
 		}
-		if (isAtomXtermModel(activeItem)) {
+		if (isXTerminalModel(activeItem)) {
 			if (atom.workspace.getPanes().length > 1) {
 				// When reorganizing still leaves more than one pane in the
 				// workspace, another pane that doesn't include the newly
@@ -436,20 +436,20 @@ class AtomXtermSingleton {
 export { config } from './config'
 
 export function activate (state) {
-	return AtomXtermSingleton.instance.activate(state)
+	return XTerminalSingleton.instance.activate(state)
 }
 
 export function deactivate () {
-	return AtomXtermSingleton.instance.deactivate()
+	return XTerminalSingleton.instance.deactivate()
 }
 
-export function deserializeAtomXtermModel (serializedModel, atomEnvironment) {
-	return AtomXtermSingleton.instance.deserializeAtomXtermModel(
+export function deserializeXTerminalModel (serializedModel, atomEnvironment) {
+	return XTerminalSingleton.instance.deserializeXTerminalModel(
 		serializedModel,
 		atomEnvironment,
 	)
 }
 
 export function provideAtomXtermService () {
-	return AtomXtermSingleton.instance.provideAtomXtermService()
+	return XTerminalSingleton.instance.provideAtomXtermService()
 }

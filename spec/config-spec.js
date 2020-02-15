@@ -367,7 +367,7 @@ describe('Call to getUserDataPath()', () => {
 		if (process.env.APPDATA) {
 			delete process.env.APPDATA
 		}
-		const expected = path.join(os.homedir(), 'AppData', 'Roaming', 'atom-xterm')
+		const expected = path.join(os.homedir(), 'AppData', 'Roaming', 'x-terminal')
 		expect(configDefaults.getUserDataPath()).toBe(expected)
 	})
 
@@ -376,7 +376,7 @@ describe('Call to getUserDataPath()', () => {
 			value: 'win32',
 		})
 		process.env.APPDATA = path.join('/some', 'dir')
-		const expected = path.join(process.env.APPDATA, 'atom-xterm')
+		const expected = path.join(process.env.APPDATA, 'x-terminal')
 		expect(configDefaults.getUserDataPath()).toBe(expected)
 	})
 
@@ -384,7 +384,7 @@ describe('Call to getUserDataPath()', () => {
 		Object.defineProperty(process, 'platform', {
 			value: 'darwin',
 		})
-		const expected = path.join(os.homedir(), 'Library', 'Application Support', 'atom-xterm')
+		const expected = path.join(os.homedir(), 'Library', 'Application Support', 'x-terminal')
 		expect(configDefaults.getUserDataPath()).toBe(expected)
 	})
 
@@ -395,7 +395,7 @@ describe('Call to getUserDataPath()', () => {
 		if (process.env.XDG_CONFIG_HOME) {
 			delete process.env.XDG_CONFIG_HOME
 		}
-		const expected = path.join(os.homedir(), '.config', 'atom-xterm')
+		const expected = path.join(os.homedir(), '.config', 'x-terminal')
 		expect(configDefaults.getUserDataPath()).toBe(expected)
 	})
 
@@ -404,7 +404,7 @@ describe('Call to getUserDataPath()', () => {
 			value: 'linux',
 		})
 		process.env.XDG_CONFIG_HOME = path.join('/some', 'dir')
-		const expected = path.join(process.env.XDG_CONFIG_HOME, 'atom-xterm')
+		const expected = path.join(process.env.XDG_CONFIG_HOME, 'x-terminal')
 		expect(configDefaults.getUserDataPath()).toBe(expected)
 	})
 })

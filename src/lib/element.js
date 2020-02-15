@@ -26,9 +26,9 @@ import { WebglAddon } from 'xterm-addon-webgl'
 import { shell } from 'electron'
 
 import { configDefaults, COLORS } from './config'
-import { AtomXtermProfileMenuElement } from './profile-menu-element'
-import { AtomXtermProfileMenuModel } from './profile-menu-model'
-import { AtomXtermProfilesSingleton } from './profiles'
+import { XTerminalProfileMenuElement } from './profile-menu-element'
+import { XTerminalProfileMenuModel } from './profile-menu-model'
+import { XTerminalProfilesSingleton } from './profiles'
 
 import fs from 'fs-extra'
 
@@ -44,32 +44,32 @@ const PTY_PROCESS_OPTIONS = new Set([
 	'deleteEnv',
 	'encoding',
 ])
-const ATOM_XTERM_OPTIONS = [
+const X_TERMINAL_OPTIONS = [
 	'leaveOpenAfterExit',
 	'relaunchTerminalOnStartup',
 	'title',
 	'promptToStartup',
 ]
 
-class AtomXtermElementImpl extends HTMLElement {
+class XTerminalElementImpl extends HTMLElement {
 	async initialize (model) {
-		this.profilesSingleton = AtomXtermProfilesSingleton.instance
+		this.profilesSingleton = XTerminalProfilesSingleton.instance
 		this.model = model
 		this.model.element = this
 		this.disposables = new CompositeDisposable()
 		this.topDiv = document.createElement('div')
-		this.topDiv.classList.add('atom-xterm-top-div')
+		this.topDiv.classList.add('x-terminal-top-div')
 		this.appendChild(this.topDiv)
 		this.mainDiv = document.createElement('div')
-		this.mainDiv.classList.add('atom-xterm-main-div')
+		this.mainDiv.classList.add('x-terminal-main-div')
 		this.appendChild(this.mainDiv)
 		this.menuDiv = document.createElement('div')
-		this.menuDiv.classList.add('atom-xterm-menu-div')
+		this.menuDiv.classList.add('x-terminal-menu-div')
 		this.mainDiv.appendChild(this.menuDiv)
 		this.terminalDiv = document.createElement('div')
-		this.terminalDiv.classList.add('atom-xterm-term-container')
+		this.terminalDiv.classList.add('x-terminal-term-container')
 		this.mainDiv.appendChild(this.terminalDiv)
-		this.atomXtermProfileMenuElement = new AtomXtermProfileMenuElement()
+		this.atomXtermProfileMenuElement = new XTerminalProfileMenuElement()
 		this.hoveredLink = null
 		this.pendingTerminalProfileOptions = {}
 		this.terminalDivIntersectionRatio = 0.0
@@ -83,7 +83,7 @@ class AtomXtermElementImpl extends HTMLElement {
 			// Always wait for the model to finish initializing before proceeding.
 			await this.model.initializedPromise
 			this.setAttribute('session-id', this.model.getSessionId())
-			await this.atomXtermProfileMenuElement.initialize(new AtomXtermProfileMenuModel(this.model))
+			await this.atomXtermProfileMenuElement.initialize(new XTerminalProfileMenuModel(this.model))
 			this.menuDiv.append(this.atomXtermProfileMenuElement)
 			await this.createTerminal()
 			// An element resize detector is used to check when this element is
@@ -475,8 +475,8 @@ class AtomXtermElementImpl extends HTMLElement {
 			this.restartPtyProcess()
 		})
 		restartButton.classList.add('btn-' + infoType)
-		restartButton.classList.add('atom-xterm-restart-btn')
-		messageDiv.classList.add('atom-xterm-notice-' + infoType)
+		restartButton.classList.add('x-terminal-restart-btn')
+		messageDiv.classList.add('x-terminal-notice-' + infoType)
 		messageDiv.appendChild(document.createTextNode(message))
 		messageDiv.appendChild(restartButton)
 		this.topDiv.innerHTML = ''
@@ -643,9 +643,9 @@ class AtomXtermElementImpl extends HTMLElement {
 			this.refitTerminal()
 		}
 
-		// atom-xterm specific options can be removed since at this point they
+		// x-terminal specific options can be removed since at this point they
 		// should already be applied in the terminal's profile.
-		for (const key of ATOM_XTERM_OPTIONS) {
+		for (const key of X_TERMINAL_OPTIONS) {
 			delete this.pendingTerminalProfileOptions[key]
 		}
 	}
@@ -688,11 +688,11 @@ class AtomXtermElementImpl extends HTMLElement {
 
 	setHoveredLink (link) {
 		this.hoveredLink = link
-		this.terminalDiv.classList.add('atom-xterm-term-container-has-link')
+		this.terminalDiv.classList.add('x-terminal-term-container-has-link')
 	}
 
 	clearHoveredLink () {
-		this.terminalDiv.classList.remove('atom-xterm-term-container-has-link')
+		this.terminalDiv.classList.remove('x-terminal-term-container-has-link')
 		this.hoveredLink = null
 	}
 
@@ -714,10 +714,10 @@ class AtomXtermElementImpl extends HTMLElement {
 	}
 }
 
-const AtomXtermElement = document.registerElement('atom-xterm', {
-	prototype: AtomXtermElementImpl.prototype,
+const XTerminalElement = document.registerElement('x-terminal', {
+	prototype: XTerminalElementImpl.prototype,
 })
 
 export {
-	AtomXtermElement,
+	XTerminalElement,
 }

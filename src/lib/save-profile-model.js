@@ -19,24 +19,24 @@
 
 import { TextEditor } from 'atom'
 
-import { AtomXtermProfilesSingleton } from './profiles'
-import { AtomXtermOverwriteProfileModel } from './overwrite-profile-model'
-import { currentItemIsAtomXtermModel } from './model'
+import { XTerminalProfilesSingleton } from './profiles'
+import { XTerminalOverwriteProfileModel } from './overwrite-profile-model'
+import { currentItemIsXTerminalModel } from './model'
 
-class AtomXtermSaveProfileModel {
+class XTerminalSaveProfileModel {
 	constructor (atomXtermProfileMenuElement) {
 		this.atomXtermProfileMenuElement = atomXtermProfileMenuElement
-		this.profilesSingleton = AtomXtermProfilesSingleton.instance
+		this.profilesSingleton = XTerminalProfilesSingleton.instance
 		this.element = null
 		this.panel = atom.workspace.addModalPanel({
 			item: this,
 			visible: false,
 		})
-		this.overwriteProfileModel = new AtomXtermOverwriteProfileModel(this)
+		this.overwriteProfileModel = new XTerminalOverwriteProfileModel(this)
 	}
 
 	getTitle () {
-		return 'atom-xterm Save Profile Model'
+		return 'x-terminal Save Profile Model'
 	}
 
 	getElement () {
@@ -88,7 +88,7 @@ class AtomXtermSaveProfileModel {
 	promptForNewProfileName (newProfile, profileChanges) {
 		// TODO: Is it possible for the active item to change while the
 		// modal is displayed.
-		if (this.panel.isVisible() || !currentItemIsAtomXtermModel()) {
+		if (this.panel.isVisible() || !currentItemIsXTerminalModel()) {
 			return
 		}
 		this.textbox = new TextEditor({ mini: true })
@@ -108,5 +108,5 @@ class AtomXtermSaveProfileModel {
 }
 
 export {
-	AtomXtermSaveProfileModel,
+	XTerminalSaveProfileModel,
 }

@@ -1,0 +1,61 @@
+{
+  ".platform-linux atom-workspace": {
+    "ctrl-`": "x-terminal:open",
+    "ctrl-~": "x-terminal:open",
+    "ctrl-shift-t": "x-terminal:open",
+    "ctrl-alt-shift-t": "x-terminal:open",
+    "ctrl-alt-shift-up": "x-terminal:open-split-up",
+    "ctrl-alt-shift-down": "x-terminal:open-split-down",
+    "ctrl-alt-shift-left": "x-terminal:open-split-left",
+    "ctrl-alt-shift-right": "x-terminal:open-split-right",
+    "ctrl-alt-shift-i": "x-terminal:open-split-bottom-dock",
+    "ctrl-alt-shift-u": "x-terminal:open-split-left-dock",
+    "ctrl-alt-shift-o": "x-terminal:open-split-right-dock"
+  },
+  ".platform-win32 atom-workspace": {
+    "ctrl-`": "x-terminal:open",
+    "ctrl-~": "x-terminal:open",
+    "ctrl-shift-t": "x-terminal:open",
+    "ctrl-alt-shift-t": "x-terminal:open",
+    "ctrl-alt-shift-up": "x-terminal:open-split-up",
+    "ctrl-alt-shift-down": "x-terminal:open-split-down",
+    "ctrl-alt-shift-left": "x-terminal:open-split-left",
+    "ctrl-alt-shift-right": "x-terminal:open-split-right",
+    "ctrl-alt-shift-i": "x-terminal:open-split-bottom-dock",
+    "ctrl-alt-shift-u": "x-terminal:open-split-left-dock",
+    "ctrl-alt-shift-o": "x-terminal:open-split-right-dock"
+  },
+  ".platform-darwin atom-workspace": {
+    "cmd-`": "x-terminal:open",
+    "cmd-~": "x-terminal:open",
+    "cmd-t": "x-terminal:open",
+    "cmd-alt-shift-t": "x-terminal:open",
+    "cmd-alt-shift-up": "x-terminal:open-split-up",
+    "cmd-alt-shift-down": "x-terminal:open-split-down",
+    "cmd-alt-shift-left": "x-terminal:open-split-left",
+    "cmd-alt-shift-right": "x-terminal:open-split-right",
+    "cmd-alt-shift-i": "x-terminal:open-split-bottom-dock",
+    "cmd-alt-shift-u": "x-terminal:open-split-left-dock",
+    "cmd-alt-shift-o": "x-terminal:open-split-right-dock"
+  },
+  ".platform-linux x-terminal": {
+    "ctrl-insert": "x-terminal:copy",
+    "ctrl-shift-c": "x-terminal:copy",
+    "shift-insert": "x-terminal:paste",
+    "ctrl-shift-v": "x-terminal:paste"
+  },
+  ".platform-win32 x-terminal": {
+    "ctrl-insert": "x-terminal:copy",
+    "ctrl-shift-c": "x-terminal:copy",
+    "shift-insert": "x-terminal:paste",
+    "ctrl-shift-v": "x-terminal:paste"
+  },
+  ".platform-darwin x-terminal": {
+    "ctrl-shift-c": "x-terminal:copy",
+    "ctrl-insert": "x-terminal:copy",
+    "ctrl-shift-v": "x-terminal:paste",
+    "shift-insert": "x-terminal:paste",
+    "cmd-c": "x-terminal:copy",
+    "cmd-v": "x-terminal:paste"
+  }
+}

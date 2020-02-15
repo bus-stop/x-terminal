@@ -4,8 +4,8 @@
     "selector-type-no-unknown": [
       true, {
         ignoreTypes: [
-          "atom-xterm",
-          "atom-xterm-profile"
+          "x-terminal",
+          "x-terminal-profile"
         ]
       }
     ]

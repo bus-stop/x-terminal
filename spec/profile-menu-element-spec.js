@@ -17,9 +17,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { AtomXtermProfileMenuElement } from '../src/lib/profile-menu-element'
+import { XTerminalProfileMenuElement } from '../src/lib/profile-menu-element'
 
-describe('AtomXtermProfileMenuElement', () => {
+describe('XTerminalProfileMenuElement', () => {
 	this.element = null
 
 	beforeEach(async () => {
@@ -27,8 +27,8 @@ describe('AtomXtermProfileMenuElement', () => {
 			'atomXtermProfileMenuModel',
 			[
 				'setElement',
-				'getAtomXtermModel',
-				'getAtomXtermModelElement',
+				'getXTerminalModel',
+				'getXTerminalModelElement',
 			],
 		)
 		model.atomXtermModel = jasmine.createSpyObj(
@@ -49,9 +49,9 @@ describe('AtomXtermProfileMenuElement', () => {
 				'focusOnTerminal',
 			],
 		)
-		model.getAtomXtermModel.and.returnValue(model.atomXtermModel)
-		model.getAtomXtermModelElement.and.returnValue(mock)
-		this.element = new AtomXtermProfileMenuElement()
+		model.getXTerminalModel.and.returnValue(model.atomXtermModel)
+		model.getXTerminalModelElement.and.returnValue(mock)
+		this.element = new XTerminalProfileMenuElement()
 		this.element.initialize(model)
 		await this.element.initializedPromise
 	})
@@ -133,7 +133,7 @@ describe('AtomXtermProfileMenuElement', () => {
 
 	it('applyProfileChanges()', () => {
 		this.element.applyProfileChanges('foo')
-		expect(this.element.model.getAtomXtermModel().applyProfileChanges).toHaveBeenCalledWith('foo')
+		expect(this.element.model.getXTerminalModel().applyProfileChanges).toHaveBeenCalledWith('foo')
 	})
 
 	it('applyProfileChanges() profile menu hidden', () => {
@@ -144,7 +144,7 @@ describe('AtomXtermProfileMenuElement', () => {
 
 	it('restartTerminal()', () => {
 		this.element.restartTerminal()
-		expect(this.element.model.getAtomXtermModelElement().restartPtyProcess).toHaveBeenCalled()
+		expect(this.element.model.getXTerminalModelElement().restartPtyProcess).toHaveBeenCalled()
 	})
 
 	it('restartTerminal() profile menu hidden', () => {
@@ -160,13 +160,13 @@ describe('AtomXtermProfileMenuElement', () => {
 
 	it('createMenuItemContainer() check title', () => {
 		const container = this.element.createMenuItemContainer('foo', 'bar', 'baz')
-		const titleDiv = container.querySelector('.atom-xterm-profile-menu-item-title')
+		const titleDiv = container.querySelector('.x-terminal-profile-menu-item-title')
 		expect(titleDiv.textContent).toBe('bar')
 	})
 
 	it('createMenuItemContainer() check description', () => {
 		const container = this.element.createMenuItemContainer('foo', 'bar', 'baz')
-		const descriptionDiv = container.querySelector('.atom-xterm-profile-menu-item-description')
+		const descriptionDiv = container.querySelector('.x-terminal-profile-menu-item-description')
 		expect(descriptionDiv.textContent).toBe('baz')
 	})
 
@@ -177,7 +177,7 @@ describe('AtomXtermProfileMenuElement', () => {
 
 	it('createProfilesDropDownSelectItem() check classList', async () => {
 		const select = await this.element.createProfilesDropDownSelectItem()
-		expect(select.classList.contains('atom-xterm-profile-menu-item-select')).toBe(true)
+		expect(select.classList.contains('x-terminal-profile-menu-item-select')).toBe(true)
 	})
 
 	it('createProfilesDropDown()', async () => {
@@ -187,12 +187,12 @@ describe('AtomXtermProfileMenuElement', () => {
 
 	it('createProfileMenuButtons()', () => {
 		const buttonsContainer = this.element.createProfileMenuButtons()
-		expect(buttonsContainer.classList.contains('atom-xterm-profile-menu-buttons-div')).toBe(true)
+		expect(buttonsContainer.classList.contains('x-terminal-profile-menu-buttons-div')).toBe(true)
 	})
 
 	it('createButton()', () => {
 		const button = this.element.createButton()
-		expect(button.classList.contains('atom-xterm-profile-menu-button')).toBe(true)
+		expect(button.classList.contains('x-terminal-profile-menu-button')).toBe(true)
 	})
 
 	it('createTextbox()', () => {
@@ -216,12 +216,12 @@ describe('AtomXtermProfileMenuElement', () => {
 
 	it('hideProfileMenu() terminal shown', () => {
 		this.element.hideProfileMenu()
-		expect(this.element.model.getAtomXtermModelElement().showTerminal).toHaveBeenCalled()
+		expect(this.element.model.getXTerminalModelElement().showTerminal).toHaveBeenCalled()
 	})
 
 	it('hideProfileMenu() terminal focused', () => {
 		this.element.hideProfileMenu()
-		expect(this.element.model.getAtomXtermModelElement().focusOnTerminal).toHaveBeenCalled()
+		expect(this.element.model.getXTerminalModelElement().focusOnTerminal).toHaveBeenCalled()
 	})
 
 	it('showProfileMenu()', () => {
@@ -231,7 +231,7 @@ describe('AtomXtermProfileMenuElement', () => {
 
 	it('showProfileMenu() terminal hidden', () => {
 		this.element.showProfileMenu()
-		expect(this.element.model.getAtomXtermModelElement().hideTerminal).toHaveBeenCalled()
+		expect(this.element.model.getXTerminalModelElement().hideTerminal).toHaveBeenCalled()
 	})
 
 	it('toggleProfileMenu() currently hidden', () => {

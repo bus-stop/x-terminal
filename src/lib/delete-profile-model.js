@@ -17,12 +17,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { AtomXtermProfilesSingleton } from './profiles'
+import { XTerminalProfilesSingleton } from './profiles'
 
-class AtomXtermDeleteProfileModel {
+class XTerminalDeleteProfileModel {
 	constructor (atomXtermProfileMenuElement) {
 		this.atomXtermProfileMenuElement = atomXtermProfileMenuElement
-		this.profilesSingleton = AtomXtermProfilesSingleton.instance
+		this.profilesSingleton = XTerminalProfilesSingleton.instance
 		this.element = null
 		this.panel = atom.workspace.addModalPanel({
 			item: this,
@@ -31,7 +31,7 @@ class AtomXtermDeleteProfileModel {
 	}
 
 	getTitle () {
-		return 'atom-xterm Delete Profile Model'
+		return 'x-terminal Delete Profile Model'
 	}
 
 	getElement () {
@@ -69,5 +69,5 @@ class AtomXtermDeleteProfileModel {
 }
 
 export {
-	AtomXtermDeleteProfileModel,
+	XTerminalDeleteProfileModel,
 }

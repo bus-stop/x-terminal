@@ -17,9 +17,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { AtomXtermOverwriteProfileElement } from '../src/lib/overwrite-profile-element'
+import { XTerminalOverwriteProfileElement } from '../src/lib/overwrite-profile-element'
 
-describe('AtomXtermOverwriteProfileElement', () => {
+describe('XTerminalOverwriteProfileElement', () => {
 	this.model = null
 
 	beforeEach(() => {
@@ -27,13 +27,13 @@ describe('AtomXtermOverwriteProfileElement', () => {
 	})
 
 	it('initialize()', () => {
-		const element = new AtomXtermOverwriteProfileElement()
+		const element = new XTerminalOverwriteProfileElement()
 		element.initialize(this.model)
 		expect(element.promptButtonsDiv.childElementCount).toBe(0)
 	})
 
 	it('setNewPrompt()', () => {
-		const element = new AtomXtermOverwriteProfileElement()
+		const element = new XTerminalOverwriteProfileElement()
 		element.initialize(this.model)
 		const profileName = 'foo'
 		const confirmHandler = () => {}

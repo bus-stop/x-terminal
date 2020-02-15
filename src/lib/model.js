@@ -19,21 +19,21 @@
 
 import { Emitter } from 'atom'
 
-import { AtomXtermProfilesSingleton } from './profiles'
+import { XTerminalProfilesSingleton } from './profiles'
 
 import fs from 'fs-extra'
 import path from 'path'
 
 import { URL } from 'whatwg-url'
 
-const DEFAULT_TITLE = 'Atom Xterm'
+const DEFAULT_TITLE = 'X Terminal'
 
 /**
  * The main terminal model, or rather item, displayed in the Atom workspace.
  *
  * @class
  */
-class AtomXtermModel {
+class XTerminalModel {
 	// NOTE: Though the class is publically accessible, all methods except for the
 	// ones defined at the very bottom of the class should be considered private
 	// and subject to change at any time.
@@ -42,7 +42,7 @@ class AtomXtermModel {
 		this.uri = this.options.uri
 		const url = new URL(this.uri)
 		this.sessionId = url.host
-		this.profilesSingleton = AtomXtermProfilesSingleton.instance
+		this.profilesSingleton = XTerminalProfilesSingleton.instance
 		this.profile = this.profilesSingleton.createProfileDataFromUri(this.uri)
 		this.terminals_set = this.options.terminals_set
 		this.element = null
@@ -108,7 +108,7 @@ class AtomXtermModel {
 
 	serialize () {
 		return {
-			deserializer: 'AtomXtermModel',
+			deserializer: 'XTerminalModel',
 			version: '2017-09-17',
 			uri: this.profilesSingleton.generateNewUrlFromProfileData(this.profile).href,
 		}
@@ -242,17 +242,17 @@ class AtomXtermModel {
 	/* Public methods are defined below this line. */
 
 	/**
-   * Retrieve profile for this {@link AtomXtermModel} instance.
+   * Retrieve profile for this {@link XTerminalModel} instance.
    *
    * @function
-   * @return {Object} Profile for {@link AtomXtermModel} instance.
+   * @return {Object} Profile for {@link XTerminalModel} instance.
    */
 	getProfile () {
 		return this.profile
 	}
 
 	/**
-   * Apply profile changes to {@link AtomXtermModel} instance.
+   * Apply profile changes to {@link XTerminalModel} instance.
    *
    * @function
    * @param {Object} profileChanges Profile changes to apply.
@@ -264,16 +264,16 @@ class AtomXtermModel {
 	}
 }
 
-function isAtomXtermModel (item) {
-	return (item instanceof AtomXtermModel)
+function isXTerminalModel (item) {
+	return (item instanceof XTerminalModel)
 }
 
-function currentItemIsAtomXtermModel () {
-	return isAtomXtermModel(atom.workspace.getActivePaneItem())
+function currentItemIsXTerminalModel () {
+	return isXTerminalModel(atom.workspace.getActivePaneItem())
 }
 
 export {
-	AtomXtermModel,
-	isAtomXtermModel,
-	currentItemIsAtomXtermModel,
+	XTerminalModel,
+	isXTerminalModel,
+	currentItemIsXTerminalModel,
 }

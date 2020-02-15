@@ -25,7 +25,7 @@ export function clearDiv (div) {
 
 export function createHorizontalLine () {
 	const hLine = document.createElement('div')
-	hLine.classList.add('atom-xterm-profile-menu-element-hline')
+	hLine.classList.add('x-terminal-profile-menu-element-hline')
 	hLine.appendChild(document.createTextNode('.'))
 	return hLine
 }

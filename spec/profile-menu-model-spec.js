@@ -17,9 +17,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { AtomXtermProfileMenuModel } from '../src/lib/profile-menu-model'
+import { XTerminalProfileMenuModel } from '../src/lib/profile-menu-model'
 
-describe('AtomXtermProfileMenuModel', () => {
+describe('XTerminalProfileMenuModel', () => {
 	this.atomXtermModel = null
 
 	beforeEach(() => {
@@ -27,47 +27,47 @@ describe('AtomXtermProfileMenuModel', () => {
 	})
 
 	it('constructor()', () => {
-		const model = new AtomXtermProfileMenuModel(this.atomXtermModel)
+		const model = new XTerminalProfileMenuModel(this.atomXtermModel)
 		expect(model).not.toBeUndefined()
 	})
 
 	it('destroy() no element set', () => {
-		const model = new AtomXtermProfileMenuModel(this.atomXtermModel)
+		const model = new XTerminalProfileMenuModel(this.atomXtermModel)
 		model.destroy()
 	})
 
 	it('destroy() element set', () => {
-		const model = new AtomXtermProfileMenuModel(this.atomXtermModel)
+		const model = new XTerminalProfileMenuModel(this.atomXtermModel)
 		model.element = jasmine.createSpyObj('element', ['destroy'])
 		model.destroy()
 		expect(model.element.destroy).toHaveBeenCalled()
 	})
 
 	it('getTitle()', () => {
-		const model = new AtomXtermProfileMenuModel(this.atomXtermModel)
-		expect(model.getTitle()).toBe('Atom Xterm Profile Menu')
+		const model = new XTerminalProfileMenuModel(this.atomXtermModel)
+		expect(model.getTitle()).toBe('X Terminal Profile Menu')
 	})
 
 	it('getElement()', () => {
-		const model = new AtomXtermProfileMenuModel(this.atomXtermModel)
+		const model = new XTerminalProfileMenuModel(this.atomXtermModel)
 		expect(model.getElement()).toBeNull()
 	})
 
 	it('setElement()', () => {
-		const model = new AtomXtermProfileMenuModel(this.atomXtermModel)
+		const model = new XTerminalProfileMenuModel(this.atomXtermModel)
 		const mock = jasmine.createSpy('element')
 		model.setElement(mock)
 		expect(model.getElement()).toBe(mock)
 	})
 
-	it('getAtomXtermModelElement()', () => {
-		const model = new AtomXtermProfileMenuModel(this.atomXtermModel)
-		model.getAtomXtermModelElement()
+	it('getXTerminalModelElement()', () => {
+		const model = new XTerminalProfileMenuModel(this.atomXtermModel)
+		model.getXTerminalModelElement()
 		expect(model.atomXtermModel.getElement).toHaveBeenCalled()
 	})
 
-	it('getAtomXtermModel()', () => {
-		const model = new AtomXtermProfileMenuModel(this.atomXtermModel)
-		expect(model.getAtomXtermModel()).toBe(this.atomXtermModel)
+	it('getXTerminalModel()', () => {
+		const model = new XTerminalProfileMenuModel(this.atomXtermModel)
+		expect(model.getXTerminalModel()).toBe(this.atomXtermModel)
 	})
 })

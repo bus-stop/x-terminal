@@ -38,7 +38,7 @@ describe('Utilities', () => {
 	it('createHorizontalLine()', () => {
 		const hLine = utils.createHorizontalLine()
 		expect(hLine.tagName).toBe('DIV')
-		expect(hLine.classList.contains('atom-xterm-profile-menu-element-hline')).toBe(true)
+		expect(hLine.classList.contains('x-terminal-profile-menu-element-hline')).toBe(true)
 		expect(hLine.textContent).toBe('.')
 	})
 })

@@ -21,8 +21,8 @@ import * as nodePty from 'node-pty-prebuilt-multiarch'
 import { shell } from 'electron'
 
 import { configDefaults } from '../src/lib/config'
-import { AtomXtermElement } from '../src/lib/element'
-import { AtomXtermModel } from '../src/lib/model'
+import { XTerminalElement } from '../src/lib/element'
+import { XTerminalModel } from '../src/lib/model'
 
 import path from 'path'
 
@@ -31,21 +31,21 @@ import { URL, URLSearchParams } from 'whatwg-url'
 
 temp.track()
 
-describe('AtomXtermElement', () => {
+describe('XTerminalElement', () => {
 	const savedPlatform = process.platform
 	this.element = null
 	this.tmpdirObj = null
 
-	const createNewElement = async (uri = 'atom-xterm://somesessionid/') => {
+	const createNewElement = async (uri = 'x-terminal://somesessionid/') => {
 		const terminalsSet = new Set()
-		const model = new AtomXtermModel({
+		const model = new XTerminalModel({
 			uri: uri,
 			terminals_set: terminalsSet,
 		})
 		await model.initializedPromise
 		model.pane = jasmine.createSpyObj('pane',
 			['removeItem', 'getActiveItem', 'destroyItem'])
-		const element = new AtomXtermElement()
+		const element = new XTerminalElement()
 		await element.initialize(model)
 		return element
 	}
@@ -106,7 +106,7 @@ describe('AtomXtermElement', () => {
 	it('getShellCommand() command set in uri', async () => {
 		const expected = 'somecommand'
 		const params = new URLSearchParams({ command: expected })
-		const url = new URL('atom-xterm://?' + params.toString())
+		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		expect(element.getShellCommand()).toBe(expected)
 	})
@@ -118,7 +118,7 @@ describe('AtomXtermElement', () => {
 	it('getArgs() args set in uri', async () => {
 		const expected = ['some', 'extra', 'args']
 		const params = new URLSearchParams({ args: JSON.stringify(expected) })
-		const url = new URL('atom-xterm://?' + params.toString())
+		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		expect(element.getArgs()).toEqual(expected)
 	})
@@ -135,7 +135,7 @@ describe('AtomXtermElement', () => {
 	it('getTermType() name set in uri', async () => {
 		const expected = 'sometermtype'
 		const params = new URLSearchParams({ name: expected })
-		const url = new URL('atom-xterm://?' + params.toString())
+		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		expect(element.getTermType()).toBe(expected)
 	})
@@ -173,7 +173,7 @@ describe('AtomXtermElement', () => {
 	it('getCwd() cwd set in uri', async () => {
 		const expected = this.tmpdir
 		const params = new URLSearchParams({ cwd: expected })
-		const url = new URL('atom-xterm://?' + params.toString())
+		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		const cwd = await element.getCwd()
 		expect(cwd).toBe(expected)
@@ -210,7 +210,7 @@ describe('AtomXtermElement', () => {
 	it('getCwd() non-existent cwd set in uri', async () => {
 		const dir = path.join(this.tmpdir, 'non-existent-dir')
 		const params = new URLSearchParams({ cwd: dir })
-		const url = new URL('atom-xterm://?' + params.toString())
+		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		const cwd = await this.element.getCwd()
 		expect(cwd).toBe(configDefaults.getDefaultCwd())
@@ -230,7 +230,7 @@ describe('AtomXtermElement', () => {
 	it('getEnv() env set in uri', async () => {
 		const expected = { var1: 'value1', var2: 'value2' }
 		const params = new URLSearchParams({ env: JSON.stringify(expected) })
-		const url = new URL('atom-xterm://?' + params.toString())
+		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		expect(element.getEnv()).toEqual(expected)
 	})
@@ -243,28 +243,28 @@ describe('AtomXtermElement', () => {
 	it('getEnv() setEnv set in uri', async () => {
 		const expected = { var2: 'value2' }
 		const params = new URLSearchParams({ env: JSON.stringify({ var1: 'value1' }), setEnv: JSON.stringify(expected) })
-		const url = new URL('atom-xterm://?' + params.toString())
+		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		expect(element.getEnv().var2).toEqual(expected.var2)
 	})
 
 	it('getEnv() deleteEnv set in config', () => {
-		atom.config.set('atom-xterm.spawnPtySettings.env', JSON.stringify({ var1: 'value1' }))
-		atom.config.set('atom-xterm.spawnPtySettings.deleteEnv', JSON.stringify(['var1']))
+		atom.config.set('x-terminal.spawnPtySettings.env', JSON.stringify({ var1: 'value1' }))
+		atom.config.set('x-terminal.spawnPtySettings.deleteEnv', JSON.stringify(['var1']))
 		expect(this.element.getEnv().var1).toBe(undefined)
 	})
 
 	it('getEnv() deleteEnv set in uri', async () => {
 		const params = new URLSearchParams({ env: JSON.stringify({ var1: 'value1' }), deleteEnv: JSON.stringify(['var1']) })
-		const url = new URL('atom-xterm://?' + params.toString())
+		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		expect(this.element.getEnv().var1).toBe(undefined)
 	})
 
 	it('getEnv() deleteEnv has precendence over senEnv', () => {
-		atom.config.set('atom-xterm.spawnPtySettings.env', JSON.stringify({ var1: 'value1' }))
-		atom.config.set('atom-xterm.spawnPtySettings.setEnv', JSON.stringify({ var2: 'value2' }))
-		atom.config.set('atom-xterm.spawnPtySettings.deleteEnv', JSON.stringify(['var2']))
+		atom.config.set('x-terminal.spawnPtySettings.env', JSON.stringify({ var1: 'value1' }))
+		atom.config.set('x-terminal.spawnPtySettings.setEnv', JSON.stringify({ var2: 'value2' }))
+		atom.config.set('x-terminal.spawnPtySettings.deleteEnv', JSON.stringify(['var2']))
 		expect(this.element.getEnv().var2).toBe(undefined)
 	})
 
@@ -275,7 +275,7 @@ describe('AtomXtermElement', () => {
 	it('getEncoding() encoding set in uri', async () => {
 		const expected = 'someencoding'
 		const params = new URLSearchParams({ encoding: expected })
-		const url = new URL('atom-xterm://?' + params.toString())
+		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		expect(element.getEncoding()).toBe(expected)
 	})
@@ -287,7 +287,7 @@ describe('AtomXtermElement', () => {
 	it('leaveOpenAfterExit() true set in uri', async () => {
 		const expected = true
 		const params = new URLSearchParams({ leaveOpenAfterExit: expected })
-		const url = new URL('atom-xterm://?' + params.toString())
+		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		expect(element.leaveOpenAfterExit()).toBe(expected)
 	})
@@ -295,7 +295,7 @@ describe('AtomXtermElement', () => {
 	it('leaveOpenAfterExit() false set in uri', async () => {
 		const expected = false
 		const params = new URLSearchParams({ leaveOpenAfterExit: expected })
-		const url = new URL('atom-xterm://?' + params.toString())
+		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		expect(element.leaveOpenAfterExit()).toBe(expected)
 	})
@@ -307,7 +307,7 @@ describe('AtomXtermElement', () => {
 	it('isPromptToStartup() false set in uri', async () => {
 		const expected = false
 		const params = new URLSearchParams({ promptToStartup: expected })
-		const url = new URL('atom-xterm://?' + params.toString())
+		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		expect(element.isPromptToStartup()).toBe(expected)
 	})
@@ -315,7 +315,7 @@ describe('AtomXtermElement', () => {
 	it('isPromptToStartup() true set in uri', async () => {
 		const expected = true
 		const params = new URLSearchParams({ promptToStartup: expected })
-		const url = new URL('atom-xterm://?' + params.toString())
+		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		expect(element.isPromptToStartup()).toBe(expected)
 	})
@@ -1179,8 +1179,8 @@ describe('AtomXtermElement', () => {
 		spyOn(this.element.model, 'exit')
 		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
 		exitHandler(0)
-		const successDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
-		const errorDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error')
+		const successDiv = this.element.topDiv.querySelector('.x-terminal-notice-success')
+		const errorDiv = this.element.topDiv.querySelector('.x-terminal-notice-error')
 		expect(successDiv).not.toBeNull()
 		expect(errorDiv).toBeNull()
 	})
@@ -1196,8 +1196,8 @@ describe('AtomXtermElement', () => {
 		spyOn(this.element.model, 'exit')
 		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
 		exitHandler(1)
-		const successDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
-		const errorDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error')
+		const successDiv = this.element.topDiv.querySelector('.x-terminal-notice-success')
+		const errorDiv = this.element.topDiv.querySelector('.x-terminal-notice-error')
 		expect(successDiv).toBeNull()
 		expect(errorDiv).not.toBeNull()
 	})
@@ -1213,7 +1213,7 @@ describe('AtomXtermElement', () => {
 		spyOn(this.element.model, 'exit')
 		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
 		exitHandler(0)
-		const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
+		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-success')
 		const restartButton = messageDiv.querySelector('.btn-success')
 		expect(restartButton).not.toBeNull()
 	})
@@ -1229,7 +1229,7 @@ describe('AtomXtermElement', () => {
 		spyOn(this.element.model, 'exit')
 		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
 		exitHandler(1)
-		const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error')
+		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-error')
 		const restartButton = messageDiv.querySelector('.btn-error')
 		expect(restartButton).not.toBeNull()
 	})
@@ -1245,7 +1245,7 @@ describe('AtomXtermElement', () => {
 		spyOn(this.element.model, 'exit')
 		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
 		exitHandler(0)
-		const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
+		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-success')
 		const restartButton = messageDiv.querySelector('.btn-success')
 		spyOn(this.element, 'restartPtyProcess')
 		const mouseEvent = new MouseEvent('click')
@@ -1555,21 +1555,21 @@ describe('AtomXtermElement', () => {
 	})
 
 	it('terminalDiv initially does not have link class', () => {
-		expect(this.element.terminalDiv.classList.contains('atom-xterm-term-container-has-link')).toBe(false)
+		expect(this.element.terminalDiv.classList.contains('x-terminal-term-container-has-link')).toBe(false)
 	})
 
 	it('setHoveredLink(\'https://atom.io\')', () => {
 		const expected = 'https://atom.io'
 		this.element.setHoveredLink(expected)
 		expect(this.element.hoveredLink).toBe(expected)
-		expect(this.element.terminalDiv.classList.contains('atom-xterm-term-container-has-link')).toBe(true)
+		expect(this.element.terminalDiv.classList.contains('x-terminal-term-container-has-link')).toBe(true)
 	})
 
 	it('clearHoveredLink()', () => {
 		this.element.setHoveredLink('https://atom.io')
 		this.element.clearHoveredLink()
 		expect(this.element.hoveredLink).toBeNull()
-		expect(this.element.terminalDiv.classList.contains('atom-xterm-term-container-has-link')).toBe(false)
+		expect(this.element.terminalDiv.classList.contains('x-terminal-term-container-has-link')).toBe(false)
 	})
 
 	it('openHoveredLink() no hovered link set', () => {
@@ -1604,7 +1604,7 @@ describe('AtomXtermElement', () => {
 		const args = this.element.ptyProcess.on.calls.argsFor(0)
 		const onDataCallback = args[1]
 		onDataCallback('')
-		expect(this.element.model.title).toBe('Atom Xterm')
+		expect(this.element.model.title).toBe('X Terminal')
 	})
 
 	it('on \'data\' handler no custom title on linux platform', async () => {
@@ -1665,8 +1665,8 @@ describe('AtomXtermElement', () => {
 		const onExitCallback = args[1]
 		this.element.model.profile.leaveOpenAfterExit = true
 		onExitCallback(0)
-		expect(this.element.querySelector('.atom-xterm-notice-success')).toBeTruthy()
-		expect(this.element.querySelector('.atom-xterm-notice-error')).toBe(null)
+		expect(this.element.querySelector('.x-terminal-notice-success')).toBeTruthy()
+		expect(this.element.querySelector('.x-terminal-notice-error')).toBe(null)
 	})
 
 	it('on \'exit\' handler leave open after exit failure', async () => {
@@ -1680,8 +1680,8 @@ describe('AtomXtermElement', () => {
 		const onExitCallback = args[1]
 		this.element.model.profile.leaveOpenAfterExit = true
 		onExitCallback(1)
-		expect(this.element.querySelector('.atom-xterm-notice-success')).toBe(null)
-		expect(this.element.querySelector('.atom-xterm-notice-error')).toBeTruthy()
+		expect(this.element.querySelector('.x-terminal-notice-success')).toBe(null)
+		expect(this.element.querySelector('.x-terminal-notice-error')).toBeTruthy()
 	})
 
 	it('on \'exit\' handler do not leave open', async () => {
@@ -1704,7 +1704,7 @@ describe('AtomXtermElement', () => {
 			'foo',
 			'success',
 		)
-		const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-success')
+		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-success')
 		expect(messageDiv.textContent).toBe('fooRestart')
 	})
 
@@ -1713,7 +1713,7 @@ describe('AtomXtermElement', () => {
 			'foo',
 			'error',
 		)
-		const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-error')
+		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-error')
 		expect(messageDiv.textContent).toBe('fooRestart')
 	})
 
@@ -1769,13 +1769,13 @@ describe('AtomXtermElement', () => {
 			'info',
 			'Some text',
 		)
-		const restartButton = this.element.topDiv.querySelector('.atom-xterm-restart-btn')
+		const restartButton = this.element.topDiv.querySelector('.x-terminal-restart-btn')
 		expect(restartButton.firstChild.nodeValue).toBe('Some text')
 	})
 
 	it('promptToStartup()', async () => {
 		await this.element.promptToStartup()
-		const restartButton = this.element.topDiv.querySelector('.atom-xterm-restart-btn')
+		const restartButton = this.element.topDiv.querySelector('.x-terminal-restart-btn')
 		expect(restartButton.firstChild.nodeValue).toBe('Start')
 	})
 
@@ -1785,7 +1785,7 @@ describe('AtomXtermElement', () => {
 		spyOn(this.element, 'getArgs').and.returnValue(command.slice(1))
 		const expected = `New command ${JSON.stringify(command)} ready to start.`
 		await this.element.promptToStartup()
-		const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-info')
+		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-info')
 		expect(messageDiv.firstChild.nodeValue).toBe(expected)
 	})
 
@@ -1793,7 +1793,7 @@ describe('AtomXtermElement', () => {
 		this.element.model.profile.title = 'My Profile'
 		const expected = 'New command for profile My Profile ready to start.'
 		await this.element.promptToStartup()
-		const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-info')
+		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-info')
 		expect(messageDiv.firstChild.nodeValue).toBe(expected)
 	})
 
@@ -1990,7 +1990,7 @@ describe('AtomXtermElement', () => {
 		expect(this.element.pendingTerminalProfileOptions).toEqual({})
 	})
 
-	it('applyPendingTerminalProfileOptions() terminal not visible atom-xterm options removed', () => {
+	it('applyPendingTerminalProfileOptions() terminal not visible x-terminal options removed', () => {
 		spyOn(this.element, 'refitTerminal')
 		this.element.terminalDivIntersectionRatio = 0.0
 		this.element.pendingTerminalProfileOptions.leaveOpenAfterExit = true
@@ -2000,7 +2000,7 @@ describe('AtomXtermElement', () => {
 		expect(this.element.pendingTerminalProfileOptions).toEqual({})
 	})
 
-	it('applyPendingTerminalProfileOptions() terminal visible atom-xterm options removed', () => {
+	it('applyPendingTerminalProfileOptions() terminal visible x-terminal options removed', () => {
 		spyOn(this.element, 'refitTerminal')
 		this.element.terminalDivIntersectionRatio = 1.0
 		this.element.pendingTerminalProfileOptions.leaveOpenAfterExit = true

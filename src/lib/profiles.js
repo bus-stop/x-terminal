@@ -28,55 +28,55 @@ import uuidv4 from 'uuid/v4'
 import { URL } from 'whatwg-url'
 import { detailedDiff } from 'deep-object-diff'
 
-const ATOM_XTERM_BASE_URI = 'atom-xterm://'
+const X_TERMINAL_BASE_URI = 'x-terminal://'
 
 const CONFIG_KEY_TO_PROFILE_KEY_MAPPING = {
-	'atom-xterm.spawnPtySettings.command': 'command',
-	'atom-xterm.spawnPtySettings.args': 'args',
-	'atom-xterm.spawnPtySettings.name': 'name',
-	'atom-xterm.spawnPtySettings.cwd': 'cwd',
-	'atom-xterm.spawnPtySettings.env': 'env',
-	'atom-xterm.spawnPtySettings.setEnv': 'setEnv',
-	'atom-xterm.spawnPtySettings.deleteEnv': 'deleteEnv',
-	'atom-xterm.spawnPtySettings.encoding': 'encoding',
-	'atom-xterm.terminalSettings.fontSize': 'fontSize',
-	'atom-xterm.terminalSettings.fontFamily': 'fontFamily',
-	'atom-xterm.terminalSettings.colors.theme': 'theme',
-	'atom-xterm.terminalSettings.colors.foreground': 'colorForeground',
-	'atom-xterm.terminalSettings.colors.background': 'colorBackground',
-	'atom-xterm.terminalSettings.colors.cursor': 'colorCursor',
-	'atom-xterm.terminalSettings.colors.cursorAccent': 'colorCursorAccent',
-	'atom-xterm.terminalSettings.colors.selection': 'colorSelection',
-	'atom-xterm.terminalSettings.colors.black': 'colorBlack',
-	'atom-xterm.terminalSettings.colors.red': 'colorRed',
-	'atom-xterm.terminalSettings.colors.green': 'colorGreen',
-	'atom-xterm.terminalSettings.colors.yellow': 'colorYellow',
-	'atom-xterm.terminalSettings.colors.blue': 'colorBlue',
-	'atom-xterm.terminalSettings.colors.magenta': 'colorMagenta',
-	'atom-xterm.terminalSettings.colors.cyan': 'colorCyan',
-	'atom-xterm.terminalSettings.colors.white': 'colorWhite',
-	'atom-xterm.terminalSettings.colors.brightBlack': 'colorBrightBlack',
-	'atom-xterm.terminalSettings.colors.brightRed': 'colorBrightRed',
-	'atom-xterm.terminalSettings.colors.brightGreen': 'colorBrightGreen',
-	'atom-xterm.terminalSettings.colors.brightYellow': 'colorBrightYellow',
-	'atom-xterm.terminalSettings.colors.brightBlue': 'colorBrightBlue',
-	'atom-xterm.terminalSettings.colors.brightMagenta': 'colorBrightMagenta',
-	'atom-xterm.terminalSettings.colors.brightCyan': 'colorBrightCyan',
-	'atom-xterm.terminalSettings.colors.brightWhite': 'colorBrightWhite',
-	'atom-xterm.terminalSettings.leaveOpenAfterExit': 'leaveOpenAfterExit',
-	'atom-xterm.terminalSettings.allowRelaunchingTerminalsOnStartup': 'allowRelaunchingTerminalsOnStartup',
-	'atom-xterm.terminalSettings.relaunchTerminalOnStartup': 'relaunchTerminalOnStartup',
-	'atom-xterm.terminalSettings.title': 'title',
-	'atom-xterm.terminalSettings.xtermOptions': 'xtermOptions',
-	'atom-xterm.terminalSettings.promptToStartup': 'promptToStartup',
+	'x-terminal.spawnPtySettings.command': 'command',
+	'x-terminal.spawnPtySettings.args': 'args',
+	'x-terminal.spawnPtySettings.name': 'name',
+	'x-terminal.spawnPtySettings.cwd': 'cwd',
+	'x-terminal.spawnPtySettings.env': 'env',
+	'x-terminal.spawnPtySettings.setEnv': 'setEnv',
+	'x-terminal.spawnPtySettings.deleteEnv': 'deleteEnv',
+	'x-terminal.spawnPtySettings.encoding': 'encoding',
+	'x-terminal.terminalSettings.fontSize': 'fontSize',
+	'x-terminal.terminalSettings.fontFamily': 'fontFamily',
+	'x-terminal.terminalSettings.colors.theme': 'theme',
+	'x-terminal.terminalSettings.colors.foreground': 'colorForeground',
+	'x-terminal.terminalSettings.colors.background': 'colorBackground',
+	'x-terminal.terminalSettings.colors.cursor': 'colorCursor',
+	'x-terminal.terminalSettings.colors.cursorAccent': 'colorCursorAccent',
+	'x-terminal.terminalSettings.colors.selection': 'colorSelection',
+	'x-terminal.terminalSettings.colors.black': 'colorBlack',
+	'x-terminal.terminalSettings.colors.red': 'colorRed',
+	'x-terminal.terminalSettings.colors.green': 'colorGreen',
+	'x-terminal.terminalSettings.colors.yellow': 'colorYellow',
+	'x-terminal.terminalSettings.colors.blue': 'colorBlue',
+	'x-terminal.terminalSettings.colors.magenta': 'colorMagenta',
+	'x-terminal.terminalSettings.colors.cyan': 'colorCyan',
+	'x-terminal.terminalSettings.colors.white': 'colorWhite',
+	'x-terminal.terminalSettings.colors.brightBlack': 'colorBrightBlack',
+	'x-terminal.terminalSettings.colors.brightRed': 'colorBrightRed',
+	'x-terminal.terminalSettings.colors.brightGreen': 'colorBrightGreen',
+	'x-terminal.terminalSettings.colors.brightYellow': 'colorBrightYellow',
+	'x-terminal.terminalSettings.colors.brightBlue': 'colorBrightBlue',
+	'x-terminal.terminalSettings.colors.brightMagenta': 'colorBrightMagenta',
+	'x-terminal.terminalSettings.colors.brightCyan': 'colorBrightCyan',
+	'x-terminal.terminalSettings.colors.brightWhite': 'colorBrightWhite',
+	'x-terminal.terminalSettings.leaveOpenAfterExit': 'leaveOpenAfterExit',
+	'x-terminal.terminalSettings.allowRelaunchingTerminalsOnStartup': 'allowRelaunchingTerminalsOnStartup',
+	'x-terminal.terminalSettings.relaunchTerminalOnStartup': 'relaunchTerminalOnStartup',
+	'x-terminal.terminalSettings.title': 'title',
+	'x-terminal.terminalSettings.xtermOptions': 'xtermOptions',
+	'x-terminal.terminalSettings.promptToStartup': 'promptToStartup',
 }
 
-const AtomXtermProfilesSingletonSymbol = Symbol('AtomXtermProfilesSingleton sentinel')
+const XTerminalProfilesSingletonSymbol = Symbol('XTerminalProfilesSingleton sentinel')
 
-class AtomXtermProfilesSingleton {
+class XTerminalProfilesSingleton {
 	constructor (symbolCheck) {
-		if (AtomXtermProfilesSingletonSymbol !== symbolCheck) {
-			throw new Error('AtomXtermProfilesSingleton cannot be instantiated directly.')
+		if (XTerminalProfilesSingletonSymbol !== symbolCheck) {
+			throw new Error('XTerminalProfilesSingleton cannot be instantiated directly.')
 		}
 		this.emitter = new Emitter()
 		this.profilesConfigPath = path.join(configDefaults.getUserDataPath(), 'profiles.json')
@@ -89,10 +89,10 @@ class AtomXtermProfilesSingleton {
 	}
 
 	static get instance () {
-		if (!this[AtomXtermProfilesSingletonSymbol]) {
-			this[AtomXtermProfilesSingletonSymbol] = new AtomXtermProfilesSingleton(AtomXtermProfilesSingletonSymbol)
+		if (!this[XTerminalProfilesSingletonSymbol]) {
+			this[XTerminalProfilesSingletonSymbol] = new XTerminalProfilesSingleton(XTerminalProfilesSingletonSymbol)
 		}
-		return this[AtomXtermProfilesSingletonSymbol]
+		return this[XTerminalProfilesSingletonSymbol]
 	}
 
 	sortProfiles (profiles) {
@@ -195,38 +195,38 @@ class AtomXtermProfilesSingleton {
 
 	resetBaseProfile () {
 		this.previousBaseProfile = this.deepClone(this.baseProfile)
-		let env = this.validateJsonConfigSetting('atom-xterm.spawnPtySettings.env', 'null')
+		let env = this.validateJsonConfigSetting('x-terminal.spawnPtySettings.env', 'null')
 		if (!env || env.constructor !== Object) {
 			env = null
 		}
-		const encoding = atom.config.get('atom-xterm.spawnPtySettings.encoding') || null
-		let leaveOpenAfterExit = atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit')
+		const encoding = atom.config.get('x-terminal.spawnPtySettings.encoding') || null
+		let leaveOpenAfterExit = atom.config.get('x-terminal.terminalSettings.leaveOpenAfterExit')
 		if (leaveOpenAfterExit !== true && leaveOpenAfterExit !== false) leaveOpenAfterExit = configDefaults.getDefaultLeaveOpenAfterExit()
-		let relaunchTerminalOnStartup = atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup')
+		let relaunchTerminalOnStartup = atom.config.get('x-terminal.terminalSettings.relaunchTerminalOnStartup')
 		if (relaunchTerminalOnStartup !== true && relaunchTerminalOnStartup !== false) relaunchTerminalOnStartup = configDefaults.getDefaultRelaunchTerminalOnStartup()
-		const title = atom.config.get('atom-xterm.terminalSettings.title') || configDefaults.getDefaultTitle()
-		let promptToStartup = atom.config.get('atom-xterm.terminalSettings.promptToStartup')
+		const title = atom.config.get('x-terminal.terminalSettings.title') || configDefaults.getDefaultTitle()
+		let promptToStartup = atom.config.get('x-terminal.terminalSettings.promptToStartup')
 		if (promptToStartup !== true && promptToStartup !== false) promptToStartup = configDefaults.getDefaultPromptToStartup()
 		this.baseProfile = {
-			command: atom.config.get('atom-xterm.spawnPtySettings.command') || configDefaults.getDefaultShellCommand(),
-			args: this.validateJsonConfigSetting('atom-xterm.spawnPtySettings.args', configDefaults.getDefaultArgs()),
-			name: atom.config.get('atom-xterm.spawnPtySettings.name') || configDefaults.getDefaultTermType(),
-			cwd: atom.config.get('atom-xterm.spawnPtySettings.cwd') || configDefaults.getDefaultCwd(),
+			command: atom.config.get('x-terminal.spawnPtySettings.command') || configDefaults.getDefaultShellCommand(),
+			args: this.validateJsonConfigSetting('x-terminal.spawnPtySettings.args', configDefaults.getDefaultArgs()),
+			name: atom.config.get('x-terminal.spawnPtySettings.name') || configDefaults.getDefaultTermType(),
+			cwd: atom.config.get('x-terminal.spawnPtySettings.cwd') || configDefaults.getDefaultCwd(),
 			env: env,
-			setEnv: this.validateJsonConfigSetting('atom-xterm.spawnPtySettings.setEnv', configDefaults.getDefaultSetEnv()),
-			deleteEnv: this.validateJsonConfigSetting('atom-xterm.spawnPtySettings.deleteEnv', configDefaults.getDefaultDeleteEnv()),
+			setEnv: this.validateJsonConfigSetting('x-terminal.spawnPtySettings.setEnv', configDefaults.getDefaultSetEnv()),
+			deleteEnv: this.validateJsonConfigSetting('x-terminal.spawnPtySettings.deleteEnv', configDefaults.getDefaultDeleteEnv()),
 			encoding: encoding,
-			fontSize: atom.config.get('atom-xterm.terminalSettings.fontSize') || configDefaults.getDefaultFontSize(),
-			fontFamily: atom.config.get('atom-xterm.terminalSettings.fontFamily') || configDefaults.getDefaultFontFamily(),
-			theme: atom.config.get('atom-xterm.terminalSettings.colors.theme') || configDefaults.getDefaultTheme(),
+			fontSize: atom.config.get('x-terminal.terminalSettings.fontSize') || configDefaults.getDefaultFontSize(),
+			fontFamily: atom.config.get('x-terminal.terminalSettings.fontFamily') || configDefaults.getDefaultFontFamily(),
+			theme: atom.config.get('x-terminal.terminalSettings.colors.theme') || configDefaults.getDefaultTheme(),
 			...Object.keys(COLORS).reduce((obj, c) => {
-				obj[COLORS[c]] = atom.config.get(`atom-xterm.terminalSettings.colors.${c}`) || configDefaults[`getDefault${COLORS[c].charAt(0).toUpperCase() + COLORS[c].substring(1)}`]()
+				obj[COLORS[c]] = atom.config.get(`x-terminal.terminalSettings.colors.${c}`) || configDefaults[`getDefault${COLORS[c].charAt(0).toUpperCase() + COLORS[c].substring(1)}`]()
 				return obj
 			}, {}),
 			leaveOpenAfterExit: leaveOpenAfterExit,
 			relaunchTerminalOnStartup: relaunchTerminalOnStartup,
 			title: title || null,
-			xtermOptions: this.validateJsonConfigSetting('atom-xterm.terminalSettings.xtermOptions', configDefaults.getDefaultXtermOptions()),
+			xtermOptions: this.validateJsonConfigSetting('x-terminal.terminalSettings.xtermOptions', configDefaults.getDefaultXtermOptions()),
 			promptToStartup: promptToStartup,
 		}
 		this.emitter.emit('did-reset-base-profile', this.getBaseProfile())
@@ -305,7 +305,7 @@ class AtomXtermProfilesSingleton {
 	}
 
 	generateNewUri () {
-		return ATOM_XTERM_BASE_URI + uuidv4() + '/'
+		return X_TERMINAL_BASE_URI + uuidv4() + '/'
 	}
 
 	generateNewUrlFromProfileData (data) {
@@ -421,6 +421,6 @@ class AtomXtermProfilesSingleton {
 }
 
 export {
-	ATOM_XTERM_BASE_URI,
-	AtomXtermProfilesSingleton,
+	X_TERMINAL_BASE_URI,
+	XTerminalProfilesSingleton,
 }

@@ -17,13 +17,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { AtomXtermProfilesSingleton } from './profiles'
+import { XTerminalProfilesSingleton } from './profiles'
 
-class AtomXtermOverwriteProfileModel {
+class XTerminalOverwriteProfileModel {
 	constructor (atomXtermSaveProfileModel) {
 		this.atomXtermSaveProfileModel = atomXtermSaveProfileModel
 		this.atomXtermProfileMenuElement = this.atomXtermSaveProfileModel.atomXtermProfileMenuElement
-		this.profilesSingleton = AtomXtermProfilesSingleton.instance
+		this.profilesSingleton = XTerminalProfilesSingleton.instance
 		this.element = null
 		this.panel = atom.workspace.addModalPanel({
 			item: this,
@@ -32,7 +32,7 @@ class AtomXtermOverwriteProfileModel {
 	}
 
 	getTitle () {
-		return 'atom-xterm Overwrite Profile Model'
+		return 'x-terminal Overwrite Profile Model'
 	}
 
 	getElement () {
@@ -74,5 +74,5 @@ class AtomXtermOverwriteProfileModel {
 }
 
 export {
-	AtomXtermOverwriteProfileModel,
+	XTerminalOverwriteProfileModel,
 }

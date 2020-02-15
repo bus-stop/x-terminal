@@ -17,9 +17,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { AtomXtermSaveProfileElement } from '../src/lib/save-profile-element'
+import { XTerminalSaveProfileElement } from '../src/lib/save-profile-element'
 
-describe('AtomXtermSaveProfileElement', () => {
+describe('XTerminalSaveProfileElement', () => {
 	this.model = null
 
 	beforeEach(() => {
@@ -27,13 +27,13 @@ describe('AtomXtermSaveProfileElement', () => {
 	})
 
 	it('initialize()', () => {
-		const element = new AtomXtermSaveProfileElement()
+		const element = new XTerminalSaveProfileElement()
 		element.initialize(this.model)
 		expect(element.messageDiv.textContent).toBe('Enter new profile name')
 	})
 
 	it('setNewTextbox()', () => {
-		const element = new AtomXtermSaveProfileElement()
+		const element = new XTerminalSaveProfileElement()
 		element.initialize(this.model)
 		const textbox = jasmine.createSpyObj('textbox', ['getElement'])
 		textbox.getElement.and.returnValue(document.createElement('div'))

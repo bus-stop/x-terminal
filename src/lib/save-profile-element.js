@@ -19,15 +19,15 @@
 
 import { clearDiv } from './utils'
 
-class AtomXtermSaveProfileElementImpl extends HTMLElement {
+class XTerminalSaveProfileElementImpl extends HTMLElement {
 	initialize (model) {
 		this.model = model
 		this.model.setElement(this)
 		this.textboxDiv = document.createElement('div')
-		this.textboxDiv.classList.add('atom-xterm-save-profile-textbox')
+		this.textboxDiv.classList.add('x-terminal-save-profile-textbox')
 		this.appendChild(this.textboxDiv)
 		this.messageDiv = document.createElement('div')
-		this.messageDiv.classList.add('atom-xterm-modal-message')
+		this.messageDiv.classList.add('x-terminal-modal-message')
 		this.messageDiv.appendChild(document.createTextNode('Enter new profile name'))
 		this.appendChild(this.messageDiv)
 	}
@@ -38,10 +38,10 @@ class AtomXtermSaveProfileElementImpl extends HTMLElement {
 	}
 }
 
-const AtomXtermSaveProfileElement = document.registerElement('atom-xterm-save-profile', {
-	prototype: AtomXtermSaveProfileElementImpl.prototype,
+const XTerminalSaveProfileElement = document.registerElement('x-terminal-save-profile', {
+	prototype: XTerminalSaveProfileElementImpl.prototype,
 })
 
 export {
-	AtomXtermSaveProfileElement,
+	XTerminalSaveProfileElement,
 }

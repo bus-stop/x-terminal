@@ -17,9 +17,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { AtomXtermDeleteProfileModel } from '../src/lib/delete-profile-model'
+import { XTerminalDeleteProfileModel } from '../src/lib/delete-profile-model'
 
-describe('AtomXtermDeleteProfileModel', () => {
+describe('XTerminalDeleteProfileModel', () => {
 	this.atomXtermProfileMenuElement = null
 
 	beforeEach(() => {
@@ -29,29 +29,29 @@ describe('AtomXtermDeleteProfileModel', () => {
 	})
 
 	it('constructor()', () => {
-		const model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement)
+		const model = new XTerminalDeleteProfileModel(this.atomXtermProfileMenuElement)
 		expect(model).not.toBeNull()
 	})
 
 	it('getTitle()', () => {
-		const model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement)
-		expect(model.getTitle()).toBe('atom-xterm Delete Profile Model')
+		const model = new XTerminalDeleteProfileModel(this.atomXtermProfileMenuElement)
+		expect(model.getTitle()).toBe('x-terminal Delete Profile Model')
 	})
 
 	it('getElement()', () => {
-		const model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement)
+		const model = new XTerminalDeleteProfileModel(this.atomXtermProfileMenuElement)
 		expect(model.getElement()).toBeNull()
 	})
 
 	it('setElement()', () => {
-		const model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement)
+		const model = new XTerminalDeleteProfileModel(this.atomXtermProfileMenuElement)
 		const element = jasmine.createSpy('atomXtermDeleteProfileElement')
 		model.setElement(element)
 		expect(model.getElement()).toBe(element)
 	})
 
 	it('close() panel is not visible', () => {
-		const model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement)
+		const model = new XTerminalDeleteProfileModel(this.atomXtermProfileMenuElement)
 		model.panel = jasmine.createSpyObj('panel', ['isVisible', 'hide'])
 		model.panel.isVisible.and.returnValue(false)
 		model.close()
@@ -59,7 +59,7 @@ describe('AtomXtermDeleteProfileModel', () => {
 	})
 
 	it('close() panel is visible', () => {
-		const model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement)
+		const model = new XTerminalDeleteProfileModel(this.atomXtermProfileMenuElement)
 		model.panel = jasmine.createSpyObj('panel', ['isVisible', 'hide'])
 		model.panel.isVisible.and.returnValue(true)
 		model.close()
@@ -67,7 +67,7 @@ describe('AtomXtermDeleteProfileModel', () => {
 	})
 
 	it('promptDelete() panel is shown', () => {
-		const model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement)
+		const model = new XTerminalDeleteProfileModel(this.atomXtermProfileMenuElement)
 		model.panel = jasmine.createSpyObj('panel', ['show', 'isVisible', 'hide'])
 		model.panel.isVisible.and.returnValue(true)
 		model.element = jasmine.createSpyObj('atomXtermDeleteProfileElement', ['setNewPrompt'])
@@ -76,7 +76,7 @@ describe('AtomXtermDeleteProfileModel', () => {
 	})
 
 	it('promptDelete() new prompt is set', () => {
-		const model = new AtomXtermDeleteProfileModel(this.atomXtermProfileMenuElement)
+		const model = new XTerminalDeleteProfileModel(this.atomXtermProfileMenuElement)
 		model.panel = jasmine.createSpyObj('panel', ['show', 'isVisible', 'hide'])
 		model.panel.isVisible.and.returnValue(true)
 		model.element = jasmine.createSpyObj('atomXtermDeleteProfileElement', ['setNewPrompt'])

@@ -210,7 +210,7 @@ export const configDefaults = {
 		} else {
 			appDataPath = process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config')
 		}
-		return path.join(appDataPath, 'atom-xterm')
+		return path.join(appDataPath, 'x-terminal')
 	},
 
 	getDefaultTitle () {

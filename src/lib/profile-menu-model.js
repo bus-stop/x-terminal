@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-class AtomXtermProfileMenuModel {
+class XTerminalProfileMenuModel {
 	constructor (atomXtermModel) {
 		this.atomXtermModel = atomXtermModel
 		this.element = null
@@ -30,7 +30,7 @@ class AtomXtermProfileMenuModel {
 	}
 
 	getTitle () {
-		return 'Atom Xterm Profile Menu'
+		return 'X Terminal Profile Menu'
 	}
 
 	getElement () {
@@ -41,15 +41,15 @@ class AtomXtermProfileMenuModel {
 		this.element = element
 	}
 
-	getAtomXtermModelElement () {
+	getXTerminalModelElement () {
 		return this.atomXtermModel.getElement()
 	}
 
-	getAtomXtermModel () {
+	getXTerminalModel () {
 		return this.atomXtermModel
 	}
 }
 
 export {
-	AtomXtermProfileMenuModel,
+	XTerminalProfileMenuModel,
 }

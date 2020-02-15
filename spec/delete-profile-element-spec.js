@@ -17,9 +17,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { AtomXtermDeleteProfileElement } from '../src/lib/delete-profile-element'
+import { XTerminalDeleteProfileElement } from '../src/lib/delete-profile-element'
 
-describe('AtomXtermDeleteProfileElement', () => {
+describe('XTerminalDeleteProfileElement', () => {
 	this.model = null
 
 	beforeEach(() => {
@@ -27,13 +27,13 @@ describe('AtomXtermDeleteProfileElement', () => {
 	})
 
 	it('initialize()', () => {
-		const element = new AtomXtermDeleteProfileElement()
+		const element = new XTerminalDeleteProfileElement()
 		element.initialize(this.model)
 		expect(element.promptButtonsDiv.childElementCount).toBe(0)
 	})
 
 	it('setNewPrompt()', () => {
-		const element = new AtomXtermDeleteProfileElement()
+		const element = new XTerminalDeleteProfileElement()
 		element.initialize(this.model)
 		const profileName = 'foo'
 		const confirmHandler = () => {}

@@ -84,10 +84,10 @@ function main () {
 		}
 	}
 	console.log('Using atomHome = \'' + atomHome + '\'')
-	const atomXtermPath = path.join(atomHome, 'packages', 'atom-xterm')
+	const atomXtermPath = path.join(atomHome, 'packages', 'x-terminal')
 	console.log('Using atomXtermPath = \'' + atomXtermPath + '\'')
 	if (!fs.existsSync(atomXtermPath)) {
-		console.log('atom-xterm not installed, exiting.')
+		console.log('x-terminal not installed, exiting.')
 		process.exit(0)
 	}
 	// NOTE: This script will move binaries for the 'node-pty' module. Although

@@ -100,19 +100,19 @@ describe('move-winpty-binaries script', () => {
 			expect(() => script.main()).toThrow(new Error('process.exit(0) called'))
 		})
 
-		it('is win32 atom-xterm not installed', () => {
+		it('is win32 x-terminal not installed', () => {
 			Object.defineProperty(process, 'platform', {
 				value: 'win32',
 			})
 			expect(() => script.main()).toThrow(new Error('process.exit(0) called'))
 		})
 
-		describe('is win32 atom-xterm installed', () => {
+		describe('is win32 x-terminal installed', () => {
 			beforeEach(() => {
 				const atomXtermPath = path.join(
 					process.env.ATOM_HOME,
 					'packages',
-					'atom-xterm',
+					'x-terminal',
 				)
 				const nodePtyPath = path.join(atomXtermPath, 'node_modules', 'node-pty')
 				const nodePtyPrebuiltPath = path.join(atomXtermPath, 'node_modules', 'node-pty-prebuilt-multiarch')

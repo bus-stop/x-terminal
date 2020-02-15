@@ -19,16 +19,16 @@
 
 import { clearDiv, createHorizontalLine } from './utils'
 
-class AtomXtermDeleteProfileElementImpl extends HTMLElement {
+class XTerminalDeleteProfileElementImpl extends HTMLElement {
 	initialize (model) {
 		this.model = model
 		this.model.setElement(this)
 		this.messageDiv = document.createElement('div')
-		this.messageDiv.classList.add('atom-xterm-modal-message')
+		this.messageDiv.classList.add('x-terminal-modal-message')
 		this.appendChild(this.messageDiv)
 		this.appendChild(createHorizontalLine())
 		this.promptButtonsDiv = document.createElement('div')
-		this.promptButtonsDiv.classList.add('atom-xterm-modal-buttons-div')
+		this.promptButtonsDiv.classList.add('x-terminal-modal-buttons-div')
 		this.appendChild(this.promptButtonsDiv)
 	}
 
@@ -38,22 +38,22 @@ class AtomXtermDeleteProfileElementImpl extends HTMLElement {
 		const text = 'Delete existing profile \'' + profileName + '\'?'
 		this.messageDiv.appendChild(document.createTextNode(text))
 		const confirmButton = document.createElement('button')
-		confirmButton.classList.add('atom-xterm-modal-button')
+		confirmButton.classList.add('x-terminal-modal-button')
 		confirmButton.appendChild(document.createTextNode('Confirm'))
 		confirmButton.addEventListener('click', confirmHandler)
 		this.promptButtonsDiv.appendChild(confirmButton)
 		const cancelButton = document.createElement('button')
-		cancelButton.classList.add('atom-xterm-modal-button')
+		cancelButton.classList.add('x-terminal-modal-button')
 		cancelButton.appendChild(document.createTextNode('Cancel'))
 		cancelButton.addEventListener('click', cancelHandler)
 		this.promptButtonsDiv.appendChild(cancelButton)
 	}
 }
 
-const AtomXtermDeleteProfileElement = document.registerElement('atom-xterm-delete-profile', {
-	prototype: AtomXtermDeleteProfileElementImpl.prototype,
+const XTerminalDeleteProfileElement = document.registerElement('x-terminal-delete-profile', {
+	prototype: XTerminalDeleteProfileElementImpl.prototype,
 })
 
 export {
-	AtomXtermDeleteProfileElement,
+	XTerminalDeleteProfileElement,
 }
