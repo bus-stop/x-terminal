@@ -1,3 +1,16 @@
+# [7.0.0](https://github.com/UziTech/x-terminal/compare/v6.5.1...v7.0.0) (2020-02-15)
+
+
+### Bug Fixes
+
+* rename everything ([d643a15](https://github.com/UziTech/x-terminal/commit/d643a1592218ad1fd401e7584ea3d7ab95c9e445))
+* use async await ([dd7ffcd](https://github.com/UziTech/x-terminal/commit/dd7ffcd1097b5a715020f49f9783e44f019327bd))
+
+
+### BREAKING CHANGES
+
+* rename everything
+
 ## [6.5.1](https://github.com/UziTech/x-terminal/compare/v6.5.0...v6.5.1) (2020-02-14)
 
 
