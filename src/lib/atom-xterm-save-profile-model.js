@@ -51,30 +51,27 @@ class AtomXtermSaveProfileModel {
 		return this.textbox
 	}
 
-	updateProfile (profileName, newProfile, profileChanges) {
-		this.profilesSingleton.setProfile(profileName, newProfile).then(() => {
-			this.profilesSingleton.reloadProfiles()
-			this.profilesSingleton.profilesLoadPromise.then(() => {
-				this.close()
-				this.atomXtermProfileMenuElement.applyProfileChanges(profileChanges)
-			})
-		})
+	async updateProfile (profileName, newProfile, profileChanges) {
+		await this.profilesSingleton.setProfile(profileName, newProfile)
+		this.profilesSingleton.reloadProfiles()
+		await this.profilesSingleton.profilesLoadPromise
+		this.close()
+		this.atomXtermProfileMenuElement.applyProfileChanges(profileChanges)
 	}
 
-	confirm (newProfile, profileChanges) {
+	async confirm (newProfile, profileChanges) {
 		const profileName = this.textbox.getText()
 		if (!profileName) {
 			// Simply do nothing.
 			return
 		}
-		this.profilesSingleton.isProfileExists(profileName).then((exists) => {
-			if (exists) {
-				this.close(false)
-				this.overwriteProfileModel.promptOverwrite(profileName, newProfile, profileChanges)
-			} else {
-				this.updateProfile(profileName, newProfile, profileChanges)
-			}
-		})
+		const exists = await this.profilesSingleton.isProfileExists(profileName)
+		if (exists) {
+			this.close(false)
+			this.overwriteProfileModel.promptOverwrite(profileName, newProfile, profileChanges)
+		} else {
+			this.updateProfile(profileName, newProfile, profileChanges)
+		}
 	}
 
 	close (focusMenuElement = true) {

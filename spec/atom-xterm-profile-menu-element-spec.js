@@ -22,7 +22,7 @@ import { AtomXtermProfileMenuElement } from '../src/lib/atom-xterm-profile-menu-
 describe('AtomXtermProfileMenuElement', () => {
 	this.element = null
 
-	beforeEach((done) => {
+	beforeEach(async () => {
 		const model = jasmine.createSpyObj(
 			'atomXtermProfileMenuModel',
 			[
@@ -53,15 +53,11 @@ describe('AtomXtermProfileMenuElement', () => {
 		model.getAtomXtermModelElement.and.returnValue(mock)
 		this.element = new AtomXtermProfileMenuElement()
 		this.element.initialize(model)
-		this.element.initializedPromise.then(() => {
-			done()
-		})
+		await this.element.initializedPromise
 	})
 
-	it('initialize()', (done) => {
-		this.element.initializedPromise.then(() => {
-			done()
-		})
+	it('initialize()', async () => {
+		await this.element.initializedPromise
 	})
 
 	it('destroy() disposables not set', () => {
@@ -174,25 +170,19 @@ describe('AtomXtermProfileMenuElement', () => {
 		expect(descriptionDiv.textContent).toBe('baz')
 	})
 
-	it('createProfilesDropDownSelectItem() check id', (done) => {
-		this.element.createProfilesDropDownSelectItem().then((select) => {
-			expect(select.getAttribute('id')).toBe('profiles-dropdown')
-			done()
-		})
+	it('createProfilesDropDownSelectItem() check id', async () => {
+		const select = await this.element.createProfilesDropDownSelectItem()
+		expect(select.getAttribute('id')).toBe('profiles-dropdown')
 	})
 
-	it('createProfilesDropDownSelectItem() check classList', (done) => {
-		this.element.createProfilesDropDownSelectItem().then((select) => {
-			expect(select.classList.contains('atom-xterm-profile-menu-item-select')).toBe(true)
-			done()
-		})
+	it('createProfilesDropDownSelectItem() check classList', async () => {
+		const select = await this.element.createProfilesDropDownSelectItem()
+		expect(select.classList.contains('atom-xterm-profile-menu-item-select')).toBe(true)
 	})
 
-	it('createProfilesDropDown()', (done) => {
-		this.element.createProfilesDropDown().then((menuItemContainer) => {
-			expect(menuItemContainer.getAttribute('id')).toBe('profiles-selection')
-			done()
-		})
+	it('createProfilesDropDown()', async () => {
+		const menuItemContainer = await this.element.createProfilesDropDown()
+		expect(menuItemContainer.getAttribute('id')).toBe('profiles-selection')
 	})
 
 	it('createProfileMenuButtons()', () => {

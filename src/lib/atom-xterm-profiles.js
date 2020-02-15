@@ -19,7 +19,7 @@
 
 import { Emitter } from 'atom'
 
-import atomXtermConfig from './atom-xterm-config'
+import { configDefaults, COLORS } from './atom-xterm-config'
 
 import fs from 'fs-extra'
 import path from 'path'
@@ -79,7 +79,7 @@ class AtomXtermProfilesSingleton {
 			throw new Error('AtomXtermProfilesSingleton cannot be instantiated directly.')
 		}
 		this.emitter = new Emitter()
-		this.profilesConfigPath = path.join(atomXtermConfig.getUserDataPath(), 'profiles.json')
+		this.profilesConfigPath = path.join(configDefaults.getUserDataPath(), 'profiles.json')
 		this.profiles = {}
 		this.previousBaseProfile = null
 		this.baseProfile = this.getDefaultProfile()
@@ -103,22 +103,22 @@ class AtomXtermProfilesSingleton {
 		return orderedProfiles
 	}
 
-	reloadProfiles () {
-		this.profilesLoadPromise = new Promise((resolve, reject) => {
-			fs.readJson(this.profilesConfigPath, (err, data) => {
-				if (err) {
-					// Create the profiles file.
-					this.updateProfiles({}).then(() => {
-						this.emitter.emit('did-reload-profiles', this.getSanitizedProfilesData())
-						resolve()
-					})
-				} else {
-					this.profiles = this.sortProfiles(data)
-					this.emitter.emit('did-reload-profiles', this.getSanitizedProfilesData())
-					resolve()
-				}
-			})
+	async reloadProfiles () {
+		let resolveLoad
+		this.profilesLoadPromise = new Promise((resolve) => {
+			resolveLoad = resolve
 		})
+		try {
+			const data = await fs.readJson(this.profilesConfigPath)
+			this.profiles = this.sortProfiles(data)
+			this.emitter.emit('did-reload-profiles', this.getSanitizedProfilesData())
+			resolveLoad()
+		} catch (err) {
+			// Create the profiles file.
+			await this.updateProfiles({})
+			this.emitter.emit('did-reload-profiles', this.getSanitizedProfilesData())
+			resolveLoad()
+		}
 	}
 
 	onDidReloadProfiles (callback) {
@@ -129,18 +129,11 @@ class AtomXtermProfilesSingleton {
 		return this.emitter.on('did-reset-base-profile', callback)
 	}
 
-	updateProfiles (newProfilesConfigData) {
-		return new Promise((resolve, reject) => {
-			fs.ensureDir(path.dirname(this.profilesConfigPath), (err) => {
-				if (err) reject(err)
-				newProfilesConfigData = this.sortProfiles(newProfilesConfigData)
-				fs.writeJson(this.profilesConfigPath, newProfilesConfigData, (err) => {
-					if (err) reject(err)
-					this.profiles = newProfilesConfigData
-					resolve()
-				})
-			})
-		})
+	async updateProfiles (newProfilesConfigData) {
+		await fs.ensureDir(path.dirname(this.profilesConfigPath))
+		newProfilesConfigData = this.sortProfiles(newProfilesConfigData)
+		await fs.writeJson(this.profilesConfigPath, newProfilesConfigData)
+		this.profiles = newProfilesConfigData
 	}
 
 	deepClone (data) {
@@ -155,43 +148,26 @@ class AtomXtermProfilesSingleton {
 
 	getDefaultProfile () {
 		return {
-			command: atomXtermConfig.getDefaultShellCommand(),
-			args: JSON.parse(atomXtermConfig.getDefaultArgs()),
-			name: atomXtermConfig.getDefaultTermType(),
-			cwd: atomXtermConfig.getDefaultCwd(),
+			command: configDefaults.getDefaultShellCommand(),
+			args: JSON.parse(configDefaults.getDefaultArgs()),
+			name: configDefaults.getDefaultTermType(),
+			cwd: configDefaults.getDefaultCwd(),
 			env: null,
-			setEnv: JSON.parse(atomXtermConfig.getDefaultSetEnv()),
-			deleteEnv: JSON.parse(atomXtermConfig.getDefaultDeleteEnv()),
+			setEnv: JSON.parse(configDefaults.getDefaultSetEnv()),
+			deleteEnv: JSON.parse(configDefaults.getDefaultDeleteEnv()),
 			encoding: null,
-			fontSize: atomXtermConfig.getDefaultFontSize(),
-			fontFamily: atomXtermConfig.getDefaultFontFamily(),
-			theme: atomXtermConfig.getDefaultTheme(),
-			colorForeground: atomXtermConfig.getDefaultColorForeground(),
-			colorBackground: atomXtermConfig.getDefaultColorBackground(),
-			colorCursor: atomXtermConfig.getDefaultColorCursor(),
-			colorCursorAccent: atomXtermConfig.getDefaultColorCursorAccent(),
-			colorSelection: atomXtermConfig.getDefaultColorSelection(),
-			colorBlack: atomXtermConfig.getDefaultColorBlack(),
-			colorRed: atomXtermConfig.getDefaultColorRed(),
-			colorGreen: atomXtermConfig.getDefaultColorGreen(),
-			colorYellow: atomXtermConfig.getDefaultColorYellow(),
-			colorBlue: atomXtermConfig.getDefaultColorBlue(),
-			colorMagenta: atomXtermConfig.getDefaultColorMagenta(),
-			colorCyan: atomXtermConfig.getDefaultColorCyan(),
-			colorWhite: atomXtermConfig.getDefaultColorWhite(),
-			colorBrightBlack: atomXtermConfig.getDefaultColorBrightBlack(),
-			colorBrightRed: atomXtermConfig.getDefaultColorBrightRed(),
-			colorBrightGreen: atomXtermConfig.getDefaultColorBrightGreen(),
-			colorBrightYellow: atomXtermConfig.getDefaultColorBrightYellow(),
-			colorBrightBlue: atomXtermConfig.getDefaultColorBrightBlue(),
-			colorBrightMagenta: atomXtermConfig.getDefaultColorBrightMagenta(),
-			colorBrightCyan: atomXtermConfig.getDefaultColorBrightCyan(),
-			colorBrightWhite: atomXtermConfig.getDefaultColorBrightWhite(),
-			leaveOpenAfterExit: atomXtermConfig.getDefaultLeaveOpenAfterExit(),
-			relaunchTerminalOnStartup: atomXtermConfig.getDefaultRelaunchTerminalOnStartup(),
+			fontSize: configDefaults.getDefaultFontSize(),
+			fontFamily: configDefaults.getDefaultFontFamily(),
+			theme: configDefaults.getDefaultTheme(),
+			...Object.values(COLORS).reduce((obj, c) => {
+				obj[c] = configDefaults[`getDefault${c.charAt(0).toUpperCase() + c.substring(1)}`]()
+				return obj
+			}, {}),
+			leaveOpenAfterExit: configDefaults.getDefaultLeaveOpenAfterExit(),
+			relaunchTerminalOnStartup: configDefaults.getDefaultRelaunchTerminalOnStartup(),
 			title: null,
-			xtermOptions: JSON.parse(atomXtermConfig.getDefaultXtermOptions()),
-			promptToStartup: atomXtermConfig.getDefaultPromptToStartup(),
+			xtermOptions: JSON.parse(configDefaults.getDefaultXtermOptions()),
+			promptToStartup: configDefaults.getDefaultPromptToStartup(),
 		}
 	}
 
@@ -225,49 +201,32 @@ class AtomXtermProfilesSingleton {
 		}
 		const encoding = atom.config.get('atom-xterm.spawnPtySettings.encoding') || null
 		let leaveOpenAfterExit = atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit')
-		if (leaveOpenAfterExit !== true && leaveOpenAfterExit !== false) leaveOpenAfterExit = atomXtermConfig.getDefaultLeaveOpenAfterExit()
+		if (leaveOpenAfterExit !== true && leaveOpenAfterExit !== false) leaveOpenAfterExit = configDefaults.getDefaultLeaveOpenAfterExit()
 		let relaunchTerminalOnStartup = atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup')
-		if (relaunchTerminalOnStartup !== true && relaunchTerminalOnStartup !== false) relaunchTerminalOnStartup = atomXtermConfig.getDefaultRelaunchTerminalOnStartup()
-		const title = atom.config.get('atom-xterm.terminalSettings.title') || atomXtermConfig.getDefaultTitle()
+		if (relaunchTerminalOnStartup !== true && relaunchTerminalOnStartup !== false) relaunchTerminalOnStartup = configDefaults.getDefaultRelaunchTerminalOnStartup()
+		const title = atom.config.get('atom-xterm.terminalSettings.title') || configDefaults.getDefaultTitle()
 		let promptToStartup = atom.config.get('atom-xterm.terminalSettings.promptToStartup')
-		if (promptToStartup !== true && promptToStartup !== false) promptToStartup = atomXtermConfig.getDefaultPromptToStartup()
+		if (promptToStartup !== true && promptToStartup !== false) promptToStartup = configDefaults.getDefaultPromptToStartup()
 		this.baseProfile = {
-			command: atom.config.get('atom-xterm.spawnPtySettings.command') || atomXtermConfig.getDefaultShellCommand(),
-			args: this.validateJsonConfigSetting('atom-xterm.spawnPtySettings.args', atomXtermConfig.getDefaultArgs()),
-			name: atom.config.get('atom-xterm.spawnPtySettings.name') || atomXtermConfig.getDefaultTermType(),
-			cwd: atom.config.get('atom-xterm.spawnPtySettings.cwd') || atomXtermConfig.getDefaultCwd(),
+			command: atom.config.get('atom-xterm.spawnPtySettings.command') || configDefaults.getDefaultShellCommand(),
+			args: this.validateJsonConfigSetting('atom-xterm.spawnPtySettings.args', configDefaults.getDefaultArgs()),
+			name: atom.config.get('atom-xterm.spawnPtySettings.name') || configDefaults.getDefaultTermType(),
+			cwd: atom.config.get('atom-xterm.spawnPtySettings.cwd') || configDefaults.getDefaultCwd(),
 			env: env,
-			setEnv: this.validateJsonConfigSetting('atom-xterm.spawnPtySettings.setEnv', atomXtermConfig.getDefaultSetEnv()),
-			deleteEnv: this.validateJsonConfigSetting('atom-xterm.spawnPtySettings.deleteEnv', atomXtermConfig.getDefaultDeleteEnv()),
+			setEnv: this.validateJsonConfigSetting('atom-xterm.spawnPtySettings.setEnv', configDefaults.getDefaultSetEnv()),
+			deleteEnv: this.validateJsonConfigSetting('atom-xterm.spawnPtySettings.deleteEnv', configDefaults.getDefaultDeleteEnv()),
 			encoding: encoding,
-			fontSize: atom.config.get('atom-xterm.terminalSettings.fontSize') || atomXtermConfig.getDefaultFontSize(),
-			fontFamily: atom.config.get('atom-xterm.terminalSettings.fontFamily') || atomXtermConfig.getDefaultFontFamily(),
-			theme: atom.config.get('atom-xterm.terminalSettings.colors.theme') || atomXtermConfig.getDefaultTheme(),
-			colorForeground: atom.config.get('atom-xterm.terminalSettings.colors.foreground') || atomXtermConfig.getDefaultColorForeground(),
-			colorBackground: atom.config.get('atom-xterm.terminalSettings.colors.background') || atomXtermConfig.getDefaultColorBackground(),
-			colorCursor: atom.config.get('atom-xterm.terminalSettings.colors.cursor') || atomXtermConfig.getDefaultColorCursor(),
-			colorCursorAccent: atom.config.get('atom-xterm.terminalSettings.colors.cursorAccent') || atomXtermConfig.getDefaultColorCursorAccent(),
-			colorSelection: atom.config.get('atom-xterm.terminalSettings.colors.selection') || atomXtermConfig.getDefaultColorSelection(),
-			colorBlack: atom.config.get('atom-xterm.terminalSettings.colors.black') || atomXtermConfig.getDefaultColorBlack(),
-			colorRed: atom.config.get('atom-xterm.terminalSettings.colors.red') || atomXtermConfig.getDefaultColorRed(),
-			colorGreen: atom.config.get('atom-xterm.terminalSettings.colors.green') || atomXtermConfig.getDefaultColorGreen(),
-			colorYellow: atom.config.get('atom-xterm.terminalSettings.colors.yellow') || atomXtermConfig.getDefaultColorYellow(),
-			colorBlue: atom.config.get('atom-xterm.terminalSettings.colors.blue') || atomXtermConfig.getDefaultColorBlue(),
-			colorMagenta: atom.config.get('atom-xterm.terminalSettings.colors.magenta') || atomXtermConfig.getDefaultColorMagenta(),
-			colorCyan: atom.config.get('atom-xterm.terminalSettings.colors.cyan') || atomXtermConfig.getDefaultColorCyan(),
-			colorWhite: atom.config.get('atom-xterm.terminalSettings.colors.white') || atomXtermConfig.getDefaultColorWhite(),
-			colorBrightBlack: atom.config.get('atom-xterm.terminalSettings.colors.brightBlack') || atomXtermConfig.getDefaultColorBrightBlack(),
-			colorBrightRed: atom.config.get('atom-xterm.terminalSettings.colors.brightRed') || atomXtermConfig.getDefaultColorBrightRed(),
-			colorBrightGreen: atom.config.get('atom-xterm.terminalSettings.colors.brightGreen') || atomXtermConfig.getDefaultColorBrightGreen(),
-			colorBrightYellow: atom.config.get('atom-xterm.terminalSettings.colors.brightYellow') || atomXtermConfig.getDefaultColorBrightYellow(),
-			colorBrightBlue: atom.config.get('atom-xterm.terminalSettings.colors.brightBlue') || atomXtermConfig.getDefaultColorBrightBlue(),
-			colorBrightMagenta: atom.config.get('atom-xterm.terminalSettings.colors.brightMagenta') || atomXtermConfig.getDefaultColorBrightMagenta(),
-			colorBrightCyan: atom.config.get('atom-xterm.terminalSettings.colors.brightCyan') || atomXtermConfig.getDefaultColorBrightCyan(),
-			colorBrightWhite: atom.config.get('atom-xterm.terminalSettings.colors.brightWhite') || atomXtermConfig.getDefaultColorBrightWhite(),
+			fontSize: atom.config.get('atom-xterm.terminalSettings.fontSize') || configDefaults.getDefaultFontSize(),
+			fontFamily: atom.config.get('atom-xterm.terminalSettings.fontFamily') || configDefaults.getDefaultFontFamily(),
+			theme: atom.config.get('atom-xterm.terminalSettings.colors.theme') || configDefaults.getDefaultTheme(),
+			...Object.keys(COLORS).reduce((obj, c) => {
+				obj[COLORS[c]] = atom.config.get(`atom-xterm.terminalSettings.colors.${c}`) || configDefaults[`getDefault${COLORS[c].charAt(0).toUpperCase() + COLORS[c].substring(1)}`]()
+				return obj
+			}, {}),
 			leaveOpenAfterExit: leaveOpenAfterExit,
 			relaunchTerminalOnStartup: relaunchTerminalOnStartup,
 			title: title || null,
-			xtermOptions: this.validateJsonConfigSetting('atom-xterm.terminalSettings.xtermOptions', atomXtermConfig.getDefaultXtermOptions()),
+			xtermOptions: this.validateJsonConfigSetting('atom-xterm.terminalSettings.xtermOptions', configDefaults.getDefaultXtermOptions()),
 			promptToStartup: promptToStartup,
 		}
 		this.emitter.emit('did-reset-base-profile', this.getBaseProfile())
@@ -286,27 +245,9 @@ class AtomXtermProfilesSingleton {
 		if ('fontSize' in data) sanitizedData.fontSize = data.fontSize
 		if ('fontFamily' in data) sanitizedData.fontFamily = data.fontFamily
 		if ('theme' in data) sanitizedData.theme = data.theme
-		if ('colorForeground' in data) sanitizedData.colorForeground = data.colorForeground
-		if ('colorBackground' in data) sanitizedData.colorBackground = data.colorBackground
-		if ('colorCursor' in data) sanitizedData.colorCursor = data.colorCursor
-		if ('colorCursorAccent' in data) sanitizedData.colorCursorAccent = data.colorCursorAccent
-		if ('colorSelection' in data) sanitizedData.colorSelection = data.colorSelection
-		if ('colorBlack' in data) sanitizedData.colorBlack = data.colorBlack
-		if ('colorRed' in data) sanitizedData.colorRed = data.colorRed
-		if ('colorGreen' in data) sanitizedData.colorGreen = data.colorGreen
-		if ('colorYellow' in data) sanitizedData.colorYellow = data.colorYellow
-		if ('colorBlue' in data) sanitizedData.colorBlue = data.colorBlue
-		if ('colorMagenta' in data) sanitizedData.colorMagenta = data.colorMagenta
-		if ('colorCyan' in data) sanitizedData.colorCyan = data.colorCyan
-		if ('colorWhite' in data) sanitizedData.colorWhite = data.colorWhite
-		if ('colorBrightBlack' in data) sanitizedData.colorBrightBlack = data.colorBrightBlack
-		if ('colorBrightRed' in data) sanitizedData.colorBrightRed = data.colorBrightRed
-		if ('colorBrightGreen' in data) sanitizedData.colorBrightGreen = data.colorBrightGreen
-		if ('colorBrightYellow' in data) sanitizedData.colorBrightYellow = data.colorBrightYellow
-		if ('colorBrightBlue' in data) sanitizedData.colorBrightBlue = data.colorBrightBlue
-		if ('colorBrightMagenta' in data) sanitizedData.colorBrightMagenta = data.colorBrightMagenta
-		if ('colorBrightCyan' in data) sanitizedData.colorBrightCyan = data.colorBrightCyan
-		if ('colorBrightWhite' in data) sanitizedData.colorBrightWhite = data.colorBrightWhite
+		for (const c of Object.values(COLORS)) {
+			if (c in data) sanitizedData[c] = data[c]
+		}
 		if ('leaveOpenAfterExit' in data) sanitizedData.leaveOpenAfterExit = data.leaveOpenAfterExit
 		if ('relaunchTerminalOnStartup' in data) sanitizedData.relaunchTerminalOnStartup = data.relaunchTerminalOnStartup
 		if ('title' in data) sanitizedData.title = data.title
@@ -323,67 +264,44 @@ class AtomXtermProfilesSingleton {
 		return retval
 	}
 
-	getProfiles () {
-		return new Promise((resolve, reject) => {
-			this.profilesLoadPromise.then(() => {
-				resolve(this.getSanitizedProfilesData())
-			})
-		})
+	async getProfiles () {
+		await this.profilesLoadPromise
+		return this.getSanitizedProfilesData()
 	}
 
-	getProfile (profileName) {
-		return new Promise((resolve, reject) => {
-			this.profilesLoadPromise.then(() => {
-				resolve(Object.assign(
-					{},
-					this.deepClone(this.baseProfile),
-					this.sanitizeData(this.profiles[profileName] || {}),
-				))
-			})
-		})
+	async getProfile (profileName) {
+		await this.profilesLoadPromise
+		return {
+			...this.deepClone(this.baseProfile),
+			...this.sanitizeData(this.profiles[profileName] || {}),
+		}
 	}
 
-	isProfileExists (profileName) {
-		return new Promise((resolve, reject) => {
-			this.profilesLoadPromise.then(() => {
-				resolve(profileName in this.profiles)
-			})
-		})
+	async isProfileExists (profileName) {
+		await this.profilesLoadPromise
+		return profileName in this.profiles
 	}
 
-	setProfile (profileName, data) {
-		return new Promise((resolve, reject) => {
-			this.profilesLoadPromise.then(() => {
-				const profileData = Object.assign(
-					{},
-					this.deepClone(this.baseProfile),
-					this.sanitizeData(data),
-				)
-				const newProfilesConfigData = Object.assign(
-					{},
-					this.deepClone(this.profiles),
-				)
-				newProfilesConfigData[profileName] = profileData
-				this.updateProfiles(newProfilesConfigData).then(() => {
-					resolve()
-				})
-			})
-		})
+	async setProfile (profileName, data) {
+		await this.profilesLoadPromise
+		const profileData = {
+			...this.deepClone(this.baseProfile),
+			...this.sanitizeData(data),
+		}
+		const newProfilesConfigData = {
+			...this.deepClone(this.profiles),
+		}
+		newProfilesConfigData[profileName] = profileData
+		await this.updateProfiles(newProfilesConfigData)
 	}
 
-	deleteProfile (profileName) {
-		return new Promise((resolve, reject) => {
-			this.profilesLoadPromise.then(() => {
-				const newProfilesConfigData = Object.assign(
-					{},
-					this.deepClone(this.profiles),
-				)
-				delete newProfilesConfigData[profileName]
-				this.updateProfiles(newProfilesConfigData).then(() => {
-					resolve()
-				})
-			})
-		})
+	async deleteProfile (profileName) {
+		await this.profilesLoadPromise
+		const newProfilesConfigData = {
+			...this.deepClone(this.profiles),
+		}
+		delete newProfilesConfigData[profileName]
+		await this.updateProfiles(newProfilesConfigData)
 	}
 
 	generateNewUri () {
@@ -419,27 +337,9 @@ class AtomXtermProfilesSingleton {
 		// Theme to use.
 		if ('theme' in data) url.searchParams.set('theme', data.theme)
 		// Colors
-		if ('colorForeground' in data) url.searchParams.set('colorForeground', data.colorForeground)
-		if ('colorBackground' in data) url.searchParams.set('colorBackground', data.colorBackground)
-		if ('colorCursor' in data) url.searchParams.set('colorCursor', data.colorCursor)
-		if ('colorCursorAccent' in data) url.searchParams.set('colorCursorAccent', data.colorCursorAccent)
-		if ('colorSelection' in data) url.searchParams.set('colorSelection', data.colorSelection)
-		if ('colorBlack' in data) url.searchParams.set('colorBlack', data.colorBlack)
-		if ('colorRed' in data) url.searchParams.set('colorRed', data.colorRed)
-		if ('colorGreen' in data) url.searchParams.set('colorGreen', data.colorGreen)
-		if ('colorYellow' in data) url.searchParams.set('colorYellow', data.colorYellow)
-		if ('colorBlue' in data) url.searchParams.set('colorBlue', data.colorBlue)
-		if ('colorMagenta' in data) url.searchParams.set('colorMagenta', data.colorMagenta)
-		if ('colorCyan' in data) url.searchParams.set('colorCyan', data.colorCyan)
-		if ('colorWhite' in data) url.searchParams.set('colorWhite', data.colorWhite)
-		if ('colorBrightBlack' in data) url.searchParams.set('colorBrightBlack', data.colorBrightBlack)
-		if ('colorBrightRed' in data) url.searchParams.set('colorBrightRed', data.colorBrightRed)
-		if ('colorBrightGreen' in data) url.searchParams.set('colorBrightGreen', data.colorBrightGreen)
-		if ('colorBrightYellow' in data) url.searchParams.set('colorBrightYellow', data.colorBrightYellow)
-		if ('colorBrightBlue' in data) url.searchParams.set('colorBrightBlue', data.colorBrightBlue)
-		if ('colorBrightMagenta' in data) url.searchParams.set('colorBrightMagenta', data.colorBrightMagenta)
-		if ('colorBrightCyan' in data) url.searchParams.set('colorBrightCyan', data.colorBrightCyan)
-		if ('colorBrightWhite' in data) url.searchParams.set('colorBrightWhite', data.colorBrightWhite)
+		for (const c of Object.values(COLORS)) {
+			if (c in data) url.searchParams.set(c, data[c])
+		}
 		// This determines whether to leave the terminal tab open when the command
 		// has finished running.
 		if ('leaveOpenAfterExit' in data) url.searchParams.set('leaveOpenAfterExit', JSON.stringify(data.leaveOpenAfterExit))
@@ -496,69 +396,11 @@ class AtomXtermProfilesSingleton {
 		param = url.searchParams.get('theme')
 		if (param) newProfile.theme = param
 		if (!('theme' in newProfile)) newProfile.theme = baseProfile.theme
-		param = url.searchParams.get('colorForeground')
-		if (param) newProfile.colorForeground = param
-		if (!('colorForeground' in newProfile)) newProfile.colorForeground = baseProfile.colorForeground
-		param = url.searchParams.get('colorBackground')
-		if (param) newProfile.colorBackground = param
-		if (!('colorBackground' in newProfile)) newProfile.colorBackground = baseProfile.colorBackground
-		param = url.searchParams.get('colorCursor')
-		if (param) newProfile.colorCursor = param
-		if (!('colorCursor' in newProfile)) newProfile.colorCursor = baseProfile.colorCursor
-		param = url.searchParams.get('colorCursorAccent')
-		if (param) newProfile.colorCursorAccent = param
-		if (!('colorCursorAccent' in newProfile)) newProfile.colorCursorAccent = baseProfile.colorCursorAccent
-		param = url.searchParams.get('colorSelection')
-		if (param) newProfile.colorSelection = param
-		if (!('colorSelection' in newProfile)) newProfile.colorSelection = baseProfile.colorSelection
-		param = url.searchParams.get('colorBlack')
-		if (param) newProfile.colorBlack = param
-		if (!('colorBlack' in newProfile)) newProfile.colorBlack = baseProfile.colorBlack
-		param = url.searchParams.get('colorRed')
-		if (param) newProfile.colorRed = param
-		if (!('colorRed' in newProfile)) newProfile.colorRed = baseProfile.colorRed
-		param = url.searchParams.get('colorGreen')
-		if (param) newProfile.colorGreen = param
-		if (!('colorGreen' in newProfile)) newProfile.colorGreen = baseProfile.colorGreen
-		param = url.searchParams.get('colorYellow')
-		if (param) newProfile.colorYellow = param
-		if (!('colorYellow' in newProfile)) newProfile.colorYellow = baseProfile.colorYellow
-		param = url.searchParams.get('colorBlue')
-		if (param) newProfile.colorBlue = param
-		if (!('colorBlue' in newProfile)) newProfile.colorBlue = baseProfile.colorBlue
-		param = url.searchParams.get('colorMagenta')
-		if (param) newProfile.colorMagenta = param
-		if (!('colorMagenta' in newProfile)) newProfile.colorMagenta = baseProfile.colorMagenta
-		param = url.searchParams.get('colorCyan')
-		if (param) newProfile.colorCyan = param
-		if (!('colorCyan' in newProfile)) newProfile.colorCyan = baseProfile.colorCyan
-		param = url.searchParams.get('colorWhite')
-		if (param) newProfile.colorWhite = param
-		if (!('colorWhite' in newProfile)) newProfile.colorWhite = baseProfile.colorWhite
-		param = url.searchParams.get('colorBrightBlack')
-		if (param) newProfile.colorBrightBlack = param
-		if (!('colorBrightBlack' in newProfile)) newProfile.colorBrightBlack = baseProfile.colorBrightBlack
-		param = url.searchParams.get('colorBrightRed')
-		if (param) newProfile.colorBrightRed = param
-		if (!('colorBrightRed' in newProfile)) newProfile.colorBrightRed = baseProfile.colorBrightRed
-		param = url.searchParams.get('colorBrightGreen')
-		if (param) newProfile.colorBrightGreen = param
-		if (!('colorBrightGreen' in newProfile)) newProfile.colorBrightGreen = baseProfile.colorBrightGreen
-		param = url.searchParams.get('colorBrightYellow')
-		if (param) newProfile.colorBrightYellow = param
-		if (!('colorBrightYellow' in newProfile)) newProfile.colorBrightYellow = baseProfile.colorBrightYellow
-		param = url.searchParams.get('colorBrightBlue')
-		if (param) newProfile.colorBrightBlue = param
-		if (!('colorBrightBlue' in newProfile)) newProfile.colorBrightBlue = baseProfile.colorBrightBlue
-		param = url.searchParams.get('colorBrightMagenta')
-		if (param) newProfile.colorBrightMagenta = param
-		if (!('colorBrightMagenta' in newProfile)) newProfile.colorBrightMagenta = baseProfile.colorBrightMagenta
-		param = url.searchParams.get('colorBrightCyan')
-		if (param) newProfile.colorBrightCyan = param
-		if (!('colorBrightCyan' in newProfile)) newProfile.colorBrightCyan = baseProfile.colorBrightCyan
-		param = url.searchParams.get('colorBrightWhite')
-		if (param) newProfile.colorBrightWhite = param
-		if (!('colorBrightWhite' in newProfile)) newProfile.colorBrightWhite = baseProfile.colorBrightWhite
+		for (const c of Object.values(COLORS)) {
+			param = url.searchParams.get(c)
+			if (param) newProfile[c] = param
+			if (!(c in newProfile)) newProfile[c] = baseProfile[c]
+		}
 		param = url.searchParams.get('leaveOpenAfterExit')
 		if (param) newProfile.leaveOpenAfterExit = JSON.parse(param)
 		if (!('leaveOpenAfterExit' in newProfile && newProfile.leaveOpenAfterExit !== null && newProfile.leaveOpenAfterExit !== '')) newProfile.leaveOpenAfterExit = baseProfile.leaveOpenAfterExit

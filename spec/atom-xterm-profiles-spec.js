@@ -19,13 +19,15 @@
 
 import { CompositeDisposable } from 'atom'
 
-import atomXtermConfig from '../src/lib/atom-xterm-config'
+import { configDefaults } from '../src/lib/atom-xterm-config'
 import { AtomXtermProfilesSingleton } from '../src/lib/atom-xterm-profiles'
 
 import path from 'path'
 
-import tmp from 'tmp'
+import temp from 'temp'
 import { URL } from 'whatwg-url'
+
+temp.track()
 
 describe('AtomXtermProfilesSingleton', () => {
 	const getDefaultExpectedProfile = () => {
@@ -41,11 +43,11 @@ describe('AtomXtermProfilesSingleton', () => {
 			fontSize: 14,
 			fontFamily: 'monospace',
 			theme: 'Custom',
-			colorForeground: '#fff',
-			colorBackground: '#000',
-			colorCursor: '#fff',
-			colorCursorAccent: '#000',
-			colorSelection: 'rgba(255, 255, 255, .3)',
+			colorForeground: '#ffffff',
+			colorBackground: '#000000',
+			colorCursor: '#ffffff',
+			colorCursorAccent: '#000000',
+			colorSelection: '#4d4d4d',
 			colorBlack: '#2e3436',
 			colorRed: '#cc0000',
 			colorGreen: '#4e9a06',
@@ -66,9 +68,7 @@ describe('AtomXtermProfilesSingleton', () => {
 			relaunchTerminalOnStartup: true,
 			title: 'foo',
 			xtermOptions: {
-				theme: {
-					background: '#FFF',
-				},
+				cursorBlink: true,
 			},
 			promptToStartup: false,
 		}
@@ -202,9 +202,7 @@ describe('AtomXtermProfilesSingleton', () => {
 		}
 		if (key === 'atom-xterm.terminalSettings.xtermOptions') {
 			return JSON.stringify({
-				theme: {
-					background: '#FFF',
-				},
+				cursorBlink: true,
 			})
 		}
 		if (key === 'atom-xterm.terminalSettings.promptToStartup') {
@@ -213,29 +211,21 @@ describe('AtomXtermProfilesSingleton', () => {
 		throw new Error('Unknown key: ' + key)
 	}
 
-	beforeEach((done) => {
+	beforeEach(async () => {
 		this.origAtomConfigGet = atom.config.get
 		this.disposables = new CompositeDisposable()
 		this.origProfilesConfigPath = AtomXtermProfilesSingleton.instance.profilesConfigPath
 		AtomXtermProfilesSingleton.instance.resetBaseProfile()
-		AtomXtermProfilesSingleton.instance.profilesLoadPromise.then(() => {
-			tmp.dir({ unsafeCleanup: true }, (err, _path, cleanupCallback) => {
-				if (err) {
-					throw err
-				}
-				AtomXtermProfilesSingleton.instance.profilesConfigPath = path.join(_path, 'profiles.json')
-				this.tmpdirCleanupCallback = cleanupCallback
-				AtomXtermProfilesSingleton.instance.reloadProfiles()
-				AtomXtermProfilesSingleton.instance.profilesLoadPromise.then(() => {
-					done()
-				})
-			})
-		})
+		await AtomXtermProfilesSingleton.instance.profilesLoadPromise
+		const _path = await temp.mkdir()
+		AtomXtermProfilesSingleton.instance.profilesConfigPath = path.join(_path, 'profiles.json')
+		AtomXtermProfilesSingleton.instance.reloadProfiles()
+		await AtomXtermProfilesSingleton.instance.profilesLoadPromise
 	})
 
-	afterEach(() => {
+	afterEach(async () => {
 		atom.config.get = this.origAtomConfigGet
-		this.tmpdirCleanupCallback()
+		await temp.cleanup()
 		AtomXtermProfilesSingleton.instance.profilesConfigPath = this.origProfilesConfigPath
 		this.disposables.dispose()
 	})
@@ -252,7 +242,7 @@ describe('AtomXtermProfilesSingleton', () => {
 	})
 
 	it('has proper profiles.json path', () => {
-		const expected = path.join(atomXtermConfig.getUserDataPath(), 'profiles.json')
+		const expected = path.join(configDefaults.getUserDataPath(), 'profiles.json')
 		// Need to check to original profiles config path.
 		expect(this.origProfilesConfigPath).toBe(expected)
 	})
@@ -288,14 +278,12 @@ describe('AtomXtermProfilesSingleton', () => {
 		this.disposables.add(AtomXtermProfilesSingleton.instance.onDidResetBaseProfile((baseProfile) => {}))
 	})
 
-	it('updateProfiles()', (done) => {
+	it('updateProfiles()', async () => {
 		const expected = {
 			foo: 'bar',
 		}
-		AtomXtermProfilesSingleton.instance.updateProfiles(expected).then(() => {
-			expect(AtomXtermProfilesSingleton.instance.profiles).toEqual(expected)
-			done()
-		})
+		await AtomXtermProfilesSingleton.instance.updateProfiles(expected)
+		expect(AtomXtermProfilesSingleton.instance.profiles).toEqual(expected)
 	})
 
 	it('deepClone()', () => {
@@ -309,47 +297,47 @@ describe('AtomXtermProfilesSingleton', () => {
 	})
 
 	it('getBaseProfile()', () => {
-		const env = atom.config.get('atom-xterm.spawnPtySettings.env') || atomXtermConfig.getDefaultEnv()
-		const encoding = atom.config.get('atom-xterm.spawnPtySettings.encoding') || atomXtermConfig.getDefaultEncoding()
-		const title = atom.config.get('atom-xterm.terminalSettings.title') || atomXtermConfig.getDefaultTitle()
+		const env = atom.config.get('atom-xterm.spawnPtySettings.env') || configDefaults.getDefaultEnv()
+		const encoding = atom.config.get('atom-xterm.spawnPtySettings.encoding') || configDefaults.getDefaultEncoding()
+		const title = atom.config.get('atom-xterm.terminalSettings.title') || configDefaults.getDefaultTitle()
 		const expected = {
-			command: atom.config.get('atom-xterm.spawnPtySettings.command') || atomXtermConfig.getDefaultShellCommand(),
-			args: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.args') || atomXtermConfig.getDefaultArgs()),
-			name: atom.config.get('atom-xterm.spawnPtySettings.name') || atomXtermConfig.getDefaultTermType(),
-			cwd: atom.config.get('atom-xterm.spawnPtySettings.cwd') || atomXtermConfig.getDefaultCwd(),
+			command: atom.config.get('atom-xterm.spawnPtySettings.command') || configDefaults.getDefaultShellCommand(),
+			args: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.args') || configDefaults.getDefaultArgs()),
+			name: atom.config.get('atom-xterm.spawnPtySettings.name') || configDefaults.getDefaultTermType(),
+			cwd: atom.config.get('atom-xterm.spawnPtySettings.cwd') || configDefaults.getDefaultCwd(),
 			env: JSON.parse(env || 'null'),
-			setEnv: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.setEnv') || atomXtermConfig.getDefaultSetEnv()),
-			deleteEnv: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.deleteEnv') || atomXtermConfig.getDefaultDeleteEnv()),
+			setEnv: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.setEnv') || configDefaults.getDefaultSetEnv()),
+			deleteEnv: JSON.parse(atom.config.get('atom-xterm.spawnPtySettings.deleteEnv') || configDefaults.getDefaultDeleteEnv()),
 			encoding: encoding || null,
-			fontSize: atom.config.get('atom-xterm.terminalSettings.fontSize') || atomXtermConfig.getDefaultFontSize(),
-			fontFamily: atom.config.get('atom-xterm.terminalSettings.fontFamily') || atomXtermConfig.getDefaultFontFamily(),
-			theme: atom.config.get('atom-xterm.terminalSettings.colors.theme') || atomXtermConfig.getDefaultTheme(),
-			colorForeground: atom.config.get('atom-xterm.terminalSettings.colors.foreground') || atomXtermConfig.getDefaultColorForeground(),
-			colorBackground: atom.config.get('atom-xterm.terminalSettings.colors.background') || atomXtermConfig.getDefaultColorBackground(),
-			colorCursor: atom.config.get('atom-xterm.terminalSettings.colors.cursor') || atomXtermConfig.getDefaultColorCursor(),
-			colorCursorAccent: atom.config.get('atom-xterm.terminalSettings.colors.cursorAccent') || atomXtermConfig.getDefaultColorCursorAccent(),
-			colorSelection: atom.config.get('atom-xterm.terminalSettings.colors.selection') || atomXtermConfig.getDefaultColorSelection(),
-			colorBlack: atom.config.get('atom-xterm.terminalSettings.colors.black') || atomXtermConfig.getDefaultColorBlack(),
-			colorRed: atom.config.get('atom-xterm.terminalSettings.colors.red') || atomXtermConfig.getDefaultColorRed(),
-			colorGreen: atom.config.get('atom-xterm.terminalSettings.colors.green') || atomXtermConfig.getDefaultColorGreen(),
-			colorYellow: atom.config.get('atom-xterm.terminalSettings.colors.Yellow') || atomXtermConfig.getDefaultColorYellow(),
-			colorBlue: atom.config.get('atom-xterm.terminalSettings.colors.blue') || atomXtermConfig.getDefaultColorBlue(),
-			colorMagenta: atom.config.get('atom-xterm.terminalSettings.colors.Magenta') || atomXtermConfig.getDefaultColorMagenta(),
-			colorCyan: atom.config.get('atom-xterm.terminalSettings.colors.cyan') || atomXtermConfig.getDefaultColorCyan(),
-			colorWhite: atom.config.get('atom-xterm.terminalSettings.colors.White') || atomXtermConfig.getDefaultColorWhite(),
-			colorBrightBlack: atom.config.get('atom-xterm.terminalSettings.colors.brightBlack') || atomXtermConfig.getDefaultColorBrightBlack(),
-			colorBrightRed: atom.config.get('atom-xterm.terminalSettings.colors.brightRed') || atomXtermConfig.getDefaultColorBrightRed(),
-			colorBrightGreen: atom.config.get('atom-xterm.terminalSettings.colors.brightGreen') || atomXtermConfig.getDefaultColorBrightGreen(),
-			colorBrightYellow: atom.config.get('atom-xterm.terminalSettings.colors.brightYellow') || atomXtermConfig.getDefaultColorBrightYellow(),
-			colorBrightBlue: atom.config.get('atom-xterm.terminalSettings.colors.brightBlue') || atomXtermConfig.getDefaultColorBrightBlue(),
-			colorBrightMagenta: atom.config.get('atom-xterm.terminalSettings.colors.brightMagenta') || atomXtermConfig.getDefaultColorBrightMagenta(),
-			colorBrightCyan: atom.config.get('atom-xterm.terminalSettings.colors.brightCyan') || atomXtermConfig.getDefaultColorBrightCyan(),
-			colorBrightWhite: atom.config.get('atom-xterm.terminalSettings.colors.brightWhite') || atomXtermConfig.getDefaultColorBrightWhite(),
-			leaveOpenAfterExit: atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit') || atomXtermConfig.getDefaultLeaveOpenAfterExit(),
-			relaunchTerminalOnStartup: atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup') || atomXtermConfig.getDefaultRelaunchTerminalOnStartup(),
+			fontSize: atom.config.get('atom-xterm.terminalSettings.fontSize') || configDefaults.getDefaultFontSize(),
+			fontFamily: atom.config.get('atom-xterm.terminalSettings.fontFamily') || configDefaults.getDefaultFontFamily(),
+			theme: atom.config.get('atom-xterm.terminalSettings.colors.theme') || configDefaults.getDefaultTheme(),
+			colorForeground: atom.config.get('atom-xterm.terminalSettings.colors.foreground') || configDefaults.getDefaultColorForeground(),
+			colorBackground: atom.config.get('atom-xterm.terminalSettings.colors.background') || configDefaults.getDefaultColorBackground(),
+			colorCursor: atom.config.get('atom-xterm.terminalSettings.colors.cursor') || configDefaults.getDefaultColorCursor(),
+			colorCursorAccent: atom.config.get('atom-xterm.terminalSettings.colors.cursorAccent') || configDefaults.getDefaultColorCursorAccent(),
+			colorSelection: atom.config.get('atom-xterm.terminalSettings.colors.selection') || configDefaults.getDefaultColorSelection(),
+			colorBlack: atom.config.get('atom-xterm.terminalSettings.colors.black') || configDefaults.getDefaultColorBlack(),
+			colorRed: atom.config.get('atom-xterm.terminalSettings.colors.red') || configDefaults.getDefaultColorRed(),
+			colorGreen: atom.config.get('atom-xterm.terminalSettings.colors.green') || configDefaults.getDefaultColorGreen(),
+			colorYellow: atom.config.get('atom-xterm.terminalSettings.colors.Yellow') || configDefaults.getDefaultColorYellow(),
+			colorBlue: atom.config.get('atom-xterm.terminalSettings.colors.blue') || configDefaults.getDefaultColorBlue(),
+			colorMagenta: atom.config.get('atom-xterm.terminalSettings.colors.Magenta') || configDefaults.getDefaultColorMagenta(),
+			colorCyan: atom.config.get('atom-xterm.terminalSettings.colors.cyan') || configDefaults.getDefaultColorCyan(),
+			colorWhite: atom.config.get('atom-xterm.terminalSettings.colors.White') || configDefaults.getDefaultColorWhite(),
+			colorBrightBlack: atom.config.get('atom-xterm.terminalSettings.colors.brightBlack') || configDefaults.getDefaultColorBrightBlack(),
+			colorBrightRed: atom.config.get('atom-xterm.terminalSettings.colors.brightRed') || configDefaults.getDefaultColorBrightRed(),
+			colorBrightGreen: atom.config.get('atom-xterm.terminalSettings.colors.brightGreen') || configDefaults.getDefaultColorBrightGreen(),
+			colorBrightYellow: atom.config.get('atom-xterm.terminalSettings.colors.brightYellow') || configDefaults.getDefaultColorBrightYellow(),
+			colorBrightBlue: atom.config.get('atom-xterm.terminalSettings.colors.brightBlue') || configDefaults.getDefaultColorBrightBlue(),
+			colorBrightMagenta: atom.config.get('atom-xterm.terminalSettings.colors.brightMagenta') || configDefaults.getDefaultColorBrightMagenta(),
+			colorBrightCyan: atom.config.get('atom-xterm.terminalSettings.colors.brightCyan') || configDefaults.getDefaultColorBrightCyan(),
+			colorBrightWhite: atom.config.get('atom-xterm.terminalSettings.colors.brightWhite') || configDefaults.getDefaultColorBrightWhite(),
+			leaveOpenAfterExit: atom.config.get('atom-xterm.terminalSettings.leaveOpenAfterExit') || configDefaults.getDefaultLeaveOpenAfterExit(),
+			relaunchTerminalOnStartup: atom.config.get('atom-xterm.terminalSettings.relaunchTerminalOnStartup') || configDefaults.getDefaultRelaunchTerminalOnStartup(),
 			title: title || null,
-			xtermOptions: JSON.parse(atom.config.get('atom-xterm.terminalSettings.xtermOptions') || atomXtermConfig.getDefaultXtermOptions()),
-			promptToStartup: atom.config.get('atom-xterm.terminalSettings.promptToStartup') || atomXtermConfig.getDefaultPromptToStartup(),
+			xtermOptions: JSON.parse(atom.config.get('atom-xterm.terminalSettings.xtermOptions') || configDefaults.getDefaultXtermOptions()),
+			promptToStartup: atom.config.get('atom-xterm.terminalSettings.promptToStartup') || configDefaults.getDefaultPromptToStartup(),
 		}
 		expect(AtomXtermProfilesSingleton.instance.getBaseProfile()).toEqual(expected)
 	})
@@ -394,9 +382,7 @@ describe('AtomXtermProfilesSingleton', () => {
 			relaunchTerminalOnStartup: false,
 			title: 'foo',
 			xtermOptions: {
-				theme: {
-					background: '#FFF',
-				},
+				cursorBlink: true,
 			},
 			promptToStartup: true,
 		}
@@ -434,70 +420,54 @@ describe('AtomXtermProfilesSingleton', () => {
 		expect(AtomXtermProfilesSingleton.instance.sanitizeData(data)).toEqual(expected)
 	})
 
-	it('getProfiles() no profiles defined', (done) => {
-		AtomXtermProfilesSingleton.instance.getProfiles().then((profiles) => {
-			expect(profiles).toEqual({})
-			done()
-		})
+	it('getProfiles() no profiles defined', async () => {
+		const profiles = await AtomXtermProfilesSingleton.instance.getProfiles()
+		expect(profiles).toEqual({})
 	})
 
-	it('getProfile() no profiles defined', (done) => {
-		AtomXtermProfilesSingleton.instance.getProfile('foo').then((profile) => {
-			expect(profile).toEqual(AtomXtermProfilesSingleton.instance.getBaseProfile())
-			done()
-		})
+	it('getProfile() no profiles defined', async () => {
+		const profile = await AtomXtermProfilesSingleton.instance.getProfile('foo')
+		expect(profile).toEqual(AtomXtermProfilesSingleton.instance.getBaseProfile())
 	})
 
-	it('isProfileExists() non-existent profile', (done) => {
-		AtomXtermProfilesSingleton.instance.isProfileExists('foo').then((exists) => {
-			expect(exists).toBe(false)
-			done()
-		})
+	it('isProfileExists() non-existent profile', async () => {
+		const exists = await AtomXtermProfilesSingleton.instance.isProfileExists('foo')
+		expect(exists).toBe(false)
 	})
 
-	it('isProfileExists() existent profile', (done) => {
+	it('isProfileExists() existent profile', async () => {
 		const data = {
 			command: './manage.py',
 			args: ['runserver', '9000'],
 		}
 		const profileName = 'Django module runserver'
-		AtomXtermProfilesSingleton.instance.setProfile(profileName, data).then(() => {
-			AtomXtermProfilesSingleton.instance.isProfileExists(profileName).then((exists) => {
-				expect(exists).toBe(true)
-				done()
-			})
-		})
+		await AtomXtermProfilesSingleton.instance.setProfile(profileName, data)
+		const exists = await AtomXtermProfilesSingleton.instance.isProfileExists(profileName)
+		expect(exists).toBe(true)
 	})
 
-	it('setProfile()', (done) => {
+	it('setProfile()', async () => {
 		const data = {
 			command: './manage.py',
 			args: ['runserver', '9000'],
 		}
 		const expected = Object.assign({}, AtomXtermProfilesSingleton.instance.getBaseProfile(), data)
 		const profileName = 'Django module runserver'
-		AtomXtermProfilesSingleton.instance.setProfile(profileName, data).then(() => {
-			AtomXtermProfilesSingleton.instance.getProfile(profileName).then((profile) => {
-				expect(profile).toEqual(expected)
-				done()
-			})
-		})
+		await AtomXtermProfilesSingleton.instance.setProfile(profileName, data)
+		const profile = await AtomXtermProfilesSingleton.instance.getProfile(profileName)
+		expect(profile).toEqual(expected)
 	})
 
-	it('deleteProfile()', (done) => {
+	it('deleteProfile()', async () => {
 		const data = {
 			command: './manage.py',
 			args: ['runserver', '9000'],
 		}
 		const profileName = 'Django module runserver'
-		AtomXtermProfilesSingleton.instance.setProfile(profileName, data).then(() => {
-			AtomXtermProfilesSingleton.instance.deleteProfile(profileName).then(() => {
-				AtomXtermProfilesSingleton.instance.isProfileExists(profileName).then((exists) => {
-					expect(exists).toBe(false)
-					done()
-				})
-			})
-		})
+		await AtomXtermProfilesSingleton.instance.setProfile(profileName, data)
+		await AtomXtermProfilesSingleton.instance.deleteProfile(profileName)
+		const exists = await AtomXtermProfilesSingleton.instance.isProfileExists(profileName)
+		expect(exists).toBe(false)
 	})
 
 	it('generateNewUri() starts with atom-xterm://', () => {
@@ -560,9 +530,7 @@ describe('AtomXtermProfilesSingleton', () => {
 			relaunchTerminalOnStartup: true,
 			title: '',
 			xtermOptions: {
-				theme: {
-					background: '#FFF',
-				},
+				cursorBlink: true,
 			},
 			promptToStartup: false,
 		}
@@ -570,7 +538,7 @@ describe('AtomXtermProfilesSingleton', () => {
 			foo: 'bar',
 			baz: null,
 		})
-		const expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&promptToStartup=false&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=&xtermOptions=%7B%22theme%22%3A%7B%22background%22%3A%22%23FFF%22%7D%7D'
+		const expected = 'args=%5B%5D&command=somecommand&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&promptToStartup=false&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=&xtermOptions=%7B%22cursorBlink%22%3Atrue%7D'
 		const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(data)
 		url.searchParams.sort()
 		expect(url.searchParams.toString()).toEqual(expected)
@@ -579,43 +547,43 @@ describe('AtomXtermProfilesSingleton', () => {
 	it('createProfileDataFromUri() base URI', () => {
 		const url = new URL('atom-xterm://somesessionid/')
 		const expected = {
-			command: atomXtermConfig.getDefaultShellCommand(),
-			args: JSON.parse(atomXtermConfig.getDefaultArgs()),
-			name: atomXtermConfig.getDefaultTermType(),
-			cwd: atomXtermConfig.getDefaultCwd(),
+			command: configDefaults.getDefaultShellCommand(),
+			args: JSON.parse(configDefaults.getDefaultArgs()),
+			name: configDefaults.getDefaultTermType(),
+			cwd: configDefaults.getDefaultCwd(),
 			env: null,
-			setEnv: JSON.parse(atomXtermConfig.getDefaultSetEnv()),
-			deleteEnv: JSON.parse(atomXtermConfig.getDefaultDeleteEnv()),
+			setEnv: JSON.parse(configDefaults.getDefaultSetEnv()),
+			deleteEnv: JSON.parse(configDefaults.getDefaultDeleteEnv()),
 			encoding: null,
-			fontSize: atomXtermConfig.getDefaultFontSize(),
-			fontFamily: atomXtermConfig.getDefaultFontFamily(),
-			theme: atomXtermConfig.getDefaultTheme(),
-			colorForeground: atomXtermConfig.getDefaultColorForeground(),
-			colorBackground: atomXtermConfig.getDefaultColorBackground(),
-			colorCursor: atomXtermConfig.getDefaultColorCursor(),
-			colorCursorAccent: atomXtermConfig.getDefaultColorCursorAccent(),
-			colorSelection: atomXtermConfig.getDefaultColorSelection(),
-			colorBlack: atomXtermConfig.getDefaultColorBlack(),
-			colorRed: atomXtermConfig.getDefaultColorRed(),
-			colorGreen: atomXtermConfig.getDefaultColorGreen(),
-			colorYellow: atomXtermConfig.getDefaultColorYellow(),
-			colorBlue: atomXtermConfig.getDefaultColorBlue(),
-			colorMagenta: atomXtermConfig.getDefaultColorMagenta(),
-			colorCyan: atomXtermConfig.getDefaultColorCyan(),
-			colorWhite: atomXtermConfig.getDefaultColorWhite(),
-			colorBrightBlack: atomXtermConfig.getDefaultColorBrightBlack(),
-			colorBrightRed: atomXtermConfig.getDefaultColorBrightRed(),
-			colorBrightGreen: atomXtermConfig.getDefaultColorBrightGreen(),
-			colorBrightYellow: atomXtermConfig.getDefaultColorBrightYellow(),
-			colorBrightBlue: atomXtermConfig.getDefaultColorBrightBlue(),
-			colorBrightMagenta: atomXtermConfig.getDefaultColorBrightMagenta(),
-			colorBrightCyan: atomXtermConfig.getDefaultColorBrightCyan(),
-			colorBrightWhite: atomXtermConfig.getDefaultColorBrightWhite(),
-			leaveOpenAfterExit: atomXtermConfig.getDefaultLeaveOpenAfterExit(),
-			relaunchTerminalOnStartup: atomXtermConfig.getDefaultRelaunchTerminalOnStartup(),
+			fontSize: configDefaults.getDefaultFontSize(),
+			fontFamily: configDefaults.getDefaultFontFamily(),
+			theme: configDefaults.getDefaultTheme(),
+			colorForeground: configDefaults.getDefaultColorForeground(),
+			colorBackground: configDefaults.getDefaultColorBackground(),
+			colorCursor: configDefaults.getDefaultColorCursor(),
+			colorCursorAccent: configDefaults.getDefaultColorCursorAccent(),
+			colorSelection: configDefaults.getDefaultColorSelection(),
+			colorBlack: configDefaults.getDefaultColorBlack(),
+			colorRed: configDefaults.getDefaultColorRed(),
+			colorGreen: configDefaults.getDefaultColorGreen(),
+			colorYellow: configDefaults.getDefaultColorYellow(),
+			colorBlue: configDefaults.getDefaultColorBlue(),
+			colorMagenta: configDefaults.getDefaultColorMagenta(),
+			colorCyan: configDefaults.getDefaultColorCyan(),
+			colorWhite: configDefaults.getDefaultColorWhite(),
+			colorBrightBlack: configDefaults.getDefaultColorBrightBlack(),
+			colorBrightRed: configDefaults.getDefaultColorBrightRed(),
+			colorBrightGreen: configDefaults.getDefaultColorBrightGreen(),
+			colorBrightYellow: configDefaults.getDefaultColorBrightYellow(),
+			colorBrightBlue: configDefaults.getDefaultColorBrightBlue(),
+			colorBrightMagenta: configDefaults.getDefaultColorBrightMagenta(),
+			colorBrightCyan: configDefaults.getDefaultColorBrightCyan(),
+			colorBrightWhite: configDefaults.getDefaultColorBrightWhite(),
+			leaveOpenAfterExit: configDefaults.getDefaultLeaveOpenAfterExit(),
+			relaunchTerminalOnStartup: configDefaults.getDefaultRelaunchTerminalOnStartup(),
 			title: null,
-			xtermOptions: JSON.parse(atomXtermConfig.getDefaultXtermOptions()),
-			promptToStartup: atomXtermConfig.getDefaultPromptToStartup(),
+			xtermOptions: JSON.parse(configDefaults.getDefaultXtermOptions()),
+			promptToStartup: configDefaults.getDefaultPromptToStartup(),
 		}
 		expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
 	})
@@ -646,7 +614,7 @@ describe('AtomXtermProfilesSingleton', () => {
 		const url = getDefaultExpectedUrl()
 		url.searchParams.set('command', '')
 		const expected = getDefaultExpectedProfile()
-		expected.command = atomXtermConfig.getDefaultShellCommand()
+		expected.command = configDefaults.getDefaultShellCommand()
 		expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
 	})
 
@@ -676,7 +644,7 @@ describe('AtomXtermProfilesSingleton', () => {
 		const url = getDefaultExpectedUrl()
 		url.searchParams.set('name', '')
 		const expected = getDefaultExpectedProfile()
-		expected.name = atomXtermConfig.getDefaultTermType()
+		expected.name = configDefaults.getDefaultTermType()
 		expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
 	})
 
@@ -692,7 +660,7 @@ describe('AtomXtermProfilesSingleton', () => {
 		const url = getDefaultExpectedUrl()
 		url.searchParams.set('cwd', '')
 		const expected = getDefaultExpectedProfile()
-		expected.cwd = atomXtermConfig.getDefaultCwd()
+		expected.cwd = configDefaults.getDefaultCwd()
 		expect(AtomXtermProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
 	})
 
@@ -926,43 +894,43 @@ describe('AtomXtermProfilesSingleton', () => {
 
 	it('getDefaultProfile()', () => {
 		const expected = {
-			command: atomXtermConfig.getDefaultShellCommand(),
-			args: JSON.parse(atomXtermConfig.getDefaultArgs()),
-			name: atomXtermConfig.getDefaultTermType(),
-			cwd: atomXtermConfig.getDefaultCwd(),
+			command: configDefaults.getDefaultShellCommand(),
+			args: JSON.parse(configDefaults.getDefaultArgs()),
+			name: configDefaults.getDefaultTermType(),
+			cwd: configDefaults.getDefaultCwd(),
 			env: null,
-			setEnv: JSON.parse(atomXtermConfig.getDefaultSetEnv()),
-			deleteEnv: JSON.parse(atomXtermConfig.getDefaultDeleteEnv()),
+			setEnv: JSON.parse(configDefaults.getDefaultSetEnv()),
+			deleteEnv: JSON.parse(configDefaults.getDefaultDeleteEnv()),
 			encoding: null,
-			fontSize: atomXtermConfig.getDefaultFontSize(),
-			fontFamily: atomXtermConfig.getDefaultFontFamily(),
-			theme: atomXtermConfig.getDefaultTheme(),
-			colorForeground: atomXtermConfig.getDefaultColorForeground(),
-			colorBackground: atomXtermConfig.getDefaultColorBackground(),
-			colorCursor: atomXtermConfig.getDefaultColorCursor(),
-			colorCursorAccent: atomXtermConfig.getDefaultColorCursorAccent(),
-			colorSelection: atomXtermConfig.getDefaultColorSelection(),
-			colorBlack: atomXtermConfig.getDefaultColorBlack(),
-			colorRed: atomXtermConfig.getDefaultColorRed(),
-			colorGreen: atomXtermConfig.getDefaultColorGreen(),
-			colorYellow: atomXtermConfig.getDefaultColorYellow(),
-			colorBlue: atomXtermConfig.getDefaultColorBlue(),
-			colorMagenta: atomXtermConfig.getDefaultColorMagenta(),
-			colorCyan: atomXtermConfig.getDefaultColorCyan(),
-			colorWhite: atomXtermConfig.getDefaultColorWhite(),
-			colorBrightBlack: atomXtermConfig.getDefaultColorBrightBlack(),
-			colorBrightRed: atomXtermConfig.getDefaultColorBrightRed(),
-			colorBrightGreen: atomXtermConfig.getDefaultColorBrightGreen(),
-			colorBrightYellow: atomXtermConfig.getDefaultColorBrightYellow(),
-			colorBrightBlue: atomXtermConfig.getDefaultColorBrightBlue(),
-			colorBrightMagenta: atomXtermConfig.getDefaultColorBrightMagenta(),
-			colorBrightCyan: atomXtermConfig.getDefaultColorBrightCyan(),
-			colorBrightWhite: atomXtermConfig.getDefaultColorBrightWhite(),
-			leaveOpenAfterExit: atomXtermConfig.getDefaultLeaveOpenAfterExit(),
-			relaunchTerminalOnStartup: atomXtermConfig.getDefaultRelaunchTerminalOnStartup(),
+			fontSize: configDefaults.getDefaultFontSize(),
+			fontFamily: configDefaults.getDefaultFontFamily(),
+			theme: configDefaults.getDefaultTheme(),
+			colorForeground: configDefaults.getDefaultColorForeground(),
+			colorBackground: configDefaults.getDefaultColorBackground(),
+			colorCursor: configDefaults.getDefaultColorCursor(),
+			colorCursorAccent: configDefaults.getDefaultColorCursorAccent(),
+			colorSelection: configDefaults.getDefaultColorSelection(),
+			colorBlack: configDefaults.getDefaultColorBlack(),
+			colorRed: configDefaults.getDefaultColorRed(),
+			colorGreen: configDefaults.getDefaultColorGreen(),
+			colorYellow: configDefaults.getDefaultColorYellow(),
+			colorBlue: configDefaults.getDefaultColorBlue(),
+			colorMagenta: configDefaults.getDefaultColorMagenta(),
+			colorCyan: configDefaults.getDefaultColorCyan(),
+			colorWhite: configDefaults.getDefaultColorWhite(),
+			colorBrightBlack: configDefaults.getDefaultColorBrightBlack(),
+			colorBrightRed: configDefaults.getDefaultColorBrightRed(),
+			colorBrightGreen: configDefaults.getDefaultColorBrightGreen(),
+			colorBrightYellow: configDefaults.getDefaultColorBrightYellow(),
+			colorBrightBlue: configDefaults.getDefaultColorBrightBlue(),
+			colorBrightMagenta: configDefaults.getDefaultColorBrightMagenta(),
+			colorBrightCyan: configDefaults.getDefaultColorBrightCyan(),
+			colorBrightWhite: configDefaults.getDefaultColorBrightWhite(),
+			leaveOpenAfterExit: configDefaults.getDefaultLeaveOpenAfterExit(),
+			relaunchTerminalOnStartup: configDefaults.getDefaultRelaunchTerminalOnStartup(),
 			title: null,
-			xtermOptions: JSON.parse(atomXtermConfig.getDefaultXtermOptions()),
-			promptToStartup: atomXtermConfig.getDefaultPromptToStartup(),
+			xtermOptions: JSON.parse(configDefaults.getDefaultXtermOptions()),
+			promptToStartup: configDefaults.getDefaultPromptToStartup(),
 		}
 		expect(AtomXtermProfilesSingleton.instance.getDefaultProfile()).toEqual(expected)
 	})

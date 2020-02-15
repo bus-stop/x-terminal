@@ -19,14 +19,16 @@
 
 import { Emitter } from 'atom'
 
-import atomXtermConfig from '../src/lib/atom-xterm-config'
+import { configDefaults } from '../src/lib/atom-xterm-config'
 import { AtomXtermModel, isAtomXtermModel, currentItemIsAtomXtermModel } from '../src/lib/atom-xterm-model'
 import { AtomXtermProfilesSingleton } from '../src/lib/atom-xterm-profiles'
 
 import fs from 'fs-extra'
 import path from 'path'
 
-import tmp from 'tmp'
+import temp from 'temp'
+
+temp.track()
 
 describe('AtomXtermModel', () => {
 	this.model = null
@@ -34,7 +36,7 @@ describe('AtomXtermModel', () => {
 	this.element = null
 	this.emitter = null
 
-	beforeEach((done) => {
+	beforeEach(async () => {
 		const uri = 'atom-xterm://somesessionid/'
 		spyOn(AtomXtermProfilesSingleton.instance, 'generateNewUri').and.returnValue(uri)
 		const terminalsSet = new Set()
@@ -42,44 +44,34 @@ describe('AtomXtermModel', () => {
 			uri: uri,
 			terminals_set: terminalsSet,
 		})
-		this.model.initializedPromise.then(() => {
-			this.pane = jasmine.createSpyObj('pane',
-				['destroyItem', 'getActiveItem'])
-			this.element = jasmine.createSpyObj('element',
-				['destroy', 'refitTerminal', 'focusOnTerminal', 'clickOnCurrentAnchor', 'getCurrentAnchorHref', 'restartPtyProcess'])
-			this.element.terminal = jasmine.createSpyObj('terminal',
-				['getSelection'])
-			this.element.ptyProcess = jasmine.createSpyObj('ptyProcess',
-				['write'])
-			this.emitter = new Emitter()
-			tmp.dir({ unsafeCleanup: true }, (err, path, cleanupCallback) => {
-				if (err) {
-					throw err
-				}
-				this.tmpdir = path
-				this.tmpdirCleanupCallback = cleanupCallback
-				done()
-			})
-		})
+		await this.model.initializedPromise
+		this.pane = jasmine.createSpyObj('pane',
+			['destroyItem', 'getActiveItem'])
+		this.element = jasmine.createSpyObj('element',
+			['destroy', 'refitTerminal', 'focusOnTerminal', 'clickOnCurrentAnchor', 'getCurrentAnchorHref', 'restartPtyProcess'])
+		this.element.terminal = jasmine.createSpyObj('terminal',
+			['getSelection'])
+		this.element.ptyProcess = jasmine.createSpyObj('ptyProcess',
+			['write'])
+		this.emitter = new Emitter()
+		this.tmpdir = await temp.mkdir()
 	})
 
-	afterEach(() => {
-		this.tmpdirCleanupCallback()
+	afterEach(async () => {
+		await temp.cleanup()
 	})
 
-	it('constructor with previous active item that has no getPath() method', (done) => {
+	it('constructor with previous active item that has no getPath() method', async () => {
 		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue({})
 		const model = new AtomXtermModel({
 			uri: 'atom-xterm://somesessionid/',
 			terminals_set: new Set(),
 		})
-		model.initializedPromise.then(() => {
-			expect(model.getPath()).toBe(atomXtermConfig.getDefaultCwd())
-			done()
-		})
+		await model.initializedPromise
+		expect(model.getPath()).toBe(configDefaults.getDefaultCwd())
 	})
 
-	it('constructor with valid cwd passed in uri', (done) => {
+	it('constructor with valid cwd passed in uri', async () => {
 		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue({})
 		const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData({})
 		url.searchParams.set('cwd', this.tmpdir)
@@ -87,13 +79,11 @@ describe('AtomXtermModel', () => {
 			uri: url.href,
 			terminals_set: new Set(),
 		})
-		model.initializedPromise.then(() => {
-			expect(model.getPath()).toBe(this.tmpdir)
-			done()
-		})
+		await model.initializedPromise
+		expect(model.getPath()).toBe(this.tmpdir)
 	})
 
-	it('constructor with invalid cwd passed in uri', (done) => {
+	it('constructor with invalid cwd passed in uri', async () => {
 		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue({})
 		const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData({})
 		url.searchParams.set('cwd', path.join(this.tmpdir, 'non-existent-dir'))
@@ -101,13 +91,11 @@ describe('AtomXtermModel', () => {
 			uri: url.href,
 			terminals_set: new Set(),
 		})
-		model.initializedPromise.then(() => {
-			expect(model.getPath()).toBe(atomXtermConfig.getDefaultCwd())
-			done()
-		})
+		await model.initializedPromise
+		expect(model.getPath()).toBe(configDefaults.getDefaultCwd())
 	})
 
-	it('constructor with previous active item that has getPath() method', (done) => {
+	it('constructor with previous active item that has getPath() method', async () => {
 		const previousActiveItem = jasmine.createSpyObj('somemodel', ['getPath'])
 		previousActiveItem.getPath.and.returnValue(this.tmpdir)
 		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(previousActiveItem)
@@ -115,31 +103,25 @@ describe('AtomXtermModel', () => {
 			uri: 'atom-xterm://somesessionid/',
 			terminals_set: new Set(),
 		})
-		model.initializedPromise.then(() => {
-			expect(model.getPath()).toBe(this.tmpdir)
-			done()
-		})
+		await model.initializedPromise
+		expect(model.getPath()).toBe(this.tmpdir)
 	})
 
-	it('constructor with previous active item that has getPath() method returns file path', (done) => {
+	it('constructor with previous active item that has getPath() method returns file path', async () => {
 		const previousActiveItem = jasmine.createSpyObj('somemodel', ['getPath'])
 		const filePath = path.join(this.tmpdir, 'somefile')
-		fs.writeFile(filePath, '', (err) => {
-			if (err) throw err
-			previousActiveItem.getPath.and.returnValue(filePath)
-			spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(previousActiveItem)
-			const model = new AtomXtermModel({
-				uri: 'atom-xterm://somesessionid/',
-				terminals_set: new Set(),
-			})
-			model.initializedPromise.then(() => {
-				expect(model.getPath()).toBe(this.tmpdir)
-				done()
-			})
+		await fs.writeFile(filePath, '')
+		previousActiveItem.getPath.and.returnValue(filePath)
+		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(previousActiveItem)
+		const model = new AtomXtermModel({
+			uri: 'atom-xterm://somesessionid/',
+			terminals_set: new Set(),
 		})
+		await model.initializedPromise
+		expect(model.getPath()).toBe(this.tmpdir)
 	})
 
-	it('constructor with previous active item that has getPath() returning invalid path', (done) => {
+	it('constructor with previous active item that has getPath() returning invalid path', async () => {
 		const previousActiveItem = jasmine.createSpyObj('somemodel', ['getPath'])
 		previousActiveItem.getPath.and.returnValue(path.join(this.tmpdir, 'non-existent-dir'))
 		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(previousActiveItem)
@@ -147,13 +129,11 @@ describe('AtomXtermModel', () => {
 			uri: 'atom-xterm://somesessionid/',
 			terminals_set: new Set(),
 		})
-		model.initializedPromise.then(() => {
-			expect(model.getPath()).toBe(atomXtermConfig.getDefaultCwd())
-			done()
-		})
+		await model.initializedPromise
+		expect(model.getPath()).toBe(configDefaults.getDefaultCwd())
 	})
 
-	it('constructor with previous active item which exists in project path', (done) => {
+	it('constructor with previous active item which exists in project path', async () => {
 		const previousActiveItem = jasmine.createSpyObj('somemodel', ['getPath'])
 		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(previousActiveItem)
 		const expected = ['/some/dir', null]
@@ -162,76 +142,66 @@ describe('AtomXtermModel', () => {
 			uri: 'atom-xterm://somesessionid/',
 			terminals_set: new Set(),
 		})
-		model.initializedPromise.then(() => {
-			expect(model.getPath()).toBe(expected[0])
-			done()
-		})
+		await model.initializedPromise
+		expect(model.getPath()).toBe(expected[0])
 	})
 
-	it('constructor with custom title', (done) => {
+	it('constructor with custom title', async () => {
 		const model = new AtomXtermModel({
 			uri: 'atom-xterm://somesessionid/?title=foo',
 			terminals_set: new Set(),
 		})
-		model.initializedPromise.then(() => {
-			expect(model.title).toBe('foo')
-			done()
-		})
+		await model.initializedPromise
+		expect(model.title).toBe('foo')
 	})
 
-	it('serialize() no cwd set', (done) => {
+	it('serialize() no cwd set', async () => {
 		const model = new AtomXtermModel({
 			uri: 'atom-xterm://somesessionid/',
 			terminals_set: new Set(),
 		})
-		model.initializedPromise.then(() => {
-			const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(model.profile)
-			const expected = {
-				deserializer: 'AtomXtermModel',
-				version: '2017-09-17',
-				uri: url.href,
-			}
-			expect(model.serialize()).toEqual(expected)
-			done()
-		})
+		await model.initializedPromise
+		const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(model.profile)
+		const expected = {
+			deserializer: 'AtomXtermModel',
+			version: '2017-09-17',
+			uri: url.href,
+		}
+		expect(model.serialize()).toEqual(expected)
 	})
 
-	it('serialize() cwd set in model', (done) => {
+	it('serialize() cwd set in model', async () => {
 		const model = new AtomXtermModel({
 			uri: 'atom-xterm://somesessionid/',
 			terminals_set: new Set(),
 		})
-		model.initializedPromise.then(() => {
-			model.profile.cwd = '/some/dir'
-			const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(model.profile)
-			const expected = {
-				deserializer: 'AtomXtermModel',
-				version: '2017-09-17',
-				uri: url.href,
-			}
-			expect(model.serialize()).toEqual(expected)
-			done()
-		})
+		await model.initializedPromise
+		model.profile.cwd = '/some/dir'
+		const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(model.profile)
+		const expected = {
+			deserializer: 'AtomXtermModel',
+			version: '2017-09-17',
+			uri: url.href,
+		}
+		expect(model.serialize()).toEqual(expected)
 	})
 
-	it('serialize() cwd set in uri', (done) => {
+	it('serialize() cwd set in uri', async () => {
 		const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData({})
 		url.searchParams.set('cwd', this.tmpdir)
 		const model = new AtomXtermModel({
 			uri: url.href,
 			terminals_set: new Set(),
 		})
-		model.initializedPromise.then(() => {
-			const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(model.profile)
-			const expected = {
-				deserializer: 'AtomXtermModel',
-				version: '2017-09-17',
-				uri: url.href,
-			}
-			expect(url.searchParams.get('cwd')).toEqual(this.tmpdir)
-			expect(model.serialize()).toEqual(expected)
-			done()
-		})
+		await model.initializedPromise
+		const url2 = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(model.profile)
+		const expected = {
+			deserializer: 'AtomXtermModel',
+			version: '2017-09-17',
+			uri: url2.href,
+		}
+		expect(url2.searchParams.get('cwd')).toEqual(this.tmpdir)
+		expect(model.serialize()).toEqual(expected)
 	})
 
 	it('destroy() check element is destroyed when set', () => {
@@ -262,17 +232,15 @@ describe('AtomXtermModel', () => {
 		expect(this.model.getElement()).toBe(expected)
 	})
 
-	it('getURI()', (done) => {
+	it('getURI()', async () => {
 		const uri = 'atom-xterm://somesessionid/'
 		const terminalsSet = new Set()
 		const model = new AtomXtermModel({
 			uri: uri,
 			terminals_set: terminalsSet,
 		})
-		model.initializedPromise.then(() => {
-			expect(model.getURI()).toBe(uri)
-			done()
-		})
+		await model.initializedPromise
+		expect(model.getURI()).toBe(uri)
 	})
 
 	it('getLongTitle() with default title', () => {
@@ -309,7 +277,7 @@ describe('AtomXtermModel', () => {
 	})
 
 	it('getPath()', () => {
-		expect(this.model.getPath()).toBe(atomXtermConfig.getDefaultCwd())
+		expect(this.model.getPath()).toBe(configDefaults.getDefaultCwd())
 	})
 
 	it('getPath() cwd set', () => {
@@ -380,7 +348,7 @@ describe('AtomXtermModel', () => {
 		expect(this.model.emitter.emit).toHaveBeenCalled()
 	})
 
-	it('getSessionId()', (done) => {
+	it('getSessionId()', async () => {
 		const expected = 'somesessionid'
 		const uri = 'atom-xterm://' + expected + '/'
 		const terminalsSet = new Set()
@@ -388,25 +356,21 @@ describe('AtomXtermModel', () => {
 			uri: uri,
 			terminals_set: terminalsSet,
 		})
-		model.initializedPromise.then(() => {
-			expect(model.getSessionId()).toBe(expected)
-			done()
-		})
+		await model.initializedPromise
+		expect(model.getSessionId()).toBe(expected)
 	})
 
-	it('getSessionParameters() when no parameters set', (done) => {
+	it('getSessionParameters() when no parameters set', async () => {
 		const uri = 'atom-xterm://somesessionid/'
 		const terminalsSet = new Set()
 		const model = new AtomXtermModel({
 			uri: uri,
 			terminals_set: terminalsSet,
 		})
-		model.initializedPromise.then(() => {
-			const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(model.profile)
-			url.searchParams.sort()
-			expect(model.getSessionParameters()).toBe(url.searchParams.toString())
-			done()
-		})
+		await model.initializedPromise
+		const url = AtomXtermProfilesSingleton.instance.generateNewUrlFromProfileData(model.profile)
+		url.searchParams.sort()
+		expect(model.getSessionParameters()).toBe(url.searchParams.toString())
 	})
 
 	it('refitTerminal() without element set', () => {
@@ -484,19 +448,17 @@ describe('AtomXtermModel', () => {
 		expect(this.model.element.ptyProcess.write.calls.allArgs()).toEqual([[expectedText]])
 	})
 
-	it('setNewPane(event)', (done) => {
+	it('setNewPane(event)', async () => {
 		const uri = 'atom-xterm://somesessionid/'
 		const terminalsSet = new Set()
 		const model = new AtomXtermModel({
 			uri: uri,
 			terminals_set: terminalsSet,
 		})
-		model.initializedPromise.then(() => {
-			const expected = {}
-			model.setNewPane(expected)
-			expect(model.pane).toBe(expected)
-			done()
-		})
+		await model.initializedPromise
+		const expected = {}
+		model.setNewPane(expected)
+		expect(model.pane).toBe(expected)
 	})
 
 	it('toggleProfileMenu()', () => {

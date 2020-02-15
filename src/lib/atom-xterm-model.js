@@ -60,58 +60,50 @@ class AtomXtermModel {
 		// system, a Promise will be used to indicate when initialization is
 		// done.
 		this.isInitialized = false
-		this.initializedPromise = new Promise((resolve, reject) => {
-			const baseProfile = this.profilesSingleton.getBaseProfile()
-			const previousActiveItem = atom.workspace.getActivePaneItem()
-			let cwd = this.profile.cwd
-			if (typeof previousActiveItem !== 'undefined' && typeof previousActiveItem.getPath === 'function') {
-				cwd = previousActiveItem.getPath()
-			}
-			const dir = atom.project.relativizePath(cwd)[0]
-			if (dir) {
-				// Use project paths whenever they are available by default.
-				this.profile.cwd = dir
-				resolve()
-			} else if (cwd) {
-				fs.exists(cwd, (exists) => {
-					if (exists) {
-						// Otherwise, if the path exists on the local file system, use the
-						// path or parent directory as appropriate.
-						fs.stat(cwd, (err, stats) => {
-							if (err) {
-								reject(err)
-							}
-							if (!stats.isDirectory()) {
-								cwd = path.dirname(cwd)
-								fs.stat(cwd, (err, stats) => {
-									if (err) {
-										reject(err)
-									}
-									if (!stats.isDirectory) {
-										this.profile.cwd = baseProfile.cwd
-										resolve()
-									} else {
-										this.profile.cwd = cwd
-										resolve()
-									}
-								})
-							} else {
-								this.profile.cwd = cwd
-								resolve()
-							}
-						})
-					} else {
-						this.profile.cwd = baseProfile.cwd
-						resolve()
-					}
-				})
-			} else {
-				this.profile.cwd = baseProfile.cwd
-				resolve()
-			}
-		}).then(() => {
+		this.initializedPromise = this.initialize().then(() => {
 			this.isInitialized = true
 		})
+	}
+
+	async initialize () {
+		const baseProfile = this.profilesSingleton.getBaseProfile()
+		const previousActiveItem = atom.workspace.getActivePaneItem()
+		let cwd = this.profile.cwd
+		if (typeof previousActiveItem !== 'undefined' && typeof previousActiveItem.getPath === 'function') {
+			cwd = previousActiveItem.getPath()
+		}
+		const dir = atom.project.relativizePath(cwd)[0]
+		if (dir) {
+			// Use project paths whenever they are available by default.
+			this.profile.cwd = dir
+			return
+		}
+		if (!cwd) {
+			this.profile.cwd = baseProfile.cwd
+			return
+		}
+		const exists = await fs.exists(cwd)
+		if (!exists) {
+			this.profile.cwd = baseProfile.cwd
+			return
+		}
+
+		// Otherwise, if the path exists on the local file system, use the
+		// path or parent directory as appropriate.
+		const stats = await fs.stat(cwd)
+		if (stats.isDirectory()) {
+			this.profile.cwd = cwd
+			return
+		}
+
+		cwd = path.dirname(cwd)
+		const dirStats = await fs.stat(cwd)
+		if (dirStats.isDirectory) {
+			this.profile.cwd = cwd
+			return
+		}
+
+		this.profile.cwd = baseProfile.cwd
 	}
 
 	serialize () {

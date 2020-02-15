@@ -20,39 +20,37 @@
 import * as nodePty from 'node-pty-prebuilt-multiarch'
 import { shell } from 'electron'
 
-import atomXtermConfig from '../src/lib/atom-xterm-config'
+import { configDefaults } from '../src/lib/atom-xterm-config'
 import { AtomXtermElement } from '../src/lib/atom-xterm-element'
 import { AtomXtermModel } from '../src/lib/atom-xterm-model'
 
 import path from 'path'
 
-import tmp from 'tmp'
+import temp from 'temp'
 import { URL, URLSearchParams } from 'whatwg-url'
+
+temp.track()
 
 describe('AtomXtermElement', () => {
 	const savedPlatform = process.platform
 	this.element = null
 	this.tmpdirObj = null
 
-	const createNewElement = (uri = 'atom-xterm://somesessionid/') => {
-		return new Promise((resolve, reject) => {
-			const terminalsSet = new Set()
-			const model = new AtomXtermModel({
-				uri: uri,
-				terminals_set: terminalsSet,
-			})
-			model.initializedPromise.then(() => {
-				model.pane = jasmine.createSpyObj('pane',
-					['removeItem', 'getActiveItem', 'destroyItem'])
-				const element = new AtomXtermElement()
-				element.initialize(model).then(() => {
-					resolve(element)
-				})
-			})
+	const createNewElement = async (uri = 'atom-xterm://somesessionid/') => {
+		const terminalsSet = new Set()
+		const model = new AtomXtermModel({
+			uri: uri,
+			terminals_set: terminalsSet,
 		})
+		await model.initializedPromise
+		model.pane = jasmine.createSpyObj('pane',
+			['removeItem', 'getActiveItem', 'destroyItem'])
+		const element = new AtomXtermElement()
+		await element.initialize(model)
+		return element
 	}
 
-	beforeEach((done) => {
+	beforeEach(async () => {
 		atom.config.clear()
 		atom.project.setPaths([])
 		const ptyProcess = jasmine.createSpyObj('ptyProcess',
@@ -61,25 +59,17 @@ describe('AtomXtermElement', () => {
 			.and.returnValue('sometestprocess')
 		spyOn(nodePty, 'spawn').and.returnValue(ptyProcess)
 		spyOn(shell, 'openExternal')
-		createNewElement().then((element) => {
-			this.element = element
-			tmp.dir({ unsafeCleanup: true }, (err, path, cleanupCallback) => {
-				if (err) {
-					throw err
-				}
-				this.tmpdir = path
-				this.tmpdirCleanupCallback = cleanupCallback
-				done()
-			})
-		})
+		const element = await createNewElement()
+		this.element = element
+		this.tmpdir = await temp.mkdir()
 	})
 
-	afterEach(() => {
+	afterEach(async () => {
 		this.element.destroy()
 		Object.defineProperty(process, 'platform', {
 			value: savedPlatform,
 		})
-		this.tmpdirCleanupCallback()
+		await temp.cleanup()
 		atom.config.clear()
 	})
 
@@ -110,31 +100,27 @@ describe('AtomXtermElement', () => {
 	})
 
 	it('getShellCommand()', () => {
-		expect(this.element.getShellCommand()).toBe(atomXtermConfig.getDefaultShellCommand())
+		expect(this.element.getShellCommand()).toBe(configDefaults.getDefaultShellCommand())
 	})
 
-	it('getShellCommand() command set in uri', (done) => {
+	it('getShellCommand() command set in uri', async () => {
 		const expected = 'somecommand'
 		const params = new URLSearchParams({ command: expected })
 		const url = new URL('atom-xterm://?' + params.toString())
-		createNewElement(url.href).then((element) => {
-			expect(element.getShellCommand()).toBe(expected)
-			done()
-		})
+		const element = await createNewElement(url.href)
+		expect(element.getShellCommand()).toBe(expected)
 	})
 
 	it('getArgs()', () => {
 		expect(this.element.getArgs()).toEqual([])
 	})
 
-	it('getArgs() args set in uri', (done) => {
+	it('getArgs() args set in uri', async () => {
 		const expected = ['some', 'extra', 'args']
 		const params = new URLSearchParams({ args: JSON.stringify(expected) })
 		const url = new URL('atom-xterm://?' + params.toString())
-		createNewElement(url.href).then((element) => {
-			expect(element.getArgs()).toEqual(expected)
-			done()
-		})
+		const element = await createNewElement(url.href)
+		expect(element.getArgs()).toEqual(expected)
 	})
 
 	it('getArgs() throw exception when args is not an array', () => {
@@ -143,74 +129,57 @@ describe('AtomXtermElement', () => {
 	})
 
 	it('getTermType()', () => {
-		expect(this.element.getTermType()).toBe(atomXtermConfig.getDefaultTermType())
+		expect(this.element.getTermType()).toBe(configDefaults.getDefaultTermType())
 	})
 
-	it('getTermType() name set in uri', (done) => {
+	it('getTermType() name set in uri', async () => {
 		const expected = 'sometermtype'
 		const params = new URLSearchParams({ name: expected })
 		const url = new URL('atom-xterm://?' + params.toString())
-		createNewElement(url.href).then((element) => {
-			expect(element.getTermType()).toBe(expected)
-			done()
-		})
+		const element = await createNewElement(url.href)
+		expect(element.getTermType()).toBe(expected)
 	})
 
-	it('checkPathIsDirectory() no path given', (done) => {
-		this.element.checkPathIsDirectory().then((isDirectory) => {
-			expect(isDirectory).toBe(false)
-			done()
-		})
+	it('checkPathIsDirectory() no path given', async () => {
+		const isDirectory = await this.element.checkPathIsDirectory()
+		expect(isDirectory).toBe(false)
 	})
 
-	it('checkPathIsDirectory() path set to undefined', (done) => {
-		this.element.checkPathIsDirectory(undefined).then((isDirectory) => {
-			expect(isDirectory).toBe(false)
-			done()
-		})
+	it('checkPathIsDirectory() path set to undefined', async () => {
+		const isDirectory = await this.element.checkPathIsDirectory(undefined)
+		expect(isDirectory).toBe(false)
 	})
 
-	it('checkPathIsDirectory() path set to null', (done) => {
-		this.element.checkPathIsDirectory(null).then((isDirectory) => {
-			expect(isDirectory).toBe(false)
-			done()
-		})
+	it('checkPathIsDirectory() path set to null', async () => {
+		const isDirectory = await this.element.checkPathIsDirectory(null)
+		expect(isDirectory).toBe(false)
 	})
 
-	it('checkPathIsDirectory() path set to tmpdir', (done) => {
-		this.element.checkPathIsDirectory(this.tmpdir).then((isDirectory) => {
-			expect(isDirectory).toBe(true)
-			done()
-		})
+	it('checkPathIsDirectory() path set to tmpdir', async () => {
+		const isDirectory = await this.element.checkPathIsDirectory(this.tmpdir)
+		expect(isDirectory).toBe(true)
 	})
 
-	it('checkPathIsDirectory() path set to non-existent dir', (done) => {
-		this.element.checkPathIsDirectory(path.join(this.tmpdir, 'non-existent-dir')).then((isDirectory) => {
-			expect(isDirectory).toBe(false)
-			done()
-		})
+	it('checkPathIsDirectory() path set to non-existent dir', async () => {
+		const isDirectory = await this.element.checkPathIsDirectory(path.join(this.tmpdir, 'non-existent-dir'))
+		expect(isDirectory).toBe(false)
 	})
 
-	it('getCwd()', (done) => {
-		this.element.getCwd().then((cwd) => {
-			expect(cwd).toBe(atomXtermConfig.getDefaultCwd())
-			done()
-		})
+	it('getCwd()', async () => {
+		const cwd = await this.element.getCwd()
+		expect(cwd).toBe(configDefaults.getDefaultCwd())
 	})
 
-	it('getCwd() cwd set in uri', (done) => {
+	it('getCwd() cwd set in uri', async () => {
 		const expected = this.tmpdir
 		const params = new URLSearchParams({ cwd: expected })
 		const url = new URL('atom-xterm://?' + params.toString())
-		createNewElement(url.href).then((element) => {
-			element.getCwd().then((cwd) => {
-				expect(cwd).toBe(expected)
-				done()
-			})
-		})
+		const element = await createNewElement(url.href)
+		const cwd = await element.getCwd()
+		expect(cwd).toBe(expected)
 	})
 
-	it('getCwd() model getPath() returns valid path', (done) => {
+	it('getCwd() model getPath() returns valid path', async () => {
 		const previousActiveItem = jasmine.createSpyObj(
 			'previousActiveItem',
 			['getPath'],
@@ -219,15 +188,12 @@ describe('AtomXtermElement', () => {
 		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(
 			previousActiveItem,
 		)
-		createNewElement().then((element) => {
-			element.getCwd().then((cwd) => {
-				expect(cwd).toBe(this.tmpdir)
-				done()
-			})
-		})
+		const element = await createNewElement()
+		const cwd = await element.getCwd()
+		expect(cwd).toBe(this.tmpdir)
 	})
 
-	it('getCwd() model getPath() returns invalid path', (done) => {
+	it('getCwd() model getPath() returns invalid path', async () => {
 		const previousActiveItem = jasmine.createSpyObj(
 			'previousActiveItem',
 			['getPath'],
@@ -236,48 +202,37 @@ describe('AtomXtermElement', () => {
 		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(
 			previousActiveItem,
 		)
-		createNewElement().then((element) => {
-			element.getCwd().then((cwd) => {
-				expect(cwd).toBe(atomXtermConfig.getDefaultCwd())
-				done()
-			})
-		})
+		const element = await createNewElement()
+		const cwd = await element.getCwd()
+		expect(cwd).toBe(configDefaults.getDefaultCwd())
 	})
 
-	it('getCwd() non-existent cwd set in uri', (done) => {
+	it('getCwd() non-existent cwd set in uri', async () => {
 		const dir = path.join(this.tmpdir, 'non-existent-dir')
 		const params = new URLSearchParams({ cwd: dir })
 		const url = new URL('atom-xterm://?' + params.toString())
-		createNewElement(url.href).then((element) => {
-			this.element.getCwd().then((cwd) => {
-				expect(cwd).toBe(atomXtermConfig.getDefaultCwd())
-				done()
-			})
-		})
+		const element = await createNewElement(url.href)
+		const cwd = await this.element.getCwd()
+		expect(cwd).toBe(configDefaults.getDefaultCwd())
 	})
 
-	it('getCwd() non-existent project path added', (done) => {
+	it('getCwd() non-existent project path added', async () => {
 		spyOn(atom.project, 'getPaths').and.returnValue([path.join(this.tmpdir, 'non-existent-dir')])
-		createNewElement().then((element) => {
-			element.getCwd().then((cwd) => {
-				expect(cwd).toBe(atomXtermConfig.getDefaultCwd())
-				done()
-			})
-		})
+		const element = await createNewElement()
+		const cwd = await element.getCwd()
+		expect(cwd).toBe(configDefaults.getDefaultCwd())
 	})
 
 	it('getEnv()', () => {
 		expect(JSON.stringify(this.element.getEnv())).toEqual(JSON.stringify(process.env))
 	})
 
-	it('getEnv() env set in uri', (done) => {
+	it('getEnv() env set in uri', async () => {
 		const expected = { var1: 'value1', var2: 'value2' }
 		const params = new URLSearchParams({ env: JSON.stringify(expected) })
 		const url = new URL('atom-xterm://?' + params.toString())
-		createNewElement(url.href).then((element) => {
-			expect(element.getEnv()).toEqual(expected)
-			done()
-		})
+		const element = await createNewElement(url.href)
+		expect(element.getEnv()).toEqual(expected)
 	})
 
 	it('getEnv() throw exception when env is not an object', () => {
@@ -285,14 +240,12 @@ describe('AtomXtermElement', () => {
 		expect(() => { this.element.getEnv() }).toThrow(new Error('Environment set is not an object.'))
 	})
 
-	it('getEnv() setEnv set in uri', (done) => {
+	it('getEnv() setEnv set in uri', async () => {
 		const expected = { var2: 'value2' }
 		const params = new URLSearchParams({ env: JSON.stringify({ var1: 'value1' }), setEnv: JSON.stringify(expected) })
 		const url = new URL('atom-xterm://?' + params.toString())
-		createNewElement(url.href).then((element) => {
-			expect(element.getEnv().var2).toEqual(expected.var2)
-			done()
-		})
+		const element = await createNewElement(url.href)
+		expect(element.getEnv().var2).toEqual(expected.var2)
 	})
 
 	it('getEnv() deleteEnv set in config', () => {
@@ -301,13 +254,11 @@ describe('AtomXtermElement', () => {
 		expect(this.element.getEnv().var1).toBe(undefined)
 	})
 
-	it('getEnv() deleteEnv set in uri', (done) => {
+	it('getEnv() deleteEnv set in uri', async () => {
 		const params = new URLSearchParams({ env: JSON.stringify({ var1: 'value1' }), deleteEnv: JSON.stringify(['var1']) })
 		const url = new URL('atom-xterm://?' + params.toString())
-		createNewElement(url.href).then((element) => {
-			expect(this.element.getEnv().var1).toBe(undefined)
-			done()
-		})
+		const element = await createNewElement(url.href)
+		expect(this.element.getEnv().var1).toBe(undefined)
 	})
 
 	it('getEnv() deleteEnv has precendence over senEnv', () => {
@@ -321,62 +272,52 @@ describe('AtomXtermElement', () => {
 		expect(this.element.getEncoding()).toBeNull()
 	})
 
-	it('getEncoding() encoding set in uri', (done) => {
+	it('getEncoding() encoding set in uri', async () => {
 		const expected = 'someencoding'
 		const params = new URLSearchParams({ encoding: expected })
 		const url = new URL('atom-xterm://?' + params.toString())
-		createNewElement(url.href).then((element) => {
-			expect(element.getEncoding()).toBe(expected)
-			done()
-		})
+		const element = await createNewElement(url.href)
+		expect(element.getEncoding()).toBe(expected)
 	})
 
 	it('leaveOpenAfterExit()', () => {
 		expect(this.element.leaveOpenAfterExit()).toBe(true)
 	})
 
-	it('leaveOpenAfterExit() true set in uri', (done) => {
+	it('leaveOpenAfterExit() true set in uri', async () => {
 		const expected = true
 		const params = new URLSearchParams({ leaveOpenAfterExit: expected })
 		const url = new URL('atom-xterm://?' + params.toString())
-		createNewElement(url.href).then((element) => {
-			expect(element.leaveOpenAfterExit()).toBe(expected)
-			done()
-		})
+		const element = await createNewElement(url.href)
+		expect(element.leaveOpenAfterExit()).toBe(expected)
 	})
 
-	it('leaveOpenAfterExit() false set in uri', (done) => {
+	it('leaveOpenAfterExit() false set in uri', async () => {
 		const expected = false
 		const params = new URLSearchParams({ leaveOpenAfterExit: expected })
 		const url = new URL('atom-xterm://?' + params.toString())
-		createNewElement(url.href).then((element) => {
-			expect(element.leaveOpenAfterExit()).toBe(expected)
-			done()
-		})
+		const element = await createNewElement(url.href)
+		expect(element.leaveOpenAfterExit()).toBe(expected)
 	})
 
 	it('isPromptToStartup()', () => {
 		expect(this.element.isPromptToStartup()).toBe(false)
 	})
 
-	it('isPromptToStartup() false set in uri', (done) => {
+	it('isPromptToStartup() false set in uri', async () => {
 		const expected = false
 		const params = new URLSearchParams({ promptToStartup: expected })
 		const url = new URL('atom-xterm://?' + params.toString())
-		createNewElement(url.href).then((element) => {
-			expect(element.isPromptToStartup()).toBe(expected)
-			done()
-		})
+		const element = await createNewElement(url.href)
+		expect(element.isPromptToStartup()).toBe(expected)
 	})
 
-	it('isPromptToStartup() true set in uri', (done) => {
+	it('isPromptToStartup() true set in uri', async () => {
 		const expected = true
 		const params = new URLSearchParams({ promptToStartup: expected })
 		const url = new URL('atom-xterm://?' + params.toString())
-		createNewElement(url.href).then((element) => {
-			expect(element.isPromptToStartup()).toBe(expected)
-			done()
-		})
+		const element = await createNewElement(url.href)
+		expect(element.isPromptToStartup()).toBe(expected)
 	})
 
 	it('isPtyProcessRunning() ptyProcess null, ptyProcessRunning false', () => {
@@ -401,11 +342,11 @@ describe('AtomXtermElement', () => {
 		it('Custom', () => {
 			const theme = this.element.getTheme({ theme: 'Custom' })
 			expect(theme).toEqual({
-				background: '#000',
-				foreground: '#fff',
-				selection: 'rgba(255, 255, 255, .3)',
-				cursor: '#fff',
-				cursorAccent: '#000',
+				background: '#000000',
+				foreground: '#ffffff',
+				selection: '#4d4d4d',
+				cursor: '#ffffff',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -430,9 +371,9 @@ describe('AtomXtermElement', () => {
 			expect(theme).toEqual({
 				background: '#1d1f21',
 				foreground: '#c5c8c6',
-				selection: '#999',
-				cursor: '#fff',
-				cursorAccent: '#000',
+				selection: '#999999',
+				cursor: '#ffffff',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -455,11 +396,11 @@ describe('AtomXtermElement', () => {
 		it('Atom Light', () => {
 			const theme = this.element.getTheme({ theme: 'Atom Light' })
 			expect(theme).toEqual({
-				background: '#fff',
-				foreground: '#555',
+				background: '#ffffff',
+				foreground: '#555555',
 				selection: '#afc4da',
-				cursor: '#000',
-				cursorAccent: '#000',
+				cursor: '#000000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -486,8 +427,8 @@ describe('AtomXtermElement', () => {
 				foreground: '#c5c8c6',
 				selection: '#b4b7b4',
 				// selectionForeground: '#e0e0e0',
-				cursor: '#fff',
-				cursorAccent: '#000',
+				cursor: '#ffffff',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -510,12 +451,12 @@ describe('AtomXtermElement', () => {
 		it('Base16 Tomorrow Light', () => {
 			const theme = this.element.getTheme({ theme: 'Base16 Tomorrow Light' })
 			expect(theme).toEqual({
-				background: '#fff',
+				background: '#ffffff',
 				foreground: '#1d1f21',
 				selection: '#282a2e',
 				// selectionForeground: '#e0e0e0',
 				cursor: '#1d1f21',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -542,7 +483,7 @@ describe('AtomXtermElement', () => {
 				foreground: '#f81705',
 				selection: '#298f16',
 				cursor: '#009f59',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -570,7 +511,7 @@ describe('AtomXtermElement', () => {
 				selection: '#2a2f38',
 				// selectionForeground: '#b7c5d3',
 				cursor: '#528bff',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -597,7 +538,7 @@ describe('AtomXtermElement', () => {
 				foreground: 'white',
 				selection: '#44475a',
 				cursor: '#999999',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -624,7 +565,7 @@ describe('AtomXtermElement', () => {
 				foreground: 'rgb(255, 240, 165)',
 				selection: 'rgba(182, 73, 38, .99)',
 				cursor: 'rgb(142, 40, 0)',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -647,11 +588,11 @@ describe('AtomXtermElement', () => {
 		it('Homebrew', () => {
 			const theme = this.element.getTheme({ theme: 'Homebrew' })
 			expect(theme).toEqual({
-				background: '#000',
+				background: '#000000',
 				foreground: 'rgb(41, 254, 20)',
 				selection: 'rgba(7, 30, 155, .99)',
 				cursor: 'rgb(55, 254, 38)',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -674,11 +615,11 @@ describe('AtomXtermElement', () => {
 		it('Inverse', () => {
 			const theme = this.element.getTheme({ theme: 'Inverse' })
 			expect(theme).toEqual({
-				background: '#fff',
-				foreground: '#000',
+				background: '#ffffff',
+				foreground: '#000000',
 				selection: 'rgba(178, 215, 255, .99)',
 				cursor: 'rgb(146, 146, 146)',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -701,11 +642,11 @@ describe('AtomXtermElement', () => {
 		it('Linux', () => {
 			const theme = this.element.getTheme({ theme: 'Linux' })
 			expect(theme).toEqual({
-				background: '#000',
+				background: '#000000',
 				foreground: 'rgb(230, 230, 230)',
 				selection: 'rgba(155, 30, 7, .99)',
 				cursor: 'rgb(200, 20, 25)',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -732,7 +673,7 @@ describe('AtomXtermElement', () => {
 				foreground: 'black',
 				selection: 'rgba(178, 215, 255, .99)',
 				cursor: 'rgb(146, 146, 146)',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -759,7 +700,7 @@ describe('AtomXtermElement', () => {
 				foreground: 'rgb(77, 47, 46)',
 				selection: 'rgba(155, 153, 122, .99)',
 				cursor: 'rgb(115, 99, 89)',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -786,7 +727,7 @@ describe('AtomXtermElement', () => {
 				foreground: 'white',
 				selection: 'rgba(41, 134, 255, .99)',
 				cursor: 'rgb(146, 146, 146)',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -813,7 +754,7 @@ describe('AtomXtermElement', () => {
 				foreground: '#abb2bf',
 				selection: '#9196a1',
 				cursor: '#528bff',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -840,7 +781,7 @@ describe('AtomXtermElement', () => {
 				foreground: 'hsl(230, 8%, 24%)',
 				selection: 'hsl(230, 1%, 90%)',
 				cursor: 'hsl(230, 100%, 66%)',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -867,7 +808,7 @@ describe('AtomXtermElement', () => {
 				foreground: '#f1f1f1',
 				selection: 'rgba(255,255,255,0.25)',
 				cursor: '#f18260',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -890,11 +831,11 @@ describe('AtomXtermElement', () => {
 		it('Pro', () => {
 			const theme = this.element.getTheme({ theme: 'Pro' })
 			expect(theme).toEqual({
-				background: '#000',
+				background: '#000000',
 				foreground: 'rgb(244, 244, 244)',
 				selection: 'rgba(82, 82, 82, .99)',
 				cursor: 'rgb(96, 96, 96)',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -921,7 +862,7 @@ describe('AtomXtermElement', () => {
 				foreground: 'rgb(215, 201, 167)',
 				selection: 'rgba(60, 25, 22, .99)',
 				cursor: 'white',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -944,11 +885,11 @@ describe('AtomXtermElement', () => {
 		it('Red', () => {
 			const theme = this.element.getTheme({ theme: 'Red' })
 			expect(theme).toEqual({
-				background: '#000',
+				background: '#000000',
 				foreground: 'rgb(255, 38, 14)',
 				selection: 'rgba(7, 30, 155, .99)',
 				cursor: 'rgb(255, 38, 14)',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -972,10 +913,10 @@ describe('AtomXtermElement', () => {
 			const theme = this.element.getTheme({ theme: 'Silver Aerogel' })
 			expect(theme).toEqual({
 				background: 'rgb(146, 146, 146)',
-				foreground: '#000',
+				foreground: '#000000',
 				selection: 'rgba(120, 123, 156, .99)',
 				cursor: 'rgb(224, 224, 224)',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -1002,7 +943,7 @@ describe('AtomXtermElement', () => {
 				foreground: '#708284',
 				selection: '#839496',
 				cursor: '#819090',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -1029,7 +970,7 @@ describe('AtomXtermElement', () => {
 				foreground: '#657a81',
 				selection: '#ece7d5',
 				cursor: '#586e75',
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -1053,10 +994,10 @@ describe('AtomXtermElement', () => {
 			const theme = this.element.getTheme({ theme: 'Solid Colors' })
 			expect(theme).toEqual({
 				background: 'rgb(120, 132, 151)',
-				foreground: '#000',
+				foreground: '#000000',
 				selection: 'rgba(178, 215, 255, .99)',
-				cursor: '#fff',
-				cursorAccent: '#000',
+				cursor: '#ffffff',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -1082,9 +1023,9 @@ describe('AtomXtermElement', () => {
 			expect(theme).toEqual({
 				background: root.getPropertyValue('--standard-app-background-color'),
 				foreground: root.getPropertyValue('--standard-text-color'),
-				selection: 'rgba(255, 255, 255, .3)',
+				selection: '#4d4d4d',
 				cursor: root.getPropertyValue('--standard-text-color-highlight'),
-				cursorAccent: '#000',
+				cursorAccent: '#000000',
 				black: '#2e3436',
 				red: '#cc0000',
 				green: '#4e9a06',
@@ -1113,70 +1054,62 @@ describe('AtomXtermElement', () => {
 		expect(this.element.ptyProcess).toBeTruthy()
 	})
 
-	it('restartPtyProcess() check new pty process created', (done) => {
+	it('restartPtyProcess() check new pty process created', async () => {
 		const oldPtyProcess = this.element.ptyProcess
 		const newPtyProcess = jasmine.createSpyObj('ptyProcess',
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = jasmine.createSpy('process')
 			.and.returnValue('sometestprocess')
 		nodePty.spawn.and.returnValue(newPtyProcess)
-		this.element.restartPtyProcess().then(() => {
-			expect(this.element.ptyProcess).toBe(newPtyProcess)
-			expect(oldPtyProcess).not.toBe(this.element.ptyProcess)
-			done()
-		})
+		await this.element.restartPtyProcess()
+		expect(this.element.ptyProcess).toBe(newPtyProcess)
+		expect(oldPtyProcess).not.toBe(this.element.ptyProcess)
 	})
 
-	it('restartPtyProcess() check ptyProcessRunning set to true', (done) => {
+	it('restartPtyProcess() check ptyProcessRunning set to true', async () => {
 		const newPtyProcess = jasmine.createSpyObj('ptyProcess',
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = jasmine.createSpy('process')
 			.and.returnValue('sometestprocess')
 		nodePty.spawn.and.returnValue(newPtyProcess)
-		this.element.restartPtyProcess().then(() => {
-			expect(this.element.ptyProcessRunning).toBe(true)
-			done()
-		})
+		await this.element.restartPtyProcess()
+		expect(this.element.ptyProcessRunning).toBe(true)
 	})
 
-	it('restartPtyProcess() command not found', (done) => {
+	it('restartPtyProcess() command not found', async () => {
 		spyOn(this.element, 'showNotification')
 		this.element.model.profile.command = 'somecommand'
 		const fakeCall = () => {
 			throw Error('File not found: somecommand')
 		}
 		nodePty.spawn.and.callFake(fakeCall)
-		this.element.restartPtyProcess().then(() => {
-			expect(this.element.ptyProcess).toBe(null)
-			expect(this.element.ptyProcessRunning).toBe(false)
-			expect(this.element.showNotification.calls.argsFor(0)).toEqual(
-				[
-					"Could not find command 'somecommand'.",
-					'error',
-				],
-			)
-			done()
-		})
+		await this.element.restartPtyProcess()
+		expect(this.element.ptyProcess).toBe(null)
+		expect(this.element.ptyProcessRunning).toBe(false)
+		expect(this.element.showNotification.calls.argsFor(0)).toEqual(
+			[
+				"Could not find command 'somecommand'.",
+				'error',
+			],
+		)
 	})
 
-	it('restartPtyProcess() some other error thrown', (done) => {
+	it('restartPtyProcess() some other error thrown', async () => {
 		spyOn(this.element, 'showNotification')
 		this.element.model.profile.command = 'somecommand'
 		const fakeCall = () => {
 			throw Error('Something went wrong')
 		}
 		nodePty.spawn.and.callFake(fakeCall)
-		this.element.restartPtyProcess().then(() => {
-			expect(this.element.ptyProcess).toBe(null)
-			expect(this.element.ptyProcessRunning).toBe(false)
-			expect(this.element.showNotification.calls.argsFor(0)).toEqual(
-				[
-					"Launching 'somecommand' raised the following error: Something went wrong",
-					'error',
-				],
-			)
-			done()
-		})
+		await this.element.restartPtyProcess()
+		expect(this.element.ptyProcess).toBe(null)
+		expect(this.element.ptyProcessRunning).toBe(false)
+		expect(this.element.showNotification.calls.argsFor(0)).toEqual(
+			[
+				"Launching 'somecommand' raised the following error: Something went wrong",
+				'error',
+			],
+		)
 	})
 
 	it('ptyProcess exit handler set ptyProcessRunning to false', () => {
@@ -1601,10 +1534,9 @@ describe('AtomXtermElement', () => {
 			],
 		)
 		this.element.atomXtermProfileMenuElement.initializedPromise = Promise.resolve()
-		const toggleCallback = () => {
+		this.element.atomXtermProfileMenuElement.toggleProfileMenu.and.callFake(() => {
 			done()
-		}
-		this.element.atomXtermProfileMenuElement.toggleProfileMenu.and.callFake(toggleCallback)
+		})
 		this.element.toggleProfileMenu()
 	})
 
@@ -1660,7 +1592,7 @@ describe('AtomXtermElement', () => {
 		expect(this.element.getHoveredLink()).toBe('https://atom.io')
 	})
 
-	it('on \'data\' handler no custom title on win32 platform', (done) => {
+	it('on \'data\' handler no custom title on win32 platform', async () => {
 		Object.defineProperty(process, 'platform', {
 			value: 'win32',
 		})
@@ -1668,16 +1600,14 @@ describe('AtomXtermElement', () => {
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
-		this.element.restartPtyProcess().then(() => {
-			const args = this.element.ptyProcess.on.calls.argsFor(0)
-			const onDataCallback = args[1]
-			onDataCallback('')
-			expect(this.element.model.title).toBe('Atom Xterm')
-			done()
-		})
+		await this.element.restartPtyProcess()
+		const args = this.element.ptyProcess.on.calls.argsFor(0)
+		const onDataCallback = args[1]
+		onDataCallback('')
+		expect(this.element.model.title).toBe('Atom Xterm')
 	})
 
-	it('on \'data\' handler no custom title on linux platform', (done) => {
+	it('on \'data\' handler no custom title on linux platform', async () => {
 		Object.defineProperty(process, 'platform', {
 			value: 'linux',
 		})
@@ -1685,16 +1615,14 @@ describe('AtomXtermElement', () => {
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
-		this.element.restartPtyProcess().then(() => {
-			const args = this.element.ptyProcess.on.calls.argsFor(0)
-			const onDataCallback = args[1]
-			onDataCallback('')
-			expect(this.element.model.title).toBe('sometestprocess')
-			done()
-		})
+		await this.element.restartPtyProcess()
+		const args = this.element.ptyProcess.on.calls.argsFor(0)
+		const onDataCallback = args[1]
+		onDataCallback('')
+		expect(this.element.model.title).toBe('sometestprocess')
 	})
 
-	it('on \'data\' handler custom title on win32 platform', (done) => {
+	it('on \'data\' handler custom title on win32 platform', async () => {
 		Object.defineProperty(process, 'platform', {
 			value: 'win32',
 		})
@@ -1703,16 +1631,14 @@ describe('AtomXtermElement', () => {
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
 		this.element.model.profile.title = 'foo'
-		this.element.restartPtyProcess().then(() => {
-			const args = this.element.ptyProcess.on.calls.argsFor(0)
-			const onDataCallback = args[1]
-			onDataCallback('')
-			expect(this.element.model.title).toBe('foo')
-			done()
-		})
+		await this.element.restartPtyProcess()
+		const args = this.element.ptyProcess.on.calls.argsFor(0)
+		const onDataCallback = args[1]
+		onDataCallback('')
+		expect(this.element.model.title).toBe('foo')
 	})
 
-	it('on \'data\' handler custom title on linux platform', (done) => {
+	it('on \'data\' handler custom title on linux platform', async () => {
 		Object.defineProperty(process, 'platform', {
 			value: 'linux',
 		})
@@ -1721,64 +1647,56 @@ describe('AtomXtermElement', () => {
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
 		this.element.model.profile.title = 'foo'
-		this.element.restartPtyProcess().then(() => {
-			const args = this.element.ptyProcess.on.calls.argsFor(0)
-			const onDataCallback = args[1]
-			onDataCallback('')
-			expect(this.element.model.title).toBe('foo')
-			done()
-		})
+		await this.element.restartPtyProcess()
+		const args = this.element.ptyProcess.on.calls.argsFor(0)
+		const onDataCallback = args[1]
+		onDataCallback('')
+		expect(this.element.model.title).toBe('foo')
 	})
 
-	it('on \'exit\' handler leave open after exit success', (done) => {
+	it('on \'exit\' handler leave open after exit success', async () => {
 		const newPtyProcess = jasmine.createSpyObj('ptyProcess',
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
 		this.element.model.profile.title = 'foo'
-		this.element.restartPtyProcess().then(() => {
-			const args = this.element.ptyProcess.on.calls.argsFor(1)
-			const onExitCallback = args[1]
-			this.element.model.profile.leaveOpenAfterExit = true
-			onExitCallback(0)
-			expect(this.element.querySelector('.atom-xterm-notice-success')).toBeTruthy()
-			expect(this.element.querySelector('.atom-xterm-notice-error')).toBe(null)
-			done()
-		})
+		await this.element.restartPtyProcess()
+		const args = this.element.ptyProcess.on.calls.argsFor(1)
+		const onExitCallback = args[1]
+		this.element.model.profile.leaveOpenAfterExit = true
+		onExitCallback(0)
+		expect(this.element.querySelector('.atom-xterm-notice-success')).toBeTruthy()
+		expect(this.element.querySelector('.atom-xterm-notice-error')).toBe(null)
 	})
 
-	it('on \'exit\' handler leave open after exit failure', (done) => {
+	it('on \'exit\' handler leave open after exit failure', async () => {
 		const newPtyProcess = jasmine.createSpyObj('ptyProcess',
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
 		this.element.model.profile.title = 'foo'
-		this.element.restartPtyProcess().then(() => {
-			const args = this.element.ptyProcess.on.calls.argsFor(1)
-			const onExitCallback = args[1]
-			this.element.model.profile.leaveOpenAfterExit = true
-			onExitCallback(1)
-			expect(this.element.querySelector('.atom-xterm-notice-success')).toBe(null)
-			expect(this.element.querySelector('.atom-xterm-notice-error')).toBeTruthy()
-			done()
-		})
+		await this.element.restartPtyProcess()
+		const args = this.element.ptyProcess.on.calls.argsFor(1)
+		const onExitCallback = args[1]
+		this.element.model.profile.leaveOpenAfterExit = true
+		onExitCallback(1)
+		expect(this.element.querySelector('.atom-xterm-notice-success')).toBe(null)
+		expect(this.element.querySelector('.atom-xterm-notice-error')).toBeTruthy()
 	})
 
-	it('on \'exit\' handler do not leave open', (done) => {
+	it('on \'exit\' handler do not leave open', async () => {
 		const newPtyProcess = jasmine.createSpyObj('ptyProcess',
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
 		this.element.model.profile.title = 'foo'
-		this.element.restartPtyProcess().then(() => {
-			const args = this.element.ptyProcess.on.calls.argsFor(1)
-			const onExitCallback = args[1]
-			this.element.model.profile.leaveOpenAfterExit = false
-			spyOn(this.element.model, 'exit')
-			onExitCallback(1)
-			expect(this.element.model.exit).toHaveBeenCalled()
-			done()
-		})
+		await this.element.restartPtyProcess()
+		const args = this.element.ptyProcess.on.calls.argsFor(1)
+		const onExitCallback = args[1]
+		this.element.model.profile.leaveOpenAfterExit = false
+		spyOn(this.element.model, 'exit')
+		onExitCallback(1)
+		expect(this.element.model.exit).toHaveBeenCalled()
 	})
 
 	it('showNotification() success message', () => {
@@ -1855,34 +1773,28 @@ describe('AtomXtermElement', () => {
 		expect(restartButton.firstChild.nodeValue).toBe('Some text')
 	})
 
-	it('promptToStartup()', (done) => {
-		this.element.promptToStartup().then(() => {
-			const restartButton = this.element.topDiv.querySelector('.atom-xterm-restart-btn')
-			expect(restartButton.firstChild.nodeValue).toBe('Start')
-			done()
-		})
+	it('promptToStartup()', async () => {
+		await this.element.promptToStartup()
+		const restartButton = this.element.topDiv.querySelector('.atom-xterm-restart-btn')
+		expect(restartButton.firstChild.nodeValue).toBe('Start')
 	})
 
-	it('promptToStartup() check message without title', (done) => {
+	it('promptToStartup() check message without title', async () => {
 		const command = ['some_command', 'a', 'b', 'c']
 		spyOn(this.element, 'getShellCommand').and.returnValue(command[0])
 		spyOn(this.element, 'getArgs').and.returnValue(command.slice(1))
 		const expected = `New command ${JSON.stringify(command)} ready to start.`
-		this.element.promptToStartup().then(() => {
-			const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-info')
-			expect(messageDiv.firstChild.nodeValue).toBe(expected)
-			done()
-		})
+		await this.element.promptToStartup()
+		const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-info')
+		expect(messageDiv.firstChild.nodeValue).toBe(expected)
 	})
 
-	it('promptToStartup() check message with title', (done) => {
+	it('promptToStartup() check message with title', async () => {
 		this.element.model.profile.title = 'My Profile'
 		const expected = 'New command for profile My Profile ready to start.'
-		this.element.promptToStartup().then(() => {
-			const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-info')
-			expect(messageDiv.firstChild.nodeValue).toBe(expected)
-			done()
-		})
+		await this.element.promptToStartup()
+		const messageDiv = this.element.topDiv.querySelector('.atom-xterm-notice-info')
+		expect(messageDiv.firstChild.nodeValue).toBe(expected)
 	})
 
 	it('use wheelScrollUp on terminal container', () => {
@@ -1942,23 +1854,23 @@ describe('AtomXtermElement', () => {
 	})
 
 	it('use ctrl+wheelScrollUp font already at maximum', () => {
-		this.element.model.profile.fontSize = atomXtermConfig.getMaximumFontSize()
+		this.element.model.profile.fontSize = configDefaults.getMaximumFontSize()
 		const wheelEvent = new WheelEvent('wheel', {
 			deltaY: -150,
 			ctrlKey: true,
 		})
 		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(atomXtermConfig.getMaximumFontSize())
+		expect(this.element.model.profile.fontSize).toBe(configDefaults.getMaximumFontSize())
 	})
 
 	it('use ctrl+wheelScrollDown font already at minimum', () => {
-		this.element.model.profile.fontSize = atomXtermConfig.getMinimumFontSize()
+		this.element.model.profile.fontSize = configDefaults.getMinimumFontSize()
 		const wheelEvent = new WheelEvent('wheel', {
 			deltaY: 150,
 			ctrlKey: true,
 		})
 		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(atomXtermConfig.getMinimumFontSize())
+		expect(this.element.model.profile.fontSize).toBe(configDefaults.getMinimumFontSize())
 	})
 
 	it('getXtermOptions() default options', () => {
@@ -2135,11 +2047,11 @@ describe('AtomXtermElement', () => {
 			fontSize: 14,
 			fontFamily: 'monospace',
 			theme: 'Custom',
-			colorForeground: '#fff',
-			colorBackground: '#000',
-			colorCursor: '#fff',
-			colorCursorAccent: '#000',
-			colorSelection: 'rgba(255, 255, 255, .3)',
+			colorForeground: '#ffffff',
+			colorBackground: '#000000',
+			colorCursor: '#ffffff',
+			colorCursorAccent: '#000000',
+			colorSelection: '#4d4d4d',
 			colorBlack: '#2e3436',
 			colorRed: '#cc0000',
 			colorGreen: '#4e9a06',
@@ -2174,11 +2086,11 @@ describe('AtomXtermElement', () => {
 			fontSize: 14,
 			fontFamily: 'monospace',
 			theme: 'Custom',
-			colorForeground: '#fff',
-			colorBackground: '#000',
-			colorCursor: '#fff',
-			colorCursorAccent: '#000',
-			colorSelection: 'rgba(255, 255, 255, .3)',
+			colorForeground: '#ffffff',
+			colorBackground: '#000000',
+			colorCursor: '#ffffff',
+			colorCursorAccent: '#000000',
+			colorSelection: '#4d4d4d',
 			colorBlack: '#2e3436',
 			colorRed: '#cc0000',
 			colorGreen: '#4e9a06',
@@ -2217,11 +2129,11 @@ describe('AtomXtermElement', () => {
 			fontSize: 14,
 			fontFamily: 'monospace',
 			theme: 'Custom',
-			colorForeground: '#fff',
-			colorBackground: '#000',
-			colorCursor: '#fff',
-			colorCursorAccent: '#000',
-			colorSelection: 'rgba(255, 255, 255, .3)',
+			colorForeground: '#ffffff',
+			colorBackground: '#000000',
+			colorCursor: '#ffffff',
+			colorCursorAccent: '#000000',
+			colorSelection: '#4d4d4d',
 			colorBlack: '#2e3436',
 			colorRed: '#cc0000',
 			colorGreen: '#4e9a06',
@@ -2264,11 +2176,11 @@ describe('AtomXtermElement', () => {
 			fontSize: 14,
 			fontFamily: 'monospace',
 			theme: 'Custom',
-			colorForeground: '#fff',
-			colorBackground: '#000',
-			colorCursor: '#fff',
-			colorCursorAccent: '#000',
-			colorSelection: 'rgba(255, 255, 255, .3)',
+			colorForeground: '#ffffff',
+			colorBackground: '#000000',
+			colorCursor: '#ffffff',
+			colorCursorAccent: '#000000',
+			colorSelection: '#4d4d4d',
 			colorBlack: '#2e3436',
 			colorRed: '#cc0000',
 			colorGreen: '#4e9a06',
@@ -2314,11 +2226,11 @@ describe('AtomXtermElement', () => {
 			fontSize: 14,
 			fontFamily: 'monospace',
 			theme: 'Custom',
-			colorForeground: '#fff',
-			colorBackground: '#000',
-			colorCursor: '#fff',
-			colorCursorAccent: '#000',
-			colorSelection: 'rgba(255, 255, 255, .3)',
+			colorForeground: '#ffffff',
+			colorBackground: '#000000',
+			colorCursor: '#ffffff',
+			colorCursorAccent: '#000000',
+			colorSelection: '#4d4d4d',
 			colorBlack: '#2e3436',
 			colorRed: '#cc0000',
 			colorGreen: '#4e9a06',

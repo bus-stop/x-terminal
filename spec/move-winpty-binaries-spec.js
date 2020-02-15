@@ -21,28 +21,23 @@ import fs from 'fs-extra'
 import os from 'os'
 import path from 'path'
 
-import tmp from 'tmp'
+import temp from 'temp'
 
 import * as script from '../src/scripts/move-winpty-binaries'
 
+temp.track()
+
 describe('move-winpty-binaries script', () => {
-	beforeEach((done) => {
+	beforeEach(async () => {
 		spyOn(process, 'exit').and.callFake((exitCode) => {
 			throw new Error(`process.exit(${exitCode}) called`)
 		})
 		spyOn(console, 'log')
-		tmp.dir({ unsafeCleanup: true }, (err, _path, cleanupCallback) => {
-			if (err) {
-				throw err
-			}
-			this.tmpdir = _path
-			this.tmpdirCleanupCallback = cleanupCallback
-			done()
-		})
+		this.tmpdir = await temp.mkdir()
 	})
 
-	afterEach(() => {
-		this.tmpdirCleanupCallback()
+	afterEach(async () => {
+		await temp.cleanup()
 	})
 
 	it('mkdtempSyncForRenamingDLLs() no atomHome specified', () => {
@@ -57,29 +52,19 @@ describe('move-winpty-binaries script', () => {
 		expect(fs.mkdtempSync.calls.argsFor(0)).toEqual([expectedTemplate])
 	})
 
-	it('mkdtempSyncForRenamingDLLs() path created', (done) => {
+	it('mkdtempSyncForRenamingDLLs() path created', async () => {
 		const atomHome = this.tmpdir
 		const tmpPath = script.mkdtempSyncForRenamingDLLs(atomHome)
-		fs.lstat(tmpPath, (err, stats) => {
-			if (err) {
-				fail(err)
-			}
-			expect(stats.isDirectory())
-			done()
-		})
+		const stats = await fs.lstat(tmpPath)
+		expect(stats.isDirectory())
 	})
 
-	it('mkdtempSyncForRenamingDLLs() correct leading directories created', (done) => {
+	it('mkdtempSyncForRenamingDLLs() correct leading directories created', async () => {
 		const atomHome = this.tmpdir
 		const expectedTmpDir = path.join(atomHome, 'tmp')
 		script.mkdtempSyncForRenamingDLLs(atomHome)
-		fs.lstat(expectedTmpDir, (err, stats) => {
-			if (err) {
-				fail(err)
-			}
-			expect(stats.isDirectory())
-			done()
-		})
+		const stats = await fs.lstat(expectedTmpDir)
+		expect(stats.isDirectory())
 	})
 
 	it('mkdtempSyncForRenamingDLLs() different directory per call', () => {
