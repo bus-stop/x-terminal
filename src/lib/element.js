@@ -25,10 +25,10 @@ import { WebLinksAddon } from 'xterm-addon-web-links'
 import { WebglAddon } from 'xterm-addon-webgl'
 import { shell } from 'electron'
 
-import { configDefaults, COLORS } from './atom-xterm-config'
-import { AtomXtermProfileMenuElement } from './atom-xterm-profile-menu-element'
-import { AtomXtermProfileMenuModel } from './atom-xterm-profile-menu-model'
-import { AtomXtermProfilesSingleton } from './atom-xterm-profiles'
+import { configDefaults, COLORS } from './config'
+import { AtomXtermProfileMenuElement } from './profile-menu-element'
+import { AtomXtermProfileMenuModel } from './profile-menu-model'
+import { AtomXtermProfilesSingleton } from './profiles'
 
 import fs from 'fs-extra'
 

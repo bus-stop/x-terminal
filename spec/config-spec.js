@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { configDefaults } from '../src/lib/atom-xterm-config'
+import { configDefaults } from '../src/lib/config'
 
 import os from 'os'
 import path from 'path'

@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { clearDiv } from './atom-xterm-utils'
+import { clearDiv } from './utils'
 
 class AtomXtermSaveProfileElementImpl extends HTMLElement {
 	initialize (model) {

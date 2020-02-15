@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { AtomXtermProfilesSingleton } from './atom-xterm-profiles'
+import { AtomXtermProfilesSingleton } from './profiles'
 
 class AtomXtermOverwriteProfileModel {
 	constructor (atomXtermSaveProfileModel) {

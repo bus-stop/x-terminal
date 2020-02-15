@@ -19,7 +19,7 @@
 
 import { Emitter } from 'atom'
 
-import { configDefaults, COLORS } from './atom-xterm-config'
+import { configDefaults, COLORS } from './config'
 
 import fs from 'fs-extra'
 import path from 'path'

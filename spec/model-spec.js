@@ -19,9 +19,9 @@
 
 import { Emitter } from 'atom'
 
-import { configDefaults } from '../src/lib/atom-xterm-config'
-import { AtomXtermModel, isAtomXtermModel, currentItemIsAtomXtermModel } from '../src/lib/atom-xterm-model'
-import { AtomXtermProfilesSingleton } from '../src/lib/atom-xterm-profiles'
+import { configDefaults } from '../src/lib/config'
+import { AtomXtermModel, isAtomXtermModel, currentItemIsAtomXtermModel } from '../src/lib/model'
+import { AtomXtermProfilesSingleton } from '../src/lib/profiles'
 
 import fs from 'fs-extra'
 import path from 'path'

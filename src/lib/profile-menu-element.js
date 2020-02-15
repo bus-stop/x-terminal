@@ -19,11 +19,11 @@
 
 import { CompositeDisposable, TextEditor } from 'atom'
 
-import { AtomXtermProfilesSingleton } from './atom-xterm-profiles'
-import { AtomXtermDeleteProfileModel } from './atom-xterm-delete-profile-model'
-import { AtomXtermSaveProfileModel } from './atom-xterm-save-profile-model'
-import { createHorizontalLine } from './atom-xterm-utils'
-import { config, COLORS } from './atom-xterm-config.js'
+import { AtomXtermProfilesSingleton } from './profiles'
+import { AtomXtermDeleteProfileModel } from './delete-profile-model'
+import { AtomXtermSaveProfileModel } from './save-profile-model'
+import { createHorizontalLine } from './utils'
+import { config, COLORS } from './config.js'
 
 class AtomXtermProfileMenuElementImpl extends HTMLElement {
 	async initialize (model) {

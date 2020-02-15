@@ -19,7 +19,7 @@
 
 import { Emitter } from 'atom'
 
-import { AtomXtermProfilesSingleton } from './atom-xterm-profiles'
+import { AtomXtermProfilesSingleton } from './profiles'
 
 import fs from 'fs-extra'
 import path from 'path'

@@ -19,8 +19,8 @@
 
 import { CompositeDisposable } from 'atom'
 
-import { configDefaults } from '../src/lib/atom-xterm-config'
-import { AtomXtermProfilesSingleton } from '../src/lib/atom-xterm-profiles'
+import { configDefaults } from '../src/lib/config'
+import { AtomXtermProfilesSingleton } from '../src/lib/profiles'
 
 import path from 'path'
 

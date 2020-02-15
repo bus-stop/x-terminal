@@ -19,9 +19,9 @@
 
 import { TextEditor } from 'atom'
 
-import { AtomXtermProfilesSingleton } from './atom-xterm-profiles'
-import { AtomXtermOverwriteProfileModel } from './atom-xterm-overwrite-profile-model'
-import { currentItemIsAtomXtermModel } from './atom-xterm-model'
+import { AtomXtermProfilesSingleton } from './profiles'
+import { AtomXtermOverwriteProfileModel } from './overwrite-profile-model'
+import { currentItemIsAtomXtermModel } from './model'
 
 class AtomXtermSaveProfileModel {
 	constructor (atomXtermProfileMenuElement) {

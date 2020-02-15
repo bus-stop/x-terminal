@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { clearDiv, createHorizontalLine } from './atom-xterm-utils'
+import { clearDiv, createHorizontalLine } from './utils'
 
 class AtomXtermOverwriteProfileElementImpl extends HTMLElement {
 	initialize (model) {

@@ -20,9 +20,9 @@
 import * as nodePty from 'node-pty-prebuilt-multiarch'
 import { shell } from 'electron'
 
-import { configDefaults } from '../src/lib/atom-xterm-config'
-import { AtomXtermElement } from '../src/lib/atom-xterm-element'
-import { AtomXtermModel } from '../src/lib/atom-xterm-model'
+import { configDefaults } from '../src/lib/config'
+import { AtomXtermElement } from '../src/lib/element'
+import { AtomXtermModel } from '../src/lib/model'
 
 import path from 'path'
 

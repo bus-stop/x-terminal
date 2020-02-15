@@ -22,18 +22,18 @@ import '../styles/atom-xterm.sass'
 
 import { CompositeDisposable } from 'atom'
 
-import { COLORS } from './atom-xterm-config'
-import { AtomXtermElement } from './atom-xterm-element'
-import { AtomXtermModel, isAtomXtermModel } from './atom-xterm-model'
-import { ATOM_XTERM_BASE_URI, AtomXtermProfilesSingleton } from './atom-xterm-profiles'
-import { AtomXtermProfileMenuElement } from './atom-xterm-profile-menu-element'
-import { AtomXtermProfileMenuModel } from './atom-xterm-profile-menu-model'
-import { AtomXtermDeleteProfileElement } from './atom-xterm-delete-profile-element'
-import { AtomXtermDeleteProfileModel } from './atom-xterm-delete-profile-model'
-import { AtomXtermOverwriteProfileElement } from './atom-xterm-overwrite-profile-element'
-import { AtomXtermOverwriteProfileModel } from './atom-xterm-overwrite-profile-model'
-import { AtomXtermSaveProfileElement } from './atom-xterm-save-profile-element'
-import { AtomXtermSaveProfileModel } from './atom-xterm-save-profile-model'
+import { COLORS } from './config'
+import { AtomXtermElement } from './element'
+import { AtomXtermModel, isAtomXtermModel } from './model'
+import { ATOM_XTERM_BASE_URI, AtomXtermProfilesSingleton } from './profiles'
+import { AtomXtermProfileMenuElement } from './profile-menu-element'
+import { AtomXtermProfileMenuModel } from './profile-menu-model'
+import { AtomXtermDeleteProfileElement } from './delete-profile-element'
+import { AtomXtermDeleteProfileModel } from './delete-profile-model'
+import { AtomXtermOverwriteProfileElement } from './overwrite-profile-element'
+import { AtomXtermOverwriteProfileModel } from './overwrite-profile-model'
+import { AtomXtermSaveProfileElement } from './save-profile-element'
+import { AtomXtermSaveProfileModel } from './save-profile-model'
 
 import { URL } from 'whatwg-url'
 
@@ -433,7 +433,7 @@ class AtomXtermSingleton {
 	}
 }
 
-export { config } from './atom-xterm-config'
+export { config } from './config'
 
 export function activate (state) {
 	return AtomXtermSingleton.instance.activate(state)
