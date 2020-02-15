@@ -211,7 +211,7 @@ describe('XTerminalElement', () => {
 		const dir = path.join(this.tmpdir, 'non-existent-dir')
 		const params = new URLSearchParams({ cwd: dir })
 		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		await createNewElement(url.href)
 		const cwd = await this.element.getCwd()
 		expect(cwd).toBe(configDefaults.getDefaultCwd())
 	})
@@ -257,7 +257,7 @@ describe('XTerminalElement', () => {
 	it('getEnv() deleteEnv set in uri', async () => {
 		const params = new URLSearchParams({ env: JSON.stringify({ var1: 'value1' }), deleteEnv: JSON.stringify(['var1']) })
 		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		await createNewElement(url.href)
 		expect(this.element.getEnv().var1).toBe(undefined)
 	})
 
