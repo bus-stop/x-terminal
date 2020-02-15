@@ -1,7 +1,7 @@
 {
   "name": "x-terminal",
-  "main": "./dist/lib/atom-xterm",
-  "module": "./dist/lib/atom-xterm",
+  "main": "./dist/lib/x-terminal",
+  "module": "./dist/lib/x-terminal",
   "version": "6.5.1",
   "description": "Atom plugin for providing terminals inside your Atom workspace.",
   "keywords": [
