@@ -428,7 +428,7 @@ class XTerminalElementImpl extends HTMLElement {
 		this.terminal = new Terminal(this.getXtermOptions())
 		this.fitAddon = new FitAddon()
 		this.terminal.loadAddon(this.fitAddon)
-		this.terminal.loadAddon(new WebLinksAddon())
+		this.terminal.loadAddon(new WebLinksAddon((e, uri) => { shell.openExternal(uri) }))
 		this.terminal.open(this.terminalDiv)
 		this.terminal.loadAddon(new WebglAddon())
 		this.ptyProcessCols = 80
@@ -684,28 +684,6 @@ class XTerminalElementImpl extends HTMLElement {
 
 	showTerminal () {
 		this.terminalDiv.style.visibility = 'visible'
-	}
-
-	setHoveredLink (link) {
-		this.hoveredLink = link
-		this.terminalDiv.classList.add('x-terminal-term-container-has-link')
-	}
-
-	clearHoveredLink () {
-		this.terminalDiv.classList.remove('x-terminal-term-container-has-link')
-		this.hoveredLink = null
-	}
-
-	openHoveredLink () {
-		if (this.hoveredLink) {
-			shell.openExternal(this.hoveredLink)
-		}
-	}
-
-	getHoveredLink () {
-		if (this.hoveredLink) {
-			return this.hoveredLink
-		}
 	}
 
 	queueNewProfileChanges (profileChanges) {

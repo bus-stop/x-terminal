@@ -21,6 +21,7 @@
 import '../styles/x-terminal.sass'
 
 import { CompositeDisposable } from 'atom'
+import os from 'os'
 
 import { COLORS } from './config'
 import { XTerminalElement } from './element'
@@ -201,8 +202,6 @@ class XTerminalSingleton {
 			'x-terminal:restart': () => this.restart(),
 			'x-terminal:copy': () => this.copy(),
 			'x-terminal:paste': () => this.paste(),
-			'x-terminal:open-link': () => this.openLink(),
-			'x-terminal:copy-link': () => this.copyLink(),
 		}))
 	}
 
@@ -276,16 +275,16 @@ class XTerminalSingleton {
 	}
 
 	/**
-   * Service function which is a wrapper around 'atom.workspace.open()'. The
-   * only difference with this function from 'atom.workspace.open()' is that it
-   * accepts a profile Object as the first argument.
-   *
-   * @async
-   * @function
-   * @param {Object} profile Profile data to use when opening terminal.
-   * @param {Object} options Options to pass to call to 'atom.workspace.open()'.
-   * @return {XTerminalModel} Instance of XTerminalModel.
-   */
+	 * Service function which is a wrapper around 'atom.workspace.open()'. The
+	 * only difference with this function from 'atom.workspace.open()' is that it
+	 * accepts a profile Object as the first argument.
+	 *
+	 * @async
+	 * @function
+	 * @param {Object} profile Profile data to use when opening terminal.
+	 * @param {Object} options Options to pass to call to 'atom.workspace.open()'.
+	 * @return {XTerminalModel} Instance of XTerminalModel.
+	 */
 	async openTerminal (profile, options = {}) {
 		return this.open(
 			XTerminalProfilesSingleton.instance.generateNewUrlFromProfileData(profile),
@@ -294,15 +293,56 @@ class XTerminalSingleton {
 	}
 
 	/**
-   * Function providing service functions offered by 'x-terminal' package.
-   *
-   * @function
-   * @returns {Object} Object holding service functions.
-   */
+	 * Service function which opens a terminal and runs the commands.
+	 *
+	 * @async
+	 * @function
+	 * @param {string[]} commands Commands to run in the terminal.
+	 * @return {XTerminalModel} Instance of XTerminalModel.
+	 */
+	async runCommands (commands) {
+		const model = await this.open(XTerminalProfilesSingleton.instance.generateNewUri())
+		await model.element.initializedPromise
+		for (const command of commands) {
+			model.pasteToTerminal(command + os.EOL)
+		}
+	}
+
+	/**
+	 * Function providing service functions offered by 'atom-xterm' service.
+	 *
+	 * @function
+	 * @returns {Object} Object holding service functions.
+	 */
 	provideAtomXtermService () {
 		return {
 			openTerminal: async (...args) => {
 				return this.openTerminal(...args)
+			},
+		}
+	}
+
+	/**
+	 * Function providing service functions offered by 'platformioIDETerminal' service.
+	 *
+	 * @function
+	 * @returns {Object} Object holding service functions.
+	 */
+	providePlatformIOIDEService () {
+		return {
+			updateProcessEnv (vars) {
+				for (const name in vars) {
+					process.env[name] = vars[name]
+				}
+			},
+			run: (commands) => {
+				return this.runCommands(commands)
+			},
+			getTerminalViews: () => {
+				return this.terminals_set
+			},
+			open: () => {
+				return this.openTerminal()
 			},
 		}
 	}
@@ -323,16 +363,6 @@ class XTerminalSingleton {
 				case 'paste':
 					item.pasteToTerminal(atom.clipboard.read())
 					break
-				case 'open-link':
-					item.openHoveredLink()
-					break
-				case 'copy-link': {
-					const link = item.getHoveredLink()
-					if (link) {
-						atom.clipboard.write(link)
-					}
-					break
-				}
 				default:
 					throw new Error('Unknown operation: ' + operation)
 			}
@@ -353,14 +383,6 @@ class XTerminalSingleton {
 
 	paste () {
 		this.performOperationOnItem('paste')
-	}
-
-	openLink () {
-		this.performOperationOnItem('open-link')
-	}
-
-	copyLink () {
-		this.performOperationOnItem('copy-link')
 	}
 
 	toggleProfileMenu () {
@@ -452,4 +474,8 @@ export function deserializeXTerminalModel (serializedModel, atomEnvironment) {
 
 export function provideAtomXtermService () {
 	return XTerminalSingleton.instance.provideAtomXtermService()
+}
+
+export function providePlatformIOIDEService () {
+	return XTerminalSingleton.instance.providePlatformIOIDEService()
 }

@@ -467,18 +467,6 @@ describe('XTerminalModel', () => {
 		expect(this.model.element.toggleProfileMenu).toHaveBeenCalled()
 	})
 
-	it('openHoveredLink()', () => {
-		this.model.element = jasmine.createSpyObj('element', ['openHoveredLink'])
-		this.model.openHoveredLink()
-		expect(this.model.element.openHoveredLink).toHaveBeenCalled()
-	})
-
-	it('getHoveredLink()', () => {
-		this.model.element = jasmine.createSpyObj('element', ['getHoveredLink'])
-		this.model.getHoveredLink()
-		expect(this.model.element.getHoveredLink).toHaveBeenCalled()
-	})
-
 	it('getProfile()', () => {
 		const mock = jasmine.createSpy('mock')
 		this.model.profile = mock

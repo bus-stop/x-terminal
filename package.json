@@ -35,6 +35,12 @@
       "versions": {
         "2.0.0": "provideAtomXtermService"
       }
+    },
+    "platformioIDETerminal": {
+      "description": "Run commands and open terminals.",
+      "versions": {
+        "1.1.0": "providePlatformIOIDEService"
+      }
     }
   },
   "dependencies": {
