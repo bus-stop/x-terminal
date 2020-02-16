@@ -114,6 +114,7 @@ x-terminal-profile {
 
 .x-terminal-profile-menu-item-label-checkbox {
   padding-left: 2.25em;
+  margin-top: -20px;
 
   .x-terminal-profile-menu-item-checkbox {
     width: 15px;
@@ -121,8 +122,12 @@ x-terminal-profile {
     margin-left: -2.25em;
     vertical-align: bottom;
     position: relative;
-    top: 10px;
+    top: 20px;
   }
+}
+
+.x-terminal-profile-menu-item-description-checkbox {
+  padding-left: 2.25em;
 }
 
 .x-terminal-profile-menu-item-title {
@@ -138,10 +143,6 @@ x-terminal-profile {
   &:empty {
     display: none;
   }
-}
-
-.x-terminal-profile-menu-item-description-checkbox {
-  padding-left: 2.25em;
 }
 
 .x-terminal-profile-menu-item-select {
@@ -161,21 +162,42 @@ x-terminal-profile {
   }
 }
 
-.x-terminal-profile-menu-item-color {
-  color: @text-color;
-  border-color: @button-border-color;
-  background-color: @button-background-color;
-  height: 2em;
-  width: 100%;
-  font-size: 1.25em;
-  padding-top: 0;
-  padding-bottom: 0;
+.x-terminal-profile-menu-item-label-color {
+  padding-left: 5em;
+  margin-top: -20px;
 
-  &:hover,
-  &:focus {
-    box-shadow: none;
-    background-color: @button-background-color-hover;
+  .x-terminal-profile-menu-item-color {
+    color: @text-color;
+    border-color: @button-border-color;
+    background-color: @button-background-color;
+    width: 4em;
+    margin-left: -5em;
+    padding: 0;
+    vertical-align: bottom;
+    position: relative;
+    top: 20px;
+
+    &::-webkit-color-swatch-wrapper {
+      padding: 2px;
+      margin: 0;
+      border-radius: inherit;
+    }
+
+    &::-webkit-color-swatch {
+      border-radius: 2px;
+      border: 1px solid hsla(0, 0%, 0%, 0.1);
+    }
+
+    &:hover,
+    &:focus {
+      box-shadow: none;
+      background-color: @button-background-color-hover;
+    }
   }
+}
+
+.x-terminal-profile-menu-item-description-color {
+  padding-left: 5em;
 }
 
 .x-terminal-profile-menu-buttons-div {

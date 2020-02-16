@@ -366,11 +366,12 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 	}
 
 	createColor (id, labelTitle, labelDescription, defaultValue, initialValue) {
-		const menuItemContainer = this.createMenuItemContainer(
-			id,
-			labelTitle,
-			labelDescription,
-		)
+		const menuItemContainer = document.createElement('div')
+		menuItemContainer.classList.add('x-terminal-profile-menu-item')
+		menuItemContainer.setAttribute('id', id)
+		const menuItemLabel = document.createElement('label')
+		menuItemLabel.classList.add('x-terminal-profile-menu-item-label')
+		menuItemLabel.classList.add('x-terminal-profile-menu-item-label-color')
 		const color = document.createElement('input')
 		color.setAttribute('type', 'color')
 		color.classList.add('x-terminal-profile-menu-item-color')
@@ -378,7 +379,17 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		if (initialValue !== undefined) {
 			color.value = this.toHex(initialValue)
 		}
-		menuItemContainer.appendChild(color)
+		menuItemLabel.appendChild(color)
+		const titleDiv = document.createElement('div')
+		titleDiv.classList.add('x-terminal-profile-menu-item-title')
+		titleDiv.appendChild(document.createTextNode(labelTitle))
+		menuItemLabel.appendChild(titleDiv)
+		menuItemContainer.appendChild(menuItemLabel)
+		const descriptionDiv = document.createElement('div')
+		descriptionDiv.classList.add('x-terminal-profile-menu-item-description')
+		descriptionDiv.classList.add('x-terminal-profile-menu-item-description-color')
+		descriptionDiv.appendChild(document.createTextNode(labelDescription))
+		menuItemContainer.appendChild(descriptionDiv)
 		return menuItemContainer
 	}
 
