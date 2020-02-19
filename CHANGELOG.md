@@ -1,3 +1,16 @@
+# [7.1.0](https://github.com/UziTech/x-terminal/compare/v7.0.0...v7.1.0) (2020-02-19)
+
+
+### Bug Fixes
+
+* profile menu style ([ac13e41](https://github.com/UziTech/x-terminal/commit/ac13e415a543440996b90f00f9e549e27362055d))
+
+
+### Features
+
+* add default open position setting ([7c10a3c](https://github.com/UziTech/x-terminal/commit/7c10a3c94a340bfe9afa3c1ce790b7d85504700a))
+* add platform io terminal service ([fbf2b6a](https://github.com/UziTech/x-terminal/commit/fbf2b6a696cb971f8c1f7b5aa01f2d6ed0d8d0e4))
+
 # [7.0.0](https://github.com/UziTech/x-terminal/compare/v6.5.1...v7.0.0) (2020-02-15)
 
 
