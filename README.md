@@ -30,11 +30,11 @@ give an explanation as to why you need a built-in terminal in Atom by default.
 
 # Installation
 
-To install, simply search for the *x-terminal* package via Atom's package
-manager. It can also be installed via command-line with the
-[apm](https://github.com/atom/apm) command.
+Go to <https://atom.io/packages/x-terminal> and click Install, or search for
+the *x-terminal* package via Atom's package manager. It can also be installed
+via command-line with the [apm](https://github.com/atom/apm) command.
 
-```
+```sh
 apm install x-terminal
 ```
 
@@ -56,7 +56,7 @@ to install the LTS version of Node.js.
 
 Then, install the *windows-build-tools* package via npm.
 
-```plain
+```sh
 npm install --global --production windows-build-tools
 ```
 
@@ -69,7 +69,7 @@ to install Node.js. It's recommended to install the LTS version of Node.js.
 
 Then install the *build-essential* and *python2.7* .deb packages.
 
-```plain
+```sh
 sudo apt-get install build-essential python2.7
 ```
 
@@ -134,20 +134,26 @@ There's also activity notifications for terminal tabs not in focus.
 
 ## Services
 
-For plugin writers, the `x-terminal` package supports one service method which
-can be used to easily open terminals. This method is provided using Atom's [services](http://flight-manual.atom.io/behind-atom/sections/interacting-with-other-packages-via-services/)
-API. To use it, add a consumer method to consume the `x-terminal` service, or
-rather a JavaScript object that provides an
-[openTerminal()](https://github.com/UziTech/x-terminal/blob/b9578414e93b6fd164e19e03e2fbd5140934c3cb/lib/atom-xterm.js#L368) method. The `openTerminal()` method behaves just like Atom's
-[open()](https://github.com/atom/atom/blob/v1.23.3/src/workspace.js#L912)
+For plugin writers, the `x-terminal` package supports two services, `atom-xterm` and `platformioIDETerminal`, which
+can be used to easily open terminals. These methods are provided using Atom's [services](http://flight-manual.atom.io/behind-atom/sections/interacting-with-other-packages-via-services/)
+API.
+
+To use a service, add a consumer method to consume the service, or
+rather a JavaScript object that provides methods to open terminals and run commands.
+
+### 'atom-xterm' service v2.0.0
+
+The `atom-xterm` service provides the
+[openTerminal()](https://github.com/UziTech/x-terminal/blob/2a7762b6d29abdc017af17c320b2e548cd14e4a9/src/lib/x-terminal.js#L273) method. The `openTerminal()` method behaves just like Atom's
+[open()](https://github.com/atom/atom/blob/917a00e195b93c8c2a9adc349fd8fa1844f61dbc/src/workspace.js#L1076)
 method except that the first argument must be a JSON object describing the
 terminal profile that should be opened. Docs about this JSON object can be
-found [here](https://github.com/UziTech/x-terminal/blob/b9578414e93b6fd164e19e03e2fbd5140934c3cb/lib/atom-xterm-profiles.js#L295).
+found [here](https://github.com/UziTech/x-terminal/blob/2a7762b6d29abdc017af17c320b2e548cd14e4a9/src/lib/profiles.js#L311).
 
 As an example on how to use the provided `openTerminal()` method, your
 `package.json` should have the following.
 
-```javascript
+```json
 {
   "consumedServices": {
     "atom-xterm": {
@@ -162,9 +168,7 @@ As an example on how to use the provided `openTerminal()` method, your
 Your package's main module should then define a `consumeAtomXtermService`
 method, for example.
 
-```javascript
-// In ECMAScript 6
-
+```js
 import { Disposable } from 'atom'
 
 export default {
@@ -184,7 +188,7 @@ export default {
 Once the service is consumed, use the `openTerminal()` method that is provided
 by the service, for example.
 
-```javascript
+```js
 // Launch `somecommand --foo --bar --baz` in a terminal.
 this.atomXtermService.openTerminal({
   command: 'somecommand',
@@ -196,6 +200,55 @@ this.atomXtermService.openTerminal({
 })
 ```
 
+### 'platformioIDETerminal' service v1.1.0
+
+The `platformioIDETerminal` service provides an [object](https://github.com/UziTech/x-terminal/blob/2a7762b6d29abdc017af17c320b2e548cd14e4a9/src/lib/x-terminal.js#L381) with `updateProcessEnv`, `run`, `getTerminalViews`, and `open` methods.
+
+As an example on how to use the provided `run()` method, your
+`package.json` should have the following.
+
+```json
+{
+  "consumedServices": {
+    "platformioIDETerminal": {
+      "versions": {
+        "^1.1.0": "consumePlatformioIDETerminalService"
+      }
+    }
+  }
+}
+```
+
+Your package's main module should then define a `consumePlatformioIDETerminalService`
+method, for example.
+
+```js
+import { Disposable } from 'atom'
+
+export default {
+  platformioIDETerminalService: null,
+
+  consumePlatformioIDETerminalService (platformioIDETerminalService) {
+    this.platformioIDETerminalService = platformioIDETerminalService
+    return new Disposable(() => {
+      this.platformioIDETerminalService = null
+    })
+  },
+
+  // . . .
+}
+```
+
+Once the service is consumed, use the `run()` method that is provided
+by the service, for example.
+
+```js
+// Launch `somecommand --foo --bar --baz` in a terminal.
+this.platformioIDETerminalService.run([
+   'somecommand --foo --bar --baz'
+])
+```
+
 # Development
 
 Want to help develop x-terminal? Here's how to quickly get setup.
@@ -203,14 +256,14 @@ Want to help develop x-terminal? Here's how to quickly get setup.
 First use the [apm](https://github.com/atom/apm) command to clone the
 [x-terminal repo](https://github.com/UziTech/x-terminal).
 
-```
+```sh
 apm develop x-terminal
 ```
 
 This should clone the x-terminal package into the `$HOME/github/x-terminal`
 directory. Go into this directory and install its dependencies.
 
-```
+```sh
 cd $HOME/github/x-terminal
 npm install
 ```
@@ -219,13 +272,13 @@ Rebuild any native binaries that were installed (such as the binaries from the
 [node-pty](https://github.com/Tyriar/node-pty) package) so that they can be
 used inside Atom.
 
-```
+```sh
 apm rebuild
 ```
 
 Finally, open this directory in Atom's dev mode and hack away.
 
-```
+```sh
 atom --dev
 ```
 
@@ -246,7 +299,7 @@ master branch that you'll own. Fork the repo using Github and make note of the
 new `git` URL. Set this new git URL as the URL for the `origin` remote in your
 already cloned git repo is follows.
 
-```
+```sh
 git remote set-url origin ${NEW_GIT_URL}
 ```
 
@@ -267,44 +320,44 @@ supported in x-terminal, here's how you can quickly get setup.
 First make a fork of [xterm.js](https://github.com/xtermjs/xterm.js). Next,
 clone your newly created fork as follows.
 
-```
+```sh
 git clone ${YOUR_XTERMJS_FORK} ${HOME}/github/xterm.js
 ```
 
 Go into your newly cloned repo for xterm.js.
 
-```
+```sh
 cd ${HOME}/github/xterm.js
 ```
 
 Install all needed dependencies.
 
-```
+```sh
 npm install
 ```
 
 Build xterm.js.
 
-```
+```sh
 npm run build
 ```
 
 Ensure the test suite passes.
 
-```
+```sh
 npm run test
 npm run lint
 ```
 
 Add a global link for xterm.js to your system.
 
-```
+```sh
 npm link
 ```
 
 Inside your x-terminal directory, link against the global `xterm` link.
 
-```
+```sh
 cd ${HOME}/github/x-terminal
 npm link xterm
 ```
@@ -312,7 +365,7 @@ npm link xterm
 Finally, perform a rebuild with the [apm](https://github.com/atom/apm) program
 inside the x-terminal directory.
 
-```
+```sh
 apm rebuild
 ```
 
