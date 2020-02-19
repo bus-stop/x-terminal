@@ -158,9 +158,11 @@ class XTerminalSingleton {
 
 		// Add commands.
 		this.disposables.add(atom.commands.add('atom-workspace', {
-			'x-terminal:open': () => {
-				this.openInCenterOrDock(atom.workspace)
-			},
+			'x-terminal:open': () => this.open(
+				this.profilesSingleton.generateNewUri(),
+				this.addDefaultPosition(),
+			),
+			'x-terminal:open-center': () => this.openInCenterOrDock(atom.workspace),
 			'x-terminal:open-split-up': () => this.open(
 				this.profilesSingleton.generateNewUri(),
 				{ split: 'up' },
@@ -177,15 +179,9 @@ class XTerminalSingleton {
 				this.profilesSingleton.generateNewUri(),
 				{ split: 'right' },
 			),
-			'x-terminal:open-split-bottom-dock': () => {
-				this.openInCenterOrDock(atom.workspace.getBottomDock())
-			},
-			'x-terminal:open-split-left-dock': () => {
-				this.openInCenterOrDock(atom.workspace.getLeftDock())
-			},
-			'x-terminal:open-split-right-dock': () => {
-				this.openInCenterOrDock(atom.workspace.getRightDock())
-			},
+			'x-terminal:open-split-bottom-dock': () => this.openInCenterOrDock(atom.workspace.getBottomDock()),
+			'x-terminal:open-split-left-dock': () => this.openInCenterOrDock(atom.workspace.getLeftDock()),
+			'x-terminal:open-split-right-dock': () => this.openInCenterOrDock(atom.workspace.getRightDock()),
 			'x-terminal:toggle-profile-menu': () => this.toggleProfileMenu(),
 			'x-terminal:reorganize': () => this.reorganize('current'),
 			'x-terminal:reorganize-top': () => this.reorganize('top'),
@@ -229,13 +225,12 @@ class XTerminalSingleton {
 		})
 	}
 
-	openInCenterOrDock (centerOrDock) {
-		const options = {}
+	openInCenterOrDock (centerOrDock, options = {}) {
 		const pane = centerOrDock.getActivePane()
 		if (pane) {
 			options.pane = pane
 		}
-		this.open(
+		return this.open(
 			this.profilesSingleton.generateNewUri(),
 			options,
 		)
@@ -286,6 +281,7 @@ class XTerminalSingleton {
 	 * @return {XTerminalModel} Instance of XTerminalModel.
 	 */
 	async openTerminal (profile, options = {}) {
+		options = this.addDefaultPosition(options)
 		return this.open(
 			XTerminalProfilesSingleton.instance.generateNewUrlFromProfileData(profile),
 			options,
@@ -301,11 +297,70 @@ class XTerminalSingleton {
 	 * @return {XTerminalModel} Instance of XTerminalModel.
 	 */
 	async runCommands (commands) {
-		const model = await this.open(XTerminalProfilesSingleton.instance.generateNewUri())
+		const options = this.addDefaultPosition()
+		const model = await this.open(
+			XTerminalProfilesSingleton.instance.generateNewUri(),
+			options,
+		)
 		await model.element.initializedPromise
 		for (const command of commands) {
 			model.pasteToTerminal(command + os.EOL)
 		}
+	}
+
+	addDefaultPosition (options = {}) {
+		const position = atom.config.get('x-terminal.terminalSettings.defaultOpenPosition')
+		switch (position) {
+			case 'Center': {
+				const pane = atom.workspace.getActivePane()
+				if (pane && !('pane' in options)) {
+					options.pane = pane
+				}
+				break
+			}
+			case 'Split Up':
+				if (!('split' in options)) {
+					options.split = 'up'
+				}
+				break
+			case 'Split Down':
+				if (!('split' in options)) {
+					options.split = 'down'
+				}
+				break
+			case 'Split Left':
+				if (!('split' in options)) {
+					options.split = 'left'
+				}
+				break
+			case 'Split Right':
+				if (!('split' in options)) {
+					options.split = 'right'
+				}
+				break
+			case 'Bottom Dock': {
+				const pane = atom.workspace.getBottomDock().getActivePane()
+				if (pane && !('pane' in options)) {
+					options.pane = pane
+				}
+				break
+			}
+			case 'Left Dock': {
+				const pane = atom.workspace.getLeftDock().getActivePane()
+				if (pane && !('pane' in options)) {
+					options.pane = pane
+				}
+				break
+			}
+			case 'Right Dock': {
+				const pane = atom.workspace.getRightDock().getActivePane()
+				if (pane && !('pane' in options)) {
+					options.pane = pane
+				}
+				break
+			}
+		}
+		return options
 	}
 
 	/**
