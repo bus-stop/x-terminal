@@ -11,6 +11,8 @@ This is a fork of [atom-xterm](https://github.com/amejia1/atom-xterm/)
    - Easily change terminal colors in settings
 3. Font Family
    - Change font family in settings
+4. PlatformIO IDE API
+   - Works with packages that consume the `platformioIDETerminal` service
 
 Atom plugin for providing terminals inside your Atom workspace.
 
