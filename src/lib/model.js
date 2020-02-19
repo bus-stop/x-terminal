@@ -227,14 +227,6 @@ class XTerminalModel {
 		this.pane = pane
 	}
 
-	openHoveredLink () {
-		this.element.openHoveredLink()
-	}
-
-	getHoveredLink () {
-		return this.element.getHoveredLink()
-	}
-
 	toggleProfileMenu () {
 		this.element.toggleProfileMenu()
 	}

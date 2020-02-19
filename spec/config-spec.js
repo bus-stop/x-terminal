@@ -420,3 +420,9 @@ describe('Call to getDefaultPromptToStartup()', () => {
 		expect(configDefaults.getDefaultPromptToStartup()).toBe(false)
 	})
 })
+
+describe('Call to getDefaultApiOpenPosition()', () => {
+	it('return \'Center\'', () => {
+		expect(configDefaults.getDefaultApiOpenPosition()).toBe('Center')
+	})
+})

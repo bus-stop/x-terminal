@@ -1558,40 +1558,6 @@ describe('XTerminalElement', () => {
 		expect(this.element.terminalDiv.classList.contains('x-terminal-term-container-has-link')).toBe(false)
 	})
 
-	it('setHoveredLink(\'https://atom.io\')', () => {
-		const expected = 'https://atom.io'
-		this.element.setHoveredLink(expected)
-		expect(this.element.hoveredLink).toBe(expected)
-		expect(this.element.terminalDiv.classList.contains('x-terminal-term-container-has-link')).toBe(true)
-	})
-
-	it('clearHoveredLink()', () => {
-		this.element.setHoveredLink('https://atom.io')
-		this.element.clearHoveredLink()
-		expect(this.element.hoveredLink).toBeNull()
-		expect(this.element.terminalDiv.classList.contains('x-terminal-term-container-has-link')).toBe(false)
-	})
-
-	it('openHoveredLink() no hovered link set', () => {
-		this.element.openHoveredLink()
-		expect(shell.openExternal).not.toHaveBeenCalled()
-	})
-
-	it('openHoveredLink() hovered link set', () => {
-		this.element.hoveredLink = 'https://atom.io'
-		this.element.openHoveredLink()
-		expect(shell.openExternal.calls.argsFor(0)).toEqual(['https://atom.io'])
-	})
-
-	it('getHoveredLink() no hovered link set', () => {
-		expect(this.element.getHoveredLink()).toBeFalsy()
-	})
-
-	it('openHoveredLink() hovered link set', () => {
-		this.element.hoveredLink = 'https://atom.io'
-		expect(this.element.getHoveredLink()).toBe('https://atom.io')
-	})
-
 	it('on \'data\' handler no custom title on win32 platform', async () => {
 		Object.defineProperty(process, 'platform', {
 			value: 'win32',

@@ -224,6 +224,10 @@ export const configDefaults = {
 	getDefaultPromptToStartup () {
 		return false
 	},
+
+	getDefaultApiOpenPosition () {
+		return 'Center'
+	},
 }
 
 function configOrder (obj) {
@@ -502,6 +506,22 @@ export const config = configOrder({
 				description: 'Title to use for terminal tabs.',
 				type: 'string',
 				default: configDefaults.getDefaultTitle(),
+			},
+			defaultOpenPosition: {
+				title: 'Default Open Position',
+				description: 'Position to open terminal through service API or x-terminal:open.',
+				type: 'string',
+				enum: [
+					'Center',
+					'Split Up',
+					'Split Down',
+					'Split Left',
+					'Split Right',
+					'Bottom Dock',
+					'Left Dock',
+					'Right Dock',
+				],
+				default: configDefaults.getDefaultApiOpenPosition(),
 			},
 			xtermOptions: {
 				title: 'xterm.js Terminal Options',
