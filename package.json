@@ -75,7 +75,7 @@
     "postcss-loader": "^3.0.0",
     "prunk": "^1.3.1",
     "sass-loader": "^8.0.2",
-    "semantic-release": "^17.0.3",
+    "semantic-release": "^17.0.4",
     "style-loader": "^1.1.3",
     "stylelint": "^13.2.0",
     "stylelint-config-standard": "^20.0.0",
