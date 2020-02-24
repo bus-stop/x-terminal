@@ -1,3 +1,10 @@
+## [8.0.1](https://github.com/UziTech/x-terminal/compare/v8.0.0...v8.0.1) (2020-02-24)
+
+
+### Bug Fixes
+
+* allow markdown in profile description ([#5](https://github.com/UziTech/x-terminal/issues/5)) ([448148f](https://github.com/UziTech/x-terminal/commit/448148fcb254ab7bfa87b124470128394e21dd2f))
+
 # [8.0.0](https://github.com/UziTech/x-terminal/compare/v7.1.0...v8.0.0) (2020-02-24)
 
 
