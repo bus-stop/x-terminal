@@ -180,38 +180,6 @@ export const config = configOrder({
 					toMenuSetting: (val) => val,
 				},
 			},
-			webgl: {
-				title: 'Use WebGL',
-				description: 'Use the [WebGL Addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-webgl)',
-				type: 'boolean',
-				default: configDefaults.webgl,
-				profileData: {
-					inProfile: true,
-					defaultProfile: configDefaults.webgl,
-					toUrlParam: (val) => JSON.stringify(val),
-					fromUrlParam: (val) => JSON.parse(val),
-					checkUrlParam: (val) => (val !== null && val !== ''),
-					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.spawnPtySettings.webgl', configDefaults.webgl),
-					fromMenuSetting: (element, baseValue) => element.checked,
-					toMenuSetting: (val) => val,
-				},
-			},
-			webLinks: {
-				title: 'Clickable Web Links',
-				description: 'Use the [WebLinks Addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-web-links)',
-				type: 'boolean',
-				default: configDefaults.webLinks,
-				profileData: {
-					inProfile: true,
-					defaultProfile: configDefaults.webLinks,
-					toUrlParam: (val) => JSON.stringify(val),
-					fromUrlParam: (val) => JSON.parse(val),
-					checkUrlParam: (val) => (val !== null && val !== ''),
-					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.spawnPtySettings.webLinks', configDefaults.webLinks),
-					fromMenuSetting: (element, baseValue) => element.checked,
-					toMenuSetting: (val) => val,
-				},
-			},
 			env: {
 				title: 'Environment',
 				description: 'The environment to use when launching command, must be in a JSON object. If not set, defaults to the current environment.',
@@ -839,6 +807,45 @@ export const config = configOrder({
 			},
 		},
 	},
+	xtermAddons: {
+		title: 'xTerm Addons',
+		description: 'Enable/Disable xTerm Addons',
+		type: 'object',
+		properties: {
+			webgl: {
+				title: 'Use WebGL',
+				description: 'Use the [WebGL Addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-webgl)',
+				type: 'boolean',
+				default: configDefaults.webgl,
+				profileData: {
+					inProfile: true,
+					defaultProfile: configDefaults.webgl,
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => (val !== null && val !== ''),
+					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.xtermAddons.webgl', configDefaults.webgl),
+					fromMenuSetting: (element, baseValue) => element.checked,
+					toMenuSetting: (val) => val,
+				},
+			},
+			webLinks: {
+				title: 'Clickable Web Links',
+				description: 'Use the [WebLinks Addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-web-links)',
+				type: 'boolean',
+				default: configDefaults.webLinks,
+				profileData: {
+					inProfile: true,
+					defaultProfile: configDefaults.webLinks,
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => (val !== null && val !== ''),
+					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.xtermAddons.webLinks', configDefaults.webLinks),
+					fromMenuSetting: (element, baseValue) => element.checked,
+					toMenuSetting: (val) => val,
+				},
+			},
+		}
+	}
 })
 
 function validateBooleanConfigSetting (name, defaultValue) {
