@@ -118,10 +118,10 @@ class XTerminalElementImpl extends HTMLElement {
 					}
 
 					let fontSize = this.model.profile.fontSize + (wheelEvent.deltaY < 0 ? 1 : -1)
-					if (fontSize < configDefaults.getMinimumFontSize()) {
-						fontSize = configDefaults.getMinimumFontSize()
-					} else if (fontSize > configDefaults.getMaximumFontSize()) {
-						fontSize = configDefaults.getMaximumFontSize()
+					if (fontSize < configDefaults.minimumFontSize) {
+						fontSize = configDefaults.minimumFontSize
+					} else if (fontSize > configDefaults.maximumFontSize) {
+						fontSize = configDefaults.maximumFontSize
 					}
 					this.model.applyProfileChanges({ fontSize: fontSize })
 					wheelEvent.stopPropagation()
@@ -473,7 +473,7 @@ class XTerminalElementImpl extends HTMLElement {
 		restartButton.appendChild(document.createTextNode(restartButtonText))
 		restartButton.addEventListener('click', (event) => {
 			this.restartPtyProcess()
-		})
+		}, { passive: true })
 		restartButton.classList.add('btn-' + infoType)
 		restartButton.classList.add('x-terminal-restart-btn')
 		messageDiv.classList.add('x-terminal-notice-' + infoType)

@@ -68,7 +68,7 @@ describe('XTerminalModel', () => {
 			terminals_set: new Set(),
 		})
 		await model.initializedPromise
-		expect(model.getPath()).toBe(configDefaults.getDefaultCwd())
+		expect(model.getPath()).toBe(configDefaults.cwd)
 	})
 
 	it('constructor with valid cwd passed in uri', async () => {
@@ -92,7 +92,7 @@ describe('XTerminalModel', () => {
 			terminals_set: new Set(),
 		})
 		await model.initializedPromise
-		expect(model.getPath()).toBe(configDefaults.getDefaultCwd())
+		expect(model.getPath()).toBe(configDefaults.cwd)
 	})
 
 	it('constructor with previous active item that has getPath() method', async () => {
@@ -130,7 +130,7 @@ describe('XTerminalModel', () => {
 			terminals_set: new Set(),
 		})
 		await model.initializedPromise
-		expect(model.getPath()).toBe(configDefaults.getDefaultCwd())
+		expect(model.getPath()).toBe(configDefaults.cwd)
 	})
 
 	it('constructor with previous active item which exists in project path', async () => {
@@ -277,7 +277,7 @@ describe('XTerminalModel', () => {
 	})
 
 	it('getPath()', () => {
-		expect(this.model.getPath()).toBe(configDefaults.getDefaultCwd())
+		expect(this.model.getPath()).toBe(configDefaults.cwd)
 	})
 
 	it('getPath() cwd set', () => {

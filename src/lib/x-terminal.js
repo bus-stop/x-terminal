@@ -23,7 +23,7 @@ import '../styles/x-terminal.sass'
 import { CompositeDisposable } from 'atom'
 import os from 'os'
 
-import { COLORS } from './config'
+import { KEYS } from './config'
 import { XTerminalElement } from './element'
 import { XTerminalModel, isXTerminalModel } from './model'
 import { X_TERMINAL_BASE_URI, XTerminalProfilesSingleton } from './profiles'
@@ -69,27 +69,7 @@ class XTerminalSingleton {
 		this.terminals_set = new Set()
 
 		// Monitor for changes to all config values.
-		const configKeys = [
-			'x-terminal.spawnPtySettings.command',
-			'x-terminal.spawnPtySettings.args',
-			'x-terminal.spawnPtySettings.name',
-			'x-terminal.spawnPtySettings.cwd',
-			'x-terminal.spawnPtySettings.env',
-			'x-terminal.spawnPtySettings.setEnv',
-			'x-terminal.spawnPtySettings.deleteEnv',
-			'x-terminal.spawnPtySettings.encoding',
-			'x-terminal.terminalSettings.fontSize',
-			'x-terminal.terminalSettings.fontFamily',
-			'x-terminal.terminalSettings.colors.theme',
-			...Object.keys(COLORS).map(c => `x-terminal.terminalSettings.colors.${c}`),
-			'x-terminal.terminalSettings.leaveOpenAfterExit',
-			'x-terminal.terminalSettings.allowRelaunchingTerminalsOnStartup',
-			'x-terminal.terminalSettings.relaunchTerminalOnStartup',
-			'x-terminal.terminalSettings.title',
-			'x-terminal.terminalSettings.xtermOptions',
-			'x-terminal.terminalSettings.promptToStartup',
-		]
-		for (const key of configKeys) {
+		for (const key of KEYS) {
 			this.disposables.add(atom.config.onDidChange(key, ({ newValue, oldValue }) => {
 				this.profilesSingleton.resetBaseProfile()
 			}))

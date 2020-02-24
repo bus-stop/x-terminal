@@ -26,4 +26,14 @@ prunk.suppress(/\.(?:sa|s?c)ss$/)
 
 module.exports = createRunner({
 	reporter: new SpecReporter(),
+}, () => {
+	const warn = console.warn.bind(console)
+	beforeEach(() => {
+		spyOn(console, 'warn').and.callFake((...args) => {
+			if (args[0].includes('not attached to the DOM')) {
+				return
+			}
+			warn(...args)
+		})
+	})
 })

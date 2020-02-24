@@ -36,6 +36,8 @@ describe('XTerminalProfilesSingleton', () => {
 			args: [],
 			name: 'sometermtype',
 			cwd: '/some/path',
+			projectCwd: true,
+			webgl: false,
 			env: null,
 			setEnv: {},
 			deleteEnv: [],
@@ -81,6 +83,8 @@ describe('XTerminalProfilesSingleton', () => {
 		url.searchParams.set('args', JSON.stringify(defaultProfile.args))
 		url.searchParams.set('name', defaultProfile.name)
 		url.searchParams.set('cwd', defaultProfile.cwd)
+		url.searchParams.set('projectCwd', defaultProfile.projectCwd)
+		url.searchParams.set('webgl', defaultProfile.webgl)
 		url.searchParams.set('env', JSON.stringify(defaultProfile.env))
 		url.searchParams.set('setEnv', JSON.stringify(defaultProfile.setEnv))
 		url.searchParams.set('deleteEnv', JSON.stringify(defaultProfile.deleteEnv))
@@ -106,6 +110,12 @@ describe('XTerminalProfilesSingleton', () => {
 		}
 		if (key === 'x-terminal.spawnPtySettings.cwd') {
 			return '/some/path'
+		}
+		if (key === 'x-terminal.spawnPtySettings.projectCwd') {
+			return true
+		}
+		if (key === 'x-terminal.spawnPtySettings.webgl') {
+			return false
 		}
 		if (key === 'x-terminal.spawnPtySettings.env') {
 			return JSON.stringify({ PATH: '/usr/bin:/bin' })
@@ -242,7 +252,7 @@ describe('XTerminalProfilesSingleton', () => {
 	})
 
 	it('has proper profiles.json path', () => {
-		const expected = path.join(configDefaults.getUserDataPath(), 'profiles.json')
+		const expected = path.join(configDefaults.userDataPath, 'profiles.json')
 		// Need to check to original profiles config path.
 		expect(this.origProfilesConfigPath).toBe(expected)
 	})
@@ -297,47 +307,49 @@ describe('XTerminalProfilesSingleton', () => {
 	})
 
 	it('getBaseProfile()', () => {
-		const env = atom.config.get('x-terminal.spawnPtySettings.env') || configDefaults.getDefaultEnv()
-		const encoding = atom.config.get('x-terminal.spawnPtySettings.encoding') || configDefaults.getDefaultEncoding()
-		const title = atom.config.get('x-terminal.terminalSettings.title') || configDefaults.getDefaultTitle()
+		const env = atom.config.get('x-terminal.spawnPtySettings.env') || configDefaults.env
+		const encoding = atom.config.get('x-terminal.spawnPtySettings.encoding') || configDefaults.encoding
+		const title = atom.config.get('x-terminal.terminalSettings.title') || configDefaults.title
 		const expected = {
-			command: atom.config.get('x-terminal.spawnPtySettings.command') || configDefaults.getDefaultShellCommand(),
-			args: JSON.parse(atom.config.get('x-terminal.spawnPtySettings.args') || configDefaults.getDefaultArgs()),
-			name: atom.config.get('x-terminal.spawnPtySettings.name') || configDefaults.getDefaultTermType(),
-			cwd: atom.config.get('x-terminal.spawnPtySettings.cwd') || configDefaults.getDefaultCwd(),
+			command: atom.config.get('x-terminal.spawnPtySettings.command') || configDefaults.command,
+			args: JSON.parse(atom.config.get('x-terminal.spawnPtySettings.args') || configDefaults.args),
+			name: atom.config.get('x-terminal.spawnPtySettings.name') || configDefaults.termType,
+			cwd: atom.config.get('x-terminal.spawnPtySettings.cwd') || configDefaults.cwd,
+			projectCwd: atom.config.get('x-terminal.spawnPtySettings.projectCwd') || configDefaults.projectCwd,
+			webgl: atom.config.get('x-terminal.spawnPtySettings.webgl') || configDefaults.webgl,
 			env: JSON.parse(env || 'null'),
-			setEnv: JSON.parse(atom.config.get('x-terminal.spawnPtySettings.setEnv') || configDefaults.getDefaultSetEnv()),
-			deleteEnv: JSON.parse(atom.config.get('x-terminal.spawnPtySettings.deleteEnv') || configDefaults.getDefaultDeleteEnv()),
+			setEnv: JSON.parse(atom.config.get('x-terminal.spawnPtySettings.setEnv') || configDefaults.setEnv),
+			deleteEnv: JSON.parse(atom.config.get('x-terminal.spawnPtySettings.deleteEnv') || configDefaults.deleteEnv),
 			encoding: encoding || null,
-			fontSize: atom.config.get('x-terminal.terminalSettings.fontSize') || configDefaults.getDefaultFontSize(),
-			fontFamily: atom.config.get('x-terminal.terminalSettings.fontFamily') || configDefaults.getDefaultFontFamily(),
-			theme: atom.config.get('x-terminal.terminalSettings.colors.theme') || configDefaults.getDefaultTheme(),
-			colorForeground: atom.config.get('x-terminal.terminalSettings.colors.foreground') || configDefaults.getDefaultColorForeground(),
-			colorBackground: atom.config.get('x-terminal.terminalSettings.colors.background') || configDefaults.getDefaultColorBackground(),
-			colorCursor: atom.config.get('x-terminal.terminalSettings.colors.cursor') || configDefaults.getDefaultColorCursor(),
-			colorCursorAccent: atom.config.get('x-terminal.terminalSettings.colors.cursorAccent') || configDefaults.getDefaultColorCursorAccent(),
-			colorSelection: atom.config.get('x-terminal.terminalSettings.colors.selection') || configDefaults.getDefaultColorSelection(),
-			colorBlack: atom.config.get('x-terminal.terminalSettings.colors.black') || configDefaults.getDefaultColorBlack(),
-			colorRed: atom.config.get('x-terminal.terminalSettings.colors.red') || configDefaults.getDefaultColorRed(),
-			colorGreen: atom.config.get('x-terminal.terminalSettings.colors.green') || configDefaults.getDefaultColorGreen(),
-			colorYellow: atom.config.get('x-terminal.terminalSettings.colors.Yellow') || configDefaults.getDefaultColorYellow(),
-			colorBlue: atom.config.get('x-terminal.terminalSettings.colors.blue') || configDefaults.getDefaultColorBlue(),
-			colorMagenta: atom.config.get('x-terminal.terminalSettings.colors.Magenta') || configDefaults.getDefaultColorMagenta(),
-			colorCyan: atom.config.get('x-terminal.terminalSettings.colors.cyan') || configDefaults.getDefaultColorCyan(),
-			colorWhite: atom.config.get('x-terminal.terminalSettings.colors.White') || configDefaults.getDefaultColorWhite(),
-			colorBrightBlack: atom.config.get('x-terminal.terminalSettings.colors.brightBlack') || configDefaults.getDefaultColorBrightBlack(),
-			colorBrightRed: atom.config.get('x-terminal.terminalSettings.colors.brightRed') || configDefaults.getDefaultColorBrightRed(),
-			colorBrightGreen: atom.config.get('x-terminal.terminalSettings.colors.brightGreen') || configDefaults.getDefaultColorBrightGreen(),
-			colorBrightYellow: atom.config.get('x-terminal.terminalSettings.colors.brightYellow') || configDefaults.getDefaultColorBrightYellow(),
-			colorBrightBlue: atom.config.get('x-terminal.terminalSettings.colors.brightBlue') || configDefaults.getDefaultColorBrightBlue(),
-			colorBrightMagenta: atom.config.get('x-terminal.terminalSettings.colors.brightMagenta') || configDefaults.getDefaultColorBrightMagenta(),
-			colorBrightCyan: atom.config.get('x-terminal.terminalSettings.colors.brightCyan') || configDefaults.getDefaultColorBrightCyan(),
-			colorBrightWhite: atom.config.get('x-terminal.terminalSettings.colors.brightWhite') || configDefaults.getDefaultColorBrightWhite(),
-			leaveOpenAfterExit: atom.config.get('x-terminal.terminalSettings.leaveOpenAfterExit') || configDefaults.getDefaultLeaveOpenAfterExit(),
-			relaunchTerminalOnStartup: atom.config.get('x-terminal.terminalSettings.relaunchTerminalOnStartup') || configDefaults.getDefaultRelaunchTerminalOnStartup(),
+			fontSize: atom.config.get('x-terminal.terminalSettings.fontSize') || configDefaults.fontSize,
+			fontFamily: atom.config.get('x-terminal.terminalSettings.fontFamily') || configDefaults.fontFamily,
+			theme: atom.config.get('x-terminal.terminalSettings.colors.theme') || configDefaults.theme,
+			colorForeground: atom.config.get('x-terminal.terminalSettings.colors.foreground') || configDefaults.colorForeground,
+			colorBackground: atom.config.get('x-terminal.terminalSettings.colors.background') || configDefaults.colorBackground,
+			colorCursor: atom.config.get('x-terminal.terminalSettings.colors.cursor') || configDefaults.colorCursor,
+			colorCursorAccent: atom.config.get('x-terminal.terminalSettings.colors.cursorAccent') || configDefaults.colorCursorAccent,
+			colorSelection: atom.config.get('x-terminal.terminalSettings.colors.selection') || configDefaults.colorSelection,
+			colorBlack: atom.config.get('x-terminal.terminalSettings.colors.black') || configDefaults.colorBlack,
+			colorRed: atom.config.get('x-terminal.terminalSettings.colors.red') || configDefaults.colorRed,
+			colorGreen: atom.config.get('x-terminal.terminalSettings.colors.green') || configDefaults.colorGreen,
+			colorYellow: atom.config.get('x-terminal.terminalSettings.colors.yellow') || configDefaults.colorYellow,
+			colorBlue: atom.config.get('x-terminal.terminalSettings.colors.blue') || configDefaults.colorBlue,
+			colorMagenta: atom.config.get('x-terminal.terminalSettings.colors.magenta') || configDefaults.colorMagenta,
+			colorCyan: atom.config.get('x-terminal.terminalSettings.colors.cyan') || configDefaults.colorCyan,
+			colorWhite: atom.config.get('x-terminal.terminalSettings.colors.white') || configDefaults.colorWhite,
+			colorBrightBlack: atom.config.get('x-terminal.terminalSettings.colors.brightBlack') || configDefaults.colorBrightBlack,
+			colorBrightRed: atom.config.get('x-terminal.terminalSettings.colors.brightRed') || configDefaults.colorBrightRed,
+			colorBrightGreen: atom.config.get('x-terminal.terminalSettings.colors.brightGreen') || configDefaults.colorBrightGreen,
+			colorBrightYellow: atom.config.get('x-terminal.terminalSettings.colors.brightYellow') || configDefaults.colorBrightYellow,
+			colorBrightBlue: atom.config.get('x-terminal.terminalSettings.colors.brightBlue') || configDefaults.colorBrightBlue,
+			colorBrightMagenta: atom.config.get('x-terminal.terminalSettings.colors.brightMagenta') || configDefaults.colorBrightMagenta,
+			colorBrightCyan: atom.config.get('x-terminal.terminalSettings.colors.brightCyan') || configDefaults.colorBrightCyan,
+			colorBrightWhite: atom.config.get('x-terminal.terminalSettings.colors.brightWhite') || configDefaults.colorBrightWhite,
+			leaveOpenAfterExit: atom.config.get('x-terminal.terminalSettings.leaveOpenAfterExit') || configDefaults.leaveOpenAfterExit,
+			relaunchTerminalOnStartup: atom.config.get('x-terminal.terminalSettings.relaunchTerminalOnStartup') || configDefaults.relaunchTerminalOnStartup,
 			title: title || null,
-			xtermOptions: JSON.parse(atom.config.get('x-terminal.terminalSettings.xtermOptions') || configDefaults.getDefaultXtermOptions()),
-			promptToStartup: atom.config.get('x-terminal.terminalSettings.promptToStartup') || configDefaults.getDefaultPromptToStartup(),
+			xtermOptions: JSON.parse(atom.config.get('x-terminal.terminalSettings.xtermOptions') || configDefaults.xtermOptions),
+			promptToStartup: atom.config.get('x-terminal.terminalSettings.promptToStartup') || configDefaults.promptToStartup,
 		}
 		expect(XTerminalProfilesSingleton.instance.getBaseProfile()).toEqual(expected)
 	})
@@ -350,6 +362,8 @@ describe('XTerminalProfilesSingleton', () => {
 			args: ['foo', 'bar'],
 			name: 'sometermtype',
 			cwd: '/some/path',
+			projectCwd: true,
+			webgl: false,
 			env: { PATH: '/usr/bin:/bin' },
 			setEnv: { FOO: 'BAR' },
 			deleteEnv: ['FOO'],
@@ -547,43 +561,45 @@ describe('XTerminalProfilesSingleton', () => {
 	it('createProfileDataFromUri() base URI', () => {
 		const url = new URL('x-terminal://somesessionid/')
 		const expected = {
-			command: configDefaults.getDefaultShellCommand(),
-			args: JSON.parse(configDefaults.getDefaultArgs()),
-			name: configDefaults.getDefaultTermType(),
-			cwd: configDefaults.getDefaultCwd(),
+			command: configDefaults.command,
+			args: JSON.parse(configDefaults.args),
+			name: configDefaults.termType,
+			cwd: configDefaults.cwd,
+			projectCwd: configDefaults.projectCwd,
+			webgl: configDefaults.webgl,
 			env: null,
-			setEnv: JSON.parse(configDefaults.getDefaultSetEnv()),
-			deleteEnv: JSON.parse(configDefaults.getDefaultDeleteEnv()),
+			setEnv: JSON.parse(configDefaults.setEnv),
+			deleteEnv: JSON.parse(configDefaults.deleteEnv),
 			encoding: null,
-			fontSize: configDefaults.getDefaultFontSize(),
-			fontFamily: configDefaults.getDefaultFontFamily(),
-			theme: configDefaults.getDefaultTheme(),
-			colorForeground: configDefaults.getDefaultColorForeground(),
-			colorBackground: configDefaults.getDefaultColorBackground(),
-			colorCursor: configDefaults.getDefaultColorCursor(),
-			colorCursorAccent: configDefaults.getDefaultColorCursorAccent(),
-			colorSelection: configDefaults.getDefaultColorSelection(),
-			colorBlack: configDefaults.getDefaultColorBlack(),
-			colorRed: configDefaults.getDefaultColorRed(),
-			colorGreen: configDefaults.getDefaultColorGreen(),
-			colorYellow: configDefaults.getDefaultColorYellow(),
-			colorBlue: configDefaults.getDefaultColorBlue(),
-			colorMagenta: configDefaults.getDefaultColorMagenta(),
-			colorCyan: configDefaults.getDefaultColorCyan(),
-			colorWhite: configDefaults.getDefaultColorWhite(),
-			colorBrightBlack: configDefaults.getDefaultColorBrightBlack(),
-			colorBrightRed: configDefaults.getDefaultColorBrightRed(),
-			colorBrightGreen: configDefaults.getDefaultColorBrightGreen(),
-			colorBrightYellow: configDefaults.getDefaultColorBrightYellow(),
-			colorBrightBlue: configDefaults.getDefaultColorBrightBlue(),
-			colorBrightMagenta: configDefaults.getDefaultColorBrightMagenta(),
-			colorBrightCyan: configDefaults.getDefaultColorBrightCyan(),
-			colorBrightWhite: configDefaults.getDefaultColorBrightWhite(),
-			leaveOpenAfterExit: configDefaults.getDefaultLeaveOpenAfterExit(),
-			relaunchTerminalOnStartup: configDefaults.getDefaultRelaunchTerminalOnStartup(),
+			fontSize: configDefaults.fontSize,
+			fontFamily: configDefaults.fontFamily,
+			theme: configDefaults.theme,
+			colorForeground: configDefaults.colorForeground,
+			colorBackground: configDefaults.colorBackground,
+			colorCursor: configDefaults.colorCursor,
+			colorCursorAccent: configDefaults.colorCursorAccent,
+			colorSelection: configDefaults.colorSelection,
+			colorBlack: configDefaults.colorBlack,
+			colorRed: configDefaults.colorRed,
+			colorGreen: configDefaults.colorGreen,
+			colorYellow: configDefaults.colorYellow,
+			colorBlue: configDefaults.colorBlue,
+			colorMagenta: configDefaults.colorMagenta,
+			colorCyan: configDefaults.colorCyan,
+			colorWhite: configDefaults.colorWhite,
+			colorBrightBlack: configDefaults.colorBrightBlack,
+			colorBrightRed: configDefaults.colorBrightRed,
+			colorBrightGreen: configDefaults.colorBrightGreen,
+			colorBrightYellow: configDefaults.colorBrightYellow,
+			colorBrightBlue: configDefaults.colorBrightBlue,
+			colorBrightMagenta: configDefaults.colorBrightMagenta,
+			colorBrightCyan: configDefaults.colorBrightCyan,
+			colorBrightWhite: configDefaults.colorBrightWhite,
+			leaveOpenAfterExit: configDefaults.leaveOpenAfterExit,
+			relaunchTerminalOnStartup: configDefaults.relaunchTerminalOnStartup,
 			title: null,
-			xtermOptions: JSON.parse(configDefaults.getDefaultXtermOptions()),
-			promptToStartup: configDefaults.getDefaultPromptToStartup(),
+			xtermOptions: JSON.parse(configDefaults.xtermOptions),
+			promptToStartup: configDefaults.promptToStartup,
 		}
 		expect(XTerminalProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
 	})
@@ -614,7 +630,7 @@ describe('XTerminalProfilesSingleton', () => {
 		const url = getDefaultExpectedUrl()
 		url.searchParams.set('command', '')
 		const expected = getDefaultExpectedProfile()
-		expected.command = configDefaults.getDefaultShellCommand()
+		expected.command = configDefaults.command
 		expect(XTerminalProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
 	})
 
@@ -644,7 +660,7 @@ describe('XTerminalProfilesSingleton', () => {
 		const url = getDefaultExpectedUrl()
 		url.searchParams.set('name', '')
 		const expected = getDefaultExpectedProfile()
-		expected.name = configDefaults.getDefaultTermType()
+		expected.name = configDefaults.termType
 		expect(XTerminalProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
 	})
 
@@ -660,7 +676,7 @@ describe('XTerminalProfilesSingleton', () => {
 		const url = getDefaultExpectedUrl()
 		url.searchParams.set('cwd', '')
 		const expected = getDefaultExpectedProfile()
-		expected.cwd = configDefaults.getDefaultCwd()
+		expected.cwd = configDefaults.cwd
 		expect(XTerminalProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
 	})
 
@@ -894,101 +910,46 @@ describe('XTerminalProfilesSingleton', () => {
 
 	it('getDefaultProfile()', () => {
 		const expected = {
-			command: configDefaults.getDefaultShellCommand(),
-			args: JSON.parse(configDefaults.getDefaultArgs()),
-			name: configDefaults.getDefaultTermType(),
-			cwd: configDefaults.getDefaultCwd(),
+			command: configDefaults.command,
+			args: JSON.parse(configDefaults.args),
+			name: configDefaults.termType,
+			cwd: configDefaults.cwd,
+			projectCwd: configDefaults.projectCwd,
+			webgl: configDefaults.webgl,
 			env: null,
-			setEnv: JSON.parse(configDefaults.getDefaultSetEnv()),
-			deleteEnv: JSON.parse(configDefaults.getDefaultDeleteEnv()),
+			setEnv: JSON.parse(configDefaults.setEnv),
+			deleteEnv: JSON.parse(configDefaults.deleteEnv),
 			encoding: null,
-			fontSize: configDefaults.getDefaultFontSize(),
-			fontFamily: configDefaults.getDefaultFontFamily(),
-			theme: configDefaults.getDefaultTheme(),
-			colorForeground: configDefaults.getDefaultColorForeground(),
-			colorBackground: configDefaults.getDefaultColorBackground(),
-			colorCursor: configDefaults.getDefaultColorCursor(),
-			colorCursorAccent: configDefaults.getDefaultColorCursorAccent(),
-			colorSelection: configDefaults.getDefaultColorSelection(),
-			colorBlack: configDefaults.getDefaultColorBlack(),
-			colorRed: configDefaults.getDefaultColorRed(),
-			colorGreen: configDefaults.getDefaultColorGreen(),
-			colorYellow: configDefaults.getDefaultColorYellow(),
-			colorBlue: configDefaults.getDefaultColorBlue(),
-			colorMagenta: configDefaults.getDefaultColorMagenta(),
-			colorCyan: configDefaults.getDefaultColorCyan(),
-			colorWhite: configDefaults.getDefaultColorWhite(),
-			colorBrightBlack: configDefaults.getDefaultColorBrightBlack(),
-			colorBrightRed: configDefaults.getDefaultColorBrightRed(),
-			colorBrightGreen: configDefaults.getDefaultColorBrightGreen(),
-			colorBrightYellow: configDefaults.getDefaultColorBrightYellow(),
-			colorBrightBlue: configDefaults.getDefaultColorBrightBlue(),
-			colorBrightMagenta: configDefaults.getDefaultColorBrightMagenta(),
-			colorBrightCyan: configDefaults.getDefaultColorBrightCyan(),
-			colorBrightWhite: configDefaults.getDefaultColorBrightWhite(),
-			leaveOpenAfterExit: configDefaults.getDefaultLeaveOpenAfterExit(),
-			relaunchTerminalOnStartup: configDefaults.getDefaultRelaunchTerminalOnStartup(),
+			fontSize: configDefaults.fontSize,
+			fontFamily: configDefaults.fontFamily,
+			theme: configDefaults.theme,
+			colorForeground: configDefaults.colorForeground,
+			colorBackground: configDefaults.colorBackground,
+			colorCursor: configDefaults.colorCursor,
+			colorCursorAccent: configDefaults.colorCursorAccent,
+			colorSelection: configDefaults.colorSelection,
+			colorBlack: configDefaults.colorBlack,
+			colorRed: configDefaults.colorRed,
+			colorGreen: configDefaults.colorGreen,
+			colorYellow: configDefaults.colorYellow,
+			colorBlue: configDefaults.colorBlue,
+			colorMagenta: configDefaults.colorMagenta,
+			colorCyan: configDefaults.colorCyan,
+			colorWhite: configDefaults.colorWhite,
+			colorBrightBlack: configDefaults.colorBrightBlack,
+			colorBrightRed: configDefaults.colorBrightRed,
+			colorBrightGreen: configDefaults.colorBrightGreen,
+			colorBrightYellow: configDefaults.colorBrightYellow,
+			colorBrightBlue: configDefaults.colorBrightBlue,
+			colorBrightMagenta: configDefaults.colorBrightMagenta,
+			colorBrightCyan: configDefaults.colorBrightCyan,
+			colorBrightWhite: configDefaults.colorBrightWhite,
+			leaveOpenAfterExit: configDefaults.leaveOpenAfterExit,
+			relaunchTerminalOnStartup: configDefaults.relaunchTerminalOnStartup,
 			title: null,
-			xtermOptions: JSON.parse(configDefaults.getDefaultXtermOptions()),
-			promptToStartup: configDefaults.getDefaultPromptToStartup(),
+			xtermOptions: JSON.parse(configDefaults.xtermOptions),
+			promptToStartup: configDefaults.promptToStartup,
 		}
 		expect(XTerminalProfilesSingleton.instance.getDefaultProfile()).toEqual(expected)
-	})
-
-	it('validateJsonConfigSetting() empty string config value', () => {
-		spyOn(atom.config, 'get').and.returnValue('')
-		const actual = XTerminalProfilesSingleton.instance.validateJsonConfigSetting(
-			'x-terminal.spawnPtySettings.args',
-			'["foo", "bar"]',
-		)
-		expect(actual).toEqual(['foo', 'bar'])
-	})
-
-	it('validateJsonConfigSetting() non-empty string config value', () => {
-		spyOn(atom.config, 'get').and.returnValue('["baz"]')
-		const actual = XTerminalProfilesSingleton.instance.validateJsonConfigSetting(
-			'x-terminal.spawnPtySettings.args',
-			'["foo", "bar"]',
-		)
-		expect(actual).toEqual(['baz'])
-	})
-
-	it('validateJsonConfigSetting() bad JSON string config value', () => {
-		spyOn(atom.config, 'get').and.returnValue('[]]')
-		XTerminalProfilesSingleton.instance.previousBaseProfile.args = ['baz']
-		const actual = XTerminalProfilesSingleton.instance.validateJsonConfigSetting(
-			'x-terminal.spawnPtySettings.args',
-			'["foo", "bar"]',
-		)
-		expect(actual).toEqual(['baz'])
-	})
-
-	it('validateJsonConfigSetting() empty string config value null default value', () => {
-		spyOn(atom.config, 'get').and.returnValue('')
-		XTerminalProfilesSingleton.instance.previousBaseProfile.args = ['foo', 'bar']
-		const actual = XTerminalProfilesSingleton.instance.validateJsonConfigSetting(
-			'x-terminal.spawnPtySettings.args',
-			'null',
-		)
-		expect(actual).toEqual(['foo', 'bar'])
-	})
-
-	it('validateJsonConfigSetting() non-empty string config value null default value', () => {
-		spyOn(atom.config, 'get').and.returnValue('["baz"]')
-		const actual = XTerminalProfilesSingleton.instance.validateJsonConfigSetting(
-			'x-terminal.spawnPtySettings.args',
-			'null',
-		)
-		expect(actual).toEqual(['baz'])
-	})
-
-	it('validateJsonConfigSetting() bad JSON string config value null default value', () => {
-		spyOn(atom.config, 'get').and.returnValue('[]]')
-		XTerminalProfilesSingleton.instance.previousBaseProfile.args = ['foo', 'bar']
-		const actual = XTerminalProfilesSingleton.instance.validateJsonConfigSetting(
-			'x-terminal.spawnPtySettings.args',
-			'null',
-		)
-		expect(actual).toEqual(['foo', 'bar'])
 	})
 })

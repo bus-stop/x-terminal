@@ -100,7 +100,7 @@ describe('XTerminalElement', () => {
 	})
 
 	it('getShellCommand()', () => {
-		expect(this.element.getShellCommand()).toBe(configDefaults.getDefaultShellCommand())
+		expect(this.element.getShellCommand()).toBe(configDefaults.command)
 	})
 
 	it('getShellCommand() command set in uri', async () => {
@@ -129,7 +129,7 @@ describe('XTerminalElement', () => {
 	})
 
 	it('getTermType()', () => {
-		expect(this.element.getTermType()).toBe(configDefaults.getDefaultTermType())
+		expect(this.element.getTermType()).toBe(configDefaults.termType)
 	})
 
 	it('getTermType() name set in uri', async () => {
@@ -167,7 +167,7 @@ describe('XTerminalElement', () => {
 
 	it('getCwd()', async () => {
 		const cwd = await this.element.getCwd()
-		expect(cwd).toBe(configDefaults.getDefaultCwd())
+		expect(cwd).toBe(configDefaults.cwd)
 	})
 
 	it('getCwd() cwd set in uri', async () => {
@@ -204,7 +204,7 @@ describe('XTerminalElement', () => {
 		)
 		const element = await createNewElement()
 		const cwd = await element.getCwd()
-		expect(cwd).toBe(configDefaults.getDefaultCwd())
+		expect(cwd).toBe(configDefaults.cwd)
 	})
 
 	it('getCwd() non-existent cwd set in uri', async () => {
@@ -213,14 +213,14 @@ describe('XTerminalElement', () => {
 		const url = new URL('x-terminal://?' + params.toString())
 		await createNewElement(url.href)
 		const cwd = await this.element.getCwd()
-		expect(cwd).toBe(configDefaults.getDefaultCwd())
+		expect(cwd).toBe(configDefaults.cwd)
 	})
 
 	it('getCwd() non-existent project path added', async () => {
 		spyOn(atom.project, 'getPaths').and.returnValue([path.join(this.tmpdir, 'non-existent-dir')])
 		const element = await createNewElement()
 		const cwd = await element.getCwd()
-		expect(cwd).toBe(configDefaults.getDefaultCwd())
+		expect(cwd).toBe(configDefaults.cwd)
 	})
 
 	it('getEnv()', () => {
@@ -1820,23 +1820,23 @@ describe('XTerminalElement', () => {
 	})
 
 	it('use ctrl+wheelScrollUp font already at maximum', () => {
-		this.element.model.profile.fontSize = configDefaults.getMaximumFontSize()
+		this.element.model.profile.fontSize = configDefaults.maximumFontSize
 		const wheelEvent = new WheelEvent('wheel', {
 			deltaY: -150,
 			ctrlKey: true,
 		})
 		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(configDefaults.getMaximumFontSize())
+		expect(this.element.model.profile.fontSize).toBe(configDefaults.maximumFontSize)
 	})
 
 	it('use ctrl+wheelScrollDown font already at minimum', () => {
-		this.element.model.profile.fontSize = configDefaults.getMinimumFontSize()
+		this.element.model.profile.fontSize = configDefaults.minimumFontSize
 		const wheelEvent = new WheelEvent('wheel', {
 			deltaY: 150,
 			ctrlKey: true,
 		})
 		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(configDefaults.getMinimumFontSize())
+		expect(this.element.model.profile.fontSize).toBe(configDefaults.minimumFontSize)
 	})
 
 	it('getXtermOptions() default options', () => {

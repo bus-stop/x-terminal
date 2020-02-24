@@ -94,7 +94,7 @@ class XTerminalSaveProfileModel {
 		this.textbox = new TextEditor({ mini: true })
 		this.textbox.getElement().addEventListener('blur', (event) => {
 			this.close()
-		})
+		}, { passive: true })
 		atom.commands.add(this.textbox.getElement(), 'core:confirm', () => {
 			this.confirm(newProfile, profileChanges)
 		})

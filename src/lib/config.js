@@ -20,215 +20,67 @@
 import os from 'os'
 import path from 'path'
 
-export const COLORS = {
-	foreground: 'colorForeground',
-	background: 'colorBackground',
-	cursor: 'colorCursor',
-	cursorAccent: 'colorCursorAccent',
-	selection: 'colorSelection',
-	black: 'colorBlack',
-	red: 'colorRed',
-	green: 'colorGreen',
-	yellow: 'colorYellow',
-	blue: 'colorBlue',
-	magenta: 'colorMagenta',
-	cyan: 'colorCyan',
-	white: 'colorWhite',
-	brightBlack: 'colorBrightBlack',
-	brightRed: 'colorBrightRed',
-	brightGreen: 'colorBrightGreen',
-	brightYellow: 'colorBrightYellow',
-	brightBlue: 'colorBrightBlue',
-	brightMagenta: 'colorBrightMagenta',
-	brightCyan: 'colorBrightCyan',
-	brightWhite: 'colorBrightWhite',
-}
-
-export const configDefaults = {
-
-	getDefaultShellCommand () {
-		if (process.platform === 'win32') {
-			return process.env.COMSPEC || 'cmd.exe'
-		}
-		return process.env.SHELL || '/bin/sh'
-	},
-
-	getDefaultArgs () {
-		return '[]'
-	},
-
-	getDefaultTermType () {
-		return process.env.TERM || 'xterm-256color'
-	},
-
-	getDefaultCwd () {
-		if (process.platform === 'win32') {
-			return process.env.USERPROFILE
-		}
-		return process.env.HOME
-	},
-
-	getDefaultEnv () {
-		return ''
-	},
-
-	getDefaultSetEnv () {
-		return '{}'
-	},
-
-	getDefaultDeleteEnv () {
-		return '[]'
-	},
-
-	getDefaultEncoding () {
-		return ''
-	},
-
-	getDefaultFontSize () {
-		return 14
-	},
-
-	getMinimumFontSize () {
+export function resetConfigDefaults () {
+	return {
+		command: process.platform === 'win32' ? (process.env.COMSPEC || 'cmd.exe') : (process.env.SHELL || '/bin/sh'),
+		args: '[]',
+		termType: process.env.TERM || 'xterm-256color',
+		cwd: process.platform === 'win32' ? process.env.USERPROFILE : process.env.HOME,
+		projectCwd: false,
+		webgl: true,
+		env: '',
+		setEnv: '{}',
+		deleteEnv: '[]',
+		encoding: '',
+		fontSize: 14,
 		// NOTE: Atom will crash if the font is set below 8.
-		return 8
-	},
-
-	getMaximumFontSize () {
-		return 100
-	},
-
-	getDefaultFontFamily () {
-		return 'monospace'
-	},
-
-	getDefaultTheme () {
-		return 'Custom'
-	},
-
-	getDefaultColorForeground () {
-		return '#ffffff'
-	},
-
-	getDefaultColorBackground () {
-		return '#000000'
-	},
-
-	getDefaultColorCursor () {
-		return '#ffffff'
-	},
-
-	getDefaultColorCursorAccent () {
-		return '#000000'
-	},
-
-	getDefaultColorSelection () {
-		return '#4d4d4d'
-	},
-
-	getDefaultColorBlack () {
-		return '#2e3436'
-	},
-
-	getDefaultColorRed () {
-		return '#cc0000'
-	},
-
-	getDefaultColorGreen () {
-		return '#4e9a06'
-	},
-
-	getDefaultColorYellow () {
-		return '#c4a000'
-	},
-
-	getDefaultColorBlue () {
-		return '#3465a4'
-	},
-
-	getDefaultColorMagenta () {
-		return '#75507b'
-	},
-
-	getDefaultColorCyan () {
-		return '#06989a'
-	},
-
-	getDefaultColorWhite () {
-		return '#d3d7cf'
-	},
-
-	getDefaultColorBrightBlack () {
-		return '#555753'
-	},
-
-	getDefaultColorBrightRed () {
-		return '#ef2929'
-	},
-
-	getDefaultColorBrightGreen () {
-		return '#8ae234'
-	},
-
-	getDefaultColorBrightYellow () {
-		return '#fce94f'
-	},
-
-	getDefaultColorBrightBlue () {
-		return '#729fcf'
-	},
-
-	getDefaultColorBrightMagenta () {
-		return '#ad7fa8'
-	},
-
-	getDefaultColorBrightCyan () {
-		return '#34e2e2'
-	},
-
-	getDefaultColorBrightWhite () {
-		return '#eeeeec'
-	},
-
-	getDefaultLeaveOpenAfterExit () {
-		return true
-	},
-
-	getDefaultAllowRelaunchingTerminalsOnStartup () {
-		return true
-	},
-
-	getDefaultRelaunchTerminalOnStartup () {
-		return true
-	},
-
-	getUserDataPath () {
-		let appDataPath
-		if (process.platform === 'win32') {
-			appDataPath = process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming')
-		} else if (process.platform === 'darwin') {
-			appDataPath = path.join(os.homedir(), 'Library', 'Application Support')
-		} else {
-			appDataPath = process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config')
-		}
-		return path.join(appDataPath, 'x-terminal')
-	},
-
-	getDefaultTitle () {
-		return ''
-	},
-
-	getDefaultXtermOptions () {
-		return '{}'
-	},
-
-	getDefaultPromptToStartup () {
-		return false
-	},
-
-	getDefaultApiOpenPosition () {
-		return 'Center'
-	},
+		minimumFontSize: 8,
+		maximumFontSize: 100,
+		fontFamily: 'monospace',
+		theme: 'Custom',
+		colorForeground: '#ffffff',
+		colorBackground: '#000000',
+		colorCursor: '#ffffff',
+		colorCursorAccent: '#000000',
+		colorSelection: '#4d4d4d',
+		colorBlack: '#2e3436',
+		colorRed: '#cc0000',
+		colorGreen: '#4e9a06',
+		colorYellow: '#c4a000',
+		colorBlue: '#3465a4',
+		colorMagenta: '#75507b',
+		colorCyan: '#06989a',
+		colorWhite: '#d3d7cf',
+		colorBrightBlack: '#555753',
+		colorBrightRed: '#ef2929',
+		colorBrightGreen: '#8ae234',
+		colorBrightYellow: '#fce94f',
+		colorBrightBlue: '#729fcf',
+		colorBrightMagenta: '#ad7fa8',
+		colorBrightCyan: '#34e2e2',
+		colorBrightWhite: '#eeeeec',
+		leaveOpenAfterExit: true,
+		allowRelaunchingTerminalsOnStartup: true,
+		relaunchTerminalOnStartup: true,
+		userDataPath: (() => {
+			let appDataPath
+			if (process.platform === 'win32') {
+				appDataPath = process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming')
+			} else if (process.platform === 'darwin') {
+				appDataPath = path.join(os.homedir(), 'Library', 'Application Support')
+			} else {
+				appDataPath = process.env.XDG_CONFIG_HOME || path.join(os.homedir(), '.config')
+			}
+			return path.join(appDataPath, 'x-terminal')
+		})(),
+		title: '',
+		xtermOptions: '{}',
+		promptToStartup: false,
+		apiOpenPosition: 'Center',
+	}
 }
+
+export const configDefaults = resetConfigDefaults()
 
 function configOrder (obj) {
 	let order = 1
@@ -251,49 +103,156 @@ export const config = configOrder({
 				title: 'Command',
 				description: 'Command to run',
 				type: 'string',
-				default: configDefaults.getDefaultShellCommand(),
+				default: configDefaults.command,
+				profileData: {
+					inProfile: true,
+					defaultProfile: configDefaults.command,
+					toBaseProfile: (previousValue) => (atom.config.get('x-terminal.spawnPtySettings.command') || configDefaults.command),
+					fromMenuSetting: (element, baseValue) => (element.getModel().getText() || baseValue),
+					toMenuSetting: (val) => val,
+				},
 			},
 			args: {
 				title: 'Arguments',
 				description: 'Arguments to pass to command, must be in a JSON array.',
 				type: 'string',
-				default: configDefaults.getDefaultArgs(),
+				default: configDefaults.args,
+				profileData: {
+					inProfile: true,
+					defaultProfile: JSON.parse(configDefaults.args),
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => !!val,
+					toBaseProfile: (previousValue) => validateJsonConfigSetting('x-terminal.spawnPtySettings.args', configDefaults.args, previousValue),
+					fromMenuSetting: (element, baseValue) => parseJson(element.getModel().getText(), baseValue, Array),
+					toMenuSetting: (val) => JSON.stringify(val),
+				},
 			},
 			name: {
 				title: 'Terminal Type',
 				description: 'The terminal type to use.',
 				type: 'string',
-				default: configDefaults.getDefaultTermType(),
+				default: configDefaults.termType,
+				profileData: {
+					inProfile: true,
+					defaultProfile: configDefaults.termType,
+					toBaseProfile: (previousValue) => (atom.config.get('x-terminal.spawnPtySettings.name') || configDefaults.termType),
+					fromMenuSetting: (element, baseValue) => (element.getModel().getText() || baseValue),
+					toMenuSetting: (val) => val,
+				},
 			},
 			cwd: {
 				title: 'Working Directory',
 				description: 'The working directory to use when launching command.',
 				type: 'string',
-				default: configDefaults.getDefaultCwd(),
+				default: configDefaults.cwd,
+				profileData: {
+					inProfile: true,
+					defaultProfile: configDefaults.cwd,
+					toBaseProfile: (previousValue) => (atom.config.get('x-terminal.spawnPtySettings.cwd') || configDefaults.cwd),
+					fromMenuSetting: (element, baseValue) => (element.getModel().getText() || baseValue),
+					toMenuSetting: (val) => val,
+				},
+			},
+			projectCwd: {
+				title: 'Use Project Directory',
+				description: 'Use the first project directory when launching command.',
+				type: 'boolean',
+				default: configDefaults.projectCwd,
+				profileData: {
+					inProfile: true,
+					defaultProfile: configDefaults.projectCwd,
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => (val !== null && val !== ''),
+					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.spawnPtySettings.projectCwd', configDefaults.projectCwd),
+					fromMenuSetting: (element, baseValue) => element.checked,
+					toMenuSetting: (val) => val,
+				},
+			},
+			webgl: {
+				title: 'Use WebGL',
+				description: 'Use the [WebGL Addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-webgl)',
+				type: 'boolean',
+				default: configDefaults.webgl,
+				profileData: {
+					inProfile: true,
+					defaultProfile: configDefaults.webgl,
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => (val !== null && val !== ''),
+					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.spawnPtySettings.webgl', configDefaults.webgl),
+					fromMenuSetting: (element, baseValue) => element.checked,
+					toMenuSetting: (val) => val,
+				},
 			},
 			env: {
 				title: 'Environment',
 				description: 'The environment to use when launching command, must be in a JSON object. If not set, defaults to the current environment.',
 				type: 'string',
-				default: configDefaults.getDefaultEnv(),
+				default: configDefaults.env,
+				profileData: {
+					inProfile: true,
+					defaultProfile: null,
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => !!val,
+					toBaseProfile: (previousValue) => {
+						let env = validateJsonConfigSetting('x-terminal.spawnPtySettings.env', 'null')
+						if (!env || env.constructor !== Object) {
+							env = null
+						}
+						return env
+					},
+					fromMenuSetting: (element, baseValue) => parseJson(element.getModel().getText(), baseValue, Object),
+					toMenuSetting: (val) => convertNullToEmptyString(val),
+				},
 			},
 			setEnv: {
 				title: 'Environment Overrides',
 				description: 'Environment variables to use in place of the atom process environment, must be in a JSON object.',
 				type: 'string',
-				default: configDefaults.getDefaultSetEnv(),
+				default: configDefaults.setEnv,
+				profileData: {
+					inProfile: true,
+					defaultProfile: JSON.parse(configDefaults.setEnv),
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => !!val,
+					toBaseProfile: (previousValue) => validateJsonConfigSetting('x-terminal.spawnPtySettings.setEnv', configDefaults.setEnv),
+					fromMenuSetting: (element, baseValue) => parseJson(element.getModel().getText(), baseValue, Object),
+					toMenuSetting: (val) => JSON.stringify(val),
+				},
 			},
 			deleteEnv: {
 				title: 'Environment Deletions',
 				description: 'Environment variables to delete from original environment, must be in a JSON array.',
 				type: 'string',
-				default: configDefaults.getDefaultDeleteEnv(),
+				default: configDefaults.deleteEnv,
+				profileData: {
+					inProfile: true,
+					defaultProfile: JSON.parse(configDefaults.deleteEnv),
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => !!val,
+					toBaseProfile: (previousValue) => validateJsonConfigSetting('x-terminal.spawnPtySettings.deleteEnv', configDefaults.deleteEnv),
+					fromMenuSetting: (element, baseValue) => parseJson(element.getModel().getText(), baseValue, Array),
+					toMenuSetting: (val) => JSON.stringify(val),
+				},
 			},
 			encoding: {
 				title: 'Character Encoding',
 				description: 'Character encoding to use in spawned terminal.',
 				type: 'string',
-				default: configDefaults.getDefaultEncoding(),
+				default: configDefaults.encoding,
+				profileData: {
+					inProfile: true,
+					defaultProfile: null,
+					fromUrlParam: (val) => (val === 'null' ? null : val),
+					toBaseProfile: (previousValue) => (atom.config.get('x-terminal.spawnPtySettings.encoding') || null),
+					fromMenuSetting: (element, baseValue) => (element.getModel().getText() || baseValue),
+					toMenuSetting: (val) => convertNullToEmptyString(val),
+				},
 			},
 		},
 	},
@@ -306,15 +265,32 @@ export const config = configOrder({
 				title: 'Font Size',
 				description: 'Font size used in terminal emulator.',
 				type: 'integer',
-				default: configDefaults.getDefaultFontSize(),
-				minimum: configDefaults.getMinimumFontSize(),
-				maximum: configDefaults.getMaximumFontSize(),
+				default: configDefaults.fontSize,
+				minimum: configDefaults.minimumFontSize,
+				maximum: configDefaults.maximumFontSize,
+				profileData: {
+					inProfile: true,
+					defaultProfile: configDefaults.fontSize,
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => !!val,
+					toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.fontSize') || configDefaults.fontSize),
+					fromMenuSetting: (element, baseValue) => parseJson(element.getModel().getText(), baseValue, Number),
+					toMenuSetting: (val) => val,
+				},
 			},
 			fontFamily: {
 				title: 'Font Family',
 				description: 'Font family used in terminal emulator.',
 				type: 'string',
-				default: configDefaults.getDefaultFontFamily(),
+				default: configDefaults.fontFamily,
+				profileData: {
+					inProfile: true,
+					defaultProfile: configDefaults.fontFamily,
+					toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.fontFamily') || configDefaults.fontFamily),
+					fromMenuSetting: (element, baseValue) => (element.getModel().getText() || baseValue),
+					toMenuSetting: (val) => val,
+				},
 			},
 			colors: {
 				title: 'Colors',
@@ -353,133 +329,309 @@ export const config = configOrder({
 							'Solid Colors',
 							'Standard',
 						],
-						default: configDefaults.getDefaultTheme(),
+						default: configDefaults.theme,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.theme,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.theme') || configDefaults.theme),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					foreground: {
 						title: 'Text Color',
 						description: 'This will be overridden if the theme is not \'Custom\'.',
 						type: 'color',
-						default: configDefaults.getDefaultColorForeground(),
+						default: configDefaults.colorForeground,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorForeground,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.foreground') || configDefaults.colorForeground),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					background: {
 						title: 'Background Color',
 						description: 'This will be overridden if the theme is not \'Custom\'.',
 						type: 'color',
-						default: configDefaults.getDefaultColorBackground(),
+						default: configDefaults.colorBackground,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorBackground,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.background') || configDefaults.colorBackground),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					cursor: {
 						title: 'Cursor Color',
 						description: 'Can be transparent. This will be overridden if the theme is not \'Custom\'.',
 						type: 'color',
-						default: configDefaults.getDefaultColorCursor(),
+						default: configDefaults.colorCursor,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorCursor,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.cursor') || configDefaults.colorCursor),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					cursorAccent: {
 						title: 'Cursor Text Color',
 						description: 'Can be transparent. This will be overridden if the theme is not \'Custom\'.',
 						type: 'color',
-						default: configDefaults.getDefaultColorCursorAccent(),
+						default: configDefaults.colorCursorAccent,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorCursorAccent,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.cursorAccent') || configDefaults.colorCursorAccent),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					selection: {
 						title: 'Selection Background Color',
 						description: 'Can be transparent. This will be overridden if the theme is not \'Custom\'.',
 						type: 'color',
-						default: configDefaults.getDefaultColorSelection(),
+						default: configDefaults.colorSelection,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorSelection,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.selection') || configDefaults.colorSelection),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					black: {
 						title: 'ANSI Black',
 						description: '`\\x1b[30m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorBlack(),
+						default: configDefaults.colorBlack,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorBlack,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.black') || configDefaults.colorBlack),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					red: {
 						title: 'ANSI Red',
 						description: '`\\x1b[31m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorRed(),
+						default: configDefaults.colorRed,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorRed,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.red') || configDefaults.colorRed),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					green: {
 						title: 'ANSI Green',
 						description: '`\\x1b[32m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorGreen(),
+						default: configDefaults.colorGreen,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorGreen,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.green') || configDefaults.colorGreen),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					yellow: {
 						title: 'ANSI Yellow',
 						description: '`\\x1b[33m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorYellow(),
+						default: configDefaults.colorYellow,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorYellow,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.yellow') || configDefaults.colorYellow),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					blue: {
 						title: 'ANSI Blue',
 						description: '`\\x1b[34m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorBlue(),
+						default: configDefaults.colorBlue,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorBlue,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.blue') || configDefaults.colorBlue),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					magenta: {
 						title: 'ANSI Magenta',
 						description: '`\\x1b[35m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorMagenta(),
+						default: configDefaults.colorMagenta,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorMagenta,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.magenta') || configDefaults.colorMagenta),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					cyan: {
 						title: 'ANSI Cyan',
 						description: '`\\x1b[36m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorCyan(),
+						default: configDefaults.colorCyan,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorCyan,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.cyan') || configDefaults.colorCyan),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					white: {
 						title: 'ANSI White',
 						description: '`\\x1b[37m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorWhite(),
+						default: configDefaults.colorWhite,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorWhite,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.white') || configDefaults.colorWhite),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					brightBlack: {
 						title: 'ANSI Bright Black',
 						description: '`\\x1b[1;30m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorBrightBlack(),
+						default: configDefaults.colorBrightBlack,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorBrightBlack,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightBlack') || configDefaults.colorBrightBlack),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					brightRed: {
 						title: 'ANSI Bright Red',
 						description: '`\\x1b[1;31m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorBrightRed(),
+						default: configDefaults.colorBrightRed,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorBrightRed,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightRed') || configDefaults.colorBrightRed),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					brightGreen: {
 						title: 'ANSI Bright Green',
 						description: '`\\x1b[1;32m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorBrightGreen(),
+						default: configDefaults.colorBrightGreen,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorBrightGreen,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightGreen') || configDefaults.colorBrightGreen),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					brightYellow: {
 						title: 'ANSI Bright Yellow',
 						description: '`\\x1b[1;33m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorBrightYellow(),
+						default: configDefaults.colorBrightYellow,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorBrightYellow,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightYellow') || configDefaults.colorBrightYellow),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					brightBlue: {
 						title: 'ANSI Bright Blue',
 						description: '`\\x1b[1;34m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorBrightBlue(),
+						default: configDefaults.colorBrightBlue,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorBrightBlue,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightBlue') || configDefaults.colorBrightBlue),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					brightMagenta: {
 						title: 'ANSI Bright Magenta',
 						description: '`\\x1b[1;35m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorBrightMagenta(),
+						default: configDefaults.colorBrightMagenta,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorBrightMagenta,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightMagenta') || configDefaults.colorBrightMagenta),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					brightCyan: {
 						title: 'ANSI Bright Cyan',
 						description: '`\\x1b[1;36m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorBrightCyan(),
+						default: configDefaults.colorBrightCyan,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorBrightCyan,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightCyan') || configDefaults.colorBrightCyan),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 					brightWhite: {
 						title: 'ANSI Bright White',
 						description: '`\\x1b[1;37m`',
 						type: 'color',
-						default: configDefaults.getDefaultColorBrightWhite(),
+						default: configDefaults.colorBrightWhite,
+						profileData: {
+							inProfile: true,
+							defaultProfile: configDefaults.colorBrightWhite,
+							toUrlParam: (val) => val,
+							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightWhite') || configDefaults.colorBrightWhite),
+							fromMenuSetting: (element, baseValue) => (element.value || baseValue),
+							toMenuSetting: (val) => val,
+						},
 					},
 				},
 			},
@@ -487,25 +639,53 @@ export const config = configOrder({
 				title: 'Leave Open After Exit',
 				description: 'Whether to leave terminal emulators open after their shell processes have exited.',
 				type: 'boolean',
-				default: configDefaults.getDefaultLeaveOpenAfterExit(),
+				default: configDefaults.leaveOpenAfterExit,
+				profileData: {
+					inProfile: true,
+					defaultProfile: configDefaults.leaveOpenAfterExit,
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => (val !== null && val !== ''),
+					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.terminalSettings.leaveOpenAfterExit', configDefaults.leaveOpenAfterExit),
+					fromMenuSetting: (element, baseValue) => element.checked,
+					toMenuSetting: (val) => val,
+				},
 			},
 			allowRelaunchingTerminalsOnStartup: {
 				title: 'Allow relaunching terminals on startup',
 				description: 'Whether to allow relaunching terminals on startup.',
 				type: 'boolean',
-				default: configDefaults.getDefaultAllowRelaunchingTerminalsOnStartup(),
+				default: configDefaults.allowRelaunchingTerminalsOnStartup,
 			},
 			relaunchTerminalOnStartup: {
 				title: 'Relaunch terminal on startup',
 				description: 'Whether to relaunch terminal on startup.',
 				type: 'boolean',
-				default: configDefaults.getDefaultRelaunchTerminalOnStartup(),
+				default: configDefaults.relaunchTerminalOnStartup,
+				profileData: {
+					inProfile: true,
+					defaultProfile: configDefaults.relaunchTerminalOnStartup,
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => (val !== null && val !== ''),
+					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.terminalSettings.relaunchTerminalOnStartup', configDefaults.relaunchTerminalOnStartup),
+					fromMenuSetting: (element, baseValue) => element.checked,
+					toMenuSetting: (val) => val,
+				},
 			},
 			title: {
 				title: 'Terminal tab title',
 				description: 'Title to use for terminal tabs.',
 				type: 'string',
-				default: configDefaults.getDefaultTitle(),
+				default: configDefaults.title,
+				profileData: {
+					inProfile: true,
+					defaultProfile: null,
+					fromUrlParam: (val) => (val === 'null' ? null : val),
+					toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.title') || configDefaults.title || null),
+					fromMenuSetting: (element, baseValue) => (element.getModel().getText() || baseValue),
+					toMenuSetting: (val) => (val || ''),
+				},
 			},
 			defaultOpenPosition: {
 				title: 'Default Open Position',
@@ -521,20 +701,133 @@ export const config = configOrder({
 					'Left Dock',
 					'Right Dock',
 				],
-				default: configDefaults.getDefaultApiOpenPosition(),
+				default: configDefaults.apiOpenPosition,
 			},
 			xtermOptions: {
 				title: 'xterm.js Terminal Options',
 				description: 'Options to apply to xterm.js Terminal objects. (https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/#properties)',
 				type: 'string',
-				default: configDefaults.getDefaultXtermOptions(),
+				default: configDefaults.xtermOptions,
+				profileData: {
+					inProfile: true,
+					defaultProfile: JSON.parse(configDefaults.xtermOptions),
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => !!val,
+					toBaseProfile: (previousValue) => validateJsonConfigSetting('x-terminal.terminalSettings.xtermOptions', configDefaults.xtermOptions, previousValue),
+					fromMenuSetting: (element, baseValue) => parseJson(element.getModel().getText(), baseValue, Object),
+					toMenuSetting: (val) => JSON.stringify(val),
+				},
 			},
 			promptToStartup: {
 				title: 'Prompt to start command',
 				description: 'Whether to prompt to start command in terminal on startup.',
 				type: 'boolean',
-				default: configDefaults.getDefaultPromptToStartup(),
+				default: configDefaults.promptToStartup,
+				profileData: {
+					inProfile: true,
+					defaultProfile: configDefaults.promptToStartup,
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => (val !== null && val !== ''),
+					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.terminalSettings.promptToStartup', configDefaults.promptToStartup),
+					fromMenuSetting: (element, baseValue) => element.checked,
+					toMenuSetting: (val) => val,
+				},
 			},
 		},
 	},
 })
+
+function validateBooleanConfigSetting (name, defaultValue) {
+	const value = atom.config.get(name)
+	return (typeof value === 'boolean' ? value : defaultValue)
+}
+
+function validateJsonConfigSetting (name, defaultJsonValue, previousValue) {
+	let value = atom.config.get(name)
+	try {
+		value = JSON.parse(value || defaultJsonValue) || previousValue
+	} catch (e) {
+		// This normally happens when the user is in the middle of updating some
+		// setting that is a JSON string. Ignore syntax errors and use the last
+		// known good config setting.
+		if (!(e instanceof SyntaxError)) {
+			throw e
+		}
+		value = previousValue
+	}
+	return value
+}
+
+function parseJson (value, defaultValue, type) {
+	let retval = value
+	try {
+		retval = JSON.parse(retval)
+	} catch (e) {
+		if (!(e instanceof SyntaxError)) {
+			throw e
+		}
+		retval = null
+	}
+	if (!retval || retval.constructor !== type) {
+		retval = defaultValue
+	}
+	return retval
+}
+
+function convertNullToEmptyString (value) {
+	if (value === null) {
+		return ''
+	}
+	return JSON.stringify(value)
+}
+
+export const COLORS = {
+	foreground: 'colorForeground',
+	background: 'colorBackground',
+	cursor: 'colorCursor',
+	cursorAccent: 'colorCursorAccent',
+	selection: 'colorSelection',
+	black: 'colorBlack',
+	red: 'colorRed',
+	green: 'colorGreen',
+	yellow: 'colorYellow',
+	blue: 'colorBlue',
+	magenta: 'colorMagenta',
+	cyan: 'colorCyan',
+	white: 'colorWhite',
+	brightBlack: 'colorBrightBlack',
+	brightRed: 'colorBrightRed',
+	brightGreen: 'colorBrightGreen',
+	brightYellow: 'colorBrightYellow',
+	brightBlue: 'colorBrightBlue',
+	brightMagenta: 'colorBrightMagenta',
+	brightCyan: 'colorBrightCyan',
+	brightWhite: 'colorBrightWhite',
+}
+
+function configToData (obj, prefix) {
+	const data = []
+	for (const key in obj) {
+		if (obj[key].type === 'object') {
+			data.push(...configToData(obj[key].properties, `${prefix}.${key}`))
+		} else {
+			const profileData = obj[key].profileData
+			delete obj[key].profileData
+			const keyPath = `${prefix}.${key}`
+			const profileKey = key !== 'theme' && prefix.endsWith('.colors') ? COLORS[key] : key
+			data.push({ ...obj[key], ...profileData, keyPath, key, profileKey })
+		}
+	}
+	return data
+}
+
+export const CONFIG_DATA = configToData(config, 'x-terminal')
+
+export const KEYS = CONFIG_DATA.map(d => d.keyPath)
+
+export const CONFIG_KEYS_TO_PROFILE = CONFIG_DATA.reduce((o, d) => {
+	o[d.keyPath] = d.profileKey
+	return o
+}, {})

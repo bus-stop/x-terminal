@@ -23,7 +23,7 @@ import { XTerminalProfilesSingleton } from './profiles'
 import { XTerminalDeleteProfileModel } from './delete-profile-model'
 import { XTerminalSaveProfileModel } from './save-profile-model'
 import { createHorizontalLine } from './utils'
-import { config, COLORS } from './config.js'
+import { COLORS, CONFIG_DATA } from './config.js'
 
 class XTerminalProfileMenuElementImpl extends HTMLElement {
 	async initialize (model) {
@@ -63,7 +63,7 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		// Horizontal line.
 		this.mainDiv.appendChild(createHorizontalLine())
 
-		this.createFromConfig(config, baseProfile, modelProfile)
+		this.createFromConfig(CONFIG_DATA, baseProfile, modelProfile)
 
 		this.deleteProfileModel = new XTerminalDeleteProfileModel(this)
 		this.saveProfileModel = new XTerminalSaveProfileModel(this)
@@ -80,25 +80,23 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 	}
 
 	createFromConfig (configObj, baseProfile, modelProfile) {
-		for (const name in configObj) {
-			const item = configObj[name]
-			if (item.type === 'object') {
-				this.createFromConfig(item.properties, baseProfile, modelProfile)
+		for (const data of configObj) {
+			if (!data.inProfile) {
 				continue
 			}
-			const title = item.title || name.charAt(0).toUpperCase() + name.substring(1).replace(/[A-Z]/g, ' $&')
-			const description = item.description || ''
-			if (item.enum) {
+			const title = data.title || data.key.charAt(0).toUpperCase() + data.key.substring(1).replace(/[A-Z]/g, ' $&')
+			const description = data.description || ''
+			if (data.enum) {
 				this.mainDiv.appendChild(this.createSelect(
-					`${name.toLowerCase()}-select`,
+					`${data.key.toLowerCase()}-select`,
 					title,
 					description,
-					baseProfile[name],
-					modelProfile[name],
-					item.enum,
+					baseProfile[data.key],
+					modelProfile[data.key],
+					data.enum,
 				))
-			} else if (item.type === 'color') {
-				const profileName = COLORS[name]
+			} else if (data.type === 'color') {
+				const profileName = COLORS[data.key]
 				this.mainDiv.appendChild(this.createColor(
 					`${profileName.toLowerCase()}-color`,
 					title,
@@ -106,21 +104,21 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 					baseProfile[profileName],
 					modelProfile[profileName],
 				))
-			} else if (item.type === 'boolean') {
+			} else if (data.type === 'boolean') {
 				this.mainDiv.appendChild(this.createCheckbox(
-					`${name.toLowerCase()}-checkbox`,
+					`${data.key.toLowerCase()}-checkbox`,
 					title,
 					description,
-					baseProfile[name],
-					modelProfile[name],
+					baseProfile[data.key],
+					modelProfile[data.key],
 				))
 			} else {
 				this.mainDiv.appendChild(this.createTextbox(
-					`${name.toLowerCase()}-textbox`,
+					`${data.key.toLowerCase()}-textbox`,
 					title,
 					description,
-					baseProfile[name],
-					modelProfile[name],
+					baseProfile[data.key],
+					modelProfile[data.key],
 				))
 			}
 		}
@@ -136,44 +134,20 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		return this.model.atomXtermModel.profile
 	}
 
-	parseJson (value, defaultValue, type) {
-		let retval = value
-		try {
-			retval = JSON.parse(retval)
-		} catch (e) {
-			if (!(e instanceof SyntaxError)) {
-				throw e
-			}
-			retval = null
-		}
-		if (!retval || retval.constructor !== type) {
-			retval = defaultValue
-		}
-		return retval
-	}
-
 	getMenuElements () {
 		const menuElements = {}
-		menuElements.commandElement = this.mainDiv.querySelector('#command-textbox atom-text-editor')
-		menuElements.argsElement = this.mainDiv.querySelector('#args-textbox atom-text-editor')
-		menuElements.nameElement = this.mainDiv.querySelector('#name-textbox atom-text-editor')
-		menuElements.cwdElement = this.mainDiv.querySelector('#cwd-textbox atom-text-editor')
-		menuElements.envElement = this.mainDiv.querySelector('#env-textbox atom-text-editor')
-		menuElements.setEnvElement = this.mainDiv.querySelector('#setenv-textbox atom-text-editor')
-		menuElements.deleteEnvElement = this.mainDiv.querySelector('#deleteenv-textbox atom-text-editor')
-		menuElements.encodingElement = this.mainDiv.querySelector('#encoding-textbox atom-text-editor')
-		menuElements.fontSizeElement = this.mainDiv.querySelector('#fontsize-textbox atom-text-editor')
-		menuElements.fontFamilyElement = this.mainDiv.querySelector('#fontfamily-textbox atom-text-editor')
-		menuElements.themeElement = this.mainDiv.querySelector('#theme-select .x-terminal-profile-menu-item-select')
-		for (const c of Object.values(COLORS)) {
-			menuElements[`${c}Element`] = this.mainDiv.querySelector(`#${c.toLowerCase()}-color .x-terminal-profile-menu-item-color`)
-		}
+		for (const data of CONFIG_DATA) {
+			let type = 'textbox > atom-text-editor'
 
-		menuElements.leaveOpenAfterExitElement = this.mainDiv.querySelector('#leaveopenafterexit-checkbox .x-terminal-profile-menu-item-checkbox')
-		menuElements.relaunchTerminalOnStartupElement = this.mainDiv.querySelector('#relaunchterminalonstartup-checkbox .x-terminal-profile-menu-item-checkbox')
-		menuElements.titleElement = this.mainDiv.querySelector('#title-textbox atom-text-editor')
-		menuElements.xtermOptionsElement = this.mainDiv.querySelector('#xtermoptions-textbox atom-text-editor')
-		menuElements.promptToStartupElement = this.mainDiv.querySelector('#prompttostartup-checkbox .x-terminal-profile-menu-item-checkbox')
+			if (data.enum) {
+				type = 'select select'
+			} else if (data.type === 'color') {
+				type = 'color input'
+			} else if (data.type === 'boolean') {
+				type = 'checkbox input'
+			}
+			menuElements[data.profileKey] = this.mainDiv.querySelector(`#${data.profileKey.toLowerCase()}-${type}`)
+		}
 		return menuElements
 	}
 
@@ -181,49 +155,12 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		const newProfile = {}
 		const baseProfile = this.profilesSingleton.getBaseProfile()
 		const menuElements = this.getMenuElements()
-		newProfile.command = menuElements.commandElement.getModel().getText() || baseProfile.command
-		newProfile.args = this.parseJson(
-			menuElements.argsElement.getModel().getText(),
-			baseProfile.args,
-			Array,
-		)
-		newProfile.name = menuElements.nameElement.getModel().getText() || baseProfile.name
-		newProfile.cwd = menuElements.cwdElement.getModel().getText() || baseProfile.cwd
-		newProfile.env = this.parseJson(
-			menuElements.envElement.getModel().getText(),
-			baseProfile.env,
-			Object,
-		)
-		newProfile.setEnv = this.parseJson(
-			menuElements.setEnvElement.getModel().getText(),
-			baseProfile.setEnv,
-			Object,
-		)
-		newProfile.deleteEnv = this.parseJson(
-			menuElements.deleteEnvElement.getModel().getText(),
-			baseProfile.deleteEnv,
-			Array,
-		)
-		newProfile.encoding = menuElements.encodingElement.getModel().getText() || baseProfile.encoding
-		newProfile.fontSize = this.parseJson(
-			menuElements.fontSizeElement.getModel().getText(),
-			baseProfile.fontSize,
-			Number,
-		)
-		newProfile.fontFamily = menuElements.fontFamilyElement.getModel().getText() || baseProfile.fontFamily
-		newProfile.theme = menuElements.themeElement.value || baseProfile.theme
-		for (const c of Object.values(COLORS)) {
-			newProfile[c] = menuElements[`${c}Element`].value || baseProfile[c]
+		for (const data of CONFIG_DATA) {
+			if (!data.inProfile) {
+				continue
+			}
+			newProfile[data.profileKey] = data.fromMenuSetting(menuElements[data.profileKey], baseProfile[data.profileKey])
 		}
-		newProfile.leaveOpenAfterExit = menuElements.leaveOpenAfterExitElement.checked
-		newProfile.relaunchTerminalOnStartup = menuElements.relaunchTerminalOnStartupElement.checked
-		newProfile.title = menuElements.titleElement.getModel().getText() || baseProfile.title
-		newProfile.xtermOptions = this.parseJson(
-			menuElements.xtermOptionsElement.getModel().getText(),
-			baseProfile.xtermOptions,
-			Object,
-		)
-		newProfile.promptToStartup = menuElements.promptToStartupElement.checked
 		return newProfile
 	}
 
@@ -280,7 +217,7 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 				const profile = this.profilesSingleton.getBaseProfile()
 				this.setNewMenuSettings(profile, true)
 			}
-		})
+		}, { passive: true })
 		return select
 	}
 
@@ -302,31 +239,31 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		button.appendChild(document.createTextNode('Load Settings'))
 		button.addEventListener('click', (event) => {
 			this.loadProfile()
-		})
+		}, { passive: true })
 		buttonsContainer.appendChild(button)
 		button = this.createButton()
 		button.appendChild(document.createTextNode('Save Settings'))
 		button.addEventListener('click', (event) => {
 			this.saveProfile()
-		})
+		}, { passive: true })
 		buttonsContainer.appendChild(button)
 		button = this.createButton()
 		button.appendChild(document.createTextNode('Delete Settings'))
 		button.addEventListener('click', (event) => {
 			this.deleteProfile()
-		})
+		}, { passive: true })
 		buttonsContainer.appendChild(button)
 		button = this.createButton()
 		button.appendChild(document.createTextNode('Restart'))
 		button.addEventListener('click', (event) => {
 			this.restartTerminal()
-		})
+		}, { passive: true })
 		buttonsContainer.appendChild(button)
 		button = this.createButton()
 		button.appendChild(document.createTextNode('Hide Menu'))
 		button.addEventListener('click', (event) => {
 			this.hideProfileMenu()
-		})
+		}, { passive: true })
 		buttonsContainer.appendChild(button)
 		return buttonsContainer
 	}
@@ -519,64 +456,31 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		this.saveProfileModel.promptForNewProfileName(newProfile, profileChanges)
 	}
 
-	convertNullToEmptyString (value) {
-		if (value === null) {
-			return ''
-		}
-		return JSON.stringify(value)
-	}
-
 	setNewMenuSettings (profile, clear = false) {
-		const newTextList = {
-			'command-textbox': profile.command,
-			'args-textbox': JSON.stringify(profile.args),
-			'name-textbox': profile.name,
-			'cwd-textbox': profile.cwd,
-			'env-textbox': this.convertNullToEmptyString(profile.env),
-			'setenv-textbox': JSON.stringify(profile.setEnv),
-			'deleteenv-textbox': JSON.stringify(profile.deleteEnv),
-			'encoding-textbox': this.convertNullToEmptyString(profile.encoding),
-			'fontsize-textbox': profile.fontSize,
-			'fontfamily-textbox': profile.fontFamily,
-			'title-textbox': profile.title || '',
-			'xtermoptions-textbox': JSON.stringify(profile.xtermOptions),
-		}
-		for (const newText in newTextList) {
-			const selector = '#' + newText + ' > atom-text-editor'
-			const model = this.querySelector(selector).getModel()
-			if (!clear) {
-				model.setText(newTextList[newText])
-			} else {
-				model.setText('')
-			}
-		}
+		for (const data of CONFIG_DATA) {
+			if (!data.inProfile) continue
 
-		const newCheckboxList = {
-			'leaveopenafterexit-checkbox': profile.leaveOpenAfterExit,
-			'relaunchterminalonstartup-checkbox': profile.relaunchTerminalOnStartup,
-			'prompttostartup-checkbox': profile.promptToStartup,
-		}
-		for (const newCheckbox in newCheckboxList) {
-			const selector = '#' + newCheckbox + ' input'
-			const checkbox = this.querySelector(selector)
-			checkbox.checked = newCheckboxList[newCheckbox]
-		}
-		const newValueList = {}
-		for (const c of Object.values(COLORS)) {
-			newValueList[`${c.toLowerCase()}-color`] = profile[c]
-		}
-		for (const newValue in newValueList) {
-			const selector = '#' + newValue + ' input'
-			const input = this.querySelector(selector)
-			input.value = newValueList[newValue]
-		}
-		const newSelectList = {
-			'theme-select': profile.theme,
-		}
-		for (const newValue in newSelectList) {
-			const selector = '#' + newValue + ' select'
-			const input = this.querySelector(selector)
-			input.value = newSelectList[newValue]
+			if (data.enum) {
+				const selector = `#${data.profileKey.toLowerCase()}-select select`
+				const input = this.querySelector(selector)
+				input.value = data.toMenuSetting(profile[data.profileKey])
+			} else if (data.type === 'color') {
+				const selector = `#${data.profileKey.toLowerCase()}-color input`
+				const input = this.querySelector(selector)
+				input.value = data.toMenuSetting(profile[data.profileKey])
+			} else if (data.type === 'boolean') {
+				const selector = `#${data.profileKey.toLowerCase()}-checkbox input`
+				const checkbox = this.querySelector(selector)
+				checkbox.checked = data.toMenuSetting(profile[data.profileKey])
+			} else {
+				const selector = `#${data.profileKey.toLowerCase()}-textbox > atom-text-editor`
+				const model = this.querySelector(selector).getModel()
+				if (!clear) {
+					model.setText(data.toMenuSetting(profile[data.profileKey]))
+				} else {
+					model.setText('')
+				}
+			}
 		}
 	}
 }
