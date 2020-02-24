@@ -82,45 +82,6 @@ describe('XTerminalProfileMenuElement', () => {
 		expect(this.element.getModelProfile()).toBe(mock)
 	})
 
-	it('parseJson() array type', () => {
-		const expected = ['foo']
-		const actual = this.element.parseJson(
-			'["foo"]',
-			null,
-			Array,
-		)
-		expect(actual).toEqual(expected)
-	})
-
-	it('parseJson() object type', () => {
-		const expected = { foo: 'bar' }
-		const actual = this.element.parseJson(
-			'{"foo": "bar"}',
-			null,
-			Object,
-		)
-		expect(actual).toEqual(expected)
-	})
-
-	it('parseJson() default value', () => {
-		const expected = ['foo']
-		const actual = this.element.parseJson(
-			'null',
-			expected,
-			Array,
-		)
-		expect(actual).toEqual(expected)
-	})
-
-	it('parseJson() syntax error', () => {
-		const actual = this.element.parseJson(
-			'[[',
-			'foo',
-			Array,
-		)
-		expect(actual).toBe('foo')
-	})
-
 	it('getMenuElements()', () => {
 		expect(this.element.getMenuElements()).toBeTruthy()
 	})
@@ -322,14 +283,6 @@ describe('XTerminalProfileMenuElement', () => {
 			done()
 		})
 		this.element.promptForNewProfileName('foo', 'bar')
-	})
-
-	it('convertNullToEmptyString() value is null', () => {
-		expect(this.element.convertNullToEmptyString(null)).toBe('')
-	})
-
-	it('convertNullToEmptyString() value is not null', () => {
-		expect(this.element.convertNullToEmptyString('foo')).toBe('"foo"')
 	})
 
 	it('setNewMenuSettings()', () => {

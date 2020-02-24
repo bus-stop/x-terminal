@@ -68,7 +68,7 @@ describe('XTerminalModel', () => {
 			terminals_set: new Set(),
 		})
 		await model.initializedPromise
-		expect(model.getPath()).toBe(configDefaults.getDefaultCwd())
+		expect(model.getPath()).toBe(configDefaults.cwd)
 	})
 
 	it('constructor with valid cwd passed in uri', async () => {
@@ -83,6 +83,21 @@ describe('XTerminalModel', () => {
 		expect(model.getPath()).toBe(this.tmpdir)
 	})
 
+	it('use projectCwd with valid cwd passed in uri', async () => {
+		const expected = await temp.mkdir('projectCwd')
+		spyOn(atom.project, 'getPaths').and.returnValue([expected])
+		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue({})
+		const url = XTerminalProfilesSingleton.instance.generateNewUrlFromProfileData({})
+		url.searchParams.set('projectCwd', true)
+		url.searchParams.set('cwd', this.tmpdir)
+		const model = new XTerminalModel({
+			uri: url.href,
+			terminals_set: new Set(),
+		})
+		await model.initializedPromise
+		expect(model.getPath()).toBe(expected)
+	})
+
 	it('constructor with invalid cwd passed in uri', async () => {
 		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue({})
 		const url = XTerminalProfilesSingleton.instance.generateNewUrlFromProfileData({})
@@ -92,7 +107,7 @@ describe('XTerminalModel', () => {
 			terminals_set: new Set(),
 		})
 		await model.initializedPromise
-		expect(model.getPath()).toBe(configDefaults.getDefaultCwd())
+		expect(model.getPath()).toBe(configDefaults.cwd)
 	})
 
 	it('constructor with previous active item that has getPath() method', async () => {
@@ -130,7 +145,7 @@ describe('XTerminalModel', () => {
 			terminals_set: new Set(),
 		})
 		await model.initializedPromise
-		expect(model.getPath()).toBe(configDefaults.getDefaultCwd())
+		expect(model.getPath()).toBe(configDefaults.cwd)
 	})
 
 	it('constructor with previous active item which exists in project path', async () => {
@@ -277,7 +292,7 @@ describe('XTerminalModel', () => {
 	})
 
 	it('getPath()', () => {
-		expect(this.model.getPath()).toBe(configDefaults.getDefaultCwd())
+		expect(this.model.getPath()).toBe(configDefaults.cwd)
 	})
 
 	it('getPath() cwd set', () => {

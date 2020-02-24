@@ -40,12 +40,12 @@ class XTerminalDeleteProfileElementImpl extends HTMLElement {
 		const confirmButton = document.createElement('button')
 		confirmButton.classList.add('x-terminal-modal-button')
 		confirmButton.appendChild(document.createTextNode('Confirm'))
-		confirmButton.addEventListener('click', confirmHandler)
+		confirmButton.addEventListener('click', confirmHandler, { passive: true })
 		this.promptButtonsDiv.appendChild(confirmButton)
 		const cancelButton = document.createElement('button')
 		cancelButton.classList.add('x-terminal-modal-button')
 		cancelButton.appendChild(document.createTextNode('Cancel'))
-		cancelButton.addEventListener('click', cancelHandler)
+		cancelButton.addEventListener('click', cancelHandler, { passive: true })
 		this.promptButtonsDiv.appendChild(cancelButton)
 	}
 }

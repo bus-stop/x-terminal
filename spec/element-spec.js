@@ -34,7 +34,7 @@ temp.track()
 describe('XTerminalElement', () => {
 	const savedPlatform = process.platform
 	this.element = null
-	this.tmpdirObj = null
+	this.tmpdir = null
 
 	const createNewElement = async (uri = 'x-terminal://somesessionid/') => {
 		const terminalsSet = new Set()
@@ -100,7 +100,7 @@ describe('XTerminalElement', () => {
 	})
 
 	it('getShellCommand()', () => {
-		expect(this.element.getShellCommand()).toBe(configDefaults.getDefaultShellCommand())
+		expect(this.element.getShellCommand()).toBe(configDefaults.command)
 	})
 
 	it('getShellCommand() command set in uri', async () => {
@@ -129,7 +129,7 @@ describe('XTerminalElement', () => {
 	})
 
 	it('getTermType()', () => {
-		expect(this.element.getTermType()).toBe(configDefaults.getDefaultTermType())
+		expect(this.element.getTermType()).toBe(configDefaults.termType)
 	})
 
 	it('getTermType() name set in uri', async () => {
@@ -167,12 +167,22 @@ describe('XTerminalElement', () => {
 
 	it('getCwd()', async () => {
 		const cwd = await this.element.getCwd()
-		expect(cwd).toBe(configDefaults.getDefaultCwd())
+		expect(cwd).toBe(configDefaults.cwd)
 	})
 
 	it('getCwd() cwd set in uri', async () => {
 		const expected = this.tmpdir
 		const params = new URLSearchParams({ cwd: expected })
+		const url = new URL('x-terminal://?' + params.toString())
+		const element = await createNewElement(url.href)
+		const cwd = await element.getCwd()
+		expect(cwd).toBe(expected)
+	})
+
+	it('getCwd() ignore cwd in uri if projectCwd is set', async () => {
+		const expected = await temp.mkdir('projectCwd')
+		spyOn(atom.project, 'getPaths').and.returnValue([expected])
+		const params = new URLSearchParams({ projectCwd: true, cwd: this.tmpdir })
 		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		const cwd = await element.getCwd()
@@ -204,7 +214,7 @@ describe('XTerminalElement', () => {
 		)
 		const element = await createNewElement()
 		const cwd = await element.getCwd()
-		expect(cwd).toBe(configDefaults.getDefaultCwd())
+		expect(cwd).toBe(configDefaults.cwd)
 	})
 
 	it('getCwd() non-existent cwd set in uri', async () => {
@@ -213,14 +223,14 @@ describe('XTerminalElement', () => {
 		const url = new URL('x-terminal://?' + params.toString())
 		await createNewElement(url.href)
 		const cwd = await this.element.getCwd()
-		expect(cwd).toBe(configDefaults.getDefaultCwd())
+		expect(cwd).toBe(configDefaults.cwd)
 	})
 
 	it('getCwd() non-existent project path added', async () => {
 		spyOn(atom.project, 'getPaths').and.returnValue([path.join(this.tmpdir, 'non-existent-dir')])
 		const element = await createNewElement()
 		const cwd = await element.getCwd()
-		expect(cwd).toBe(configDefaults.getDefaultCwd())
+		expect(cwd).toBe(configDefaults.cwd)
 	})
 
 	it('getEnv()', () => {
@@ -1054,6 +1064,56 @@ describe('XTerminalElement', () => {
 		expect(this.element.ptyProcess).toBeTruthy()
 	})
 
+	describe('loaded addons', () => {
+		const { Terminal } = require('xterm')
+		const { WebLinksAddon } = require('xterm-addon-web-links')
+		const { WebglAddon } = require('xterm-addon-webgl')
+
+		beforeEach(() => {
+			spyOn(Terminal.prototype, 'loadAddon').and.callThrough()
+		})
+
+		it('createTerminal() enable web-link addon', async () => {
+			const params = new URLSearchParams({ webLinks: true })
+			const url = new URL('x-terminal://?' + params.toString())
+			await createNewElement(url.href)
+			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
+				return call.args[0] instanceof WebLinksAddon
+			})
+			expect(wasAdded).toBe(true)
+		})
+
+		it('createTerminal() disable web-link addon', async () => {
+			const params = new URLSearchParams({ webLinks: false })
+			const url = new URL('x-terminal://?' + params.toString())
+			await createNewElement(url.href)
+			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
+				return call.args[0] instanceof WebLinksAddon
+			})
+			expect(wasAdded).toBe(false)
+		})
+
+		it('createTerminal() enable webgl addon', async () => {
+			const params = new URLSearchParams({ webgl: true })
+			const url = new URL('x-terminal://?' + params.toString())
+			await createNewElement(url.href)
+			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
+				return call.args[0] instanceof WebglAddon
+			})
+			expect(wasAdded).toBe(true)
+		})
+
+		it('createTerminal() disable webgl addon', async () => {
+			const params = new URLSearchParams({ webgl: false })
+			const url = new URL('x-terminal://?' + params.toString())
+			await createNewElement(url.href)
+			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
+				return call.args[0] instanceof WebglAddon
+			})
+			expect(wasAdded).toBe(false)
+		})
+	})
+
 	it('restartPtyProcess() check new pty process created', async () => {
 		const oldPtyProcess = this.element.ptyProcess
 		const newPtyProcess = jasmine.createSpyObj('ptyProcess',
@@ -1820,23 +1880,23 @@ describe('XTerminalElement', () => {
 	})
 
 	it('use ctrl+wheelScrollUp font already at maximum', () => {
-		this.element.model.profile.fontSize = configDefaults.getMaximumFontSize()
+		this.element.model.profile.fontSize = configDefaults.maximumFontSize
 		const wheelEvent = new WheelEvent('wheel', {
 			deltaY: -150,
 			ctrlKey: true,
 		})
 		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(configDefaults.getMaximumFontSize())
+		expect(this.element.model.profile.fontSize).toBe(configDefaults.maximumFontSize)
 	})
 
 	it('use ctrl+wheelScrollDown font already at minimum', () => {
-		this.element.model.profile.fontSize = configDefaults.getMinimumFontSize()
+		this.element.model.profile.fontSize = configDefaults.minimumFontSize
 		const wheelEvent = new WheelEvent('wheel', {
 			deltaY: 150,
 			ctrlKey: true,
 		})
 		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(configDefaults.getMinimumFontSize())
+		expect(this.element.model.profile.fontSize).toBe(configDefaults.minimumFontSize)
 	})
 
 	it('getXtermOptions() default options', () => {

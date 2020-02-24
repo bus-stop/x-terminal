@@ -25,7 +25,7 @@ import { WebLinksAddon } from 'xterm-addon-web-links'
 import { WebglAddon } from 'xterm-addon-webgl'
 import { shell } from 'electron'
 
-import { configDefaults, COLORS } from './config'
+import { configDefaults, COLORS, CONFIG_DATA } from './config'
 import { XTerminalProfileMenuElement } from './profile-menu-element'
 import { XTerminalProfileMenuModel } from './profile-menu-model'
 import { XTerminalProfilesSingleton } from './profiles'
@@ -118,10 +118,10 @@ class XTerminalElementImpl extends HTMLElement {
 					}
 
 					let fontSize = this.model.profile.fontSize + (wheelEvent.deltaY < 0 ? 1 : -1)
-					if (fontSize < configDefaults.getMinimumFontSize()) {
-						fontSize = configDefaults.getMinimumFontSize()
-					} else if (fontSize > configDefaults.getMaximumFontSize()) {
-						fontSize = configDefaults.getMaximumFontSize()
+					if (fontSize < configDefaults.minimumFontSize) {
+						fontSize = configDefaults.minimumFontSize
+					} else if (fontSize > configDefaults.maximumFontSize) {
+						fontSize = configDefaults.maximumFontSize
 					}
 					this.model.applyProfileChanges({ fontSize: fontSize })
 					wheelEvent.stopPropagation()
@@ -428,9 +428,13 @@ class XTerminalElementImpl extends HTMLElement {
 		this.terminal = new Terminal(this.getXtermOptions())
 		this.fitAddon = new FitAddon()
 		this.terminal.loadAddon(this.fitAddon)
-		this.terminal.loadAddon(new WebLinksAddon((e, uri) => { shell.openExternal(uri) }))
+		if (this.model.profile.webLinks) {
+			this.terminal.loadAddon(new WebLinksAddon((e, uri) => { shell.openExternal(uri) }))
+		}
 		this.terminal.open(this.terminalDiv)
-		this.terminal.loadAddon(new WebglAddon())
+		if (this.model.profile.webgl) {
+			this.terminal.loadAddon(new WebglAddon())
+		}
 		this.ptyProcessCols = 80
 		this.ptyProcessRows = 25
 		this.refitTerminal()
@@ -442,20 +446,18 @@ class XTerminalElementImpl extends HTMLElement {
 			}
 		})
 		this.disposables.add(this.profilesSingleton.onDidResetBaseProfile((baseProfile) => {
+			const frontEndSettings = {}
+			for (const data of CONFIG_DATA) {
+				if (!data.profileKey) continue
+				if (data.terminalFrontEnd) {
+					frontEndSettings[data.profileKey] = baseProfile[data.profileKey]
+				}
+			}
 			const profileChanges = this.profilesSingleton.diffProfiles(
 				this.model.getProfile(),
-				{
-					// Only allow changes to settings related to the terminal front end
-					// to be applied to existing terminals.
-					fontSize: baseProfile.fontSize,
-					fontFamily: baseProfile.fontFamily,
-					theme: baseProfile.theme,
-					...Object.values(COLORS).reduce((obj, c) => {
-						obj[c] = baseProfile[c]
-						return obj
-					}, {}),
-					xtermOptions: baseProfile.xtermOptions,
-				},
+				// Only allow changes to settings related to the terminal front end
+				// to be applied to existing terminals.
+				frontEndSettings,
 			)
 			this.model.applyProfileChanges(profileChanges)
 		}))
@@ -473,7 +475,7 @@ class XTerminalElementImpl extends HTMLElement {
 		restartButton.appendChild(document.createTextNode(restartButtonText))
 		restartButton.addEventListener('click', (event) => {
 			this.restartPtyProcess()
-		})
+		}, { passive: true })
 		restartButton.classList.add('btn-' + infoType)
 		restartButton.classList.add('x-terminal-restart-btn')
 		messageDiv.classList.add('x-terminal-notice-' + infoType)

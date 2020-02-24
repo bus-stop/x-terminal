@@ -68,7 +68,7 @@ class XTerminalModel {
 	async initialize () {
 		const baseProfile = this.profilesSingleton.getBaseProfile()
 		const previousActiveItem = atom.workspace.getActivePaneItem()
-		let cwd = this.profile.cwd
+		let cwd = this.profile.projectCwd ? atom.project.getPaths()[0] : this.profile.cwd
 		if (typeof previousActiveItem !== 'undefined' && typeof previousActiveItem.getPath === 'function') {
 			cwd = previousActiveItem.getPath()
 		}

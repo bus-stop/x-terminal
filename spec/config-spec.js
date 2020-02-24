@@ -17,12 +17,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { configDefaults } from '../src/lib/config'
+import { configDefaults, resetConfigDefaults } from '../src/lib/config'
 
 import os from 'os'
 import path from 'path'
 
-describe('Call to getDefaultShellCommand()', () => {
+describe('Call to shellCommand()', () => {
 	const savedPlatform = process.platform
 	let savedEnv
 
@@ -44,7 +44,7 @@ describe('Call to getDefaultShellCommand()', () => {
 		if (process.env.COMSPEC) {
 			delete process.env.COMSPEC
 		}
-		expect(configDefaults.getDefaultShellCommand()).toBe('cmd.exe')
+		expect(resetConfigDefaults().command).toBe('cmd.exe')
 	})
 
 	it('on win32 with COMSPEC set', () => {
@@ -53,7 +53,7 @@ describe('Call to getDefaultShellCommand()', () => {
 		})
 		const expected = 'somecommand.exe'
 		process.env.COMSPEC = expected
-		expect(configDefaults.getDefaultShellCommand()).toBe(expected)
+		expect(resetConfigDefaults().command).toBe(expected)
 	})
 
 	it('on linux without SHELL set', () => {
@@ -63,7 +63,7 @@ describe('Call to getDefaultShellCommand()', () => {
 		if (process.env.SHELL) {
 			delete process.env.SHELL
 		}
-		expect(configDefaults.getDefaultShellCommand()).toBe('/bin/sh')
+		expect(resetConfigDefaults().command).toBe('/bin/sh')
 	})
 
 	it('on linux with SHELL set', () => {
@@ -72,17 +72,17 @@ describe('Call to getDefaultShellCommand()', () => {
 		})
 		const expected = 'somecommand'
 		process.env.SHELL = expected
-		expect(configDefaults.getDefaultShellCommand()).toBe(expected)
+		expect(resetConfigDefaults().command).toBe(expected)
 	})
 })
 
-describe('Call to getDefaultArgs()', () => {
+describe('Call to args()', () => {
 	it('return []', () => {
-		expect(configDefaults.getDefaultArgs()).toBe('[]')
+		expect(configDefaults.args).toBe('[]')
 	})
 })
 
-describe('Call to getDefaultTermType()', () => {
+describe('Call to termType()', () => {
 	let savedEnv
 
 	beforeEach(() => {
@@ -97,17 +97,17 @@ describe('Call to getDefaultTermType()', () => {
 		if (process.env.TERM) {
 			delete process.env.TERM
 		}
-		expect(configDefaults.getDefaultTermType()).toBe('xterm-256color')
+		expect(resetConfigDefaults().termType).toBe('xterm-256color')
 	})
 
 	it('with TERM set', () => {
 		const expected = 'sometermtype'
 		process.env.TERM = expected
-		expect(configDefaults.getDefaultTermType()).toBe(expected)
+		expect(resetConfigDefaults().termType).toBe(expected)
 	})
 })
 
-describe('Call to getDefaultCwd()', () => {
+describe('Call to cwd()', () => {
 	const savedPlatform = process.platform
 	let savedEnv
 
@@ -128,7 +128,7 @@ describe('Call to getDefaultCwd()', () => {
 		})
 		const expected = 'C:\\some\\dir'
 		process.env.USERPROFILE = expected
-		expect(configDefaults.getDefaultCwd()).toBe(expected)
+		expect(resetConfigDefaults().cwd).toBe(expected)
 	})
 
 	it('on linux', () => {
@@ -137,215 +137,215 @@ describe('Call to getDefaultCwd()', () => {
 		})
 		const expected = '/some/dir'
 		process.env.HOME = expected
-		expect(configDefaults.getDefaultCwd()).toBe(expected)
+		expect(resetConfigDefaults().cwd).toBe(expected)
 	})
 })
 
-describe('Call to getDefaultEnv()', () => {
+describe('Call to env()', () => {
 	it('return \'\'', () => {
-		expect(configDefaults.getDefaultEnv()).toBe('')
+		expect(configDefaults.env).toBe('')
 	})
 })
 
-describe('Call to getDefaultSetEnv()', () => {
+describe('Call to setEnv()', () => {
 	it('return {}', () => {
-		expect(configDefaults.getDefaultSetEnv()).toBe('{}')
+		expect(configDefaults.setEnv).toBe('{}')
 	})
 })
 
-describe('Call to getDefaultDeleteEnv()', () => {
+describe('Call to deleteEnv()', () => {
 	it('return []', () => {
-		expect(configDefaults.getDefaultDeleteEnv()).toBe('[]')
+		expect(configDefaults.deleteEnv).toBe('[]')
 	})
 })
 
-describe('Call to getDefaultEncoding()', () => {
+describe('Call to encoding()', () => {
 	it('return \'\'', () => {
-		expect(configDefaults.getDefaultEncoding()).toBe('')
+		expect(configDefaults.encoding).toBe('')
 	})
 })
 
-describe('Call to getDefaultFontSize()', () => {
+describe('Call to fontSize()', () => {
 	it('return 14', () => {
-		expect(configDefaults.getDefaultFontSize()).toBe(14)
+		expect(configDefaults.fontSize).toBe(14)
 	})
 })
 
-describe('Call to getMinimumFontSize()', () => {
+describe('Call to minimumFontSize', () => {
 	it('return 8', () => {
-		expect(configDefaults.getMinimumFontSize()).toBe(8)
+		expect(configDefaults.minimumFontSize).toBe(8)
 	})
 })
 
-describe('Call to getMaximumFontSize()', () => {
+describe('Call to maximumFontSize', () => {
 	it('return 100', () => {
-		expect(configDefaults.getMaximumFontSize()).toBe(100)
+		expect(configDefaults.maximumFontSize).toBe(100)
 	})
 })
 
-describe('Call to getDefaultFontFamily()', () => {
+describe('Call to fontFamily()', () => {
 	it('return \'monospace\'', () => {
-		expect(configDefaults.getDefaultFontFamily()).toBe('monospace')
+		expect(configDefaults.fontFamily).toBe('monospace')
 	})
 })
 
-describe('Call to getDefaultTheme()', () => {
+describe('Call to theme()', () => {
 	it('return \'Custom\'', () => {
-		expect(configDefaults.getDefaultTheme()).toBe('Custom')
+		expect(configDefaults.theme).toBe('Custom')
 	})
 })
 
-describe('Call to getDefaultColorForeground()', () => {
+describe('Call to colorForeground()', () => {
 	it('return \'#ffffff\'', () => {
-		expect(configDefaults.getDefaultColorForeground()).toBe('#ffffff')
+		expect(configDefaults.colorForeground).toBe('#ffffff')
 	})
 })
 
-describe('Call to getDefaultColorBackground()', () => {
+describe('Call to colorBackground()', () => {
 	it('return \'#000000\'', () => {
-		expect(configDefaults.getDefaultColorBackground()).toBe('#000000')
+		expect(configDefaults.colorBackground).toBe('#000000')
 	})
 })
 
-describe('Call to getDefaultColorCursor()', () => {
+describe('Call to colorCursor()', () => {
 	it('return \'#ffffff\'', () => {
-		expect(configDefaults.getDefaultColorCursor()).toBe('#ffffff')
+		expect(configDefaults.colorCursor).toBe('#ffffff')
 	})
 })
 
-describe('Call to getDefaultColorCursorAccent()', () => {
+describe('Call to colorCursorAccent()', () => {
 	it('return \'#000000\'', () => {
-		expect(configDefaults.getDefaultColorCursorAccent()).toBe('#000000')
+		expect(configDefaults.colorCursorAccent).toBe('#000000')
 	})
 })
 
-describe('Call to getDefaultColorSelection()', () => {
+describe('Call to colorSelection()', () => {
 	it('return \'#4d4d4d\'', () => {
-		expect(configDefaults.getDefaultColorSelection()).toBe('#4d4d4d')
+		expect(configDefaults.colorSelection).toBe('#4d4d4d')
 	})
 })
 
-describe('Call to getDefaultColorBlack()', () => {
+describe('Call to colorBlack()', () => {
 	it('return \'#2e3436\'', () => {
-		expect(configDefaults.getDefaultColorBlack()).toBe('#2e3436')
+		expect(configDefaults.colorBlack).toBe('#2e3436')
 	})
 })
 
-describe('Call to getDefaultColorRed()', () => {
+describe('Call to colorRed()', () => {
 	it('return \'#cc0000\'', () => {
-		expect(configDefaults.getDefaultColorRed()).toBe('#cc0000')
+		expect(configDefaults.colorRed).toBe('#cc0000')
 	})
 })
 
-describe('Call to getDefaultColorGreen()', () => {
+describe('Call to colorGreen()', () => {
 	it('return \'#4e9a06\'', () => {
-		expect(configDefaults.getDefaultColorGreen()).toBe('#4e9a06')
+		expect(configDefaults.colorGreen).toBe('#4e9a06')
 	})
 })
 
-describe('Call to getDefaultColorYellow()', () => {
+describe('Call to colorYellow()', () => {
 	it('return \'#c4a000\'', () => {
-		expect(configDefaults.getDefaultColorYellow()).toBe('#c4a000')
+		expect(configDefaults.colorYellow).toBe('#c4a000')
 	})
 })
 
-describe('Call to getDefaultColorBlue()', () => {
+describe('Call to colorBlue()', () => {
 	it('return \'#3465a4\'', () => {
-		expect(configDefaults.getDefaultColorBlue()).toBe('#3465a4')
+		expect(configDefaults.colorBlue).toBe('#3465a4')
 	})
 })
 
-describe('Call to getDefaultColorMagenta()', () => {
+describe('Call to colorMagenta()', () => {
 	it('return \'#75507b\'', () => {
-		expect(configDefaults.getDefaultColorMagenta()).toBe('#75507b')
+		expect(configDefaults.colorMagenta).toBe('#75507b')
 	})
 })
 
-describe('Call to getDefaultColorCyan()', () => {
+describe('Call to colorCyan()', () => {
 	it('return \'#06989a\'', () => {
-		expect(configDefaults.getDefaultColorCyan()).toBe('#06989a')
+		expect(configDefaults.colorCyan).toBe('#06989a')
 	})
 })
 
-describe('Call to getDefaultColorWhite()', () => {
+describe('Call to colorWhite()', () => {
 	it('return \'#d3d7cf\'', () => {
-		expect(configDefaults.getDefaultColorWhite()).toBe('#d3d7cf')
+		expect(configDefaults.colorWhite).toBe('#d3d7cf')
 	})
 })
 
-describe('Call to getDefaultColorBrightBlack()', () => {
+describe('Call to colorBrightBlack()', () => {
 	it('return \'#555753\'', () => {
-		expect(configDefaults.getDefaultColorBrightBlack()).toBe('#555753')
+		expect(configDefaults.colorBrightBlack).toBe('#555753')
 	})
 })
 
-describe('Call to getDefaultColorBrightRed()', () => {
+describe('Call to colorBrightRed()', () => {
 	it('return \'#ef2929\'', () => {
-		expect(configDefaults.getDefaultColorBrightRed()).toBe('#ef2929')
+		expect(configDefaults.colorBrightRed).toBe('#ef2929')
 	})
 })
 
-describe('Call to getDefaultColorBrightGreen()', () => {
+describe('Call to colorBrightGreen()', () => {
 	it('return \'#8ae234\'', () => {
-		expect(configDefaults.getDefaultColorBrightGreen()).toBe('#8ae234')
+		expect(configDefaults.colorBrightGreen).toBe('#8ae234')
 	})
 })
 
-describe('Call to getDefaultColorBrightYellow()', () => {
+describe('Call to colorBrightYellow()', () => {
 	it('return \'#fce94f\'', () => {
-		expect(configDefaults.getDefaultColorBrightYellow()).toBe('#fce94f')
+		expect(configDefaults.colorBrightYellow).toBe('#fce94f')
 	})
 })
 
-describe('Call to getDefaultColorBrightBlue()', () => {
+describe('Call to colorBrightBlue()', () => {
 	it('return \'#729fcf\'', () => {
-		expect(configDefaults.getDefaultColorBrightBlue()).toBe('#729fcf')
+		expect(configDefaults.colorBrightBlue).toBe('#729fcf')
 	})
 })
 
-describe('Call to getDefaultColorBrightMagenta()', () => {
+describe('Call to colorBrightMagenta()', () => {
 	it('return \'#ad7fa8\'', () => {
-		expect(configDefaults.getDefaultColorBrightMagenta()).toBe('#ad7fa8')
+		expect(configDefaults.colorBrightMagenta).toBe('#ad7fa8')
 	})
 })
 
-describe('Call to getDefaultColorBrightCyan()', () => {
+describe('Call to colorBrightCyan()', () => {
 	it('return \'#34e2e2\'', () => {
-		expect(configDefaults.getDefaultColorBrightCyan()).toBe('#34e2e2')
+		expect(configDefaults.colorBrightCyan).toBe('#34e2e2')
 	})
 })
 
-describe('Call to getDefaultColorBrightWhite()', () => {
+describe('Call to colorBrightWhite()', () => {
 	it('return \'#eeeeec\'', () => {
-		expect(configDefaults.getDefaultColorBrightWhite()).toBe('#eeeeec')
+		expect(configDefaults.colorBrightWhite).toBe('#eeeeec')
 	})
 })
 
-describe('Call to getDefaultLeaveOpenAfterExit()', () => {
+describe('Call to leaveOpenAfterExit()', () => {
 	it('return true', () => {
-		expect(configDefaults.getDefaultLeaveOpenAfterExit()).toBe(true)
+		expect(configDefaults.leaveOpenAfterExit).toBe(true)
 	})
 })
 
-describe('Call to getDefaultAllowRelaunchingTerminalsOnStartup()', () => {
+describe('Call to allowRelaunchingTerminalsOnStartup()', () => {
 	it('return true', () => {
-		expect(configDefaults.getDefaultAllowRelaunchingTerminalsOnStartup()).toBe(true)
+		expect(configDefaults.allowRelaunchingTerminalsOnStartup).toBe(true)
 	})
 })
 
-describe('Call to getDefaultRelaunchTerminalOnStartup()', () => {
+describe('Call to relaunchTerminalOnStartup()', () => {
 	it('return true', () => {
-		expect(configDefaults.getDefaultRelaunchTerminalOnStartup()).toBe(true)
+		expect(configDefaults.relaunchTerminalOnStartup).toBe(true)
 	})
 })
 
-describe('Call to getDefaultXtermOptions()', () => {
+describe('Call to xtermOptions()', () => {
 	it('return {}', () => {
-		expect(configDefaults.getDefaultXtermOptions()).toBe('{}')
+		expect(configDefaults.xtermOptions).toBe('{}')
 	})
 })
 
-describe('Call to getUserDataPath()', () => {
+describe('Call to userDataPath()', () => {
 	const savedPlatform = process.platform
 	let savedEnv
 
@@ -368,7 +368,7 @@ describe('Call to getUserDataPath()', () => {
 			delete process.env.APPDATA
 		}
 		const expected = path.join(os.homedir(), 'AppData', 'Roaming', 'x-terminal')
-		expect(configDefaults.getUserDataPath()).toBe(expected)
+		expect(resetConfigDefaults().userDataPath).toBe(expected)
 	})
 
 	it('on win32 with APPDATA set', () => {
@@ -377,7 +377,7 @@ describe('Call to getUserDataPath()', () => {
 		})
 		process.env.APPDATA = path.join('/some', 'dir')
 		const expected = path.join(process.env.APPDATA, 'x-terminal')
-		expect(configDefaults.getUserDataPath()).toBe(expected)
+		expect(resetConfigDefaults().userDataPath).toBe(expected)
 	})
 
 	it('on darwin', () => {
@@ -385,7 +385,7 @@ describe('Call to getUserDataPath()', () => {
 			value: 'darwin',
 		})
 		const expected = path.join(os.homedir(), 'Library', 'Application Support', 'x-terminal')
-		expect(configDefaults.getUserDataPath()).toBe(expected)
+		expect(resetConfigDefaults().userDataPath).toBe(expected)
 	})
 
 	it('on linux without XDG_CONFIG_HOME set', () => {
@@ -396,7 +396,7 @@ describe('Call to getUserDataPath()', () => {
 			delete process.env.XDG_CONFIG_HOME
 		}
 		const expected = path.join(os.homedir(), '.config', 'x-terminal')
-		expect(configDefaults.getUserDataPath()).toBe(expected)
+		expect(resetConfigDefaults().userDataPath).toBe(expected)
 	})
 
 	it('on linux with XDG_CONFIG_HOME set', () => {
@@ -405,24 +405,24 @@ describe('Call to getUserDataPath()', () => {
 		})
 		process.env.XDG_CONFIG_HOME = path.join('/some', 'dir')
 		const expected = path.join(process.env.XDG_CONFIG_HOME, 'x-terminal')
-		expect(configDefaults.getUserDataPath()).toBe(expected)
+		expect(resetConfigDefaults().userDataPath).toBe(expected)
 	})
 })
 
-describe('Call to getDefaultTitle()', () => {
+describe('Call to title()', () => {
 	it('return \'\'', () => {
-		expect(configDefaults.getDefaultTitle()).toBe('')
+		expect(configDefaults.title).toBe('')
 	})
 })
 
-describe('Call to getDefaultPromptToStartup()', () => {
+describe('Call to promptToStartup()', () => {
 	it('return false', () => {
-		expect(configDefaults.getDefaultPromptToStartup()).toBe(false)
+		expect(configDefaults.promptToStartup).toBe(false)
 	})
 })
 
-describe('Call to getDefaultApiOpenPosition()', () => {
+describe('Call to apiOpenPosition()', () => {
 	it('return \'Center\'', () => {
-		expect(configDefaults.getDefaultApiOpenPosition()).toBe('Center')
+		expect(configDefaults.apiOpenPosition).toBe('Center')
 	})
 })
