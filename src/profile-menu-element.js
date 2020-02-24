@@ -18,6 +18,7 @@
  */
 
 import { CompositeDisposable, TextEditor } from 'atom'
+import marked from 'marked'
 
 import { XTerminalProfilesSingleton } from './profiles'
 import { XTerminalDeleteProfileModel } from './delete-profile-model'
@@ -182,7 +183,7 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		menuItemLabel.appendChild(titleDiv)
 		const descriptionDiv = document.createElement('div')
 		descriptionDiv.classList.add('x-terminal-profile-menu-item-description')
-		descriptionDiv.appendChild(document.createTextNode(labelDescription))
+		descriptionDiv.innerHTML = marked(labelDescription)
 		menuItemLabel.appendChild(descriptionDiv)
 		menuItemContainer.appendChild(menuItemLabel)
 		return menuItemContainer
@@ -321,7 +322,7 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		const descriptionDiv = document.createElement('div')
 		descriptionDiv.classList.add('x-terminal-profile-menu-item-description')
 		descriptionDiv.classList.add('x-terminal-profile-menu-item-description-color')
-		descriptionDiv.appendChild(document.createTextNode(labelDescription))
+		descriptionDiv.innerHTML = marked(labelDescription)
 		menuItemContainer.appendChild(descriptionDiv)
 		return menuItemContainer
 	}
@@ -378,7 +379,7 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		const descriptionDiv = document.createElement('div')
 		descriptionDiv.classList.add('x-terminal-profile-menu-item-description')
 		descriptionDiv.classList.add('x-terminal-profile-menu-item-description-checkbox')
-		descriptionDiv.appendChild(document.createTextNode(labelDescription))
+		descriptionDiv.innerHTML = marked(labelDescription)
 		menuItemContainer.appendChild(descriptionDiv)
 		return menuItemContainer
 	}

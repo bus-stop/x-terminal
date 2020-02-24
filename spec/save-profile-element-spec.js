@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { XTerminalSaveProfileElement } from '../src/lib/save-profile-element'
+import { XTerminalSaveProfileElement } from '../src/save-profile-element'
 
 describe('XTerminalSaveProfileElement', () => {
 	this.model = null

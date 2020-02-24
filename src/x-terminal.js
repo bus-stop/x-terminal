@@ -18,8 +18,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import '../styles/x-terminal.sass'
-
 import { CompositeDisposable } from 'atom'
 import os from 'os'
 

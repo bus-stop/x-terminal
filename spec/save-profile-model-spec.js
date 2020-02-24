@@ -17,8 +17,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { XTerminalSaveProfileModel } from '../src/lib/save-profile-model'
-import * as atomXtermModelModule from '../src/lib/model'
+import { XTerminalSaveProfileModel } from '../src/save-profile-model'
+import * as atomXtermModelModule from '../src/model'
 
 describe('XTerminalSaveProfileModel', () => {
 	this.atomXtermProfileMenuElement = null

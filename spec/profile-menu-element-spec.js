@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { XTerminalProfileMenuElement } from '../src/lib/profile-menu-element'
+import { XTerminalProfileMenuElement } from '../src/profile-menu-element'
 
 describe('XTerminalProfileMenuElement', () => {
 	this.element = null
@@ -128,7 +128,7 @@ describe('XTerminalProfileMenuElement', () => {
 	it('createMenuItemContainer() check description', () => {
 		const container = this.element.createMenuItemContainer('foo', 'bar', 'baz')
 		const descriptionDiv = container.querySelector('.x-terminal-profile-menu-item-description')
-		expect(descriptionDiv.textContent).toBe('baz')
+		expect(descriptionDiv.innerHTML).toBe('<p>baz</p>\n')
 	})
 
 	it('createProfilesDropDownSelectItem() check id', async () => {

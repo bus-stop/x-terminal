@@ -20,9 +20,9 @@
 import * as nodePty from 'node-pty-prebuilt-multiarch'
 import { shell } from 'electron'
 
-import { configDefaults } from '../src/lib/config'
-import { XTerminalElement } from '../src/lib/element'
-import { XTerminalModel } from '../src/lib/model'
+import { configDefaults } from '../src/config'
+import { XTerminalElement } from '../src/element'
+import { XTerminalModel } from '../src/model'
 
 import path from 'path'
 

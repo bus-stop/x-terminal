@@ -1,7 +1,0 @@
-# If .gitignore is updated, this should be updated too. However, the
-# 'dist' directory should always be published.
-.DS_Store
-npm-debug.log
-node_modules
-docs
-package-lock.json

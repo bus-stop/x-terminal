@@ -1,8 +1,0 @@
-{
-  "source": {
-    "include": ["lib/x-terminal.js","lib/model.js"]
-  },
-  "opts": {
-    "destination": "./docs/"
-  }
-}

@@ -19,9 +19,9 @@
 
 import { Emitter } from 'atom'
 
-import { configDefaults } from '../src/lib/config'
-import { XTerminalModel, isXTerminalModel, currentItemIsXTerminalModel } from '../src/lib/model'
-import { XTerminalProfilesSingleton } from '../src/lib/profiles'
+import { configDefaults } from '../src/config'
+import { XTerminalModel, isXTerminalModel, currentItemIsXTerminalModel } from '../src/model'
+import { XTerminalProfilesSingleton } from '../src/profiles'
 
 import fs from 'fs-extra'
 import path from 'path'

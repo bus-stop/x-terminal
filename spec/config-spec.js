@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { configDefaults, resetConfigDefaults } from '../src/lib/config'
+import { configDefaults, resetConfigDefaults } from '../src/config'
 
 import os from 'os'
 import path from 'path'

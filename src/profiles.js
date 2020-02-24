@@ -24,7 +24,7 @@ import { configDefaults, CONFIG_DATA } from './config'
 import fs from 'fs-extra'
 import path from 'path'
 
-import uuidv4 from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import { URL } from 'whatwg-url'
 import { detailedDiff } from 'deep-object-diff'
 
