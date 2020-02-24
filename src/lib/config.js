@@ -27,7 +27,7 @@ export function resetConfigDefaults () {
 		termType: process.env.TERM || 'xterm-256color',
 		cwd: process.platform === 'win32' ? process.env.USERPROFILE : process.env.HOME,
 		projectCwd: false,
-		webgl: true,
+		webgl: false,
 		webLinks: true,
 		env: '',
 		setEnv: '{}',
