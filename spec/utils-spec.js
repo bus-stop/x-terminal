@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as utils from '../src/lib/utils'
+import * as utils from '../src/utils'
 
 describe('Utilities', () => {
 	it('clearDiv()', () => {

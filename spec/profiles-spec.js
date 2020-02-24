@@ -19,8 +19,8 @@
 
 import { CompositeDisposable } from 'atom'
 
-import { configDefaults } from '../src/lib/config'
-import { XTerminalProfilesSingleton } from '../src/lib/profiles'
+import { configDefaults } from '../src/config'
+import { XTerminalProfilesSingleton } from '../src/profiles'
 
 import path from 'path'
 

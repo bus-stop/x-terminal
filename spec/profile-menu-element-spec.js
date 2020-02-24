@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { XTerminalProfileMenuElement } from '../src/lib/profile-menu-element'
+import { XTerminalProfileMenuElement } from '../src/profile-menu-element'
 
 describe('XTerminalProfileMenuElement', () => {
 	this.element = null

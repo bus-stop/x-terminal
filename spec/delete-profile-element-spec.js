@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { XTerminalDeleteProfileElement } from '../src/lib/delete-profile-element'
+import { XTerminalDeleteProfileElement } from '../src/delete-profile-element'
 
 describe('XTerminalDeleteProfileElement', () => {
 	this.model = null

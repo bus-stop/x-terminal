@@ -17,7 +17,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { XTerminalOverwriteProfileModel } from '../src/lib/overwrite-profile-model'
+import { XTerminalOverwriteProfileModel } from '../src/overwrite-profile-model'
 
 describe('XTerminalOverwriteProfileModel', () => {
 	this.atomXtermSaveProfileModel = null
