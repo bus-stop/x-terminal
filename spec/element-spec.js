@@ -1064,6 +1064,56 @@ describe('XTerminalElement', () => {
 		expect(this.element.ptyProcess).toBeTruthy()
 	})
 
+	describe('loaded addons', () => {
+		const { Terminal } = require('xterm')
+		const { WebLinksAddon } = require('xterm-addon-web-links')
+		const { WebglAddon } = require('xterm-addon-webgl')
+
+		beforeEach(() => {
+			spyOn(Terminal.prototype, 'loadAddon').and.callThrough()
+		})
+
+		it('createTerminal() enable web-link addon', async () => {
+			const params = new URLSearchParams({ webLinks: true })
+			const url = new URL('x-terminal://?' + params.toString())
+			await createNewElement(url.href)
+			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
+				return call.args[0] instanceof WebLinksAddon
+			})
+			expect(wasAdded).toBe(true)
+		})
+
+		it('createTerminal() disable web-link addon', async () => {
+			const params = new URLSearchParams({ webLinks: false })
+			const url = new URL('x-terminal://?' + params.toString())
+			await createNewElement(url.href)
+			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
+				return call.args[0] instanceof WebLinksAddon
+			})
+			expect(wasAdded).toBe(false)
+		})
+
+		it('createTerminal() enable webgl addon', async () => {
+			const params = new URLSearchParams({ webgl: true })
+			const url = new URL('x-terminal://?' + params.toString())
+			await createNewElement(url.href)
+			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
+				return call.args[0] instanceof WebglAddon
+			})
+			expect(wasAdded).toBe(true)
+		})
+
+		it('createTerminal() disable webgl addon', async () => {
+			const params = new URLSearchParams({ webgl: false })
+			const url = new URL('x-terminal://?' + params.toString())
+			await createNewElement(url.href)
+			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
+				return call.args[0] instanceof WebglAddon
+			})
+			expect(wasAdded).toBe(false)
+		})
+	})
+
 	it('restartPtyProcess() check new pty process created', async () => {
 		const oldPtyProcess = this.element.ptyProcess
 		const newPtyProcess = jasmine.createSpyObj('ptyProcess',
