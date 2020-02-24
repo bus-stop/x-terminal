@@ -75,7 +75,7 @@
     "temp": "^0.9.1"
   },
   "scripts": {
-    "eslint": "eslint src/ spec/",
+    "eslint": "eslint .",
     "jsonlint": "jsonlint-cli keymaps/*.json menus/*.json package.json",
     "lint": "npm run eslint && npm run stylelint && npm run jsonlint",
     "stylelint": "stylelint styles/*.less",
