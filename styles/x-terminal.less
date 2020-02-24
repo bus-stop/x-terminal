@@ -15,243 +15,247 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 // The ui-variables file is provided by whatever theme is selected by the
 // user at runtime. See also
 // https://flight-manual.atom.io/hacking-atom/sections/creating-a-theme/#creating-a-ui-theme .
 @import "ui-variables";
-
 @profile-menu-background-color: lighten(@app-background-color, 2%);
 
 :root {
-  --standard-app-background-color: @app-background-color;
-  --standard-text-color: @text-color;
-  --standard-text-color-highlight: @text-color-highlight;
+	--standard-app-background-color: @app-background-color;
+	--standard-text-color: @text-color;
+	--standard-text-color-highlight: @text-color-highlight;
 }
 
 x-terminal {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 x-terminal-profile {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  flex: auto;
-  color: @text-color;
-  background-color: @app-background-color;
-  overflow: auto;
-  visibility: hidden;
-  display: grid;
-  grid-template-columns: (@component-padding * 5) auto (@component-padding * 5);
-  grid-template-rows: (@component-padding * 5) auto (@component-padding * 5);
-  grid-template-areas:
-    "top top top"
-    "left main right"
-    "bottom bottom bottom";
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	flex: auto;
+	color: @text-color;
+	background-color: @app-background-color;
+	overflow: auto;
+	visibility: hidden;
+	display: grid;
+	grid-template-columns: (@component-padding * 5) auto (@component-padding * 5);
+	grid-template-rows: (@component-padding * 5) auto (@component-padding * 5);
+	grid-template-areas: "top top top" "left main right" "bottom bottom bottom";
 }
 
 .x-terminal-restart-btn {
-  margin-left: @component-padding;
-  margin-right: @component-padding;
+	margin-left: @component-padding;
+	margin-right: @component-padding;
 }
 
 .x-terminal-main-div {
-  height: 90%;
-  width: 100%;
-  flex: auto;
+	height: 90%;
+	width: 100%;
+	flex: auto;
 }
 
 .x-terminal-profile-menu-element-top-div {
-  grid-area: top;
+	grid-area: top;
 }
 
 .x-terminal-profile-menu-element-bottom-div {
-  grid-area: bottom;
+	grid-area: bottom;
 }
 
 .x-terminal-profile-menu-element-left-div {
-  grid-area: left;
+	grid-area: left;
 }
 
 .x-terminal-profile-menu-element-right-div {
-  grid-area: right;
+	grid-area: right;
 }
 
 .x-terminal-profile-menu-element-main-div {
-  grid-area: main;
-  padding: @component-padding;
-  border-radius: @component-border-radius * 2;
-  border: 1px solid @base-border-color;
-  background-color: @profile-menu-background-color;
+	grid-area: main;
+	padding: @component-padding;
+	border-radius: @component-border-radius * 2;
+	border: 1px solid @base-border-color;
+	background-color: @profile-menu-background-color;
 }
 
 .x-terminal-profile-menu-element-hline {
-  width: 100%;
-  font-size: 1px;
-  color: @text-color-subtle;
-  line-height: 2px;
-  background-color: @text-color-subtle;
-  margin-top: 20px;
-  margin-bottom: 20px;
+	width: 100%;
+	font-size: 1px;
+	color: @text-color-subtle;
+	line-height: 2px;
+	background-color: @text-color-subtle;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .x-terminal-profile-menu-item {
-  padding: 0.8em 0;
+	padding: 0.8em 0;
 }
 
 .x-terminal-profile-menu-item-label {
-  -webkit-user-select: none;
-  cursor: default;
-  display: block;
-  max-width: 100%;
-  margin-bottom: 5px;
-  background-color: @profile-menu-background-color;
+	-webkit-user-select: none;
+	cursor: default;
+	display: block;
+	max-width: 100%;
+	margin-bottom: 5px;
+	background-color: @profile-menu-background-color;
 }
 
 .x-terminal-profile-menu-item-label-checkbox {
-  padding-left: 2.25em;
-  margin-top: -20px;
+	padding-left: 2.25em;
+	margin-top: -20px;
 
-  .x-terminal-profile-menu-item-checkbox {
-    width: 15px;
-    height: 15px;
-    margin-left: -2.25em;
-    vertical-align: bottom;
-    position: relative;
-    top: 20px;
-  }
+	.x-terminal-profile-menu-item-checkbox {
+		width: 15px;
+		height: 15px;
+		margin-left: -2.25em;
+		vertical-align: bottom;
+		position: relative;
+		top: 20px;
+	}
 }
 
 .x-terminal-profile-menu-item-description-checkbox {
-  padding-left: 2.25em;
+	padding-left: 2.25em;
 }
 
 .x-terminal-profile-menu-item-title {
-  font-size: 1.2em;
-  -webkit-user-select: none;
+	font-size: 1.2em;
+	-webkit-user-select: none;
 }
 
 .x-terminal-profile-menu-item-description {
-  color: @text-color-subtle;
-  -webkit-user-select: none;
-  cursor: default;
+	color: @text-color-subtle;
+	-webkit-user-select: none;
+	cursor: default;
 
-  &:empty {
-    display: none;
-  }
+	&:empty {
+		display: none;
+	}
 
-  p {
-    line-height: 1.45em;
-    margin-bottom: 0;
-  }
+	p {
+		line-height: 1.45em;
+		margin-bottom: 0;
+	}
 }
 
 .x-terminal-profile-menu-item-select {
-  color: @text-color;
-  border-color: @button-border-color;
-  background-color: @button-background-color;
-  height: 2em;
-  width: 100%;
-  font-size: 1.25em;
-  padding-top: 0;
-  padding-bottom: 0;
+	color: @text-color;
+	border-color: @button-border-color;
+	background-color: @button-background-color;
+	height: 2em;
+	width: 100%;
+	font-size: 1.25em;
+	padding-top: 0;
+	padding-bottom: 0;
 
-  &:hover,
-  &:focus {
-    box-shadow: none;
-    background-color: @button-background-color-hover;
-  }
+	&:focus,
+	&:hover {
+		box-shadow: none;
+		background-color: @button-background-color-hover;
+	}
 }
 
 .x-terminal-profile-menu-item-label-color {
-  padding-left: 5em;
-  margin-top: -20px;
+	padding-left: 5em;
+	margin-top: -20px;
 
-  .x-terminal-profile-menu-item-color {
-    color: @text-color;
-    border-color: @button-border-color;
-    background-color: @button-background-color;
-    width: 4em;
-    margin-left: -5em;
-    padding: 0;
-    vertical-align: bottom;
-    position: relative;
-    top: 20px;
+	.x-terminal-profile-menu-item-color {
+		color: @text-color;
+		border-color: @button-border-color;
+		background-color: @button-background-color;
+		width: 4em;
+		margin-left: -5em;
+		padding: 0;
+		vertical-align: bottom;
+		position: relative;
+		top: 20px;
 
-    &::-webkit-color-swatch-wrapper {
-      padding: 2px;
-      margin: 0;
-      border-radius: inherit;
-    }
+		&::-webkit-color-swatch-wrapper {
+			padding: 2px;
+			margin: 0;
+			border-radius: inherit;
+		}
 
-    &::-webkit-color-swatch {
-      border-radius: 2px;
-      border: 1px solid hsla(0, 0%, 0%, 0.1);
-    }
+		&::-webkit-color-swatch {
+			border-radius: 2px;
+			border: 1px solid hsla(0, 0%, 0%, 0.1);
+		}
 
-    &:hover,
-    &:focus {
-      box-shadow: none;
-      background-color: @button-background-color-hover;
-    }
-  }
+		&:focus,
+		&:hover {
+			box-shadow: none;
+			background-color: @button-background-color-hover;
+		}
+	}
 }
 
 .x-terminal-profile-menu-item-description-color {
-  padding-left: 5em;
+	padding-left: 5em;
 }
 
 .x-terminal-profile-menu-buttons-div {
-  padding-top: 1em;
+	padding-top: 1em;
 }
 
-.x-terminal-profile-menu-button,
-.x-terminal-modal-button {
-  font-size: 1.25em;
-  border: 1px solid @button-border-color;
-  background-color: @button-background-color;
+.x-terminal-modal-button,
+.x-terminal-profile-menu-button {
+	font-size: 1.25em;
+	border: 1px solid @button-border-color;
+	background-color: @button-background-color;
 
-  &:hover {
-    background-color: @button-background-color-hover;
-  }
+	&:hover {
+		background-color: @button-background-color-hover;
+	}
 }
 
 .x-terminal-modal-message {
-  font-size: 18px;
+	font-size: 18px;
 }
 
 .x-terminal-term-container {
-  height: 100%;
-  width: 100%;
-  flex: auto;
+	height: 100%;
+	width: 100%;
+	flex: auto;
 }
 
 .x-terminal-notice-type(@tx; @bg) {
-  @x-terminal-notice-background-color: mix(@bg, @base-background-color, 10%);
+	@x-terminal-notice-background-color: mix(@bg, @base-background-color, 10%);
+	color: contrast(@x-terminal-notice-background-color, darken(@tx, 20%), lighten(@tx, 20%));
+	border-color: lighten(@x-terminal-notice-background-color, 10%);
+	background-color: @x-terminal-notice-background-color;
+	border-style: solid;
+	font-size: 14px;
+	height: 100%;
+	width: 100%;
+	flex: none;
 
-  color: contrast(@x-terminal-notice-background-color, darken(@tx, 20%), lighten(@tx, 20%));
-  border-color: lighten(@x-terminal-notice-background-color, 10%);
-  background-color: @x-terminal-notice-background-color;
-  border-style: solid;
-  font-size: 14px;
-  height: 100%;
-  width: 100%;
-  flex: none;
-
-  .x-terminal-link {
-    color: inherit;
-    text-decoration: underline;
-  }
+	.x-terminal-link {
+		color: inherit;
+		text-decoration: underline;
+	}
 }
 
-.x-terminal-notice-info { .x-terminal-notice-type(@text-color-info; @background-color-info); }
-.x-terminal-notice-success { .x-terminal-notice-type(@text-color-success; @background-color-success); }
-.x-terminal-notice-warning { .x-terminal-notice-type(@text-color-warning; @background-color-warning); }
-.x-terminal-notice-error { .x-terminal-notice-type(@text-color-error; @background-color-error); }
+.x-terminal-notice-info {
+	.x-terminal-notice-type(@text-color-info; @background-color-info);
+}
 
+.x-terminal-notice-success {
+	.x-terminal-notice-type(@text-color-success; @background-color-success);
+}
+
+.x-terminal-notice-warning {
+	.x-terminal-notice-type(@text-color-warning; @background-color-warning);
+}
+
+.x-terminal-notice-error {
+	.x-terminal-notice-type(@text-color-error; @background-color-error);
+}
 // Load the static styles here.
 @import (less) "../node_modules/xterm/css/xterm.css";
