@@ -19,7 +19,7 @@
 
 import { Emitter } from 'atom'
 
-import { configDefaults, COLORS, CONFIG_KEYS_TO_PROFILE, CONFIG_DATA } from './config'
+import { configDefaults, CONFIG_KEYS_TO_PROFILE, CONFIG_DATA } from './config'
 
 import fs from 'fs-extra'
 import path from 'path'

@@ -28,6 +28,7 @@ export function resetConfigDefaults () {
 		cwd: process.platform === 'win32' ? process.env.USERPROFILE : process.env.HOME,
 		projectCwd: false,
 		webgl: true,
+		webLinks: true,
 		env: '',
 		setEnv: '{}',
 		deleteEnv: '[]',
@@ -186,6 +187,22 @@ export const config = configOrder({
 					toMenuSetting: (val) => val,
 				},
 			},
+			webLinks: {
+				title: 'Clickable Web Links',
+				description: 'Use the [WebLinks Addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-web-links)',
+				type: 'boolean',
+				default: configDefaults.webLinks,
+				profileData: {
+					inProfile: true,
+					defaultProfile: configDefaults.webLinks,
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => (val !== null && val !== ''),
+					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.spawnPtySettings.webLinks', configDefaults.webLinks),
+					fromMenuSetting: (element, baseValue) => element.checked,
+					toMenuSetting: (val) => val,
+				},
+			},
 			env: {
 				title: 'Environment',
 				description: 'The environment to use when launching command, must be in a JSON object. If not set, defaults to the current environment.',
@@ -270,6 +287,7 @@ export const config = configOrder({
 				maximum: configDefaults.maximumFontSize,
 				profileData: {
 					inProfile: true,
+					terminalFrontEnd: true,
 					defaultProfile: configDefaults.fontSize,
 					toUrlParam: (val) => JSON.stringify(val),
 					fromUrlParam: (val) => JSON.parse(val),
@@ -286,6 +304,7 @@ export const config = configOrder({
 				default: configDefaults.fontFamily,
 				profileData: {
 					inProfile: true,
+					terminalFrontEnd: true,
 					defaultProfile: configDefaults.fontFamily,
 					toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.fontFamily') || configDefaults.fontFamily),
 					fromMenuSetting: (element, baseValue) => (element.getModel().getText() || baseValue),
@@ -332,6 +351,7 @@ export const config = configOrder({
 						default: configDefaults.theme,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.theme,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.theme') || configDefaults.theme),
@@ -346,6 +366,7 @@ export const config = configOrder({
 						default: configDefaults.colorForeground,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorForeground,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.foreground') || configDefaults.colorForeground),
@@ -360,6 +381,7 @@ export const config = configOrder({
 						default: configDefaults.colorBackground,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBackground,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.background') || configDefaults.colorBackground),
@@ -374,6 +396,7 @@ export const config = configOrder({
 						default: configDefaults.colorCursor,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorCursor,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.cursor') || configDefaults.colorCursor),
@@ -388,6 +411,7 @@ export const config = configOrder({
 						default: configDefaults.colorCursorAccent,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorCursorAccent,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.cursorAccent') || configDefaults.colorCursorAccent),
@@ -402,6 +426,7 @@ export const config = configOrder({
 						default: configDefaults.colorSelection,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorSelection,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.selection') || configDefaults.colorSelection),
@@ -416,6 +441,7 @@ export const config = configOrder({
 						default: configDefaults.colorBlack,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBlack,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.black') || configDefaults.colorBlack),
@@ -430,6 +456,7 @@ export const config = configOrder({
 						default: configDefaults.colorRed,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorRed,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.red') || configDefaults.colorRed),
@@ -444,6 +471,7 @@ export const config = configOrder({
 						default: configDefaults.colorGreen,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorGreen,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.green') || configDefaults.colorGreen),
@@ -458,6 +486,7 @@ export const config = configOrder({
 						default: configDefaults.colorYellow,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorYellow,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.yellow') || configDefaults.colorYellow),
@@ -472,6 +501,7 @@ export const config = configOrder({
 						default: configDefaults.colorBlue,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBlue,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.blue') || configDefaults.colorBlue),
@@ -486,6 +516,7 @@ export const config = configOrder({
 						default: configDefaults.colorMagenta,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorMagenta,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.magenta') || configDefaults.colorMagenta),
@@ -500,6 +531,7 @@ export const config = configOrder({
 						default: configDefaults.colorCyan,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorCyan,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.cyan') || configDefaults.colorCyan),
@@ -514,6 +546,7 @@ export const config = configOrder({
 						default: configDefaults.colorWhite,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorWhite,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.white') || configDefaults.colorWhite),
@@ -528,6 +561,7 @@ export const config = configOrder({
 						default: configDefaults.colorBrightBlack,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightBlack,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightBlack') || configDefaults.colorBrightBlack),
@@ -542,6 +576,7 @@ export const config = configOrder({
 						default: configDefaults.colorBrightRed,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightRed,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightRed') || configDefaults.colorBrightRed),
@@ -556,6 +591,7 @@ export const config = configOrder({
 						default: configDefaults.colorBrightGreen,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightGreen,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightGreen') || configDefaults.colorBrightGreen),
@@ -570,6 +606,7 @@ export const config = configOrder({
 						default: configDefaults.colorBrightYellow,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightYellow,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightYellow') || configDefaults.colorBrightYellow),
@@ -584,6 +621,7 @@ export const config = configOrder({
 						default: configDefaults.colorBrightBlue,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightBlue,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightBlue') || configDefaults.colorBrightBlue),
@@ -598,6 +636,7 @@ export const config = configOrder({
 						default: configDefaults.colorBrightMagenta,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightMagenta,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightMagenta') || configDefaults.colorBrightMagenta),
@@ -612,6 +651,7 @@ export const config = configOrder({
 						default: configDefaults.colorBrightCyan,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightCyan,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightCyan') || configDefaults.colorBrightCyan),
@@ -626,6 +666,7 @@ export const config = configOrder({
 						default: configDefaults.colorBrightWhite,
 						profileData: {
 							inProfile: true,
+							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightWhite,
 							toUrlParam: (val) => val,
 							toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.colors.brightWhite') || configDefaults.colorBrightWhite),
@@ -710,6 +751,7 @@ export const config = configOrder({
 				default: configDefaults.xtermOptions,
 				profileData: {
 					inProfile: true,
+					terminalFrontEnd: true,
 					defaultProfile: JSON.parse(configDefaults.xtermOptions),
 					toUrlParam: (val) => JSON.stringify(val),
 					fromUrlParam: (val) => JSON.parse(val),
@@ -816,7 +858,7 @@ function configToData (obj, prefix) {
 			const profileData = obj[key].profileData
 			delete obj[key].profileData
 			const keyPath = `${prefix}.${key}`
-			const profileKey = key !== 'theme' && prefix.endsWith('.colors') ? COLORS[key] : key
+			const profileKey = key in COLORS ? COLORS[key] : key
 			data.push({ ...obj[key], ...profileData, keyPath, key, profileKey })
 		}
 	}

@@ -23,7 +23,7 @@ import { XTerminalProfilesSingleton } from './profiles'
 import { XTerminalDeleteProfileModel } from './delete-profile-model'
 import { XTerminalSaveProfileModel } from './save-profile-model'
 import { createHorizontalLine } from './utils'
-import { COLORS, CONFIG_DATA } from './config.js'
+import { CONFIG_DATA } from './config.js'
 
 class XTerminalProfileMenuElementImpl extends HTMLElement {
 	async initialize (model) {
@@ -84,41 +84,40 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 			if (!data.inProfile) {
 				continue
 			}
-			const title = data.title || data.key.charAt(0).toUpperCase() + data.key.substring(1).replace(/[A-Z]/g, ' $&')
+			const title = data.title || data.profileKey.charAt(0).toUpperCase() + data.profileKey.substring(1).replace(/[A-Z]/g, ' $&')
 			const description = data.description || ''
 			if (data.enum) {
 				this.mainDiv.appendChild(this.createSelect(
-					`${data.key.toLowerCase()}-select`,
+					`${data.profileKey.toLowerCase()}-select`,
 					title,
 					description,
-					baseProfile[data.key],
-					modelProfile[data.key],
+					baseProfile[data.profileKey],
+					modelProfile[data.profileKey],
 					data.enum,
 				))
 			} else if (data.type === 'color') {
-				const profileName = COLORS[data.key]
 				this.mainDiv.appendChild(this.createColor(
-					`${profileName.toLowerCase()}-color`,
+					`${data.profileKey.toLowerCase()}-color`,
 					title,
 					description,
-					baseProfile[profileName],
-					modelProfile[profileName],
+					baseProfile[data.profileKey],
+					modelProfile[data.profileKey],
 				))
 			} else if (data.type === 'boolean') {
 				this.mainDiv.appendChild(this.createCheckbox(
-					`${data.key.toLowerCase()}-checkbox`,
+					`${data.profileKey.toLowerCase()}-checkbox`,
 					title,
 					description,
-					baseProfile[data.key],
-					modelProfile[data.key],
+					baseProfile[data.profileKey],
+					modelProfile[data.profileKey],
 				))
 			} else {
 				this.mainDiv.appendChild(this.createTextbox(
-					`${data.key.toLowerCase()}-textbox`,
+					`${data.profileKey.toLowerCase()}-textbox`,
 					title,
 					description,
-					baseProfile[data.key],
-					modelProfile[data.key],
+					baseProfile[data.profileKey],
+					modelProfile[data.profileKey],
 				))
 			}
 		}

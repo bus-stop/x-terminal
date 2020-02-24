@@ -38,6 +38,7 @@ describe('XTerminalProfilesSingleton', () => {
 			cwd: '/some/path',
 			projectCwd: true,
 			webgl: false,
+			webLinks: false,
 			env: null,
 			setEnv: {},
 			deleteEnv: [],
@@ -85,6 +86,7 @@ describe('XTerminalProfilesSingleton', () => {
 		url.searchParams.set('cwd', defaultProfile.cwd)
 		url.searchParams.set('projectCwd', defaultProfile.projectCwd)
 		url.searchParams.set('webgl', defaultProfile.webgl)
+		url.searchParams.set('webLinks', defaultProfile.webLinks)
 		url.searchParams.set('env', JSON.stringify(defaultProfile.env))
 		url.searchParams.set('setEnv', JSON.stringify(defaultProfile.setEnv))
 		url.searchParams.set('deleteEnv', JSON.stringify(defaultProfile.deleteEnv))
@@ -115,6 +117,9 @@ describe('XTerminalProfilesSingleton', () => {
 			return true
 		}
 		if (key === 'x-terminal.spawnPtySettings.webgl') {
+			return false
+		}
+		if (key === 'x-terminal.spawnPtySettings.webLinks') {
 			return false
 		}
 		if (key === 'x-terminal.spawnPtySettings.env') {
@@ -317,6 +322,7 @@ describe('XTerminalProfilesSingleton', () => {
 			cwd: atom.config.get('x-terminal.spawnPtySettings.cwd') || configDefaults.cwd,
 			projectCwd: atom.config.get('x-terminal.spawnPtySettings.projectCwd') || configDefaults.projectCwd,
 			webgl: atom.config.get('x-terminal.spawnPtySettings.webgl') || configDefaults.webgl,
+			webLinks: atom.config.get('x-terminal.spawnPtySettings.webLinks') || configDefaults.webLinks,
 			env: JSON.parse(env || 'null'),
 			setEnv: JSON.parse(atom.config.get('x-terminal.spawnPtySettings.setEnv') || configDefaults.setEnv),
 			deleteEnv: JSON.parse(atom.config.get('x-terminal.spawnPtySettings.deleteEnv') || configDefaults.deleteEnv),
@@ -364,6 +370,7 @@ describe('XTerminalProfilesSingleton', () => {
 			cwd: '/some/path',
 			projectCwd: true,
 			webgl: false,
+			webLinks: false,
 			env: { PATH: '/usr/bin:/bin' },
 			setEnv: { FOO: 'BAR' },
 			deleteEnv: ['FOO'],
@@ -567,6 +574,7 @@ describe('XTerminalProfilesSingleton', () => {
 			cwd: configDefaults.cwd,
 			projectCwd: configDefaults.projectCwd,
 			webgl: configDefaults.webgl,
+			webLinks: configDefaults.webLinks,
 			env: null,
 			setEnv: JSON.parse(configDefaults.setEnv),
 			deleteEnv: JSON.parse(configDefaults.deleteEnv),
@@ -916,6 +924,7 @@ describe('XTerminalProfilesSingleton', () => {
 			cwd: configDefaults.cwd,
 			projectCwd: configDefaults.projectCwd,
 			webgl: configDefaults.webgl,
+			webLinks: configDefaults.webLinks,
 			env: null,
 			setEnv: JSON.parse(configDefaults.setEnv),
 			deleteEnv: JSON.parse(configDefaults.deleteEnv),
