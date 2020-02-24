@@ -108,7 +108,7 @@ class XTerminalProfilesSingleton {
 	getDefaultProfile () {
 		const defaultProfile = {}
 		for (const data of CONFIG_DATA) {
-			if (!data.inProfile) continue
+			if (!data.profileKey) continue
 			defaultProfile[data.profileKey] = data.defaultProfile
 		}
 		return defaultProfile
@@ -122,17 +122,18 @@ class XTerminalProfilesSingleton {
 		this.previousBaseProfile = this.deepClone(this.baseProfile)
 		this.baseProfile = {}
 		for (const data of CONFIG_DATA) {
-			if (!data.inProfile) continue
+			if (!data.profileKey) continue
 			this.baseProfile[data.profileKey] = data.toBaseProfile(this.previousBaseProfile[data.profileKey])
 		}
 		this.emitter.emit('did-reset-base-profile', this.getBaseProfile())
 	}
 
-	sanitizeData (data) {
+	sanitizeData (unsanitizedData) {
 		const sanitizedData = {}
-		for (const d of CONFIG_DATA) {
-			if (d.profileKey in data) {
-				sanitizedData[d.profileKey] = data[d.profileKey]
+		for (const data of CONFIG_DATA) {
+			if (!data.profileKey) continue
+			if (data.profileKey in unsanitizedData) {
+				sanitizedData[data.profileKey] = unsanitizedData[data.profileKey]
 			}
 		}
 
@@ -195,7 +196,7 @@ class XTerminalProfilesSingleton {
 		profileData = this.sanitizeData(profileData)
 		const url = new URL(this.generateNewUri())
 		for (const data of CONFIG_DATA) {
-			if (!data.inProfile) continue
+			if (!data.profileKey) continue
 			if (data.profileKey in profileData) url.searchParams.set(data.profileKey, data.toUrlParam(profileData[data.profileKey]))
 		}
 		return url
@@ -206,7 +207,7 @@ class XTerminalProfilesSingleton {
 		const baseProfile = this.getBaseProfile()
 		const profileData = {}
 		for (const data of CONFIG_DATA) {
-			if (!data.inProfile) continue
+			if (!data.profileKey) continue
 			const param = url.searchParams.get(data.profileKey)
 			if (param) {
 				profileData[data.profileKey] = data.fromUrlParam(param)

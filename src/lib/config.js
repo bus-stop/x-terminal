@@ -106,7 +106,6 @@ export const config = configOrder({
 				type: 'string',
 				default: configDefaults.command,
 				profileData: {
-					inProfile: true,
 					defaultProfile: configDefaults.command,
 					toUrlParam: (val) => val,
 					fromUrlParam: (val) => val,
@@ -122,7 +121,6 @@ export const config = configOrder({
 				type: 'string',
 				default: configDefaults.args,
 				profileData: {
-					inProfile: true,
 					defaultProfile: JSON.parse(configDefaults.args),
 					toUrlParam: (val) => JSON.stringify(val),
 					fromUrlParam: (val) => JSON.parse(val),
@@ -138,7 +136,6 @@ export const config = configOrder({
 				type: 'string',
 				default: configDefaults.termType,
 				profileData: {
-					inProfile: true,
 					defaultProfile: configDefaults.termType,
 					toUrlParam: (val) => val,
 					fromUrlParam: (val) => val,
@@ -154,7 +151,6 @@ export const config = configOrder({
 				type: 'string',
 				default: configDefaults.cwd,
 				profileData: {
-					inProfile: true,
 					defaultProfile: configDefaults.cwd,
 					toUrlParam: (val) => val,
 					fromUrlParam: (val) => val,
@@ -170,7 +166,6 @@ export const config = configOrder({
 				type: 'boolean',
 				default: configDefaults.projectCwd,
 				profileData: {
-					inProfile: true,
 					defaultProfile: configDefaults.projectCwd,
 					toUrlParam: (val) => JSON.stringify(val),
 					fromUrlParam: (val) => JSON.parse(val),
@@ -186,7 +181,6 @@ export const config = configOrder({
 				type: 'string',
 				default: configDefaults.env,
 				profileData: {
-					inProfile: true,
 					defaultProfile: null,
 					toUrlParam: (val) => JSON.stringify(val),
 					fromUrlParam: (val) => JSON.parse(val),
@@ -208,7 +202,6 @@ export const config = configOrder({
 				type: 'string',
 				default: configDefaults.setEnv,
 				profileData: {
-					inProfile: true,
 					defaultProfile: JSON.parse(configDefaults.setEnv),
 					toUrlParam: (val) => JSON.stringify(val),
 					fromUrlParam: (val) => JSON.parse(val),
@@ -224,7 +217,6 @@ export const config = configOrder({
 				type: 'string',
 				default: configDefaults.deleteEnv,
 				profileData: {
-					inProfile: true,
 					defaultProfile: JSON.parse(configDefaults.deleteEnv),
 					toUrlParam: (val) => JSON.stringify(val),
 					fromUrlParam: (val) => JSON.parse(val),
@@ -240,7 +232,6 @@ export const config = configOrder({
 				type: 'string',
 				default: configDefaults.encoding,
 				profileData: {
-					inProfile: true,
 					defaultProfile: null,
 					toUrlParam: (val) => val,
 					fromUrlParam: (val) => (val === 'null' ? null : val),
@@ -265,7 +256,6 @@ export const config = configOrder({
 				minimum: configDefaults.minimumFontSize,
 				maximum: configDefaults.maximumFontSize,
 				profileData: {
-					inProfile: true,
 					terminalFrontEnd: true,
 					defaultProfile: configDefaults.fontSize,
 					toUrlParam: (val) => JSON.stringify(val),
@@ -282,7 +272,6 @@ export const config = configOrder({
 				type: 'string',
 				default: configDefaults.fontFamily,
 				profileData: {
-					inProfile: true,
 					terminalFrontEnd: true,
 					defaultProfile: configDefaults.fontFamily,
 					toUrlParam: (val) => val,
@@ -332,7 +321,6 @@ export const config = configOrder({
 						],
 						default: configDefaults.theme,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.theme,
 							toUrlParam: (val) => val,
@@ -349,7 +337,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorForeground,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorForeground,
 							toUrlParam: (val) => val,
@@ -366,7 +353,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorBackground,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBackground,
 							toUrlParam: (val) => val,
@@ -383,7 +369,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorCursor,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorCursor,
 							toUrlParam: (val) => val,
@@ -400,7 +385,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorCursorAccent,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorCursorAccent,
 							toUrlParam: (val) => val,
@@ -417,7 +401,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorSelection,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorSelection,
 							toUrlParam: (val) => val,
@@ -434,7 +417,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorBlack,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBlack,
 							toUrlParam: (val) => val,
@@ -451,7 +433,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorRed,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorRed,
 							toUrlParam: (val) => val,
@@ -468,7 +449,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorGreen,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorGreen,
 							toUrlParam: (val) => val,
@@ -485,7 +465,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorYellow,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorYellow,
 							toUrlParam: (val) => val,
@@ -502,7 +481,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorBlue,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBlue,
 							toUrlParam: (val) => val,
@@ -519,7 +497,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorMagenta,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorMagenta,
 							toUrlParam: (val) => val,
@@ -536,7 +513,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorCyan,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorCyan,
 							toUrlParam: (val) => val,
@@ -553,7 +529,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorWhite,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorWhite,
 							toUrlParam: (val) => val,
@@ -570,7 +545,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorBrightBlack,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightBlack,
 							toUrlParam: (val) => val,
@@ -587,7 +561,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorBrightRed,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightRed,
 							toUrlParam: (val) => val,
@@ -604,7 +577,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorBrightGreen,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightGreen,
 							toUrlParam: (val) => val,
@@ -621,7 +593,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorBrightYellow,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightYellow,
 							toUrlParam: (val) => val,
@@ -638,7 +609,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorBrightBlue,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightBlue,
 							toUrlParam: (val) => val,
@@ -655,7 +625,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorBrightMagenta,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightMagenta,
 							toUrlParam: (val) => val,
@@ -672,7 +641,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorBrightCyan,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightCyan,
 							toUrlParam: (val) => val,
@@ -689,7 +657,6 @@ export const config = configOrder({
 						type: 'color',
 						default: configDefaults.colorBrightWhite,
 						profileData: {
-							inProfile: true,
 							terminalFrontEnd: true,
 							defaultProfile: configDefaults.colorBrightWhite,
 							toUrlParam: (val) => val,
@@ -708,7 +675,6 @@ export const config = configOrder({
 				type: 'boolean',
 				default: configDefaults.leaveOpenAfterExit,
 				profileData: {
-					inProfile: true,
 					defaultProfile: configDefaults.leaveOpenAfterExit,
 					toUrlParam: (val) => JSON.stringify(val),
 					fromUrlParam: (val) => JSON.parse(val),
@@ -730,7 +696,6 @@ export const config = configOrder({
 				type: 'boolean',
 				default: configDefaults.relaunchTerminalOnStartup,
 				profileData: {
-					inProfile: true,
 					defaultProfile: configDefaults.relaunchTerminalOnStartup,
 					toUrlParam: (val) => JSON.stringify(val),
 					fromUrlParam: (val) => JSON.parse(val),
@@ -746,7 +711,6 @@ export const config = configOrder({
 				type: 'string',
 				default: configDefaults.title,
 				profileData: {
-					inProfile: true,
 					defaultProfile: null,
 					toUrlParam: (val) => val,
 					fromUrlParam: (val) => (val === 'null' ? null : val),
@@ -778,7 +742,6 @@ export const config = configOrder({
 				type: 'string',
 				default: configDefaults.xtermOptions,
 				profileData: {
-					inProfile: true,
 					terminalFrontEnd: true,
 					defaultProfile: JSON.parse(configDefaults.xtermOptions),
 					toUrlParam: (val) => JSON.stringify(val),
@@ -795,7 +758,6 @@ export const config = configOrder({
 				type: 'boolean',
 				default: configDefaults.promptToStartup,
 				profileData: {
-					inProfile: true,
 					defaultProfile: configDefaults.promptToStartup,
 					toUrlParam: (val) => JSON.stringify(val),
 					fromUrlParam: (val) => JSON.parse(val),
@@ -818,7 +780,6 @@ export const config = configOrder({
 				type: 'boolean',
 				default: configDefaults.webgl,
 				profileData: {
-					inProfile: true,
 					defaultProfile: configDefaults.webgl,
 					toUrlParam: (val) => JSON.stringify(val),
 					fromUrlParam: (val) => JSON.parse(val),
@@ -834,7 +795,6 @@ export const config = configOrder({
 				type: 'boolean',
 				default: configDefaults.webLinks,
 				profileData: {
-					inProfile: true,
 					defaultProfile: configDefaults.webLinks,
 					toUrlParam: (val) => JSON.stringify(val),
 					fromUrlParam: (val) => JSON.parse(val),
@@ -923,10 +883,12 @@ function configToData (obj, prefix) {
 			data.push(...configToData(obj[key].properties, `${prefix}.${key}`))
 		} else {
 			const profileData = obj[key].profileData
-			delete obj[key].profileData
+			if (profileData) {
+				profileData.profileKey = key in COLORS ? COLORS[key] : key
+				delete obj[key].profileData
+			}
 			const keyPath = `${prefix}.${key}`
-			const profileKey = key in COLORS ? COLORS[key] : key
-			data.push({ ...obj[key], ...profileData, keyPath, key, profileKey })
+			data.push({ ...obj[key], ...profileData, keyPath })
 		}
 	}
 	return data

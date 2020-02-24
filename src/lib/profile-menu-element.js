@@ -63,7 +63,7 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		// Horizontal line.
 		this.mainDiv.appendChild(createHorizontalLine())
 
-		this.createFromConfig(CONFIG_DATA, baseProfile, modelProfile)
+		this.createFromConfig(baseProfile, modelProfile)
 
 		this.deleteProfileModel = new XTerminalDeleteProfileModel(this)
 		this.saveProfileModel = new XTerminalSaveProfileModel(this)
@@ -79,11 +79,9 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		resolveInit()
 	}
 
-	createFromConfig (configObj, baseProfile, modelProfile) {
-		for (const data of configObj) {
-			if (!data.inProfile) {
-				continue
-			}
+	createFromConfig (baseProfile, modelProfile) {
+		for (const data of CONFIG_DATA) {
+			if (!data.profileKey) continue
 			const title = data.title || data.profileKey.charAt(0).toUpperCase() + data.profileKey.substring(1).replace(/[A-Z]/g, ' $&')
 			const description = data.description || ''
 			if (data.enum) {
@@ -136,8 +134,9 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 	getMenuElements () {
 		const menuElements = {}
 		for (const data of CONFIG_DATA) {
-			let type = 'textbox > atom-text-editor'
+			if (!data.profileKey) continue
 
+			let type = 'textbox > atom-text-editor'
 			if (data.enum) {
 				type = 'select select'
 			} else if (data.type === 'color') {
@@ -155,9 +154,7 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		const baseProfile = this.profilesSingleton.getBaseProfile()
 		const menuElements = this.getMenuElements()
 		for (const data of CONFIG_DATA) {
-			if (!data.inProfile) {
-				continue
-			}
+			if (!data.profileKey) continue
 			newProfile[data.profileKey] = data.fromMenuSetting(menuElements[data.profileKey], baseProfile[data.profileKey])
 		}
 		return newProfile
@@ -457,7 +454,7 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 
 	setNewMenuSettings (profile, clear = false) {
 		for (const data of CONFIG_DATA) {
-			if (!data.inProfile) continue
+			if (!data.profileKey) continue
 
 			if (data.enum) {
 				const selector = `#${data.profileKey.toLowerCase()}-select select`

@@ -448,6 +448,7 @@ class XTerminalElementImpl extends HTMLElement {
 		this.disposables.add(this.profilesSingleton.onDidResetBaseProfile((baseProfile) => {
 			const frontEndSettings = {}
 			for (const data of CONFIG_DATA) {
+				if (!data.profileKey) continue
 				if (data.terminalFrontEnd) {
 					frontEndSettings[data.profileKey] = baseProfile[data.profileKey]
 				}
