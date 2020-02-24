@@ -844,8 +844,8 @@ export const config = configOrder({
 					toMenuSetting: (val) => val,
 				},
 			},
-		}
-	}
+		},
+	},
 })
 
 function validateBooleanConfigSetting (name, defaultValue) {
