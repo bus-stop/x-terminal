@@ -19,7 +19,7 @@
 
 import { Emitter } from 'atom'
 
-import { configDefaults, CONFIG_KEYS_TO_PROFILE, CONFIG_DATA } from './config'
+import { configDefaults, CONFIG_DATA } from './config'
 
 import fs from 'fs-extra'
 import path from 'path'
@@ -106,12 +106,12 @@ class XTerminalProfilesSingleton {
 	}
 
 	getDefaultProfile () {
-		return CONFIG_DATA.reduce((o, data) => {
-			if (data.inProfile) {
-				o[data.profileKey] = data.defaultProfile
-			}
-			return o
-		}, {})
+		const defaultProfile = {}
+		for (const data of CONFIG_DATA) {
+			if (!data.inProfile) continue
+			defaultProfile[data.profileKey] = data.defaultProfile
+		}
+		return defaultProfile
 	}
 
 	getBaseProfile () {
@@ -120,20 +120,21 @@ class XTerminalProfilesSingleton {
 
 	resetBaseProfile () {
 		this.previousBaseProfile = this.deepClone(this.baseProfile)
-		this.baseProfile = CONFIG_DATA.reduce((o, data) => {
-			if (data.inProfile) {
-				o[data.profileKey] = data.toBaseProfile(this.previousBaseProfile[data.profileKey])
-			}
-			return o
-		}, {})
+		this.baseProfile = {}
+		for (const data of CONFIG_DATA) {
+			if (!data.inProfile) continue
+			this.baseProfile[data.profileKey] = data.toBaseProfile(this.previousBaseProfile[data.profileKey])
+		}
 		this.emitter.emit('did-reset-base-profile', this.getBaseProfile())
 	}
 
 	sanitizeData (data) {
-		const sanitizedData = Object.values(CONFIG_KEYS_TO_PROFILE).reduce((p, v) => {
-			if (v in data)p[v] = data[v]
-			return p
-		}, {})
+		const sanitizedData = {}
+		for (const d of CONFIG_DATA) {
+			if (d.profileKey in data) {
+				sanitizedData[d.profileKey] = data[d.profileKey]
+			}
+		}
 
 		return this.deepClone(sanitizedData)
 	}
@@ -190,14 +191,12 @@ class XTerminalProfilesSingleton {
 		return X_TERMINAL_BASE_URI + uuidv4() + '/'
 	}
 
-	generateNewUrlFromProfileData (data) {
-		data = this.sanitizeData(data)
+	generateNewUrlFromProfileData (profileData) {
+		profileData = this.sanitizeData(profileData)
 		const url = new URL(this.generateNewUri())
-		for (const configData of CONFIG_DATA) {
-			if (configData.inProfile) {
-				const toUrlParam = configData.toUrlParam || (v => v)
-				if (configData.profileKey in data) url.searchParams.set(configData.profileKey, toUrlParam(data[configData.profileKey]))
-			}
+		for (const data of CONFIG_DATA) {
+			if (!data.inProfile) continue
+			if (data.profileKey in profileData) url.searchParams.set(data.profileKey, data.toUrlParam(profileData[data.profileKey]))
 		}
 		return url
 	}
@@ -205,20 +204,18 @@ class XTerminalProfilesSingleton {
 	createProfileDataFromUri (uri) {
 		const url = new URL(uri)
 		const baseProfile = this.getBaseProfile()
-		return CONFIG_DATA.reduce((o, data) => {
-			if (data.inProfile) {
-				const fromUrlParam = data.fromUrlParam || (v => v)
-				const checkUrlParam = data.checkUrlParam || (v => true)
-				const param = url.searchParams.get(data.profileKey)
-				if (param) {
-					o[data.profileKey] = fromUrlParam(param)
-				}
-				if (!param || !checkUrlParam(o[data.profileKey])) {
-					o[data.profileKey] = baseProfile[data.profileKey]
-				}
+		const profileData = {}
+		for (const data of CONFIG_DATA) {
+			if (!data.inProfile) continue
+			const param = url.searchParams.get(data.profileKey)
+			if (param) {
+				profileData[data.profileKey] = data.fromUrlParam(param)
 			}
-			return o
-		}, {})
+			if (!param || !data.checkUrlParam(profileData[data.profileKey])) {
+				profileData[data.profileKey] = baseProfile[data.profileKey]
+			}
+		}
+		return profileData
 	}
 }
 

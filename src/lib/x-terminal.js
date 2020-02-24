@@ -23,7 +23,7 @@ import '../styles/x-terminal.sass'
 import { CompositeDisposable } from 'atom'
 import os from 'os'
 
-import { KEYS } from './config'
+import { CONFIG_DATA } from './config'
 import { XTerminalElement } from './element'
 import { XTerminalModel, isXTerminalModel } from './model'
 import { X_TERMINAL_BASE_URI, XTerminalProfilesSingleton } from './profiles'
@@ -69,8 +69,8 @@ class XTerminalSingleton {
 		this.terminals_set = new Set()
 
 		// Monitor for changes to all config values.
-		for (const key of KEYS) {
-			this.disposables.add(atom.config.onDidChange(key, ({ newValue, oldValue }) => {
+		for (const data of CONFIG_DATA) {
+			this.disposables.add(atom.config.onDidChange(data.keyPath, ({ newValue, oldValue }) => {
 				this.profilesSingleton.resetBaseProfile()
 			}))
 		}

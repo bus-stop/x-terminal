@@ -446,16 +446,17 @@ class XTerminalElementImpl extends HTMLElement {
 			}
 		})
 		this.disposables.add(this.profilesSingleton.onDidResetBaseProfile((baseProfile) => {
+			const frontEndSettings = {}
+			for (const data of CONFIG_DATA) {
+				if (data.terminalFrontEnd) {
+					frontEndSettings[data.profileKey] = baseProfile[data.profileKey]
+				}
+			}
 			const profileChanges = this.profilesSingleton.diffProfiles(
 				this.model.getProfile(),
 				// Only allow changes to settings related to the terminal front end
 				// to be applied to existing terminals.
-				CONFIG_DATA.reduce((o, data) => {
-					if (data.terminalFrontEnd) {
-						o[data.profileKey] = baseProfile[data.profileKey]
-					}
-					return o
-				}, {}),
+				frontEndSettings,
 			)
 			this.model.applyProfileChanges(profileChanges)
 		}))
