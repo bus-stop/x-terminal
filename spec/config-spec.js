@@ -368,7 +368,7 @@ describe('Call to userDataPath()', () => {
 			delete process.env.APPDATA
 		}
 		const expected = path.join(os.homedir(), 'AppData', 'Roaming', 'x-terminal')
-		expect(configDefaults.userDataPath).toBe(expected)
+		expect(resetConfigDefaults().userDataPath).toBe(expected)
 	})
 
 	it('on win32 with APPDATA set', () => {
