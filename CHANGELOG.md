@@ -1,3 +1,19 @@
+# [8.0.0](https://github.com/UziTech/x-terminal/compare/v7.1.0...v8.0.0) (2020-02-24)
+
+
+### Features
+
+* Use config data to build profile menu ([#4](https://github.com/UziTech/x-terminal/issues/4)) ([c5c55e3](https://github.com/UziTech/x-terminal/commit/c5c55e32b17dc8191cadc182b781cea002f1bdee))
+
+
+### BREAKING CHANGES
+
+* - Use config data to build profiles and profile menu
+  - no more adding new config settings in multiple places
+- add Project Cwd setting
+- add enable addon settings
+- disable webgl by default since it is not stable
+
 # [7.1.0](https://github.com/UziTech/x-terminal/compare/v7.0.0...v7.1.0) (2020-02-19)
 
 
