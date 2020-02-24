@@ -34,7 +34,7 @@ temp.track()
 describe('XTerminalElement', () => {
 	const savedPlatform = process.platform
 	this.element = null
-	this.tmpdirObj = null
+	this.tmpdir = null
 
 	const createNewElement = async (uri = 'x-terminal://somesessionid/') => {
 		const terminalsSet = new Set()
@@ -173,6 +173,16 @@ describe('XTerminalElement', () => {
 	it('getCwd() cwd set in uri', async () => {
 		const expected = this.tmpdir
 		const params = new URLSearchParams({ cwd: expected })
+		const url = new URL('x-terminal://?' + params.toString())
+		const element = await createNewElement(url.href)
+		const cwd = await element.getCwd()
+		expect(cwd).toBe(expected)
+	})
+
+	it('getCwd() ignore cwd in uri if projectCwd is set', async () => {
+		const expected = await temp.mkdir('projectCwd')
+		spyOn(atom.project, 'getPaths').and.returnValue([expected])
+		const params = new URLSearchParams({ projectCwd: true, cwd: this.tmpdir })
 		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		const cwd = await element.getCwd()
