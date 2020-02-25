@@ -1,3 +1,10 @@
+## [8.0.2](https://github.com/bus-stop/x-terminal/compare/v8.0.1...v8.0.2) (2020-02-25)
+
+
+### Bug Fixes
+
+* move to https://github.com/bus-stop/x-terminal ([521f0c2](https://github.com/bus-stop/x-terminal/commit/521f0c20e31869d691e19e6e976a7a368315a749))
+
 ## [8.0.1](https://github.com/bus-stop/x-terminal/compare/v8.0.0...v8.0.1) (2020-02-24)
 
 

@@ -2,7 +2,7 @@
   "name": "x-terminal",
   "main": "./src/x-terminal",
   "module": "./src/x-terminal",
-  "version": "8.0.1",
+  "version": "8.0.2",
   "description": "Atom plugin for providing terminals inside your Atom workspace.",
   "keywords": [
     "terminal",
