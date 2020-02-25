@@ -1,16 +1,16 @@
-## [8.0.1](https://github.com/UziTech/x-terminal/compare/v8.0.0...v8.0.1) (2020-02-24)
+## [8.0.1](https://github.com/bus-stop/x-terminal/compare/v8.0.0...v8.0.1) (2020-02-24)
 
 
 ### Bug Fixes
 
-* allow markdown in profile description ([#5](https://github.com/UziTech/x-terminal/issues/5)) ([448148f](https://github.com/UziTech/x-terminal/commit/448148fcb254ab7bfa87b124470128394e21dd2f))
+* allow markdown in profile description ([#5](https://github.com/bus-stop/x-terminal/issues/5)) ([448148f](https://github.com/bus-stop/x-terminal/commit/448148fcb254ab7bfa87b124470128394e21dd2f))
 
-# [8.0.0](https://github.com/UziTech/x-terminal/compare/v7.1.0...v8.0.0) (2020-02-24)
+# [8.0.0](https://github.com/bus-stop/x-terminal/compare/v7.1.0...v8.0.0) (2020-02-24)
 
 
 ### Features
 
-* Use config data to build profile menu ([#4](https://github.com/UziTech/x-terminal/issues/4)) ([c5c55e3](https://github.com/UziTech/x-terminal/commit/c5c55e32b17dc8191cadc182b781cea002f1bdee))
+* Use config data to build profile menu ([#4](https://github.com/bus-stop/x-terminal/issues/4)) ([c5c55e3](https://github.com/bus-stop/x-terminal/commit/c5c55e32b17dc8191cadc182b781cea002f1bdee))
 
 
 ### BREAKING CHANGES
@@ -21,38 +21,38 @@
 - add enable addon settings
 - disable webgl by default since it is not stable
 
-# [7.1.0](https://github.com/UziTech/x-terminal/compare/v7.0.0...v7.1.0) (2020-02-19)
+# [7.1.0](https://github.com/bus-stop/x-terminal/compare/v7.0.0...v7.1.0) (2020-02-19)
 
 
 ### Bug Fixes
 
-* profile menu style ([ac13e41](https://github.com/UziTech/x-terminal/commit/ac13e415a543440996b90f00f9e549e27362055d))
+* profile menu style ([ac13e41](https://github.com/bus-stop/x-terminal/commit/ac13e415a543440996b90f00f9e549e27362055d))
 
 
 ### Features
 
-* add default open position setting ([7c10a3c](https://github.com/UziTech/x-terminal/commit/7c10a3c94a340bfe9afa3c1ce790b7d85504700a))
-* add platform io terminal service ([fbf2b6a](https://github.com/UziTech/x-terminal/commit/fbf2b6a696cb971f8c1f7b5aa01f2d6ed0d8d0e4))
+* add default open position setting ([7c10a3c](https://github.com/bus-stop/x-terminal/commit/7c10a3c94a340bfe9afa3c1ce790b7d85504700a))
+* add platform io terminal service ([fbf2b6a](https://github.com/bus-stop/x-terminal/commit/fbf2b6a696cb971f8c1f7b5aa01f2d6ed0d8d0e4))
 
-# [7.0.0](https://github.com/UziTech/x-terminal/compare/v6.5.1...v7.0.0) (2020-02-15)
+# [7.0.0](https://github.com/bus-stop/x-terminal/compare/v6.5.1...v7.0.0) (2020-02-15)
 
 
 ### Bug Fixes
 
-* rename everything ([d643a15](https://github.com/UziTech/x-terminal/commit/d643a1592218ad1fd401e7584ea3d7ab95c9e445))
-* use async await ([dd7ffcd](https://github.com/UziTech/x-terminal/commit/dd7ffcd1097b5a715020f49f9783e44f019327bd))
+* rename everything ([d643a15](https://github.com/bus-stop/x-terminal/commit/d643a1592218ad1fd401e7584ea3d7ab95c9e445))
+* use async await ([dd7ffcd](https://github.com/bus-stop/x-terminal/commit/dd7ffcd1097b5a715020f49f9783e44f019327bd))
 
 
 ### BREAKING CHANGES
 
 * rename everything
 
-## [6.5.1](https://github.com/UziTech/x-terminal/compare/v6.5.0...v6.5.1) (2020-02-14)
+## [6.5.1](https://github.com/bus-stop/x-terminal/compare/v6.5.0...v6.5.1) (2020-02-14)
 
 
 ### Bug Fixes
 
-* update all deps ([1c74d24](https://github.com/UziTech/x-terminal/commit/1c74d24ca42c74caf9fc65b284d02854858654c0))
+* update all deps ([1c74d24](https://github.com/bus-stop/x-terminal/commit/1c74d24ca42c74caf9fc65b284d02854858654c0))
 
 ## 6.5.0
 * Switch to babel 7 for generating move-winpty-binaries.js script.

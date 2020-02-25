@@ -16,10 +16,10 @@ This is a fork of [atom-xterm](https://github.com/amejia1/atom-xterm/)
 
 Atom plugin for providing terminals inside your Atom workspace.
 
-![CI](https://github.com/UziTech/x-terminal/workflows/CI/badge.svg)
-[![dependencies Status](https://david-dm.org/UziTech/x-terminal/status.svg)](https://david-dm.org/UziTech/x-terminal)
+![CI](https://github.com/bus-stop/x-terminal/workflows/CI/badge.svg)
+[![dependencies Status](https://david-dm.org/bus-stop/x-terminal/status.svg)](https://david-dm.org/bus-stop/x-terminal)
 
-![X-Terminal demo](https://github.com/UziTech/x-terminal/raw/b7b9d4b073d9eea4f54806be5385d81d4fdd2393/resources/atom-xterm-demo.gif)
+![X-Terminal demo](https://github.com/bus-stop/x-terminal/raw/b7b9d4b073d9eea4f54806be5385d81d4fdd2393/resources/atom-xterm-demo.gif)
 
 ## Built in Terminal for Atom Feature Request
 
@@ -85,7 +85,7 @@ the programs listed [here](https://github.com/nodejs/node-gyp#on-mac-os-x)
 
 To open terminals, just open them through the menu.
 
-![X-Terminal menu](https://raw.githubusercontent.com/UziTech/x-terminal/9dfb79f31df4df67b12be74f541c39d498d2212f/resources/atom-xterm-menu.png)
+![X-Terminal menu](https://raw.githubusercontent.com/bus-stop/x-terminal/9dfb79f31df4df67b12be74f541c39d498d2212f/resources/atom-xterm-menu.png)
 
 There's also various key bindings you can use to open terminals. See the
 available key bindings for the x-terminal package.
@@ -105,14 +105,14 @@ And of course, there's the old fashion way of just moving the tabs where you
 want them. Feel free to place your terminal tabs anywhere in your workspace to
 include any of the docks.
 
-![X-Terminal moving terminals demo](https://github.com/UziTech/x-terminal/raw/b7b9d4b073d9eea4f54806be5385d81d4fdd2393/resources/atom-xterm-moving-terminals-demo.gif)
+![X-Terminal moving terminals demo](https://github.com/bus-stop/x-terminal/raw/b7b9d4b073d9eea4f54806be5385d81d4fdd2393/resources/atom-xterm-moving-terminals-demo.gif)
 
 ## Profiles
 
 The x-terminal package supports saving and loading profiles. What this allows
 you to do is save commonly used commands and settings for later use.
 
-![X-Terminal profiles demo](https://raw.githubusercontent.com/UziTech/x-terminal/5604f0433291a452ceffcc722c61fa2835d8b67a/resources/atom-xterm-profiles-demo.gif)
+![X-Terminal profiles demo](https://raw.githubusercontent.com/bus-stop/x-terminal/5604f0433291a452ceffcc722c61fa2835d8b67a/resources/atom-xterm-profiles-demo.gif)
 
 ## Notifications
 
@@ -122,15 +122,15 @@ manager as well as on the terminal tab triggering the notification.
 
 Success
 
-![X-Terminal exit success](https://raw.githubusercontent.com/UziTech/x-terminal/master/resources/atom-xterm-exit-success.png)
+![X-Terminal exit success](https://raw.githubusercontent.com/bus-stop/x-terminal/master/resources/atom-xterm-exit-success.png)
 
 Failure
 
-![X-Terminal exit failure](https://raw.githubusercontent.com/UziTech/x-terminal/master/resources/atom-xterm-exit-failure.png)
+![X-Terminal exit failure](https://raw.githubusercontent.com/bus-stop/x-terminal/master/resources/atom-xterm-exit-failure.png)
 
 There's also activity notifications for terminal tabs not in focus.
 
-![X-Terminal activity notification](https://raw.githubusercontent.com/UziTech/x-terminal/master/resources/atom-xterm-activity-notification.png)
+![X-Terminal activity notification](https://raw.githubusercontent.com/bus-stop/x-terminal/master/resources/atom-xterm-activity-notification.png)
 
 ## Services
 
@@ -144,11 +144,11 @@ rather a JavaScript object that provides methods to open terminals and run comma
 ### 'atom-xterm' service v2.0.0
 
 The `atom-xterm` service provides the
-[openTerminal()](https://github.com/UziTech/x-terminal/blob/2a7762b6d29abdc017af17c320b2e548cd14e4a9/src/x-terminal.js#L273) method. The `openTerminal()` method behaves just like Atom's
+[openTerminal()](https://github.com/bus-stop/x-terminal/blob/2a7762b6d29abdc017af17c320b2e548cd14e4a9/src/x-terminal.js#L273) method. The `openTerminal()` method behaves just like Atom's
 [open()](https://github.com/atom/atom/blob/917a00e195b93c8c2a9adc349fd8fa1844f61dbc/src/workspace.js#L1076)
 method except that the first argument must be a JSON object describing the
 terminal profile that should be opened. Docs about this JSON object can be
-found [here](https://github.com/UziTech/x-terminal/blob/2a7762b6d29abdc017af17c320b2e548cd14e4a9/src/profiles.js#L311).
+found [here](https://github.com/bus-stop/x-terminal/blob/2a7762b6d29abdc017af17c320b2e548cd14e4a9/src/profiles.js#L311).
 
 As an example on how to use the provided `openTerminal()` method, your
 `package.json` should have the following.
@@ -202,7 +202,7 @@ this.atomXtermService.openTerminal({
 
 ### 'platformioIDETerminal' service v1.1.0
 
-The `platformioIDETerminal` service provides an [object](https://github.com/UziTech/x-terminal/blob/2a7762b6d29abdc017af17c320b2e548cd14e4a9/src/x-terminal.js#L381) with `updateProcessEnv`, `run`, `getTerminalViews`, and `open` methods.
+The `platformioIDETerminal` service provides an [object](https://github.com/bus-stop/x-terminal/blob/2a7762b6d29abdc017af17c320b2e548cd14e4a9/src/x-terminal.js#L381) with `updateProcessEnv`, `run`, `getTerminalViews`, and `open` methods.
 
 As an example on how to use the provided `run()` method, your
 `package.json` should have the following.
@@ -254,7 +254,7 @@ this.platformioIDETerminalService.run([
 Want to help develop x-terminal? Here's how to quickly get setup.
 
 First use the [apm](https://github.com/atom/apm) command to clone the
-[x-terminal repo](https://github.com/UziTech/x-terminal).
+[x-terminal repo](https://github.com/bus-stop/x-terminal).
 
 ```sh
 apm develop x-terminal
@@ -294,7 +294,7 @@ the lint tools, simply run `npm run lint`.
 ## Pull Requests
 
 Whenever you're ready to submit a pull request, be sure to submit it
-against a fork of the main [x-terminal repo](https://github.com/UziTech/x-terminal)
+against a fork of the main [x-terminal repo](https://github.com/bus-stop/x-terminal)
 master branch that you'll own. Fork the repo using Github and make note of the
 new `git` URL. Set this new git URL as the URL for the `origin` remote in your
 already cloned git repo is follows.
@@ -385,5 +385,5 @@ the x-terminal package.
 
 Need to submit a bug report? Have a new feature you want to see implemented in
 *x-terminal*? Please feel free to report them through the
-[issues page](https://github.com/UziTech/x-terminal/issues). For bug reports,
+[issues page](https://github.com/bus-stop/x-terminal/issues). For bug reports,
 please also provide images or demos showing your issues if you can.

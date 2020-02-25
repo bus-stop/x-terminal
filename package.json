@@ -24,7 +24,7 @@
     "core:loaded-shell-environment"
   ],
   "atomTestRunner": "./spec/custom-runner",
-  "repository": "https://github.com/UziTech/x-terminal",
+  "repository": "https://github.com/bus-stop/x-terminal",
   "license": "MIT",
   "engines": {
     "atom": ">=1.23.1 <2.0.0"
