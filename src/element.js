@@ -398,7 +398,8 @@ class XTerminalElementImpl extends HTMLElement {
 			}
 		}
 
-		if (!this.model.profile.webgl) {
+		const webgl = ('webgl' in profile ? profile.webgl : this.model.profile.webgl)
+		if (!webgl) {
 			colors.selection = this.setMaximumOpacity(colors.selection, 0.5)
 		}
 
