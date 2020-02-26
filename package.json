@@ -27,7 +27,7 @@
   "repository": "https://github.com/bus-stop/x-terminal",
   "license": "MIT",
   "engines": {
-    "atom": ">=1.23.1 <2.0.0"
+    "atom": ">=1.41.0 <2.0.0"
   },
   "providedServices": {
     "atom-xterm": {
