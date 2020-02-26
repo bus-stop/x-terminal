@@ -14,12 +14,7 @@ This is a fork of [atom-xterm](https://github.com/amejia1/atom-xterm/)
 4. PlatformIO IDE API
    - Works with packages that consume the `platformioIDETerminal` service
 
-Atom plugin for providing terminals inside your Atom workspace.
-
-![CI](https://github.com/bus-stop/x-terminal/workflows/CI/badge.svg)
-[![dependencies Status](https://david-dm.org/bus-stop/x-terminal/status.svg)](https://david-dm.org/bus-stop/x-terminal)
-
-![X-Terminal demo](https://github.com/bus-stop/x-terminal/raw/b7b9d4b073d9eea4f54806be5385d81d4fdd2393/resources/atom-xterm-demo.gif)
+![X-Terminal demo](https://cdn.statically.io/gh/bus-stop/x-terminal/master/resources/x-terminal-demo.gif)
 
 ## Built in Terminal for Atom Feature Request
 
@@ -85,7 +80,7 @@ the programs listed [here](https://github.com/nodejs/node-gyp#on-mac-os-x)
 
 To open terminals, just open them through the menu.
 
-![X-Terminal menu](https://raw.githubusercontent.com/bus-stop/x-terminal/9dfb79f31df4df67b12be74f541c39d498d2212f/resources/atom-xterm-menu.png)
+![X-Terminal menu](https://cdn.statically.io/gh/bus-stop/x-terminal/master/resources/x-terminal-menu.png)
 
 There's also various key bindings you can use to open terminals. See the
 available key bindings for the x-terminal package.
@@ -105,14 +100,14 @@ And of course, there's the old fashion way of just moving the tabs where you
 want them. Feel free to place your terminal tabs anywhere in your workspace to
 include any of the docks.
 
-![X-Terminal moving terminals demo](https://github.com/bus-stop/x-terminal/raw/b7b9d4b073d9eea4f54806be5385d81d4fdd2393/resources/atom-xterm-moving-terminals-demo.gif)
+![X-Terminal moving terminals demo](https://cdn.statically.io/gh/bus-stop/x-terminal/master/resources/x-terminal-moving-terminals-demo.gif)
 
 ## Profiles
 
 The x-terminal package supports saving and loading profiles. What this allows
 you to do is save commonly used commands and settings for later use.
 
-![X-Terminal profiles demo](https://raw.githubusercontent.com/bus-stop/x-terminal/5604f0433291a452ceffcc722c61fa2835d8b67a/resources/atom-xterm-profiles-demo.gif)
+![X-Terminal profiles demo](https://cdn.statically.io/gh/bus-stop/x-terminal/master/resources/x-terminal-profiles-demo.gif)
 
 ## Notifications
 
@@ -122,15 +117,15 @@ manager as well as on the terminal tab triggering the notification.
 
 Success
 
-![X-Terminal exit success](https://raw.githubusercontent.com/bus-stop/x-terminal/master/resources/atom-xterm-exit-success.png)
+![X-Terminal exit success](https://cdn.statically.io/gh/bus-stop/x-terminal/master/resources/x-terminal-exit-success.png)
 
 Failure
 
-![X-Terminal exit failure](https://raw.githubusercontent.com/bus-stop/x-terminal/master/resources/atom-xterm-exit-failure.png)
+![X-Terminal exit failure](https://cdn.statically.io/gh/bus-stop/x-terminal/master/resources/x-terminal-exit-failure.png)
 
 There's also activity notifications for terminal tabs not in focus.
 
-![X-Terminal activity notification](https://raw.githubusercontent.com/bus-stop/x-terminal/master/resources/atom-xterm-activity-notification.png)
+![X-Terminal activity notification](https://cdn.statically.io/gh/bus-stop/x-terminal/master/resources/x-terminal-activity-notification.gif)
 
 ## Services
 
