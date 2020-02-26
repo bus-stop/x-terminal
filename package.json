@@ -1,9 +1,10 @@
 {
   "name": "x-terminal",
+  "title": "X-Terminal",
   "main": "./src/x-terminal",
   "module": "./src/x-terminal",
   "version": "8.0.3",
-  "description": "Atom plugin for providing terminals inside your Atom workspace.",
+  "description": "An xterm based Atom plugin for providing terminals inside your Atom workspace. A fork of amejia1/atom-xterm.",
   "keywords": [
     "terminal",
     "xterm",
@@ -31,7 +32,7 @@
   },
   "providedServices": {
     "atom-xterm": {
-      "description": "Atom plugin for providing terminals inside your Atom workspace.",
+      "description": "An x-terminal service for providing terminals inside your Atom workspace.",
       "versions": {
         "2.0.0": "provideAtomXtermService"
       }
