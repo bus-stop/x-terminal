@@ -1,3 +1,11 @@
+## [8.0.5](https://github.com/bus-stop/x-terminal/compare/v8.0.4...v8.0.5) (2020-02-26)
+
+
+### Bug Fixes
+
+* fix selection opacity ([660ecc9](https://github.com/bus-stop/x-terminal/commit/660ecc9163c4450c74aa9e564e58cb4af07b7319))
+* Maximum opacity ([#10](https://github.com/bus-stop/x-terminal/issues/10)) ([ec3dc42](https://github.com/bus-stop/x-terminal/commit/ec3dc42c36e2c21e863d999f5df13457cb6d3fa5))
+
 ## [8.0.4](https://github.com/bus-stop/x-terminal/compare/v8.0.3...v8.0.4) (2020-02-26)
 
 
