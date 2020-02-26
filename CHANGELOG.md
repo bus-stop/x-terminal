@@ -1,3 +1,17 @@
+## [8.0.4](https://github.com/bus-stop/x-terminal/compare/v8.0.3...v8.0.4) (2020-02-26)
+
+
+### Bug Fixes
+
+* prevent node-pty electron version mismatch ([d12c64d](https://github.com/bus-stop/x-terminal/commit/d12c64d2a7ebb8ebadf443100e25762a20406c38))
+
+## [8.0.3](https://github.com/bus-stop/x-terminal/compare/v8.0.2...v8.0.3) (2020-02-25)
+
+
+### Bug Fixes
+
+* test new repo ([abffb51](https://github.com/bus-stop/x-terminal/commit/abffb51002727ed84e1e9e6c64c3b22123bec80e))
+
 ## [8.0.2](https://github.com/bus-stop/x-terminal/compare/v8.0.1...v8.0.2) (2020-02-25)
 
 

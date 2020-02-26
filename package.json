@@ -1,9 +1,10 @@
 {
   "name": "x-terminal",
+  "title": "X-Terminal",
   "main": "./src/x-terminal",
   "module": "./src/x-terminal",
-  "version": "8.0.2",
-  "description": "Atom plugin for providing terminals inside your Atom workspace.",
+  "version": "8.0.4",
+  "description": "An xterm based Atom plugin for providing terminals inside your Atom workspace. A fork of amejia1/atom-xterm.",
   "keywords": [
     "terminal",
     "xterm",
@@ -27,11 +28,11 @@
   "repository": "https://github.com/bus-stop/x-terminal",
   "license": "MIT",
   "engines": {
-    "atom": ">=1.23.1 <2.0.0"
+    "atom": ">=1.41.0 <2.0.0"
   },
   "providedServices": {
     "atom-xterm": {
-      "description": "Atom plugin for providing terminals inside your Atom workspace.",
+      "description": "An x-terminal service for providing terminals inside your Atom workspace.",
       "versions": {
         "2.0.0": "provideAtomXtermService"
       }
