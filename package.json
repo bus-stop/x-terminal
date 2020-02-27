@@ -50,7 +50,7 @@
     "fs-extra": "^8.1.0",
     "marked": "^0.8.0",
     "node-pty-prebuilt-multiarch": "^0.9.0",
-    "uuid": "^7.0.0",
+    "uuid": "^7.0.1",
     "whatwg-url": "^8.0.0",
     "xterm": "^4.4.0",
     "xterm-addon-fit": "^0.3.0",
@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@semantic-release/apm-config": "^8.0.0",
-    "atom-jasmine3-test-runner": "^4.4.1",
+    "atom-jasmine3-test-runner": "^4.4.2",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.20.1",
