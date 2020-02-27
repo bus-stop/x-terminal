@@ -1,3 +1,10 @@
+## [8.0.6](https://github.com/bus-stop/x-terminal/compare/v8.0.5...v8.0.6) (2020-02-27)
+
+
+### Bug Fixes
+
+* serialization ([a614c6b](https://github.com/bus-stop/x-terminal/commit/a614c6bf0d680732a02d193acd06ca1c1c1ffb08))
+
 ## [8.0.5](https://github.com/bus-stop/x-terminal/compare/v8.0.4...v8.0.5) (2020-02-26)
 
 
