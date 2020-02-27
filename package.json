@@ -84,6 +84,6 @@
     "test": "npm run atom-test && npm run lint"
   },
   "deserializers": {
-    "AtomXtermModel": "deserializeAtomXtermModel"
+    "XTerminalModel": "deserializeXTerminalModel"
   }
 }
