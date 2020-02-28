@@ -14,7 +14,6 @@ module.exports = {
 		ecmaVersion: 2018,
 	},
 	rules: {
-		'no-warning-comments': 'warn',
 		'comma-dangle': ['error', 'always-multiline'],
 		indent: ['error', 'tab', { 'SwitchCase': 1 }],
 		'no-tabs': ['error', { allowIndentationTabs: true }],
