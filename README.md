@@ -1,6 +1,34 @@
-# [x-terminal](https://atom.io/packages/x-terminal)
-
-This is a fork of [atom-xterm](https://github.com/amejia1/atom-xterm/)
+<br>
+<p align="center">
+  <a href="https://github.com/bus-stop/x-terminal/actions?query=workflow%3ACI">
+    <img src="https://img.shields.io/github/workflow/status/bus-stop/x-terminal/CI?style=flat-square&logo=github&label=CI%20status" alt="actions status">
+  </a>
+  <a href="https://github.com/bus-stop/x-terminal/tags">
+    <img src="https://img.shields.io/github/tag/bus-stop/x-terminal.svg?label=current%20version&style=flat-square" alt="version">
+  </a>
+  <a href="https://github.com/bus-stop/x-terminal/stargazers">
+    <img src="https://img.shields.io/github/stars/bus-stop/x-terminal.svg?style=flat-square" alt="stars">
+  </a>
+  <a href="https://github.com/bus-stop/x-terminal/network">
+    <img src="https://img.shields.io/github/forks/bus-stop/x-terminal.svg?style=flat-square" alt="forks">
+  </a>
+  <a href="https://david-dm.org/bus-stop/x-terminal">
+    <img src="https://img.shields.io/david/dev/bus-stop/term.js.svg?label=dependencies&style=flat-square" alt="dependencies">
+  </a>
+  <a href="https://david-dm.org/bus-stop/x-terminal?type=dev">
+    <img src="https://img.shields.io/david/dev/bus-stop/term.js.svg?label=devdependencies&style=flat-square" alt="dependencies">
+  </a>
+</p>
+<h3 align="center">
+  An xterm based Atom plugin for providing terminals inside your Atom workspace!&nbsp;❤️
+</h3>
+<h5 align="center">A fork of
+  <a href="https://atom.io/packages/atom-xterm">atom.io/packages/atom-xterm</a>
+</h5>
+<h5 align="center">
+  <a href="https://atom.io/packages/x-terminal">atom.io packages x-terminal</a>
+</h5>
+<br>
 
 ## Updates
 
@@ -16,7 +44,7 @@ This is a fork of [atom-xterm](https://github.com/amejia1/atom-xterm/)
 
 ![X-Terminal demo](https://cdn.statically.io/gh/bus-stop/x-terminal/master/resources/x-terminal-demo.gif)
 
-## Built in Terminal for Atom Feature Request
+## Atom Feature Request for a Built in Terminal
 
 If you're reading this and you would rather see Atom have a built-in terminal
 by default, please go over to the built-in terminal feature request
@@ -25,7 +53,7 @@ give an explanation as to why you need a built-in terminal in Atom by default.
 
 # Installation
 
-Go to <https://atom.io/packages/x-terminal> and click Install, or search for
+Go to <https://atom.io/packages/x-terminal> and click install, or search for
 the *x-terminal* package via Atom's package manager. It can also be installed
 via command-line with the [apm](https://github.com/atom/apm) command.
 
