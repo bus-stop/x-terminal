@@ -53,7 +53,7 @@
 ## Atom Feature Request for a Built in Terminal
 
 If you're reading this and you would rather see Atom have a built-in terminal
-by default, please go over to the built-in terminal feature request
+by default, please go over to the built-in terminal feature request thread
 [here](https://github.com/atom/atom/issues/14490), give it a thumbs up, **and**
 give an explanation as to why you need a built-in terminal in Atom by default.
 
@@ -67,57 +67,13 @@ via command-line with the [apm](https://github.com/atom/apm) command.
 apm install x-terminal
 ```
 
-## One time prerequisites
-
-The *x-terminal* package requires
-[node-pty](https://www.npmjs.com/package/node-pty). That package currently
-requires building some native bindings on the local system using
-[node-gyp](https://github.com/nodejs/node-gyp). Providing prebuilt binaries
-is still [work in progress](https://github.com/Microsoft/node-pty/issues/46)
-so for now, you'll need to install certain packages on your system before
-installing *x-terminal*. Below are what you'll need to install only once before
-installing *x-terminal*.
-
-### Windows
-
-Download and install [Node.js](https://nodejs.org/en/download/). It's recommended
-to install the LTS version of Node.js.
-
-Then, install the *windows-build-tools* package via npm.
-
-```sh
-npm install --global --production windows-build-tools
-```
-
-### Linux
-
-#### Debian/Ubuntu based Linux distributions
-
-Follow the instructions [here](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
-to install Node.js. It's recommended to install the LTS version of Node.js.
-
-Then install the *build-essential* and *python2.7* .deb packages.
-
-```sh
-sudo apt-get install build-essential python2.7
-```
-
-### macOS
-
-Install Node.js using the instructions provided
-[here](https://nodejs.org/en/download/package-manager/#macos). Then, install
-the programs listed [here](https://github.com/nodejs/node-gyp#on-mac-os-x)
-
-# Usage
-
 ## Opening Terminals
 
-To open terminals, just open them through the menu.
+To open terminals, you can open them through the menu or through the available key bindings.
 
 ![X-Terminal menu](https://cdn.statically.io/gh/bus-stop/x-terminal/master/resources/x-terminal-menu.png)
 
-There's also various key bindings you can use to open terminals. See the
-available key bindings for the x-terminal package.
+See [the available key bindings](https://github.com/bus-stop/x-terminal/blob/master/keymaps/x-terminal.json) for the x-terminal package.
 
 There's also menu items available for opening terminals via right clicking on a
 text editor or on a terminal.
@@ -157,7 +113,7 @@ Failure
 
 ![X-Terminal exit failure](https://cdn.statically.io/gh/bus-stop/x-terminal/master/resources/x-terminal-exit-failure.png)
 
-There's also activity notifications for terminal tabs not in focus.
+There are also activity notifications for terminal tabs not in focus.
 
 ![X-Terminal activity notification](https://cdn.statically.io/gh/bus-stop/x-terminal/master/resources/x-terminal-activity-notification.gif)
 
@@ -297,9 +253,9 @@ cd $HOME/github/x-terminal
 npm install
 ```
 
-Rebuild any native binaries that were installed (such as the binaries from the
-[node-pty](https://github.com/Tyriar/node-pty) package) so that they can be
-used inside Atom.
+You shouldn't need to rebuild any [node-pty](https://github.com/Tyriar/node-pty)
+since they are pre-compiled, however in the event they aren't available,
+you can rebuild them with:
 
 ```sh
 apm rebuild
