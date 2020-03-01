@@ -71,7 +71,7 @@ apm install x-terminal
 
 To open terminals, you can open them through the menu or through the available key bindings.
 
-![X-Terminal menu](https://cdn.statically.io/gh/bus-stop/x-terminal/master/resources/x-terminal-menu.png)
+![X-Terminal menu](https://cdn.statically.io/gh/bus-stop/x-terminal/master/resources/x-terminal-packages-menu.png)
 
 See [the available key bindings](https://github.com/bus-stop/x-terminal/blob/master/keymaps/x-terminal.json) for the x-terminal package.
 
