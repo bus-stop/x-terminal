@@ -85,7 +85,7 @@ x-terminal-profile {
 	grid-area: main;
 	padding: @component-padding;
 	border-radius: @component-border-radius * 2;
-	border: 1px solid @base-border-color;
+	border: @btn-border;
 	background-color: @profile-menu-background-color;
 }
 
@@ -117,8 +117,8 @@ x-terminal-profile {
 	margin-top: -20px;
 
 	.x-terminal-profile-menu-item-checkbox {
-		width: 15px;
-		height: 15px;
+		width: @component-size;
+		height: @component-size;
 		margin-left: -2.25em;
 		vertical-align: bottom;
 		position: relative;
@@ -131,7 +131,7 @@ x-terminal-profile {
 }
 
 .x-terminal-profile-menu-item-title {
-	font-size: 1.2em;
+	font-size: @font-size + 4px;
 	-webkit-user-select: none;
 }
 
@@ -145,7 +145,7 @@ x-terminal-profile {
 	}
 
 	p {
-		line-height: 1.45em;
+		line-height: @ui-line-height;
 		margin-bottom: 0;
 	}
 }
@@ -189,7 +189,7 @@ x-terminal-profile {
 		}
 
 		&::-webkit-color-swatch {
-			border-radius: 2px;
+			border-radius: @component-border-radius;
 			border: 1px solid hsla(0, 0%, 0%, 0.1);
 		}
 
@@ -224,7 +224,7 @@ x-terminal-profile {
 }
 
 .x-terminal-modal-message {
-	font-size: 18px;
+	font-size: @font-size + 5px;
 }
 
 .x-terminal-term-container {
@@ -239,7 +239,7 @@ x-terminal-profile {
 	border-color: lighten(@x-terminal-notice-background-color, 10%);
 	background-color: @x-terminal-notice-background-color;
 	border-style: solid;
-	font-size: 14px;
+	font-size: @input-font-size;
 	height: 100%;
 	width: 100%;
 	flex: none;
