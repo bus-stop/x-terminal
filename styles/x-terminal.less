@@ -20,6 +20,10 @@
 // https://flight-manual.atom.io/hacking-atom/sections/creating-a-theme/#creating-a-ui-theme .
 @import "ui-variables";
 @profile-menu-background-color: lighten(@app-background-color, 2%);
+@component-size: @component-icon-size; // use for text-less controls like radio, checkboxes etc.
+@component-background-color: mix(@text-color, @base-background-color, 20%);
+@btn-border: 1px solid @button-border-color;
+@btn-padding: 0 @ui-size/1.25;
 
 :root {
 	--standard-app-background-color: @app-background-color;
