@@ -211,12 +211,15 @@ x-terminal-profile {
 
 .x-terminal-modal-button,
 .x-terminal-profile-menu-button {
-	font-size: 1.25em;
-	border: 1px solid @button-border-color;
+	height: @component-line-height + 2px;
+	padding: @btn-padding;
+	font-size: @font-size + 2px;
+	border: @btn-border;
 	background-color: @button-background-color;
 
 	&:hover {
 		background-color: @button-background-color-hover;
+		color: lighten(@text-color, 20%);
 	}
 }
 
