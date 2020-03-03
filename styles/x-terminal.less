@@ -218,11 +218,18 @@ x-terminal-profile {
 	padding: @btn-padding;
 	font-size: @font-size + 2px;
 	border: @btn-border;
+	border-radius: @component-border-radius;
 	background-color: @button-background-color;
 
 	&:hover {
 		background-color: @button-background-color-hover;
 		color: lighten(@text-color, 20%);
+	}
+
+	&:focus {
+		background-color: @button-background-color-hover;
+		color: lighten(@text-color, 20%);
+		border-color: @accent-color;
 	}
 }
 
