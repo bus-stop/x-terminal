@@ -63,8 +63,8 @@ x-terminal-profile {
 }
 
 .x-terminal-main-div {
-	height: 90%;
-	width: 100%;
+	height: 95%;
+	width: auto;
 	flex: auto;
 }
 
@@ -90,6 +90,7 @@ x-terminal-profile {
 	border-radius: @component-border-radius * 2;
 	border: @btn-border;
 	background-color: @profile-menu-background-color;
+	margin: -35px;
 }
 
 .x-terminal-profile-menu-element-hline {
@@ -113,10 +114,11 @@ x-terminal-profile {
 	max-width: 100%;
 	margin-bottom: 5px;
 	background-color: @profile-menu-background-color;
+	margin-left: 2px;
 }
 
 .x-terminal-profile-menu-item-label-checkbox {
-	padding-left: 2.25em;
+	padding-left: 2.2em;
 	margin-top: -20px;
 
 	.input-checkbox {
@@ -131,11 +133,14 @@ x-terminal-profile {
 
 .x-terminal-profile-menu-item-description-checkbox {
 	padding-left: 2.25em;
+	margin-left: 2px;
+	margin-top: -0.5em;
 }
 
 .x-terminal-profile-menu-item-title {
 	font-size: @font-size + 4px;
 	-webkit-user-select: none;
+	color: @text-color;
 }
 
 .x-terminal-profile-menu-item-description {
@@ -166,6 +171,7 @@ x-terminal-profile {
 	font-size: 1.25em;
 	padding-top: 0;
 	padding-bottom: 0;
+	padding-left: @component-padding;
 
 	&:focus,
 	&:hover {
@@ -179,15 +185,16 @@ x-terminal-profile {
 	margin-top: -20px;
 
 	.x-terminal-profile-menu-item-color {
-		color: @text-color;
 		border-color: @button-border-color;
 		background-color: @button-background-color;
 		width: 4em;
+		height: 1.6em;
 		margin-left: -5em;
 		padding: 0;
 		vertical-align: bottom;
 		position: relative;
-		top: 20px;
+		left: -2px;
+		top: 22px;
 
 		&::-webkit-color-swatch-wrapper {
 			padding: 2px;
@@ -215,6 +222,8 @@ x-terminal-profile {
 
 .x-terminal-profile-menu-item-description-color {
 	padding-left: 5em;
+	margin-left: 2px;
+	margin-top: -0.5em;
 }
 
 .x-terminal-profile-menu-buttons-div {
@@ -243,7 +252,8 @@ x-terminal-profile {
 }
 
 .x-terminal-modal-message {
-	font-size: @font-size + 3px;
+	font-size: @font-size + 4px;
+	margin-top: 0.6em;
 
 	&::before {
 		content: @arrow-right;
