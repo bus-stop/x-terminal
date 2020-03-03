@@ -738,7 +738,7 @@ export const config = configOrder({
 			},
 			xtermOptions: {
 				title: 'xterm.js Terminal Options',
-				description: 'Options to apply to xterm.js Terminal objects. (https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/#properties)',
+				description: 'Options to apply to xterm.js Terminal objects. Read more on the supported [xterm.js API properties](https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/#properties).',
 				type: 'string',
 				default: configDefaults.xtermOptions,
 				profileData: {
