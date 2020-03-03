@@ -197,10 +197,15 @@ x-terminal-profile {
 			border: 1px solid hsla(0, 0%, 0%, 0.1);
 		}
 
-		&:focus,
 		&:hover {
 			box-shadow: none;
 			background-color: @button-background-color-hover;
+		}
+
+		&:focus {
+			background-color: @button-background-color-hover;
+			border-color: @accent-color;
+			border-radius: @component-border-radius;
 		}
 	}
 }
