@@ -268,6 +268,8 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 	createButton () {
 		const button = document.createElement('button')
 		button.classList.add('x-terminal-profile-menu-button')
+		button.classList.add('btn')
+		button.classList.add('inline-block-tight')
 		return button
 	}
 
@@ -365,6 +367,7 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		menuItemLabel.classList.add('x-terminal-profile-menu-item-label-checkbox')
 		const checkbox = document.createElement('input')
 		checkbox.setAttribute('type', 'checkbox')
+		checkbox.classList.add('x-terminal-profile-menu-item-checkbox')
 		checkbox.classList.add('input-checkbox')
 		checkbox.checked = defaultValue
 		if (initialValue !== undefined) {
