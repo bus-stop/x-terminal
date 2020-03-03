@@ -770,8 +770,8 @@ export const config = configOrder({
 		},
 	},
 	xtermAddons: {
-		title: 'xTerm Addons',
-		description: 'Enable/Disable xTerm Addons',
+		title: 'xterm.js Addons',
+		description: 'Enable/Disable xterm.js Addons',
 		type: 'object',
 		properties: {
 			webgl: {
