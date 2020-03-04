@@ -198,7 +198,7 @@ export const config = configOrder({
 			},
 			setEnv: {
 				title: 'Environment Overrides',
-				description: 'Environment variables to use in place of the atom process environment, must be in a JSON object.',
+				description: 'Environment variables to use in place of the Atom process environment, must be in a JSON object.',
 				type: 'string',
 				default: configDefaults.setEnv,
 				profileData: {
@@ -738,7 +738,7 @@ export const config = configOrder({
 			},
 			xtermOptions: {
 				title: 'xterm.js Terminal Options',
-				description: 'Options to apply to xterm.js Terminal objects. Read more on the supported [xterm.js API properties](https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/#properties).',
+				description: 'Options to apply to xterm.js terminal objects. Read more on the supported [xterm.js API properties](https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/#properties).',
 				type: 'string',
 				default: configDefaults.xtermOptions,
 				profileData: {
@@ -771,12 +771,12 @@ export const config = configOrder({
 	},
 	xtermAddons: {
 		title: 'xterm.js Addons',
-		description: 'Enable/Disable xterm.js Addons',
+		description: 'Select the xterm.js Addons to enable',
 		type: 'object',
 		properties: {
 			webgl: {
-				title: 'Use WebGL',
-				description: 'Use the [WebGL Addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-webgl)',
+				title: 'WebGL Renderer',
+				description: 'Enable the WebGL-based renderer using the xterm.js [WebGL Addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-webgl)',
 				type: 'boolean',
 				default: configDefaults.webgl,
 				profileData: {
@@ -790,8 +790,8 @@ export const config = configOrder({
 				},
 			},
 			webLinks: {
-				title: 'Clickable Web Links',
-				description: 'Use the [WebLinks Addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-web-links)',
+				title: 'Web Links',
+				description: 'Enable clickable web links using the xterm.js [Web links Addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-web-links)',
 				type: 'boolean',
 				default: configDefaults.webLinks,
 				profileData: {
