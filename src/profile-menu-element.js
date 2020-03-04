@@ -234,30 +234,35 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		buttonsContainer.classList.add('x-terminal-profile-menu-buttons-div')
 		let button = this.createButton()
 		button.appendChild(document.createTextNode('Load Settings'))
+		button.classList.add('btn-load')
 		button.addEventListener('click', (event) => {
 			this.loadProfile()
 		}, { passive: true })
 		buttonsContainer.appendChild(button)
 		button = this.createButton()
 		button.appendChild(document.createTextNode('Save Settings'))
+		button.classList.add('btn-save')
 		button.addEventListener('click', (event) => {
 			this.saveProfile()
 		}, { passive: true })
 		buttonsContainer.appendChild(button)
 		button = this.createButton()
 		button.appendChild(document.createTextNode('Delete Settings'))
+		button.classList.add('btn-delete')
 		button.addEventListener('click', (event) => {
 			this.deleteProfile()
 		}, { passive: true })
 		buttonsContainer.appendChild(button)
 		button = this.createButton()
 		button.appendChild(document.createTextNode('Restart'))
+		button.classList.add('btn-restart')
 		button.addEventListener('click', (event) => {
 			this.restartTerminal()
 		}, { passive: true })
 		buttonsContainer.appendChild(button)
 		button = this.createButton()
 		button.appendChild(document.createTextNode('Hide Menu'))
+		button.classList.add('btn-hide')
 		button.addEventListener('click', (event) => {
 			this.hideProfileMenu()
 		}, { passive: true })
@@ -338,6 +343,7 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 		const select = document.createElement('select')
 		select.setAttribute('type', 'select')
 		select.classList.add('x-terminal-profile-menu-item-select')
+		select.classList.add('settings-view')
 		for (let optionValue of possibleValues) {
 			if (typeof optionValue !== 'object') {
 				optionValue = {
