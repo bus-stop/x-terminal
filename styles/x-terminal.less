@@ -21,12 +21,21 @@
 @import "ui-variables";
 @import "octicon-utf-codes";
 @import "octicon-mixins";
+@import "syntax-variables";
 
 @profile-menu-background-color: lighten(@app-background-color, 2%);
 @component-size: @component-icon-size; // use for text-less controls like radio, checkboxes etc.
 @component-background-color: mix(@text-color, @base-background-color, 20%);
 @btn-border: 1px solid @button-border-color;
+@ui-size: 1em;
 @btn-padding: 0 @ui-size/1.25;
+@accent-luma: luma( hsl(@ui-hue, 50%, 50%) ); // get lightness of current hue
+@accent-color: mix( hsv( @ui-hue, 100%, 66%), hsl( @ui-hue, 100%, 70%), @accent-luma );
+@ui-syntax-color: @syntax-background-color;
+@ui-s-h: hue(@ui-syntax-color);
+.ui-hue() when (@ui-s-h = 0) { @ui-hue: 220; } // Use blue hue when no saturation
+.ui-hue() when (@ui-s-h > 0) { @ui-hue: @ui-s-h; }
+.ui-hue();
 
 :root {
 	--standard-app-background-color: @app-background-color;
