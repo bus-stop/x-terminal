@@ -3,7 +3,7 @@
   "title": "X-Terminal",
   "main": "./src/x-terminal",
   "module": "./src/x-terminal",
-  "version": "8.0.6",
+  "version": "8.0.7",
   "description": "An xterm based Atom plugin for providing terminals inside your Atom workspace. A fork of amejia1/atom-xterm.",
   "keywords": [
     "terminal",
