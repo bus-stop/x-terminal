@@ -237,15 +237,55 @@ x-terminal-profile {
 	border-radius: @component-border-radius;
 	background-color: @button-background-color;
 
-	&:hover {
-		background-color: @button-background-color-hover;
-		color: lighten(@text-color, 20%);
+	&.btn-load {
+		&::before {
+			content: @settings;
+			.octicon-font();
+			margin-right: @component-padding;
+		}
 	}
 
-	&:focus {
-		background-color: @button-background-color-hover;
-		color: lighten(@text-color, 20%);
-		border-color: @accent-color;
+	&.btn-save {
+		&::before {
+			content: @file;
+			.octicon-font();
+			margin-right: @component-padding;
+		}
+	}
+
+	&.btn-delete {
+		&::before {
+			content: @trashcan;
+			.octicon-font();
+			margin-right: @component-padding;
+		}
+	}
+
+	&.btn-restart {
+		&::before {
+			content: @terminal;
+			.octicon-font();
+			margin-right: @component-padding;
+		}
+	}
+
+	&.btn-hide {
+		&::before {
+			content: @sign-out;
+			.octicon-font();
+			margin-right: @component-padding;
+		}
+
+		&:hover {
+			background-color: @button-background-color-hover;
+			color: lighten(@text-color, 20%);
+		}
+
+		&:focus {
+			background-color: @button-background-color-hover;
+			color: lighten(@text-color, 20%);
+			border-color: @accent-color;
+		}
 	}
 }
 
