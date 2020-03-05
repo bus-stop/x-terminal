@@ -1,3 +1,10 @@
+## [8.0.8](https://github.com/bus-stop/x-terminal/compare/v8.0.7...v8.0.8) (2020-03-05)
+
+
+### Bug Fixes
+
+* style input checkbox in profiles ([7621e1b](https://github.com/bus-stop/x-terminal/commit/7621e1b8e38b5195fbf439f9996227333d7430c7))
+
 ## [8.0.7](https://github.com/bus-stop/x-terminal/compare/v8.0.6...v8.0.7) (2020-03-04)
 
 
