@@ -32,7 +32,7 @@ class XTerminalOverwriteProfileModel {
 	}
 
 	getTitle () {
-		return 'x-terminal Overwrite Profile Model'
+		return 'X Terminal Overwrite Profile Model'
 	}
 
 	getElement () {

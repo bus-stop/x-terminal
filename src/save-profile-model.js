@@ -36,7 +36,7 @@ class XTerminalSaveProfileModel {
 	}
 
 	getTitle () {
-		return 'x-terminal Save Profile Model'
+		return 'X Terminal Save Profile Model'
 	}
 
 	getElement () {
