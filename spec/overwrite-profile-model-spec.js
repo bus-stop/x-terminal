@@ -38,7 +38,7 @@ describe('XTerminalOverwriteProfileModel', () => {
 
 	it('getTitle()', () => {
 		const model = new XTerminalOverwriteProfileModel(this.atomXtermSaveProfileModel)
-		expect(model.getTitle()).toBe('x-terminal Overwrite Profile Model')
+		expect(model.getTitle()).toBe('X Terminal Overwrite Profile Model')
 	})
 
 	it('getElement()', () => {
