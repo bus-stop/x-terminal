@@ -80,6 +80,7 @@
     "jsonlint": "jsonlint-cli keymaps/*.json menus/*.json package.json",
     "lint": "npm run eslint && npm run stylelint && npm run jsonlint",
     "stylelint": "stylelint styles/*.less",
+    "lintfix": "stylelint --fix styles/*.less",
     "atom-test": "atom --test spec",
     "test": "npm run atom-test && npm run lint"
   },
