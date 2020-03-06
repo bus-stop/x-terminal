@@ -23,6 +23,7 @@ import { XTerminalProfilesSingleton } from './profiles'
 
 import fs from 'fs-extra'
 import path from 'path'
+import os from 'os'
 
 import { URL } from 'whatwg-url'
 
@@ -217,6 +218,10 @@ class XTerminalModel {
 
 	copyFromTerminal () {
 		return this.element.terminal.getSelection()
+	}
+
+	runCommand (cmd) {
+		this.pasteToTerminal(cmd + os.EOL.charAt(0))
 	}
 
 	pasteToTerminal (text) {
