@@ -2108,6 +2108,33 @@ describe('XTerminalElement', () => {
 		expect(this.element.model.profile.fontSize).toBe(configDefaults.minimumFontSize)
 	})
 
+	it('copy on select', async () => {
+		spyOn(atom.clipboard, 'write')
+		this.element.model.profile.copyOnSelect = true
+		await new Promise(resolve => this.element.terminal.write('test', resolve))
+		this.element.terminal.selectLines(0, 0)
+		const selection = this.element.terminal.getSelection()
+		expect(atom.clipboard.write).toHaveBeenCalledWith(selection)
+	})
+
+	it('does not copy on clear selection', async () => {
+		spyOn(atom.clipboard, 'write')
+		this.element.model.profile.copyOnSelect = true
+		await new Promise(resolve => this.element.terminal.write('test', resolve))
+		this.element.terminal.selectLines(0, 0)
+		atom.clipboard.write.calls.reset()
+		this.element.terminal.clearSelection()
+		expect(atom.clipboard.write).not.toHaveBeenCalled()
+	})
+
+	it('does not copy if copyOnSelect is false', async () => {
+		spyOn(atom.clipboard, 'write')
+		this.element.model.profile.copyOnSelect = false
+		await new Promise(resolve => this.element.terminal.write('test', resolve))
+		this.element.terminal.selectLines(0, 0)
+		expect(atom.clipboard.write).not.toHaveBeenCalled()
+	})
+
 	it('getXtermOptions() default options', () => {
 		const expected = {
 			cursorBlink: true,
