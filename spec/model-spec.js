@@ -456,6 +456,13 @@ describe('XTerminalModel', () => {
 		expect(this.model.element.terminal.getSelection).toHaveBeenCalled()
 	})
 
+	it('runCommand(cmd)', () => {
+		this.model.element = this.element
+		const expectedText = 'some text'
+		this.model.runCommand(expectedText)
+		expect(this.model.element.ptyProcess.write.calls.allArgs()).toEqual([[expectedText + (process.platform === 'win32' ? '\r' : '\n')]])
+	})
+
 	it('pasteToTerminal(text)', () => {
 		this.model.element = this.element
 		const expectedText = 'some text'
