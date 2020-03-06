@@ -172,6 +172,7 @@ class XTerminalSingleton {
 			'x-terminal:reorganize-right-dock': () => this.reorganize('right-dock'),
 			'x-terminal:close-all': () => this.exitAllTerminals(),
 			'x-terminal:insert-selected-text': () => this.insertSelection(),
+			'x-terminal:run-selected-text': () => this.runSelection(),
 		}))
 		this.disposables.add(atom.commands.add('x-terminal', {
 			'x-terminal:close': () => this.close(),
@@ -269,6 +270,14 @@ class XTerminalSingleton {
 		const terminal = this.getActiveTerminal()
 		if (selection && terminal) {
 			terminal.pasteToTerminal(selection)
+		}
+	}
+
+	runSelection () {
+		const selection = this.getSelectedText()
+		const terminal = this.getActiveTerminal()
+		if (selection && terminal) {
+			terminal.runCommand(selection)
 		}
 	}
 
