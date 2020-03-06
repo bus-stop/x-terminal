@@ -461,11 +461,22 @@ class XTerminalElementImpl extends HTMLElement {
 		this.refitTerminal()
 		this.ptyProcess = null
 		this.ptyProcessRunning = false
-		this.terminal.onData((data) => {
+		this.disposables.add(this.terminal.onData((data) => {
 			if (this.isPtyProcessRunning()) {
 				this.ptyProcess.write(data)
 			}
-		})
+		}))
+		this.disposables.add(this.terminal.onSelectionChange(() => {
+			if (this.model.profile.copyOnSelect) {
+				let text = this.terminal.getSelection()
+				if (text) {
+					const rawLines = text.split(/\r?\n/g)
+					const lines = rawLines.map(line => line.replace(/\s/g, ' ').trimRight())
+					text = lines.join('\n')
+					atom.clipboard.write(text)
+				}
+			}
+		}))
 		this.disposables.add(this.profilesSingleton.onDidResetBaseProfile((baseProfile) => {
 			const frontEndSettings = {}
 			for (const data of CONFIG_DATA) {
