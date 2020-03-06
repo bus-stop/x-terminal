@@ -171,6 +171,7 @@ class XTerminalSingleton {
 			'x-terminal:reorganize-left-dock': () => this.reorganize('left-dock'),
 			'x-terminal:reorganize-right-dock': () => this.reorganize('right-dock'),
 			'x-terminal:close-all': () => this.exitAllTerminals(),
+			'x-terminal:insert-selected-text': () => this.insertSelection(),
 		}))
 		this.disposables.add(atom.commands.add('x-terminal', {
 			'x-terminal:close': () => this.close(),
@@ -233,6 +234,41 @@ class XTerminalSingleton {
 	exitAllTerminals () {
 		for (const terminal of this.terminals_set) {
 			terminal.exit()
+		}
+	}
+
+	getSelectedText () {
+		const editor = atom.workspace.getActiveTextEditor()
+		if (!editor) {
+			return ''
+		}
+
+		let selectedText = ''
+		const selection = editor.getSelectedText()
+		if (selection) {
+			selectedText = selection
+		} else {
+			const cursor = editor.getCursorBufferPosition()
+			if (cursor) {
+				const line = editor.lineTextForBufferRow(cursor.row)
+				selectedText = line
+				editor.moveDown(1)
+			}
+		}
+
+		return selectedText
+	}
+
+	getActiveTerminal () {
+		const terminals = [...this.terminals_set]
+		return terminals.find(t => t.isActive())
+	}
+
+	insertSelection () {
+		const selection = this.getSelectedText()
+		const terminal = this.getActiveTerminal()
+		if (selection && terminal) {
+			terminal.pasteToTerminal(selection)
 		}
 	}
 

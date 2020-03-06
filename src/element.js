@@ -704,6 +704,7 @@ class XTerminalElementImpl extends HTMLElement {
 
 	focusOnTerminal () {
 		if (this.terminal) {
+			this.model.setActive()
 			this.terminal.focus()
 		}
 	}

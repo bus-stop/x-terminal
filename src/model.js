@@ -48,6 +48,7 @@ class XTerminalModel {
 		this.profilesSingleton = XTerminalProfilesSingleton.instance
 		this.profile = this.profilesSingleton.createProfileDataFromUri(this.uri)
 		this.terminals_set = this.options.terminals_set
+		this.active = false
 		this.element = null
 		this.pane = null
 		this.title = DEFAULT_TITLE
@@ -228,6 +229,17 @@ class XTerminalModel {
 
 	pasteToTerminal (text) {
 		this.element.ptyProcess.write(text)
+	}
+
+	setActive () {
+		for (const terminal of this.terminals_set) {
+			terminal.active = false
+		}
+		this.active = true
+	}
+
+	isActive () {
+		return this.active
 	}
 
 	setNewPane (pane) {
