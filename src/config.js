@@ -77,6 +77,7 @@ export function resetConfigDefaults () {
 		title: '',
 		xtermOptions: '{}',
 		promptToStartup: false,
+		copyOnSelect: false,
 		apiOpenPosition: 'Center',
 	}
 }
@@ -763,6 +764,21 @@ export const config = configOrder({
 					fromUrlParam: (val) => JSON.parse(val),
 					checkUrlParam: (val) => (val !== null && val !== ''),
 					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.terminalSettings.promptToStartup', configDefaults.promptToStartup),
+					fromMenuSetting: (element, baseValue) => element.checked,
+					toMenuSetting: (val) => val,
+				},
+			},
+			copyOnSelect: {
+				title: 'Copy On Select',
+				description: 'Copy text to clipboard on selection.',
+				type: 'boolean',
+				default: configDefaults.copyOnSelect,
+				profileData: {
+					defaultProfile: configDefaults.copyOnSelect,
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => (val !== null && val !== ''),
+					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.terminalSettings.copyOnSelect', configDefaults.copyOnSelect),
 					fromMenuSetting: (element, baseValue) => element.checked,
 					toMenuSetting: (val) => val,
 				},
