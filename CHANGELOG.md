@@ -1,3 +1,10 @@
+## [8.0.9](https://github.com/bus-stop/x-terminal/compare/v8.0.8...v8.0.9) (2020-03-06)
+
+
+### Bug Fixes
+
+* add model.runCommand ([#22](https://github.com/bus-stop/x-terminal/issues/22)) ([0fad61d](https://github.com/bus-stop/x-terminal/commit/0fad61d0f904fc978b6085cb405cbd2333ed4591))
+
 ## [8.0.8](https://github.com/bus-stop/x-terminal/compare/v8.0.7...v8.0.8) (2020-03-05)
 
 
