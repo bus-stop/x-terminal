@@ -19,7 +19,6 @@
  */
 
 import { CompositeDisposable } from 'atom'
-import os from 'os'
 
 import { CONFIG_DATA } from './config'
 import { XTerminalElement } from './element'
@@ -282,7 +281,7 @@ class XTerminalSingleton {
 		)
 		await model.element.initializedPromise
 		for (const command of commands) {
-			model.pasteToTerminal(command + os.EOL)
+			model.runCommand(command)
 		}
 	}
 
