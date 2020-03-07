@@ -1,3 +1,10 @@
+# [8.1.0](https://github.com/bus-stop/x-terminal/compare/v8.0.9...v8.1.0) (2020-03-07)
+
+
+### Features
+
+* add Copy on Select setting ([40f4e51](https://github.com/bus-stop/x-terminal/commit/40f4e51cc896556e2506e72a38a1fb9f485f8e86))
+
 ## [8.0.9](https://github.com/bus-stop/x-terminal/compare/v8.0.8...v8.0.9) (2020-03-06)
 
 
