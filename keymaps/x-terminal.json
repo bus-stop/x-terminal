@@ -10,7 +10,9 @@
     "ctrl-alt-shift-right": "x-terminal:open-split-right",
     "ctrl-alt-shift-i": "x-terminal:open-split-bottom-dock",
     "ctrl-alt-shift-u": "x-terminal:open-split-left-dock",
-    "ctrl-alt-shift-o": "x-terminal:open-split-right-dock"
+    "ctrl-alt-shift-o": "x-terminal:open-split-right-dock",
+    "ctrl-alt-r": "x-terminal:run-selected-text",
+    "ctrl-alt-i": "x-terminal:insert-selected-text"
   },
   ".platform-win32 atom-workspace": {
     "ctrl-`": "x-terminal:open",
@@ -23,7 +25,9 @@
     "ctrl-alt-shift-right": "x-terminal:open-split-right",
     "ctrl-alt-shift-i": "x-terminal:open-split-bottom-dock",
     "ctrl-alt-shift-u": "x-terminal:open-split-left-dock",
-    "ctrl-alt-shift-o": "x-terminal:open-split-right-dock"
+    "ctrl-alt-shift-o": "x-terminal:open-split-right-dock",
+    "ctrl-alt-r": "x-terminal:run-selected-text",
+    "ctrl-alt-i": "x-terminal:insert-selected-text"
   },
   ".platform-darwin atom-workspace": {
     "cmd-`": "x-terminal:open",
@@ -36,7 +40,9 @@
     "cmd-alt-shift-right": "x-terminal:open-split-right",
     "cmd-alt-shift-i": "x-terminal:open-split-bottom-dock",
     "cmd-alt-shift-u": "x-terminal:open-split-left-dock",
-    "cmd-alt-shift-o": "x-terminal:open-split-right-dock"
+    "cmd-alt-shift-o": "x-terminal:open-split-right-dock",
+    "cmd-alt-r": "x-terminal:run-selected-text",
+    "cmd-alt-i": "x-terminal:insert-selected-text"
   },
   ".platform-linux x-terminal": {
     "ctrl-insert": "x-terminal:copy",
