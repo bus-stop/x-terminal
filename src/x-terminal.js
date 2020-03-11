@@ -3,6 +3,8 @@
 /*
  * Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * Copyright 2017-2018 Andres Mejia <amejia004@gmail.com>. All Rights Reserved.
+ * Copyright (c) 2020 UziTech All Rights Reserved.
+ * Copyright (c) 2020 bus-stop All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
