@@ -360,11 +360,9 @@ terminals.
 
 # Credits and Legal
 
-See the [NOTICE](NOTICE) and [LICENSE](LICENSE) files for copyright and license
-info about this package respectively.
+Click for copyright and license info about this package.
 
-See the [THIRD-PARTY](THIRD-PARTY) file for info about the dependencies used in
-the x-terminal package.
+[![LICENSE and © INFO](https://img.shields.io/badge/©%20&#38;%20LICENSE-MIT-blue.svg?longCache=true&style=flat-square)](LICENSE)
 
 # Feedback
 
