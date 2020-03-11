@@ -120,7 +120,7 @@ export const config = configOrder({
 			},
 			args: {
 				title: 'Arguments',
-				description: 'Arguments to pass to command, must be in a JSON array.',
+				description: 'Arguments to pass to command, must be in a [JSON array](https://www.w3schools.com/JS/js_json_arrays.asp).',
 				type: 'string',
 				default: configDefaults.args,
 				profileData: {
@@ -180,7 +180,7 @@ export const config = configOrder({
 			},
 			env: {
 				title: 'Environment',
-				description: 'The environment to use when launching command, must be in a JSON object. If not set, defaults to the current environment.',
+				description: 'The environment to use when launching command, must be in a [JSON object](https://www.w3schools.com/JS/js_json_objects.asp). If not set, defaults to the current environment.',
 				type: 'string',
 				default: configDefaults.env,
 				profileData: {
@@ -201,7 +201,7 @@ export const config = configOrder({
 			},
 			setEnv: {
 				title: 'Environment Overrides',
-				description: 'Environment variables to use in place of the Atom process environment, must be in a JSON object.',
+				description: 'Environment variables to use in place of the Atom process environment, must be in a [JSON object](https://www.w3schools.com/JS/js_json_objects.asp).',
 				type: 'string',
 				default: configDefaults.setEnv,
 				profileData: {
@@ -216,7 +216,7 @@ export const config = configOrder({
 			},
 			deleteEnv: {
 				title: 'Environment Deletions',
-				description: 'Environment variables to delete from original environment, must be in a JSON array.',
+				description: 'Environment variables to delete from original environment, must be in a [JSON array](https://www.w3schools.com/JS/js_json_arrays.asp).',
 				type: 'string',
 				default: configDefaults.deleteEnv,
 				profileData: {
