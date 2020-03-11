@@ -367,6 +367,7 @@ Click for copyright and license info about this package.
 # Feedback
 
 Need to submit a bug report? Have a new feature you want to see implemented in
-*x-terminal*? Please feel free to report them through the
-[issues page](https://github.com/bus-stop/x-terminal/issues). For bug reports,
-please also provide images or demos showing your issues if you can.
+*x-terminal*? Please feel free to submit them through the appropriate
+[issue template](https://github.com/bus-stop/x-terminal/issues/new/choose).
+
+For bug reports, please provide images or demos showing your issues if you can.
