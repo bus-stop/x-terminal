@@ -253,6 +253,7 @@ class XTerminalSingleton {
 			if (cursor) {
 				const line = editor.lineTextForBufferRow(cursor.row)
 				selectedText = line
+				editor.moveDown(1)
 			}
 		}
 
