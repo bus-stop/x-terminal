@@ -3,6 +3,7 @@
   "title": "X-Terminal",
   "main": "./src/x-terminal",
   "module": "./src/x-terminal",
+  "bugs": "https://github.com/bus-stop/x-terminal/issues/new/choose",
   "version": "8.1.0",
   "description": "An xterm based Atom plugin for providing terminals inside your Atom workspace. A fork of atom-xterm",
   "keywords": [
