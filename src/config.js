@@ -248,12 +248,12 @@ export const config = configOrder({
 	},
 	xtermAddons: {
 		title: 'xterm.js Addons',
-		description: 'Select the xterm.js Addons to enable',
+		description: 'Select the xterm.js addons to enable',
 		type: 'object',
 		properties: {
 			webgl: {
 				title: 'WebGL Renderer',
-				description: 'Enable the WebGL-based renderer using the xterm.js [WebGL Addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-webgl)',
+				description: 'Enable the WebGL-based renderer using the xterm.js [WebGL addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-webgl)',
 				type: 'boolean',
 				default: configDefaults.webgl,
 				profileData: {
@@ -268,7 +268,7 @@ export const config = configOrder({
 			},
 			webLinks: {
 				title: 'Web Links',
-				description: 'Enable clickable web links using the xterm.js [Web links Addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-web-links)',
+				description: 'Enable clickable web links using the xterm.js [Web links addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-web-links)',
 				type: 'boolean',
 				default: configDefaults.webLinks,
 				profileData: {
