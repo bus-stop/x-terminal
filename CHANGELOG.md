@@ -1,3 +1,10 @@
+## [8.1.1](https://github.com/bus-stop/x-terminal/compare/v8.1.0...v8.1.1) (2020-03-15)
+
+
+### Bug Fixes
+
+* **deps:** pin webgl addon to v0.5.0 ([6f17028](https://github.com/bus-stop/x-terminal/commit/6f1702894f86042edca8088c508f0fddce57d824)), closes [#28](https://github.com/bus-stop/x-terminal/issues/28)
+
 # [8.1.0](https://github.com/bus-stop/x-terminal/compare/v8.0.9...v8.1.0) (2020-03-07)
 
 
