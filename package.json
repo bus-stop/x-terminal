@@ -58,7 +58,7 @@
     "xterm": "^4.4.0",
     "xterm-addon-fit": "^0.3.0",
     "xterm-addon-web-links": "^0.2.1",
-    "xterm-addon-webgl": "0.5.0"
+    "xterm-addon-webgl": "0.6.0"
   },
   "devDependencies": {
     "@semantic-release/apm-config": "^8.0.0",
