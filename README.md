@@ -133,7 +133,7 @@ The `atom-xterm` service provides the
 [open()](https://github.com/atom/atom/blob/917a00e195b93c8c2a9adc349fd8fa1844f61dbc/src/workspace.js#L1076)
 method except that the first argument must be a JSON object describing the
 terminal profile that should be opened. Docs about this JSON object can be
-found [here](https://github.com/bus-stop/x-terminal/blob/master/src/profiles.js#L311).
+found [here](https://github.com/bus-stop/x-terminal/blob/42ddb71523a393178cacabca17b38d681b87f292/src/config.js#L25).
 
 As an example on how to use the provided `openTerminal()` method, your
 `package.json` should have the following.
