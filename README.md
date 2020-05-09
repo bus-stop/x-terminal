@@ -187,7 +187,7 @@ this.atomXtermService.openTerminal({
 
 ### 'platformioIDETerminal' service v1.1.0
 
-The `platformioIDETerminal` service provides an [object](https://github.com/bus-stop/x-terminal/blob/2a7762b6d29abdc017af17c320b2e548cd14e4a9/src/x-terminal.js#L381) with `updateProcessEnv`, `run`, `getTerminalViews`, and `open` methods.
+The `platformioIDETerminal` service provides an [object](https://github.com/bus-stop/x-terminal/blob/42ddb71523a393178cacabca17b38d681b87f292/src/x-terminal.js#L365) with `updateProcessEnv`, `run`, `getTerminalViews`, and `open` methods.
 
 As an example on how to use the provided `run()` method, your
 `package.json` should have the following.
