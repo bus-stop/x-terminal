@@ -129,11 +129,11 @@ rather a JavaScript object that provides methods to open terminals and run comma
 ### 'atom-xterm' service v2.0.0
 
 The `atom-xterm` service provides the
-[openTerminal()](https://github.com/bus-stop/x-terminal/blob/2a7762b6d29abdc017af17c320b2e548cd14e4a9/src/x-terminal.js#L273) method. The `openTerminal()` method behaves just like Atom's
+[openTerminal()](https://github.com/bus-stop/x-terminal/blob/42ddb71523a393178cacabca17b38d681b87f292/src/x-terminal.js#L262) method. The `openTerminal()` method behaves just like Atom's
 [open()](https://github.com/atom/atom/blob/917a00e195b93c8c2a9adc349fd8fa1844f61dbc/src/workspace.js#L1076)
 method except that the first argument must be a JSON object describing the
 terminal profile that should be opened. Docs about this JSON object can be
-found [here](https://github.com/bus-stop/x-terminal/blob/2a7762b6d29abdc017af17c320b2e548cd14e4a9/src/profiles.js#L311).
+found [here](https://github.com/bus-stop/x-terminal/blob/42ddb71523a393178cacabca17b38d681b87f292/src/config.js#L25).
 
 As an example on how to use the provided `openTerminal()` method, your
 `package.json` should have the following.
