@@ -1,3 +1,10 @@
+## [8.1.10](https://github.com/bus-stop/x-terminal/compare/v8.1.9...v8.1.10) (2020-05-13)
+
+
+### Bug Fixes
+
+* **deps:** update xterm and addons ([#75](https://github.com/bus-stop/x-terminal/issues/75)) ([9f751a6](https://github.com/bus-stop/x-terminal/commit/9f751a6e668a19ab30489b7bf9a6130508b77f76))
+
 ## [8.1.9](https://github.com/bus-stop/x-terminal/compare/v8.1.8...v8.1.9) (2020-05-08)
 
 
