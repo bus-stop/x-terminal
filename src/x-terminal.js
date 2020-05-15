@@ -23,6 +23,7 @@
 import { CompositeDisposable } from 'atom'
 
 import { CONFIG_DATA } from './config'
+import { recalculateActive } from './utils'
 import { XTerminalElement } from './element'
 import { XTerminalModel, isXTerminalModel } from './model'
 import { X_TERMINAL_BASE_URI, XTerminalProfilesSingleton } from './profiles'
@@ -74,112 +75,145 @@ class XTerminalSingleton {
 			}))
 		}
 
-		// Register view provider for terminal emulator item.
-		this.disposables.add(atom.views.addViewProvider(XTerminalModel, (atomXtermModel) => {
-			const atomXtermElement = new XTerminalElement()
-			atomXtermElement.initialize(atomXtermModel)
-			return atomXtermElement
-		}))
+		this.disposables.add(
+			// Register view provider for terminal emulator item.
+			atom.views.addViewProvider(XTerminalModel, (atomXtermModel) => {
+				const atomXtermElement = new XTerminalElement()
+				atomXtermElement.initialize(atomXtermModel)
+				return atomXtermElement
+			}),
+			// Register view provider for terminal emulator profile menu item.
+			atom.views.addViewProvider(XTerminalProfileMenuModel, (atomXtermProfileMenuModel) => {
+				const atomXtermProfileMenuElement = new XTerminalProfileMenuElement()
+				atomXtermProfileMenuElement.initialize(atomXtermProfileMenuModel)
+				return atomXtermProfileMenuElement
+			}),
+			// Register view profile for modal items.
+			atom.views.addViewProvider(XTerminalDeleteProfileModel, (atomXtermDeleteProfileModel) => {
+				const atomXtermDeleteProfileElement = new XTerminalDeleteProfileElement()
+				atomXtermDeleteProfileElement.initialize(atomXtermDeleteProfileModel)
+				return atomXtermDeleteProfileElement
+			}),
+			atom.views.addViewProvider(XTerminalOverwriteProfileModel, (atomXtermOverwriteProfileModel) => {
+				const atomXtermOverwriteProfileElement = new XTerminalOverwriteProfileElement()
+				atomXtermOverwriteProfileElement.initialize(atomXtermOverwriteProfileModel)
+				return atomXtermOverwriteProfileElement
+			}),
+			atom.views.addViewProvider(XTerminalSaveProfileModel, (atomXtermSaveProfileModel) => {
+				const atomXtermSaveProfileElement = new XTerminalSaveProfileElement()
+				atomXtermSaveProfileElement.initialize(atomXtermSaveProfileModel)
+				return atomXtermSaveProfileElement
+			}),
 
-		// Register view provider for terminal emulator profile menu item.
-		this.disposables.add(atom.views.addViewProvider(XTerminalProfileMenuModel, (atomXtermProfileMenuModel) => {
-			const atomXtermProfileMenuElement = new XTerminalProfileMenuElement()
-			atomXtermProfileMenuElement.initialize(atomXtermProfileMenuModel)
-			return atomXtermProfileMenuElement
-		}))
-
-		// Register view profile for modal items.
-		this.disposables.add(atom.views.addViewProvider(XTerminalDeleteProfileModel, (atomXtermDeleteProfileModel) => {
-			const atomXtermDeleteProfileElement = new XTerminalDeleteProfileElement()
-			atomXtermDeleteProfileElement.initialize(atomXtermDeleteProfileModel)
-			return atomXtermDeleteProfileElement
-		}))
-		this.disposables.add(atom.views.addViewProvider(XTerminalOverwriteProfileModel, (atomXtermOverwriteProfileModel) => {
-			const atomXtermOverwriteProfileElement = new XTerminalOverwriteProfileElement()
-			atomXtermOverwriteProfileElement.initialize(atomXtermOverwriteProfileModel)
-			return atomXtermOverwriteProfileElement
-		}))
-		this.disposables.add(atom.views.addViewProvider(XTerminalSaveProfileModel, (atomXtermSaveProfileModel) => {
-			const atomXtermSaveProfileElement = new XTerminalSaveProfileElement()
-			atomXtermSaveProfileElement.initialize(atomXtermSaveProfileModel)
-			return atomXtermSaveProfileElement
-		}))
-
-		// Add opener for terminal emulator item.
-		this.disposables.add(atom.workspace.addOpener((uri) => {
-			if (uri.startsWith(X_TERMINAL_BASE_URI)) {
-				const item = new XTerminalModel({
-					uri: uri,
-					terminals_set: this.terminals_set,
-				})
-				return item
-			}
-		}))
-
-		// Set callback to run on current and future panes.
-		this.disposables.add(atom.workspace.observePanes((pane) => {
-			// In callback, set another callback to run on current and future items.
-			this.disposables.add(pane.observeItems((item) => {
-				// In callback, set current pane for terminal items.
-				if (isXTerminalModel(item)) {
-					item.setNewPane(pane)
+			// Add opener for terminal emulator item.
+			atom.workspace.addOpener((uri) => {
+				if (uri.startsWith(X_TERMINAL_BASE_URI)) {
+					const item = new XTerminalModel({
+						uri: uri,
+						terminals_set: this.terminals_set,
+					})
+					return item
 				}
-			}))
-		}))
+			}),
 
-		// Add callbacks to run for current and future active items on active panes.
-		this.disposables.add(atom.workspace.observeActivePaneItem((item) => {
-			// In callback, focus specifically on terminal when item is terminal item.
-			if (isXTerminalModel(item)) {
-				item.focusOnTerminal()
-			}
-		}))
+			// Set callback to run on current and future panes.
+			atom.workspace.observePanes((pane) => {
+				// In callback, set another callback to run on current and future items.
+				this.disposables.add(pane.observeItems((item) => {
+					// In callback, set current pane for terminal items.
+					if (isXTerminalModel(item)) {
+						item.setNewPane(pane)
+					}
+					recalculateActive(this.terminals_set)
+				}))
+				recalculateActive(this.terminals_set)
+			}),
 
-		// Add commands.
-		this.disposables.add(atom.commands.add('atom-workspace', {
-			'x-terminal:open': () => this.open(
-				this.profilesSingleton.generateNewUri(),
-				this.addDefaultPosition(),
-			),
-			'x-terminal:open-center': () => this.openInCenterOrDock(atom.workspace),
-			'x-terminal:open-split-up': () => this.open(
-				this.profilesSingleton.generateNewUri(),
-				{ split: 'up' },
-			),
-			'x-terminal:open-split-down': () => this.open(
-				this.profilesSingleton.generateNewUri(),
-				{ split: 'down' },
-			),
-			'x-terminal:open-split-left': () => this.open(
-				this.profilesSingleton.generateNewUri(),
-				{ split: 'left' },
-			),
-			'x-terminal:open-split-right': () => this.open(
-				this.profilesSingleton.generateNewUri(),
-				{ split: 'right' },
-			),
-			'x-terminal:open-split-bottom-dock': () => this.openInCenterOrDock(atom.workspace.getBottomDock()),
-			'x-terminal:open-split-left-dock': () => this.openInCenterOrDock(atom.workspace.getLeftDock()),
-			'x-terminal:open-split-right-dock': () => this.openInCenterOrDock(atom.workspace.getRightDock()),
-			'x-terminal:toggle-profile-menu': () => this.toggleProfileMenu(),
-			'x-terminal:reorganize': () => this.reorganize('current'),
-			'x-terminal:reorganize-top': () => this.reorganize('top'),
-			'x-terminal:reorganize-bottom': () => this.reorganize('bottom'),
-			'x-terminal:reorganize-left': () => this.reorganize('left'),
-			'x-terminal:reorganize-right': () => this.reorganize('right'),
-			'x-terminal:reorganize-bottom-dock': () => this.reorganize('bottom-dock'),
-			'x-terminal:reorganize-left-dock': () => this.reorganize('left-dock'),
-			'x-terminal:reorganize-right-dock': () => this.reorganize('right-dock'),
-			'x-terminal:close-all': () => this.exitAllTerminals(),
-			'x-terminal:insert-selected-text': () => this.insertSelection(),
-			'x-terminal:run-selected-text': () => this.runSelection(),
-		}))
-		this.disposables.add(atom.commands.add('x-terminal', {
-			'x-terminal:close': () => this.close(),
-			'x-terminal:restart': () => this.restart(),
-			'x-terminal:copy': () => this.copy(),
-			'x-terminal:paste': () => this.paste(),
-		}))
+			// Add callbacks to run for current and future active items on active panes.
+			atom.workspace.observeActivePaneItem((item) => {
+				// In callback, focus specifically on terminal when item is terminal item.
+				if (isXTerminalModel(item)) {
+					item.focusOnTerminal()
+				}
+				recalculateActive(this.terminals_set)
+			}),
+
+			atom.workspace.getRightDock().observeVisible((visible) => {
+				if (visible) {
+					const item = atom.workspace.getRightDock().getActivePaneItem()
+					if (isXTerminalModel(item)) {
+						item.focusOnTerminal()
+					}
+				}
+				recalculateActive(this.terminals_set)
+			}),
+
+			atom.workspace.getLeftDock().observeVisible((visible) => {
+				if (visible) {
+					const item = atom.workspace.getLeftDock().getActivePaneItem()
+					if (isXTerminalModel(item)) {
+						item.focusOnTerminal()
+					}
+				}
+				recalculateActive(this.terminals_set)
+			}),
+
+			atom.workspace.getBottomDock().observeVisible((visible) => {
+				if (visible) {
+					const item = atom.workspace.getBottomDock().getActivePaneItem()
+					if (isXTerminalModel(item)) {
+						item.focusOnTerminal()
+					}
+				}
+				recalculateActive(this.terminals_set)
+			}),
+
+			// Add commands.
+			atom.commands.add('atom-workspace', {
+				'x-terminal:open': () => this.open(
+					this.profilesSingleton.generateNewUri(),
+					this.addDefaultPosition(),
+				),
+				'x-terminal:open-center': () => this.openInCenterOrDock(atom.workspace),
+				'x-terminal:open-split-up': () => this.open(
+					this.profilesSingleton.generateNewUri(),
+					{ split: 'up' },
+				),
+				'x-terminal:open-split-down': () => this.open(
+					this.profilesSingleton.generateNewUri(),
+					{ split: 'down' },
+				),
+				'x-terminal:open-split-left': () => this.open(
+					this.profilesSingleton.generateNewUri(),
+					{ split: 'left' },
+				),
+				'x-terminal:open-split-right': () => this.open(
+					this.profilesSingleton.generateNewUri(),
+					{ split: 'right' },
+				),
+				'x-terminal:open-split-bottom-dock': () => this.openInCenterOrDock(atom.workspace.getBottomDock()),
+				'x-terminal:open-split-left-dock': () => this.openInCenterOrDock(atom.workspace.getLeftDock()),
+				'x-terminal:open-split-right-dock': () => this.openInCenterOrDock(atom.workspace.getRightDock()),
+				'x-terminal:toggle-profile-menu': () => this.toggleProfileMenu(),
+				'x-terminal:reorganize': () => this.reorganize('current'),
+				'x-terminal:reorganize-top': () => this.reorganize('top'),
+				'x-terminal:reorganize-bottom': () => this.reorganize('bottom'),
+				'x-terminal:reorganize-left': () => this.reorganize('left'),
+				'x-terminal:reorganize-right': () => this.reorganize('right'),
+				'x-terminal:reorganize-bottom-dock': () => this.reorganize('bottom-dock'),
+				'x-terminal:reorganize-left-dock': () => this.reorganize('left-dock'),
+				'x-terminal:reorganize-right-dock': () => this.reorganize('right-dock'),
+				'x-terminal:close-all': () => this.exitAllTerminals(),
+				'x-terminal:insert-selected-text': () => this.insertSelection(),
+				'x-terminal:run-selected-text': () => this.runSelection(),
+			}),
+			atom.commands.add('x-terminal', {
+				'x-terminal:close': () => this.close(),
+				'x-terminal:restart': () => this.restart(),
+				'x-terminal:copy': () => this.copy(),
+				'x-terminal:paste': () => this.paste(),
+			}),
+		)
 	}
 
 	deactivate () {
@@ -262,7 +296,7 @@ class XTerminalSingleton {
 
 	getActiveTerminal () {
 		const terminals = [...this.terminals_set]
-		return terminals.find(t => t.isActive())
+		return terminals.find(t => t.isActiveTerminal())
 	}
 
 	insertSelection () {

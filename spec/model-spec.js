@@ -243,6 +243,11 @@ describe('XTerminalModel', () => {
 		expect(this.model.getTitle()).toBe(expected)
 	})
 
+	it('getTitle() when active', () => {
+		spyOn(this.model, 'isActiveTerminal').and.returnValue(true)
+		expect(this.model.getTitle()).toBe('* X Terminal')
+	})
+
 	it('getElement()', () => {
 		const expected = { somekey: 'somevalue' }
 		this.model.element = expected
@@ -472,17 +477,112 @@ describe('XTerminalModel', () => {
 		expect(this.model.element.ptyProcess.write.calls.allArgs()).toEqual([[expectedText]])
 	})
 
-	it('setNewPane(event)', async () => {
+	it('setActive()', async function () {
+		const pane = atom.workspace.getCenter().getActivePane()
 		const uri = 'x-terminal://somesessionid/'
 		const terminalsSet = new Set()
-		const model = new XTerminalModel({
+		const model1 = new XTerminalModel({
 			uri: uri,
 			terminals_set: terminalsSet,
 		})
-		await model.initializedPromise
-		const expected = {}
-		model.setNewPane(expected)
-		expect(model.pane).toBe(expected)
+		await model1.initializedPromise
+		pane.addItem(model1)
+		model1.setNewPane(pane)
+		const model2 = new XTerminalModel({
+			uri: uri,
+			terminals_set: terminalsSet,
+		})
+		await model2.initializedPromise
+		pane.addItem(model2)
+		model2.setNewPane(pane)
+		expect(model1.activeIndex).toBe(0)
+		expect(model2.activeIndex).toBe(1)
+		model2.setActive()
+		expect(model1.activeIndex).toBe(1)
+		expect(model2.activeIndex).toBe(0)
+	})
+
+	describe('setNewPane', () => {
+		it('(mock)', async () => {
+			const expected = { getContainer: () => ({ getLocation: () => {} }) }
+			this.model.setNewPane(expected)
+			expect(this.model.pane).toBe(expected)
+			expect(this.model.dock).toBe(null)
+		})
+
+		it('(center)', async () => {
+			const pane = atom.workspace.getCenter().getActivePane()
+			this.model.setNewPane(pane)
+			expect(this.model.pane).toBe(pane)
+			expect(this.model.dock).toBe(null)
+		})
+
+		it('(left)', async () => {
+			const dock = atom.workspace.getLeftDock()
+			const pane = dock.getActivePane()
+			this.model.setNewPane(pane)
+			expect(this.model.pane).toBe(pane)
+			expect(this.model.dock).toBe(dock)
+		})
+
+		it('(right)', async () => {
+			const dock = atom.workspace.getRightDock()
+			const pane = dock.getActivePane()
+			this.model.setNewPane(pane)
+			expect(this.model.pane).toBe(pane)
+			expect(this.model.dock).toBe(dock)
+		})
+
+		it('(bottom)', async () => {
+			const dock = atom.workspace.getBottomDock()
+			const pane = dock.getActivePane()
+			this.model.setNewPane(pane)
+			expect(this.model.pane).toBe(pane)
+			expect(this.model.dock).toBe(dock)
+		})
+	})
+
+	it('isVisible() in pane', () => {
+		const pane = atom.workspace.getCenter().getActivePane()
+		this.model.setNewPane(pane)
+		expect(this.model.isVisible()).toBe(false)
+		pane.setActiveItem(this.model)
+		expect(this.model.isVisible()).toBe(true)
+	})
+
+	it('isVisible() in dock', () => {
+		const dock = atom.workspace.getBottomDock()
+		const pane = dock.getActivePane()
+		this.model.setNewPane(pane)
+		pane.setActiveItem(this.model)
+		expect(this.model.isVisible()).toBe(false)
+		dock.show()
+		expect(this.model.isVisible()).toBe(true)
+	})
+
+	it('isActiveTerminal() visible and active', () => {
+		this.model.activeIndex = 0
+		spyOn(this.model, 'isVisible').and.returnValue(true)
+		expect(this.model.isActiveTerminal()).toBe(true)
+	})
+
+	it('isActiveTerminal() visible and not active', () => {
+		this.model.activeIndex = 1
+		spyOn(this.model, 'isVisible').and.returnValue(true)
+		expect(this.model.isActiveTerminal()).toBe(false)
+	})
+
+	it('isActiveTerminal() invisible and active', () => {
+		this.model.activeIndex = 0
+		spyOn(this.model, 'isVisible').and.returnValue(false)
+		expect(this.model.isActiveTerminal()).toBe(false)
+	})
+
+	it('isActiveTerminal() allowHiddenToStayActive', () => {
+		atom.config.set('x-terminal.terminalSettings.allowHiddenToStayActive', true)
+		this.model.activeIndex = 0
+		spyOn(this.model, 'isVisible').and.returnValue(false)
+		expect(this.model.isActiveTerminal()).toBe(true)
 	})
 
 	it('toggleProfileMenu()', () => {

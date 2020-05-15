@@ -21,6 +21,7 @@
 
 import { Emitter } from 'atom'
 
+import { recalculateActive } from './utils'
 import { XTerminalProfilesSingleton } from './profiles'
 
 import fs from 'fs-extra'
@@ -48,7 +49,7 @@ class XTerminalModel {
 		this.profilesSingleton = XTerminalProfilesSingleton.instance
 		this.profile = this.profilesSingleton.createProfileDataFromUri(this.uri)
 		this.terminals_set = this.options.terminals_set
-		this.active = false
+		this.activeIndex = this.terminals_set.size
 		this.element = null
 		this.pane = null
 		this.title = DEFAULT_TITLE
@@ -126,7 +127,8 @@ class XTerminalModel {
 	}
 
 	getTitle () {
-		return this.title
+		return (this.isActiveTerminal() ? '* ' : '') + this.title
+		// return this.activeIndex + '|' + this.title
 	}
 
 	getElement () {
@@ -232,18 +234,33 @@ class XTerminalModel {
 	}
 
 	setActive () {
-		for (const terminal of this.terminals_set) {
-			terminal.active = false
-		}
-		this.active = true
+		recalculateActive(this.terminals_set, this)
 	}
 
-	isActive () {
-		return this.active
+	isVisible () {
+		return this.pane && this.pane.getActiveItem() === this && (!this.dock || this.dock.isVisible())
+	}
+
+	isActiveTerminal () {
+		return this.activeIndex === 0 && (atom.config.get('x-terminal.terminalSettings.allowHiddenToStayActive') || this.isVisible())
 	}
 
 	setNewPane (pane) {
 		this.pane = pane
+		const location = this.pane.getContainer().getLocation()
+		switch (location) {
+			case 'left':
+				this.dock = atom.workspace.getLeftDock()
+				break
+			case 'right':
+				this.dock = atom.workspace.getRightDock()
+				break
+			case 'bottom':
+				this.dock = atom.workspace.getBottomDock()
+				break
+			default:
+				this.dock = null
+		}
 	}
 
 	toggleProfileMenu () {
