@@ -281,7 +281,7 @@ class XTerminalSingleton {
 		let selectedText = ''
 		const selection = editor.getSelectedText()
 		if (selection) {
-			selectedText = selection
+			selectedText = selection.replace(/[\r\n]+$/, '')
 		} else {
 			const cursor = editor.getCursorBufferPosition()
 			if (cursor) {
@@ -569,6 +569,10 @@ class XTerminalSingleton {
 }
 
 export { config } from './config'
+
+export function getInstance () {
+	return XTerminalSingleton.instance
+}
 
 export function activate (state) {
 	return XTerminalSingleton.instance.activate(state)
