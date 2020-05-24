@@ -1,3 +1,10 @@
+# [8.2.0](https://github.com/bus-stop/x-terminal/compare/v8.1.12...v8.2.0) (2020-05-24)
+
+
+### Features
+
+* Add commands to insert/run selected text ([#23](https://github.com/bus-stop/x-terminal/issues/23)) ([c10301a](https://github.com/bus-stop/x-terminal/commit/c10301a02b11d244a5569edc11e50cd98f49f2bb))
+
 ## [8.1.12](https://github.com/bus-stop/x-terminal/compare/v8.1.11...v8.1.12) (2020-05-21)
 
 
