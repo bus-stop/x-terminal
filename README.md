@@ -81,6 +81,21 @@ text editor or on a terminal.
 Finally, terminal tabs are automatically reopened at the spot you placed them
 when you last exited Atom.
 
+## Active Terminal
+
+The active terminal is the terminal that will be used when sending commands to
+the terminal with commands like `x-terminal:insert-selected-text` and
+`x-terminal:run-selected-text`
+
+The active terminal will always have an astrix (`*`) in front of the title.
+By default when a terminal is hidden it becomes inactive and the last used
+visible terminal will become active. If there are no visible terminals none are
+active.
+
+The `Allow Hidden Terminal To Stay Active` setting will change the
+default behavior and keep a terminal that is hidden active until another
+terminal is focused.
+
 ## Organizing Terminals
 
 To quickly organize your terminal tabs, simply use the main menu. You can also

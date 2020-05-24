@@ -62,6 +62,7 @@ export function resetConfigDefaults () {
 		colorBrightMagenta: '#ad7fa8',
 		colorBrightCyan: '#34e2e2',
 		colorBrightWhite: '#eeeeec',
+		allowHiddenToStayActive: false,
 		leaveOpenAfterExit: true,
 		allowRelaunchingTerminalsOnStartup: true,
 		relaunchTerminalOnStartup: true,
@@ -383,6 +384,12 @@ export const config = configOrder({
 					fromMenuSetting: (element, baseValue) => element.checked,
 					toMenuSetting: (val) => val,
 				},
+			},
+			allowHiddenToStayActive: {
+				title: 'Allow Hidden Terminal To Stay Active',
+				description: 'When an active terminal is hidden keep it active until another terminal is focused.',
+				type: 'boolean',
+				default: configDefaults.allowHiddenToStayActive,
 			},
 			leaveOpenAfterExit: {
 				title: 'Leave Open After Exit',

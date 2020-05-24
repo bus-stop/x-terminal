@@ -43,4 +43,67 @@ describe('Utilities', () => {
 		expect(hLine.classList.contains('x-terminal-profile-menu-element-hline')).toBe(true)
 		expect(hLine.textContent).toBe('.')
 	})
+
+	describe('recalculateActive()', () => {
+		const createTerminals = (num = 1) => {
+			const terminals = []
+			for (let i = 0; i < num; i++) {
+				terminals.push({
+					activeIndex: i,
+					isVisible () {},
+					emitter: {
+						emit () {},
+					},
+				})
+			}
+			return terminals
+		}
+
+		it('active first', () => {
+			const terminals = createTerminals(2)
+			const terminalsSet = new Set(terminals)
+			utils.recalculateActive(terminalsSet, terminals[1])
+			expect(terminals[0].activeIndex).toBe(1)
+			expect(terminals[1].activeIndex).toBe(0)
+		})
+
+		it('visible before hidden', () => {
+			const terminals = createTerminals(2)
+			const terminalsSet = new Set(terminals)
+			spyOn(terminals[1], 'isVisible').and.returnValue(true)
+			utils.recalculateActive(terminalsSet)
+			expect(terminals[0].activeIndex).toBe(1)
+			expect(terminals[1].activeIndex).toBe(0)
+		})
+
+		it('allowHiddenToStayActive', () => {
+			atom.config.set('x-terminal.terminalSettings.allowHiddenToStayActive', true)
+			const terminals = createTerminals(2)
+			const terminalsSet = new Set(terminals)
+			spyOn(terminals[1], 'isVisible').and.returnValue(true)
+			utils.recalculateActive(terminalsSet)
+			expect(terminals[0].activeIndex).toBe(0)
+			expect(terminals[1].activeIndex).toBe(1)
+		})
+
+		it('lower active index first', () => {
+			const terminals = createTerminals(2)
+			const terminalsSet = new Set(terminals)
+			terminals[0].activeIndex = 1
+			terminals[1].activeIndex = 0
+			utils.recalculateActive(terminalsSet)
+			expect(terminals[0].activeIndex).toBe(1)
+			expect(terminals[1].activeIndex).toBe(0)
+		})
+
+		it('emit did-change-title', () => {
+			const terminals = createTerminals(2)
+			const terminalsSet = new Set(terminals)
+			spyOn(terminals[0].emitter, 'emit')
+			spyOn(terminals[1].emitter, 'emit')
+			utils.recalculateActive(terminalsSet)
+			expect(terminals[0].emitter.emit).toHaveBeenCalledWith('did-change-title')
+			expect(terminals[1].emitter.emit).toHaveBeenCalledWith('did-change-title')
+		})
+	})
 })

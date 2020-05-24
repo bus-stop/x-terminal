@@ -323,6 +323,12 @@ describe('Call to colorBrightWhite()', () => {
 	})
 })
 
+describe('Call to allowHiddenToStayActive()', () => {
+	it('return false', () => {
+		expect(configDefaults.allowHiddenToStayActive).toBe(false)
+	})
+})
+
 describe('Call to leaveOpenAfterExit()', () => {
 	it('return true', () => {
 		expect(configDefaults.leaveOpenAfterExit).toBe(true)

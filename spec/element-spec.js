@@ -1787,7 +1787,9 @@ describe('XTerminalElement', () => {
 
 	it('focusOnTerminal()', () => {
 		spyOn(this.element.terminal, 'focus')
+		spyOn(this.element.model, 'setActive')
 		this.element.focusOnTerminal()
+		expect(this.element.model.setActive).toHaveBeenCalled()
 		expect(this.element.terminal.focus).toHaveBeenCalled()
 	})
 
