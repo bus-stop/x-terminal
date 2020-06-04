@@ -1,3 +1,10 @@
+## [8.2.1](https://github.com/bus-stop/x-terminal/compare/v8.2.0...v8.2.1) (2020-06-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency fs-extra to ^9.0.1 ([#84](https://github.com/bus-stop/x-terminal/issues/84)) ([1469b84](https://github.com/bus-stop/x-terminal/commit/1469b840ffc8667578bc91b1af86a6e65179e7bb))
+
 # [8.2.0](https://github.com/bus-stop/x-terminal/compare/v8.1.12...v8.2.0) (2020-05-24)
 
 
