@@ -1,3 +1,11 @@
+## [8.2.2](https://github.com/bus-stop/x-terminal/compare/v8.2.1...v8.2.2) (2020-06-11)
+
+
+### Bug Fixes
+
+* remove temporary fix for selection opacity ([188a31a](https://github.com/bus-stop/x-terminal/commit/188a31ad2e91a6940e959cd09b019a426719ab25))
+* **deps:** update dependency x-term and addons ([9f304c6](https://github.com/bus-stop/x-terminal/commit/9f304c656d5c6395dc14b8a952f72cf0d93fe3c1))
+
 ## [8.2.1](https://github.com/bus-stop/x-terminal/compare/v8.2.0...v8.2.1) (2020-06-04)
 
 
