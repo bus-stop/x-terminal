@@ -400,27 +400,7 @@ class XTerminalElementImpl extends HTMLElement {
 			}
 		}
 
-		const webgl = ('webgl' in profile ? profile.webgl : this.model.profile.webgl)
-		if (!webgl) {
-			colors.selection = this.setMaximumOpacity(colors.selection, 0.5)
-		}
-
 		return colors
-	}
-
-	setMaximumOpacity (color, opacity) {
-		// modified from https://stackoverflow.com/a/24390910/806777
-		const cvs = document.createElement('canvas')
-		cvs.height = 1
-		cvs.width = 1
-		const ctx = cvs.getContext('2d')
-		ctx.fillStyle = color
-		ctx.fillRect(0, 0, 1, 1)
-		const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data
-		if (a / 255 <= opacity) {
-			return color
-		}
-		return `rgba(${r}, ${g}, ${b}, ${opacity})`
 	}
 
 	getXtermOptions () {
