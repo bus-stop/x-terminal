@@ -356,7 +356,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#000000',
 				foreground: '#ffffff',
-				selection: 'rgba(77, 77, 77, 0.5)',
+				selection: '#4d4d4d',
 				cursor: '#ffffff',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -391,7 +391,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#1d1f21',
 				foreground: '#c5c8c6',
-				selection: 'rgba(153, 153, 153, 0.5)',
+				selection: '#999999',
 				cursor: '#ffffff',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -426,7 +426,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#ffffff',
 				foreground: '#555555',
-				selection: 'rgba(175, 196, 218, 0.5)',
+				selection: '#afc4da',
 				cursor: '#000000',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -461,7 +461,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#1d1f21',
 				foreground: '#c5c8c6',
-				selection: 'rgba(180, 183, 180, 0.5)',
+				selection: '#b4b7b4',
 				// selectionForeground: '#e0e0e0',
 				cursor: '#ffffff',
 				cursorAccent: '#000000',
@@ -497,7 +497,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#ffffff',
 				foreground: '#1d1f21',
-				selection: 'rgba(40, 42, 46, 0.5)',
+				selection: '#282a2e',
 				// selectionForeground: '#e0e0e0',
 				cursor: '#1d1f21',
 				cursorAccent: '#000000',
@@ -533,7 +533,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#0c0047',
 				foreground: '#f81705',
-				selection: 'rgba(41, 143, 22, 0.5)',
+				selection: '#298f16',
 				cursor: '#009f59',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -568,7 +568,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#181d23',
 				foreground: '#666d81',
-				selection: 'rgba(42, 47, 56, 0.5)',
+				selection: '#2a2f38',
 				// selectionForeground: '#b7c5d3',
 				cursor: '#528bff',
 				cursorAccent: '#000000',
@@ -604,7 +604,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#1e1f29',
 				foreground: 'white',
-				selection: 'rgba(68, 71, 90, 0.5)',
+				selection: '#44475a',
 				cursor: '#999999',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -639,7 +639,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: 'rgb(19, 119, 61)',
 				foreground: 'rgb(255, 240, 165)',
-				selection: 'rgba(181, 73, 37, 0.5)',
+				selection: 'rgba(182, 73, 38, .99)',
 				cursor: 'rgb(142, 40, 0)',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -674,7 +674,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#000000',
 				foreground: 'rgb(41, 254, 20)',
-				selection: 'rgba(6, 29, 155, 0.5)',
+				selection: 'rgba(7, 30, 155, .99)',
 				cursor: 'rgb(55, 254, 38)',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -709,7 +709,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#ffffff',
 				foreground: '#000000',
-				selection: 'rgba(177, 215, 255, 0.5)',
+				selection: 'rgba(178, 215, 255, .99)',
 				cursor: 'rgb(146, 146, 146)',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -744,7 +744,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#000000',
 				foreground: 'rgb(230, 230, 230)',
-				selection: 'rgba(155, 29, 6, 0.5)',
+				selection: 'rgba(155, 30, 7, .99)',
 				cursor: 'rgb(200, 20, 25)',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -779,7 +779,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: 'rgb(254, 244, 156)',
 				foreground: 'black',
-				selection: 'rgba(177, 215, 255, 0.5)',
+				selection: 'rgba(178, 215, 255, .99)',
 				cursor: 'rgb(146, 146, 146)',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -814,7 +814,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: 'rgb(223, 219, 196)',
 				foreground: 'rgb(77, 47, 46)',
-				selection: 'rgba(155, 153, 121, 0.5)',
+				selection: 'rgba(155, 153, 122, .99)',
 				cursor: 'rgb(115, 99, 89)',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -849,7 +849,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: 'rgb(44, 102, 201)',
 				foreground: 'white',
-				selection: 'rgba(40, 134, 255, 0.5)',
+				selection: 'rgba(41, 134, 255, .99)',
 				cursor: 'rgb(146, 146, 146)',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -884,7 +884,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#282c34',
 				foreground: '#abb2bf',
-				selection: 'rgba(145, 150, 161, 0.5)',
+				selection: '#9196a1',
 				cursor: '#528bff',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -919,7 +919,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: 'hsl(230, 1%, 98%)',
 				foreground: 'hsl(230, 8%, 24%)',
-				selection: 'rgba(229, 229, 230, 0.5)',
+				selection: 'hsl(230, 1%, 90%)',
 				cursor: 'hsl(230, 100%, 66%)',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -989,7 +989,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#000000',
 				foreground: 'rgb(244, 244, 244)',
-				selection: 'rgba(82, 82, 82, 0.5)',
+				selection: 'rgba(82, 82, 82, .99)',
 				cursor: 'rgb(96, 96, 96)',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -1024,7 +1024,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: 'rgb(143, 53, 39)',
 				foreground: 'rgb(215, 201, 167)',
-				selection: 'rgba(60, 24, 21, 0.5)',
+				selection: 'rgba(60, 25, 22, .99)',
 				cursor: 'white',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -1059,7 +1059,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#000000',
 				foreground: 'rgb(255, 38, 14)',
-				selection: 'rgba(6, 29, 155, 0.5)',
+				selection: 'rgba(7, 30, 155, .99)',
 				cursor: 'rgb(255, 38, 14)',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -1094,7 +1094,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: 'rgb(146, 146, 146)',
 				foreground: '#000000',
-				selection: 'rgba(119, 122, 156, 0.5)',
+				selection: 'rgba(120, 123, 156, .99)',
 				cursor: 'rgb(224, 224, 224)',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -1129,7 +1129,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#042029',
 				foreground: '#708284',
-				selection: 'rgba(131, 148, 150, 0.5)',
+				selection: '#839496',
 				cursor: '#819090',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -1164,7 +1164,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: '#fdf6e3',
 				foreground: '#657a81',
-				selection: 'rgba(236, 231, 213, 0.5)',
+				selection: '#ece7d5',
 				cursor: '#586e75',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -1199,7 +1199,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: 'rgb(120, 132, 151)',
 				foreground: '#000000',
-				selection: 'rgba(177, 215, 255, 0.5)',
+				selection: 'rgba(178, 215, 255, .99)',
 				cursor: '#ffffff',
 				cursorAccent: '#000000',
 				black: '#2e3436',
@@ -1235,7 +1235,7 @@ describe('XTerminalElement', () => {
 			expect(theme).toEqual({
 				background: root.getPropertyValue('--standard-app-background-color'),
 				foreground: root.getPropertyValue('--standard-text-color'),
-				selection: 'rgba(0, 0, 0, 0.5)',
+				selection: root.getPropertyValue('--standard-background-color-selected'),
 				cursor: root.getPropertyValue('--standard-text-color-highlight'),
 				cursorAccent: '#000000',
 				black: '#2e3436',
