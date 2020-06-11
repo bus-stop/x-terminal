@@ -378,13 +378,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Custom webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Custom' })
-			expect(webgltheme.selection).toBe('#4d4d4d')
-		})
+		if (process.platform !== 'linux') {
+			it('Custom webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Custom' })
+				expect(webgltheme.selection).toBe('#4d4d4d')
+			})
+		}
 
 		it('Atom Dark', () => {
 			const theme = this.element.getTheme({ theme: 'Atom Dark' })
@@ -413,13 +415,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Atom Dark webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Atom Dark' })
-			expect(webgltheme.selection).toBe('#999999')
-		})
+		if (process.platform !== 'linux') {
+			it('Atom Dark webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Atom Dark' })
+				expect(webgltheme.selection).toBe('#999999')
+			})
+		}
 
 		it('Atom Light', () => {
 			const theme = this.element.getTheme({ theme: 'Atom Light' })
@@ -448,13 +452,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Atom Light webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Atom Light' })
-			expect(webgltheme.selection).toBe('#afc4da')
-		})
+		if (process.platform !== 'linux') {
+			it('Atom Light webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Atom Light' })
+				expect(webgltheme.selection).toBe('#afc4da')
+			})
+		}
 
 		it('Base16 Tomorrow Dark', () => {
 			const theme = this.element.getTheme({ theme: 'Base16 Tomorrow Dark' })
@@ -484,13 +490,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Base16 Tomorrow Dark webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Base16 Tomorrow Dark' })
-			expect(webgltheme.selection).toBe('#b4b7b4')
-		})
+		if (process.platform !== 'linux') {
+			it('Base16 Tomorrow Dark webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Base16 Tomorrow Dark' })
+				expect(webgltheme.selection).toBe('#b4b7b4')
+			})
+		}
 
 		it('Base16 Tomorrow Light', () => {
 			const theme = this.element.getTheme({ theme: 'Base16 Tomorrow Light' })
@@ -520,13 +528,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Base16 Tomorrow Light webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Base16 Tomorrow Light' })
-			expect(webgltheme.selection).toBe('#282a2e')
-		})
+		if (process.platform !== 'linux') {
+			it('Base16 Tomorrow Light webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Base16 Tomorrow Light' })
+				expect(webgltheme.selection).toBe('#282a2e')
+			})
+		}
 
 		it('Christmas', () => {
 			const theme = this.element.getTheme({ theme: 'Christmas' })
@@ -555,13 +565,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Christmas webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Christmas' })
-			expect(webgltheme.selection).toBe('#298f16')
-		})
+		if (process.platform !== 'linux') {
+			it('Christmas webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Christmas' })
+				expect(webgltheme.selection).toBe('#298f16')
+			})
+		}
 
 		it('City Lights', () => {
 			const theme = this.element.getTheme({ theme: 'City Lights' })
@@ -591,13 +603,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('City Lights webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'City Lights' })
-			expect(webgltheme.selection).toBe('#2a2f38')
-		})
+		if (process.platform !== 'linux') {
+			it('City Lights webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'City Lights' })
+				expect(webgltheme.selection).toBe('#2a2f38')
+			})
+		}
 
 		it('Dracula', () => {
 			const theme = this.element.getTheme({ theme: 'Dracula' })
@@ -626,13 +640,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Dracula webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Dracula' })
-			expect(webgltheme.selection).toBe('#44475a')
-		})
+		if (process.platform !== 'linux') {
+			it('Dracula webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Dracula' })
+				expect(webgltheme.selection).toBe('#44475a')
+			})
+		}
 
 		it('Grass', () => {
 			const theme = this.element.getTheme({ theme: 'Grass' })
@@ -661,13 +677,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Grass webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Grass' })
-			expect(webgltheme.selection).toBe('rgba(182, 73, 38, .99)')
-		})
+		if (process.platform !== 'linux') {
+			it('Grass webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Grass' })
+				expect(webgltheme.selection).toBe('rgba(182, 73, 38, .99)')
+			})
+		}
 
 		it('Homebrew', () => {
 			const theme = this.element.getTheme({ theme: 'Homebrew' })
@@ -696,13 +714,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Homebrew webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Homebrew' })
-			expect(webgltheme.selection).toBe('rgba(7, 30, 155, .99)')
-		})
+		if (process.platform !== 'linux') {
+			it('Homebrew webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Homebrew' })
+				expect(webgltheme.selection).toBe('rgba(7, 30, 155, .99)')
+			})
+		}
 
 		it('Inverse', () => {
 			const theme = this.element.getTheme({ theme: 'Inverse' })
@@ -731,13 +751,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Inverse webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Inverse' })
-			expect(webgltheme.selection).toBe('rgba(178, 215, 255, .99)')
-		})
+		if (process.platform !== 'linux') {
+			it('Inverse webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Inverse' })
+				expect(webgltheme.selection).toBe('rgba(178, 215, 255, .99)')
+			})
+		}
 
 		it('Linux', () => {
 			const theme = this.element.getTheme({ theme: 'Linux' })
@@ -766,13 +788,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Linux webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Linux' })
-			expect(webgltheme.selection).toBe('rgba(155, 30, 7, .99)')
-		})
+		if (process.platform !== 'linux') {
+			it('Linux webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Linux' })
+				expect(webgltheme.selection).toBe('rgba(155, 30, 7, .99)')
+			})
+		}
 
 		it('Man Page', () => {
 			const theme = this.element.getTheme({ theme: 'Man Page' })
@@ -801,13 +825,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Man Page webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Man Page' })
-			expect(webgltheme.selection).toBe('rgba(178, 215, 255, .99)')
-		})
+		if (process.platform !== 'linux') {
+			it('Man Page webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Man Page' })
+				expect(webgltheme.selection).toBe('rgba(178, 215, 255, .99)')
+			})
+		}
 
 		it('Novel', () => {
 			const theme = this.element.getTheme({ theme: 'Novel' })
@@ -836,13 +862,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Novel webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Novel' })
-			expect(webgltheme.selection).toBe('rgba(155, 153, 122, .99)')
-		})
+		if (process.platform !== 'linux') {
+			it('Novel webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Novel' })
+				expect(webgltheme.selection).toBe('rgba(155, 153, 122, .99)')
+			})
+		}
 
 		it('Ocean', () => {
 			const theme = this.element.getTheme({ theme: 'Ocean' })
@@ -871,13 +899,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Ocean webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Ocean' })
-			expect(webgltheme.selection).toBe('rgba(41, 134, 255, .99)')
-		})
+		if (process.platform !== 'linux') {
+			it('Ocean webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Ocean' })
+				expect(webgltheme.selection).toBe('rgba(41, 134, 255, .99)')
+			})
+		}
 
 		it('One Dark', () => {
 			const theme = this.element.getTheme({ theme: 'One Dark' })
@@ -906,13 +936,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('One Dark webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'One Dark' })
-			expect(webgltheme.selection).toBe('#9196a1')
-		})
+		if (process.platform !== 'linux') {
+			it('One Dark webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'One Dark' })
+				expect(webgltheme.selection).toBe('#9196a1')
+			})
+		}
 
 		it('One Light', () => {
 			const theme = this.element.getTheme({ theme: 'One Light' })
@@ -941,13 +973,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('One Light webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'One Light' })
-			expect(webgltheme.selection).toBe('hsl(230, 1%, 90%)')
-		})
+		if (process.platform !== 'linux') {
+			it('One Light webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'One Light' })
+				expect(webgltheme.selection).toBe('hsl(230, 1%, 90%)')
+			})
+		}
 
 		it('Predawn', () => {
 			const theme = this.element.getTheme({ theme: 'Predawn' })
@@ -976,13 +1010,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Predawn webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Predawn' })
-			expect(webgltheme.selection).toBe('rgba(255,255,255,0.25)')
-		})
+		if (process.platform !== 'linux') {
+			it('Predawn webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Predawn' })
+				expect(webgltheme.selection).toBe('rgba(255,255,255,0.25)')
+			})
+		}
 
 		it('Pro', () => {
 			const theme = this.element.getTheme({ theme: 'Pro' })
@@ -1011,13 +1047,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Pro webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Pro' })
-			expect(webgltheme.selection).toBe('rgba(82, 82, 82, .99)')
-		})
+		if (process.platform !== 'linux') {
+			it('Pro webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Pro' })
+				expect(webgltheme.selection).toBe('rgba(82, 82, 82, .99)')
+			})
+		}
 
 		it('Red Sands', () => {
 			const theme = this.element.getTheme({ theme: 'Red Sands' })
@@ -1046,13 +1084,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Red Sands webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Red Sands' })
-			expect(webgltheme.selection).toBe('rgba(60, 25, 22, .99)')
-		})
+		if (process.platform !== 'linux') {
+			it('Red Sands webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Red Sands' })
+				expect(webgltheme.selection).toBe('rgba(60, 25, 22, .99)')
+			})
+		}
 
 		it('Red', () => {
 			const theme = this.element.getTheme({ theme: 'Red' })
@@ -1081,13 +1121,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Red webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Red' })
-			expect(webgltheme.selection).toBe('rgba(7, 30, 155, .99)')
-		})
+		if (process.platform !== 'linux') {
+			it('Red webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Red' })
+				expect(webgltheme.selection).toBe('rgba(7, 30, 155, .99)')
+			})
+		}
 
 		it('Silver Aerogel', () => {
 			const theme = this.element.getTheme({ theme: 'Silver Aerogel' })
@@ -1116,13 +1158,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Silver Aerogel webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Silver Aerogel' })
-			expect(webgltheme.selection).toBe('rgba(120, 123, 156, .99)')
-		})
+		if (process.platform !== 'linux') {
+			it('Silver Aerogel webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Silver Aerogel' })
+				expect(webgltheme.selection).toBe('rgba(120, 123, 156, .99)')
+			})
+		}
 
 		it('Solarized Dark', () => {
 			const theme = this.element.getTheme({ theme: 'Solarized Dark' })
@@ -1151,13 +1195,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Solarized Dark webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Solarized Dark' })
-			expect(webgltheme.selection).toBe('#839496')
-		})
+		if (process.platform !== 'linux') {
+			it('Solarized Dark webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Solarized Dark' })
+				expect(webgltheme.selection).toBe('#839496')
+			})
+		}
 
 		it('Solarized Light', () => {
 			const theme = this.element.getTheme({ theme: 'Solarized Light' })
@@ -1186,13 +1232,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Solarized Light webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Solarized Light' })
-			expect(webgltheme.selection).toBe('#ece7d5')
-		})
+		if (process.platform !== 'linux') {
+			it('Solarized Light webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Solarized Light' })
+				expect(webgltheme.selection).toBe('#ece7d5')
+			})
+		}
 
 		it('Solid Colors', () => {
 			const theme = this.element.getTheme({ theme: 'Solid Colors' })
@@ -1221,13 +1269,15 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Solid Colors webgl selection', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Solid Colors' })
-			expect(webgltheme.selection).toBe('rgba(178, 215, 255, .99)')
-		})
+		if (process.platform !== 'linux') {
+			it('Solid Colors webgl selection', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Solid Colors' })
+				expect(webgltheme.selection).toBe('rgba(178, 215, 255, .99)')
+			})
+		}
 
 		it('Standard', () => {
 			const theme = this.element.getTheme({ theme: 'Standard' })
@@ -1257,14 +1307,16 @@ describe('XTerminalElement', () => {
 			})
 		})
 
-		it('Standard webgl selection', async () => {
-			const root = getComputedStyle(document.documentElement)
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			const element = await createNewElement(url.href)
-			const webgltheme = element.getTheme({ theme: 'Standard' })
-			expect(webgltheme.selection).toBe(root.getPropertyValue('--standard-background-color-selected'))
-		})
+		if (process.platform !== 'linux') {
+			it('Standard webgl selection', async () => {
+				const root = getComputedStyle(document.documentElement)
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				const element = await createNewElement(url.href)
+				const webgltheme = element.getTheme({ theme: 'Standard' })
+				expect(webgltheme.selection).toBe(root.getPropertyValue('--standard-background-color-selected'))
+			})
+		}
 	})
 
 	it('createTerminal() check terminal object', () => {
@@ -1304,15 +1356,17 @@ describe('XTerminalElement', () => {
 			expect(wasAdded).toBe(false)
 		})
 
-		it('createTerminal() enable webgl addon', async () => {
-			const params = new URLSearchParams({ webgl: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			await createNewElement(url.href)
-			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
-				return call.args[0] instanceof WebglAddon
+		if (process.platform !== 'linux') {
+			it('createTerminal() enable webgl addon', async () => {
+				const params = new URLSearchParams({ webgl: true })
+				const url = new URL('x-terminal://?' + params.toString())
+				await createNewElement(url.href)
+				const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
+					return call.args[0] instanceof WebglAddon
+				})
+				expect(wasAdded).toBe(true)
 			})
-			expect(wasAdded).toBe(true)
-		})
+		}
 
 		it('createTerminal() disable webgl addon', async () => {
 			const params = new URLSearchParams({ webgl: false })
