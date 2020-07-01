@@ -66,11 +66,11 @@
     "eslint": "^7.3.1",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-json": "^2.1.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "jasmine-spec-reporter": "^5.0.2",
-    "jsonlint-cli": "^1.0.1",
     "prunk": "^1.3.1",
     "semantic-release": "^17.1.1",
     "stylelint": "^13.6.1",
@@ -78,11 +78,9 @@
     "temp": "^0.9.1"
   },
   "scripts": {
-    "eslint": "eslint .",
-    "jsonlint": "jsonlint-cli keymaps/*.json menus/*.json package.json",
-    "lint": "npm run eslint && npm run stylelint && npm run jsonlint",
+    "eslint": "eslint . --ext .json,.js",
+    "lint": "npm run eslint && npm run stylelint",
     "stylelint": "stylelint styles/*.less",
-    "lintfix": "stylelint --fix styles/*.less",
     "atom-test": "atom --test spec",
     "test": "npm run atom-test && npm run lint"
   },
