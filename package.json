@@ -79,8 +79,9 @@
   },
   "scripts": {
     "eslint": "eslint . --ext .json,.js",
-    "lint": "npm run eslint && npm run stylelint",
     "stylelint": "stylelint styles/*.less",
+    "lint": "npm run eslint && npm run stylelint",
+    "lintfix": "npm run eslint -- --fix && npm run stylelint -- --fix",
     "atom-test": "atom --test spec",
     "test": "npm run atom-test && npm run lint"
   },
