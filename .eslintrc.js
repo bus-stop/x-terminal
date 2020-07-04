@@ -5,6 +5,7 @@ module.exports = {
 		browser: true,
 	},
 	extends: [
+		'plugin:json/recommended',
 		'standard',
 	],
 	globals: {
