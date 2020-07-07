@@ -19,4 +19,5 @@ module.exports = {
 		indent: ['error', 'tab', { SwitchCase: 1 }],
 		'no-tabs': ['error', { allowIndentationTabs: true }],
 	},
+	ignorePatterns: ['dist/'],
 }
