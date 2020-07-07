@@ -27,7 +27,9 @@ jobs:
     - name: APM version
       run: apm -v
     - name: Install dependencies
-      run: apm install
+      run: |
+        apm install
+        npm run build
     - name: Run tests 👩🏾‍💻
       run: atom --test spec
 
@@ -56,7 +58,9 @@ jobs:
         with:
           node-version: '12.x'
       - name: NPM install
-        run: npm install
+        run: npm ci
+      - name: Build and Commit
+        run: npm run build-commit
       - name: Release 🎉
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
