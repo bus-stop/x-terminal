@@ -1,7 +1,7 @@
 {
   "name": "x-terminal",
   "title": "X-Terminal",
-  "main": "./src/x-terminal",
+  "main": "./dist/x-terminal",
   "module": "./src/x-terminal",
   "bugs": {
     "url": "https://github.com/bus-stop/x-terminal/issues/new/choose"
