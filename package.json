@@ -55,7 +55,7 @@
     "node-pty-prebuilt-multiarch": "^0.9.0",
     "uuid": "^8.2.0",
     "whatwg-url": "^8.1.0",
-    "xterm": "4.7.0",
+    "xterm": "4.8.0",
     "xterm-addon-fit": "0.4.0",
     "xterm-addon-web-links": "0.4.0",
     "xterm-addon-webgl": "0.8.0"
