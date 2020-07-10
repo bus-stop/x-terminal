@@ -1,3 +1,10 @@
+## [8.2.4](https://github.com/bus-stop/x-terminal/compare/v8.2.3...v8.2.4) (2020-07-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency xterm to v4.8.0 ([#111](https://github.com/bus-stop/x-terminal/issues/111)) ([20aa134](https://github.com/bus-stop/x-terminal/commit/20aa134fbb91f661a1a9948ef6876c1550da8543))
+
 ## [8.2.3](https://github.com/bus-stop/x-terminal/compare/v8.2.2...v8.2.3) (2020-06-24)
 
 
