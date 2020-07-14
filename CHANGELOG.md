@@ -1,3 +1,10 @@
+## [8.2.6](https://github.com/bus-stop/x-terminal/compare/v8.2.5...v8.2.6) (2020-07-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency marked to ^1.1.1 ([#113](https://github.com/bus-stop/x-terminal/issues/113)) ([98f0a0d](https://github.com/bus-stop/x-terminal/commit/98f0a0d45ed3e57e9631c01555daa3bccc933649))
+
 ## [8.2.5](https://github.com/bus-stop/x-terminal/compare/v8.2.4...v8.2.5) (2020-07-11)
 
 
