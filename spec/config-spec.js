@@ -157,7 +157,7 @@ describe('Call to setEnv()', () => {
 
 describe('Call to deleteEnv()', () => {
 	it('return []', () => {
-		expect(configDefaults.deleteEnv).toBe('[]')
+		expect(configDefaults.deleteEnv).toBe('["NODE_ENV"]')
 	})
 })
 
