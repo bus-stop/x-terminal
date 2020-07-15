@@ -236,7 +236,13 @@ describe('XTerminalElement', () => {
 	})
 
 	it('getEnv()', () => {
-		expect(JSON.stringify(this.element.getEnv())).toEqual(JSON.stringify(process.env))
+		const NODE_ENV = process.env.NODE_ENV
+		try {
+			delete process.env.NODE_ENV
+			expect(JSON.stringify(this.element.getEnv())).toEqual(JSON.stringify(process.env))
+		} finally {
+			process.env.NODE_ENV = NODE_ENV
+		}
 	})
 
 	it('getEnv() env set in uri', async () => {

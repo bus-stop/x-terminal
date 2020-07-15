@@ -41,7 +41,7 @@ describe('XTerminalProfilesSingleton', () => {
 			projectCwd: true,
 			env: null,
 			setEnv: {},
-			deleteEnv: [],
+			deleteEnv: ['NODE_ENV'],
 			encoding: null,
 			fontSize: 14,
 			fontFamily: 'monospace',
