@@ -1,3 +1,17 @@
+# [9.0.0](https://github.com/bus-stop/x-terminal/compare/v8.2.6...v9.0.0) (2020-07-15)
+
+
+### Bug Fixes
+
+* remove NODE_ENV variable by default ([#114](https://github.com/bus-stop/x-terminal/issues/114)) ([66a9a86](https://github.com/bus-stop/x-terminal/commit/66a9a861a039ea88d72bc98b9ad06a4d986c21d6))
+
+
+### BREAKING CHANGES
+
+* The default for Environment Deletions setting changed from `[]` to `["NODE_ENV"]`
+
+To restore previous behavior change the setting to `[]`
+
 ## [8.2.6](https://github.com/bus-stop/x-terminal/compare/v8.2.5...v8.2.6) (2020-07-14)
 
 
