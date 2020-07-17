@@ -75,7 +75,15 @@
     "semantic-release": "^17.1.1",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0",
-    "temp": "^0.9.1"
+    "temp": "^0.9.1",
+    "rollup": "^2.21.0",
+    "rollup-plugin-atomic": "^1.0.1",
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "babel-preset-atomic": "^0.1.0",
+    "shx": "latest",
+    "cross-env": "latest",
+    "build-commit": "latest"
   },
   "scripts": {
     "eslint": "eslint . --ext .json,.js",
