@@ -19,16 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { SpecReporter } from 'jasmine-spec-reporter'
 import { createRunner } from 'atom-jasmine3-test-runner'
-import prunk from 'prunk'
 
-// Mock imports of stylesheets so that nothing is imported.
-prunk.suppress(/\.(?:sa|s?c)ss$/)
-
-module.exports = createRunner({
-	reporter: new SpecReporter(),
-}, () => {
+module.exports = createRunner({}, () => {
 	const warn = console.warn.bind(console)
 	beforeEach(() => {
 		spyOn(console, 'warn').and.callFake((...args) => {
