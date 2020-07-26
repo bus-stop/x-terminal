@@ -147,48 +147,87 @@
         "command": "x-terminal:close-all"
       }
     ],
-    "atom-text-editor": [
-      {
-        "label": "Open New Terminal",
-        "command": "x-terminal:open"
-      },
-      {
-        "label": "Open New Terminal (Split Up)",
-        "command": "x-terminal:open-split-up"
-      },
-      {
-        "label": "Open New Terminal (Split Down)",
-        "command": "x-terminal:open-split-down"
-      },
-      {
-        "label": "Open New Terminal (Split Left)",
-        "command": "x-terminal:open-split-left"
-      },
-      {
-        "label": "Open New Terminal (Split Right)",
-        "command": "x-terminal:open-split-right"
-      },
-      {
-        "label": "Open New Terminal (Bottom Dock)",
-        "command": "x-terminal:open-split-bottom-dock"
-      },
-      {
-        "label": "Open New Terminal (Left Dock)",
-        "command": "x-terminal:open-split-left-dock"
-      },
-      {
-        "label": "Open New Terminal (Right Dock)",
-        "command": "x-terminal:open-split-right-dock"
-      }
-    ]
-  },
-  "menu": [
-    {
-      "label": "Packages",
+    "atom-text-editor": [{
+      "label": "X Terminal",
       "submenu": [
         {
-          "label": "X Terminal",
-          "submenu": [{
+          "label": "Open New Terminal",
+          "command": "x-terminal:open"
+        },
+        {
+          "label": "Open New Terminal (Split Up)",
+          "command": "x-terminal:open-split-up"
+        },
+        {
+          "label": "Open New Terminal (Split Down)",
+          "command": "x-terminal:open-split-down"
+        },
+        {
+          "label": "Open New Terminal (Split Left)",
+          "command": "x-terminal:open-split-left"
+        },
+        {
+          "label": "Open New Terminal (Split Right)",
+          "command": "x-terminal:open-split-right"
+        },
+        {
+          "label": "Open New Terminal (Bottom Dock)",
+          "command": "x-terminal:open-split-bottom-dock"
+        },
+        {
+          "label": "Open New Terminal (Left Dock)",
+          "command": "x-terminal:open-split-left-dock"
+        },
+        {
+          "label": "Open New Terminal (Right Dock)",
+          "command": "x-terminal:open-split-right-dock"
+        },
+        {
+          "label": "Reorganize Terminal Tabs (Current Pane)",
+          "command": "x-terminal:reorganize"
+        },
+        {
+          "label": "Reorganize Terminal Tabs (Topmost Pane)",
+          "command": "x-terminal:reorganize-top"
+        },
+        {
+          "label": "Reorganize Terminal Tabs (Bottommost Pane)",
+          "command": "x-terminal:reorganize-bottom"
+        },
+        {
+          "label": "Reorganize Terminal Tabs (Leftmost Pane)",
+          "command": "x-terminal:reorganize-left"
+        },
+        {
+          "label": "Reorganize Terminal Tabs (Rightmost Pane)",
+          "command": "x-terminal:reorganize-right"
+        },
+        {
+          "label": "Reorganize Terminal Tabs (Bottom Dock)",
+          "command": "x-terminal:reorganize-bottom-dock"
+        },
+        {
+          "label": "Reorganize Terminal Tabs (Left Dock)",
+          "command": "x-terminal:reorganize-left-dock"
+        },
+        {
+          "label": "Reorganize Terminal Tabs (Right Dock)",
+          "command": "x-terminal:reorganize-right-dock"
+        },
+        {
+          "label": "Close All Terminals",
+          "command": "x-terminal:close-all"
+        }
+      ]
+      }]
+    },
+    "menu": [
+      {
+        "label": "Packages",
+        "submenu": [
+          {
+            "label": "X Terminal",
+            "submenu": [{
               "label": "Open New Terminal",
               "command": "x-terminal:open"
             },
