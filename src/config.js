@@ -39,7 +39,7 @@ export function resetConfigDefaults () {
 		// NOTE: Atom will crash if the font is set below 8.
 		minimumFontSize: 8,
 		maximumFontSize: 100,
-		fontFamily: 'monospace',
+		fontFamily: atom.config.get('editor.fontFamily') || 'monospace',
 		theme: 'Custom',
 		colorForeground: '#ffffff',
 		colorBackground: '#000000',
