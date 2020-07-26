@@ -1,3 +1,10 @@
+## [9.0.1](https://github.com/bus-stop/x-terminal/compare/v9.0.0...v9.0.1) (2020-07-26)
+
+
+### Bug Fixes
+
+* use cascade menu in context menu ([#125](https://github.com/bus-stop/x-terminal/issues/125)) ([295c699](https://github.com/bus-stop/x-terminal/commit/295c69936cf8fb8966c41f1c95621379bb531aa3))
+
 # [9.0.0](https://github.com/bus-stop/x-terminal/compare/v8.2.6...v9.0.0) (2020-07-15)
 
 
