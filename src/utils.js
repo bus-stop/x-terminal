@@ -19,6 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import childProcess from 'child_process'
+
 export function clearDiv (div) {
 	while (div.firstChild) {
 		div.removeChild(div.firstChild)
@@ -59,4 +61,27 @@ export function recalculateActive (terminalsSet, active) {
 		t.activeIndex = i
 		t.emitter.emit('did-change-title')
 	})
+}
+
+// finds the default shell start commmand
+export function getShellStartCommand () {
+	let shellStartCommand
+	if (process.platform === 'win32') {
+		// Windows
+		try {
+			childProcess.spawn('pwsh.exe', ['-v'])
+			shellStartCommand = 'pwsh.exe'
+		} catch (e1) {
+			try {
+				childProcess.spawn('powershell', ['-command', '(Get-Variable PSVersionTable -ValueOnly).PSVersion'])
+				shellStartCommand = 'powershell.exe'
+			} catch (e2) {
+				shellStartCommand = process.env.COMSPEC || 'cmd.exe'
+			}
+		}
+	} else {
+		// Unix
+		shellStartCommand = process.env.SHELL || '/bin/sh'
+	}
+	return shellStartCommand
 }
