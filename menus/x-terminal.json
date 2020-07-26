@@ -218,16 +218,16 @@
           "label": "Close All Terminals",
           "command": "x-terminal:close-all"
         }
-    ]
-    }]
-  },
-  "menu": [
-    {
-      "label": "Packages",
-      "submenu": [
-        {
-          "label": "X Terminal",
-          "submenu": [{
+      ]
+      }]
+    },
+    "menu": [
+      {
+        "label": "Packages",
+        "submenu": [
+          {
+            "label": "X Terminal",
+            "submenu": [{
               "label": "Open New Terminal",
               "command": "x-terminal:open"
             },
