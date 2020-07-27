@@ -39,23 +39,12 @@ describe('Call to shellCommand()', () => {
 		})
 	})
 
-	it('on win32 without COMSPEC set', () => {
+	it('on win32', () => {
 		Object.defineProperty(process, 'platform', {
 			value: 'win32',
 		})
-		if (process.env.COMSPEC) {
-			delete process.env.COMSPEC
-		}
-		expect(resetConfigDefaults().command).toBe('cmd.exe')
-	})
-
-	it('on win32 with COMSPEC set', () => {
-		Object.defineProperty(process, 'platform', {
-			value: 'win32',
-		})
-		const expected = 'somecommand.exe'
-		process.env.COMSPEC = expected
-		expect(resetConfigDefaults().command).toBe(expected)
+		const startCommand = resetConfigDefaults().command
+		expect(['pwsh.exe', 'powershell.exe', process.env.COMSPEC, 'cmd.exe'].includes(startCommand)).toBeTruthy()
 	})
 
 	it('on linux without SHELL set', () => {
