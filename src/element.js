@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { CompositeDisposable } from 'atom'
+import { CompositeDisposable, Disposable } from 'atom'
 import { spawn as spawnPty } from 'node-pty-prebuilt-multiarch'
 import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
@@ -33,8 +33,6 @@ import { XTerminalProfileMenuModel } from './profile-menu-model'
 import { XTerminalProfilesSingleton } from './profiles'
 
 import fs from 'fs-extra'
-
-import elementResizeDetectorMaker from 'element-resize-detector'
 
 const PTY_PROCESS_OPTIONS = new Set([
 	'command',
@@ -74,7 +72,7 @@ class XTerminalElementImpl extends HTMLElement {
 		this.atomXtermProfileMenuElement = new XTerminalProfileMenuElement()
 		this.hoveredLink = null
 		this.pendingTerminalProfileOptions = {}
-		this.terminalDivIntersectionRatio = 0.0
+		this.terminalDivInitiallyVisible = false
 		this.isInitialized = false
 		let resolveInit, rejectInit
 		this.initializedPromise = new Promise((resolve, reject) => {
@@ -91,25 +89,37 @@ class XTerminalElementImpl extends HTMLElement {
 			// An element resize detector is used to check when this element is
 			// resized due to the pane resizing or due to the entire window
 			// resizing.
-			this.erd = elementResizeDetectorMaker({
-				strategy: 'scroll',
-			})
-			this.erd.listenTo(this.mainDiv, (element) => {
+			this.mainDivResizeObserver = new ResizeObserver((entries, observer) => {
 				this.refitTerminal()
 			})
+			this.mainDivResizeObserver.observe(this.mainDiv)
+			this.disposables.add(new Disposable(() => {
+				this.mainDivResizeObserver.disconnect()
+				this.mainDivResizeObserver = null
+			}))
 			// Add an IntersectionObserver in order to apply new options and
 			// refit as soon as the terminal is visible.
 			this.terminalDivIntersectionObserver = new IntersectionObserver((entries, observer) => {
 				// NOTE: Only the terminal div should be observed therefore there
 				// should only be one entry.
-				const entry = entries[0]
-				this.terminalDivIntersectionRatio = entry.intersectionRatio
-				this.applyPendingTerminalProfileOptions()
+				const visible = entries.some(e => e.intersectionRatio === 1.0)
+				if (visible) {
+					this.terminalDivInitiallyVisible = true
+					this.applyPendingTerminalProfileOptions()
+					// Remove observer once visible
+					this.terminalDivIntersectionObserver.disconnect()
+					this.terminalDivIntersectionObserver = null
+				}
 			}, {
 				root: this,
 				threshold: 1.0,
 			})
 			this.terminalDivIntersectionObserver.observe(this.terminalDiv)
+			this.disposables.add(new Disposable(() => {
+				if (this.terminalDivIntersectionObserver) {
+					this.terminalDivIntersectionObserver.disconnect()
+				}
+			}))
 			// Add event handler for increasing/decreasing the font when
 			// holding 'ctrl' and moving the mouse wheel up or down.
 			this.terminalDiv.addEventListener(
@@ -614,7 +624,7 @@ class XTerminalElementImpl extends HTMLElement {
 	applyPendingTerminalProfileOptions () {
 		// For any changes involving the xterm.js Terminal object, only apply them
 		// when the terminal is visible.
-		if (this.terminalDivIntersectionRatio === 1.0) {
+		if (this.terminalDivInitiallyVisible) {
 			const xtermOptions = this.pendingTerminalProfileOptions.xtermOptions || {}
 			// NOTE: For legacy reasons, the font size is defined from the 'fontSize'
 			// key outside of any defined xterm.js Terminal options.
@@ -668,7 +678,7 @@ class XTerminalElementImpl extends HTMLElement {
 
 	refitTerminal () {
 		// Only refit the terminal when it is completely visible.
-		if (this.terminalDivIntersectionRatio === 1.0) {
+		if (this.terminalDivInitiallyVisible) {
 			this.fitAddon.fit()
 			const geometry = this.fitAddon.proposeDimensions()
 			if (geometry && this.isPtyProcessRunning()) {
