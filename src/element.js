@@ -213,7 +213,7 @@ class XTerminalElementImpl extends HTMLElement {
 	getEnv () {
 		let env = this.model.profile.env
 		if (!env) {
-			env = Object.assign({}, process.env)
+			env = { ...process.env }
 		}
 		if (typeof env !== 'object' || Array.isArray(env)) {
 			throw new Error('Environment set is not an object.')
@@ -414,10 +414,10 @@ class XTerminalElementImpl extends HTMLElement {
 	}
 
 	getXtermOptions () {
-		let xtermOptions = {
+		const xtermOptions = {
 			cursorBlink: true,
+			...this.model.profile.xtermOptions,
 		}
-		xtermOptions = Object.assign(xtermOptions, this.model.profile.xtermOptions)
 		xtermOptions.fontSize = this.model.profile.fontSize
 		xtermOptions.fontFamily = this.model.profile.fontFamily
 		xtermOptions.theme = this.getTheme(this.model.profile)
@@ -714,7 +714,10 @@ class XTerminalElementImpl extends HTMLElement {
 	}
 
 	queueNewProfileChanges (profileChanges) {
-		this.pendingTerminalProfileOptions = Object.assign(this.pendingTerminalProfileOptions, profileChanges)
+		this.pendingTerminalProfileOptions = {
+			...this.pendingTerminalProfileOptions,
+			...profileChanges,
+		}
 		this.applyPendingTerminalProfileOptions()
 	}
 }

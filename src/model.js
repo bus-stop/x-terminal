@@ -287,7 +287,10 @@ class XTerminalModel {
    */
 	applyProfileChanges (profileChanges) {
 		profileChanges = this.profilesSingleton.sanitizeData(profileChanges)
-		this.profile = this.profilesSingleton.deepClone(Object.assign(this.profile, profileChanges))
+		this.profile = this.profilesSingleton.deepClone({
+			...this.profile,
+			...profileChanges,
+		})
 		this.element.queueNewProfileChanges(profileChanges)
 	}
 }
