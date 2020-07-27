@@ -20,7 +20,7 @@
  */
 
 import * as utils from '../src/utils'
-import childProcess from 'child_process'
+import which from 'which'
 
 describe('Utilities', () => {
 	it('clearDiv()', () => {
@@ -108,7 +108,7 @@ describe('Utilities', () => {
 		})
 	})
 
-	describe('getShellStartCommand()', () => {
+	describe('setShellStartCommand()', () => {
 		let mockPlatform, platform, COMSPEC, SHELL
 
 		beforeEach(function () {
@@ -132,64 +132,72 @@ describe('Utilities', () => {
 
 		it('windows pwsh.exe', async () => {
 			mockPlatform('win32')
-			spyOn(childProcess, 'spawn').and.callFake(() => {})
+			spyOn(which, 'which').and.callFake(() => {})
 
-			expect(utils.getShellStartCommand()).toBe('pwsh.exe')
+			await utils.setShellStartCommand()
+			expect(atom.config.get('x-terminal.spawnPtySettings.command')).toContain('pwsh.exe')
 		})
 
 		it('windows powershell.exe', async () => {
 			mockPlatform('win32')
-			spyOn(childProcess, 'spawn').and.callFake((cmd) => {
+			spyOn(which, 'which').and.callFake((cmd) => {
 				if (cmd === 'pwsh.exe') {
 					throw new Error()
 				}
 			})
 
-			expect(utils.getShellStartCommand()).toBe('powershell.exe')
+			await utils.setShellStartCommand()
+			expect(atom.config.get('x-terminal.spawnPtySettings.command')).toContain('powershell.exe')
 		})
 
 		it('windows env.COMSPEC', async () => {
 			mockPlatform('win32')
-			spyOn(childProcess, 'spawn').and.throwError()
+			spyOn(which, 'which').and.throwError()
 			process.env.COMSPEC = 'comspec'
 
-			expect(utils.getShellStartCommand()).toBe('comspec')
+			await utils.setShellStartCommand()
+			expect(atom.config.get('x-terminal.spawnPtySettings.command')).toBe('comspec')
 		})
 
 		it('windows no env.COMSPEC', async () => {
 			mockPlatform('win32')
-			spyOn(childProcess, 'spawn').and.throwError()
+			spyOn(which, 'which').and.throwError()
 			process.env.COMSPEC = ''
 
-			expect(utils.getShellStartCommand()).toBe('cmd.exe')
+			await utils.setShellStartCommand()
+			expect(atom.config.get('x-terminal.spawnPtySettings.command')).toContain('cmd.exe')
 		})
 
 		it('linux env.SHELL', async () => {
 			mockPlatform('linux')
 			process.env.SHELL = 'shell'
 
-			expect(utils.getShellStartCommand()).toBe('shell')
+			await utils.setShellStartCommand()
+			expect(atom.config.get('x-terminal.spawnPtySettings.command')).toBe('shell')
 		})
 
 		it('linux no env.SHELL', async () => {
 			mockPlatform('linux')
 			process.env.SHELL = ''
 
-			expect(utils.getShellStartCommand()).toBe('/bin/sh')
+			await utils.setShellStartCommand()
+			expect(atom.config.get('x-terminal.spawnPtySettings.command')).toBe('/bin/sh')
 		})
 
 		it('macos env.SHELL', async () => {
 			mockPlatform('darwin')
 			process.env.SHELL = 'shell'
 
-			expect(utils.getShellStartCommand()).toBe('shell')
+			await utils.setShellStartCommand()
+			expect(atom.config.get('x-terminal.spawnPtySettings.command')).toBe('shell')
 		})
 
 		it('macos no env.SHELL', async () => {
 			mockPlatform('darwin')
 			process.env.SHELL = ''
 
-			expect(utils.getShellStartCommand()).toBe('/bin/sh')
+			await utils.setShellStartCommand()
+			expect(atom.config.get('x-terminal.spawnPtySettings.command')).toBe('/bin/sh')
 		})
 	})
 })
