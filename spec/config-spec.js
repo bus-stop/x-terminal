@@ -186,8 +186,13 @@ describe('Call to maximumFontSize', () => {
 })
 
 describe('Call to fontFamily()', () => {
-	it('return \'monospace\'', () => {
-		expect(configDefaults.fontFamily).toBe('monospace')
+	it('return the same font of the editor', () => {
+		atom.config.set('editor.fontFamily', 'Cascadia Code PL')
+		expect(resetConfigDefaults().fontFamily).toBe('Cascadia Code PL')
+	})
+	it('return \'monospace\' when the editor font is not set', () => {
+		atom.config.set('editor.fontFamily', '')
+		expect(resetConfigDefaults().fontFamily).toBe('monospace')
 	})
 })
 
