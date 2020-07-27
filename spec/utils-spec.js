@@ -106,4 +106,89 @@ describe('Utilities', () => {
 			expect(terminals[1].emitter.emit).toHaveBeenCalledWith('did-change-title')
 		})
 	})
+
+	describe('getShellStartCommand()', () => {
+		let mockPlatform, platform, COMSPEC, SHELL
+
+		beforeEach(function () {
+			platform = process.platform
+			mockPlatform = (os) => {
+				Object.defineProperty(process, 'platform', {
+					value: os,
+				})
+			}
+			COMSPEC = process.env.COMSPEC
+			SHELL = process.env.SHELL
+		})
+
+		afterEach(() => {
+			Object.defineProperty(process, 'platform', {
+				value: platform,
+			})
+			process.env.COMSPEC = COMSPEC
+			process.env.SHELL = SHELL
+		})
+
+		it('windows pwsh.exe', async () => {
+			mockPlatform('win32')
+			spyOn(childProcess, 'spawn').and.callFake(() => {})
+
+			expect(utils.getShellStartCommand()).toBe('pwsh.exe')
+		})
+
+		it('windows powershell.exe', async () => {
+			mockPlatform('win32')
+			spyOn(childProcess, 'spawn').and.callFake((cmd) => {
+				if (cmd === 'pwsh.exe') {
+					throw new Error()
+				}
+			})
+
+			expect(utils.getShellStartCommand()).toBe('powershell.exe')
+		})
+
+		it('windows env.COMSPEC', async () => {
+			mockPlatform('win32')
+			spyOn(childProcess, 'spawn').and.throwError()
+			process.env.COMSPEC = 'comspec'
+
+			expect(utils.getShellStartCommand()).toBe('comspec')
+		})
+
+		it('windows no env.COMSPEC', async () => {
+			mockPlatform('win32')
+			spyOn(childProcess, 'spawn').and.throwError()
+			process.env.COMSPEC = ''
+
+			expect(utils.getShellStartCommand()).toBe('cmd.exe')
+		})
+
+		it('linux env.SHELL', async () => {
+			mockPlatform('linux')
+			process.env.SHELL = 'shell'
+
+			expect(utils.getShellStartCommand()).toBe('shell')
+		})
+
+		it('linux no env.SHELL', async () => {
+			mockPlatform('linux')
+			process.env.SHELL = ''
+
+			expect(utils.getShellStartCommand()).toBe('/bin/sh')
+		})
+
+		it('macos env.SHELL', async () => {
+			mockPlatform('darwin')
+			process.env.SHELL = 'shell'
+
+			expect(utils.getShellStartCommand()).toBe('shell')
+		})
+
+		it('macos no env.SHELL', async () => {
+			mockPlatform('darwin')
+			process.env.SHELL = ''
+
+			expect(utils.getShellStartCommand()).toBe('/bin/sh')
+		})
+	})
 })
