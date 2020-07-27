@@ -23,7 +23,7 @@
 import { CompositeDisposable } from 'atom'
 
 import { CONFIG_DATA } from './config'
-import { recalculateActive } from './utils'
+import { recalculateActive, setShellStartCommand } from './utils'
 import { XTerminalElement } from './element'
 import { XTerminalModel, isXTerminalModel } from './model'
 import { X_TERMINAL_BASE_URI, XTerminalProfilesSingleton } from './profiles'
@@ -55,6 +55,9 @@ class XTerminalSingleton {
 	}
 
 	activate (state) {
+		// set start command asyncronously
+		setShellStartCommand()
+
 		// Load profiles configuration.
 		this.profilesSingleton = XTerminalProfilesSingleton.instance
 

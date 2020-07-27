@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { sync as whichSync } from 'which'
+import which from 'which'
 
 export function clearDiv (div) {
 	while (div.firstChild) {
@@ -64,22 +64,31 @@ export function recalculateActive (terminalsSet, active) {
 }
 
 // finds the default shell start commmand
-export function getShellStartCommand () {
+async function getShellStartCommand () {
 	let shellStartCommand
 	if (process.platform === 'win32') {
 		// Windows
 		try {
-			shellStartCommand = whichSync('pwsh.exe')
+			shellStartCommand = await which('pwsh.exe')
+			return shellStartCommand
 		} catch (e1) {
 			try {
-				shellStartCommand = whichSync('powershell.exe')
+				shellStartCommand = await which('powershell.exe')
+				return shellStartCommand
 			} catch (e2) {
 				shellStartCommand = process.env.COMSPEC || 'cmd.exe'
+				return shellStartCommand
 			}
 		}
 	} else {
 		// Unix
 		shellStartCommand = process.env.SHELL || '/bin/sh'
+		return shellStartCommand
 	}
-	return shellStartCommand
+}
+
+// set start command asyncronously
+export async function setShellStartCommand () {
+	const shellStartCommand = await getShellStartCommand()
+	atom.config.set('x-terminal.spawnPtySettings.command', shellStartCommand)
 }

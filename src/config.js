@@ -21,11 +21,10 @@
 
 import os from 'os'
 import path from 'path'
-import { getShellStartCommand } from './utils'
 
 export function resetConfigDefaults () {
 	return {
-		command: getShellStartCommand(),
+		command: process.platform === 'win32' ? (process.env.COMSPEC || 'cmd.exe') : (process.env.SHELL || '/bin/sh'),
 		args: '[]',
 		termType: process.env.TERM || 'xterm-256color',
 		cwd: process.platform === 'win32' ? process.env.USERPROFILE : process.env.HOME,
