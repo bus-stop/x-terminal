@@ -20,6 +20,7 @@
  */
 
 import * as utils from '../src/utils'
+import childProcess from 'child_process'
 
 describe('Utilities', () => {
 	it('clearDiv()', () => {
