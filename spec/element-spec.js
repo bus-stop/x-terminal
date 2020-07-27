@@ -2203,7 +2203,7 @@ describe('XTerminalElement', () => {
 		const expected = {
 			cursorBlink: true,
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: this.element.getTheme(),
 		}
 		expect(this.element.getXtermOptions()).toEqual(expected)
@@ -2216,7 +2216,7 @@ describe('XTerminalElement', () => {
 		const expected = {
 			cursorBlink: true,
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: this.element.getTheme(),
 		}
 		expect(this.element.getXtermOptions()).toEqual(expected)
@@ -2371,7 +2371,7 @@ describe('XTerminalElement', () => {
 	it('base profile changed, font size and xterm options remained the same', () => {
 		const profile = {
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: 'Custom',
 			colorForeground: '#ffffff',
 			colorBackground: '#000000',
@@ -2410,7 +2410,7 @@ describe('XTerminalElement', () => {
 	it('base profile changed, font size changed, xterm options remained the same', () => {
 		const profile = {
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: 'Custom',
 			colorForeground: '#ffffff',
 			colorBackground: '#000000',
@@ -2453,7 +2453,7 @@ describe('XTerminalElement', () => {
 	it('base profile changed, font size remained the same, xterm options changed', () => {
 		const profile = {
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: 'Custom',
 			colorForeground: '#ffffff',
 			colorBackground: '#000000',
@@ -2500,7 +2500,7 @@ describe('XTerminalElement', () => {
 	it('base profile changed, font size and xterm options changed', () => {
 		const profile = {
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: 'Custom',
 			colorForeground: '#ffffff',
 			colorBackground: '#000000',
@@ -2550,7 +2550,7 @@ describe('XTerminalElement', () => {
 		const profile = {
 			command: 'somecommand',
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: 'Custom',
 			colorForeground: '#ffffff',
 			colorBackground: '#000000',

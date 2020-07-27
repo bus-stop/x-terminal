@@ -44,7 +44,7 @@ describe('XTerminalProfilesSingleton', () => {
 			deleteEnv: ['NODE_ENV'],
 			encoding: null,
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: 'Custom',
 			colorForeground: '#ffffff',
 			colorBackground: '#000000',
