@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import childProcess from 'child_process'
+import { sync as whichSync } from 'which'
 
 export function clearDiv (div) {
 	while (div.firstChild) {
@@ -69,12 +69,10 @@ export function getShellStartCommand () {
 	if (process.platform === 'win32') {
 		// Windows
 		try {
-			childProcess.spawn('pwsh.exe', ['-v'])
-			shellStartCommand = 'pwsh.exe'
+			shellStartCommand = whichSync('pwsh.exe')
 		} catch (e1) {
 			try {
-				childProcess.spawn('powershell', ['-command', '(Get-Variable PSVersionTable -ValueOnly).PSVersion'])
-				shellStartCommand = 'powershell.exe'
+				shellStartCommand = whichSync('powershell.exe')
 			} catch (e2) {
 				shellStartCommand = process.env.COMSPEC || 'cmd.exe'
 			}
