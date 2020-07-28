@@ -25,7 +25,7 @@ import path from 'path'
 export function resetConfigDefaults () {
 	return {
 		command: process.platform === 'win32' ? (process.env.COMSPEC || 'cmd.exe') : (process.env.SHELL || '/bin/sh'),
-		autoCommand: true,
+		autoCommand: false,
 		args: '[]',
 		termType: process.env.TERM || 'xterm-256color',
 		cwd: process.platform === 'win32' ? process.env.USERPROFILE : process.env.HOME,
