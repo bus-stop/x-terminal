@@ -25,6 +25,7 @@ import path from 'path'
 export function resetConfigDefaults () {
 	return {
 		command: process.platform === 'win32' ? (process.env.COMSPEC || 'cmd.exe') : (process.env.SHELL || '/bin/sh'),
+		autoCommand: true,
 		args: '[]',
 		termType: process.env.TERM || 'xterm-256color',
 		cwd: process.platform === 'win32' ? process.env.USERPROFILE : process.env.HOME,
@@ -116,6 +117,21 @@ export const config = configOrder({
 					checkUrlParam: (val) => true,
 					toBaseProfile: (previousValue) => (atom.config.get('x-terminal.spawnPtySettings.command') || configDefaults.command),
 					fromMenuSetting: (element, baseValue) => (element.getModel().getText() || baseValue),
+					toMenuSetting: (val) => val,
+				},
+			},
+			autoCommand: {
+				title: 'Automatic shell start command',
+				description: 'Automatically detect the prefered shell start command in the next Atom restart. This will be switched off, if you edit `Command` configuration manually.',
+				type: 'boolean',
+				default: configDefaults.autoCommand,
+				profileData: {
+					defaultProfile: configDefaults.command,
+					toUrlParam: (val) => val,
+					fromUrlParam: (val) => val,
+					checkUrlParam: (val) => (val !== null && val !== ''),
+					toBaseProfile: (previousValue) => (atom.config.get('x-terminal.spawnPtySettings.autoCommand') || configDefaults.autoCommand),
+					fromMenuSetting: (element, baseValue) => element.checked,
 					toMenuSetting: (val) => val,
 				},
 			},

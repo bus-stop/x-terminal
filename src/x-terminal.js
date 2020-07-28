@@ -23,7 +23,7 @@
 import { CompositeDisposable } from 'atom'
 
 import { CONFIG_DATA } from './config'
-import { recalculateActive, setShellStartCommand } from './utils'
+import { recalculateActive, getShellStartCommand } from './utils'
 import { XTerminalElement } from './element'
 import { XTerminalModel, isXTerminalModel } from './model'
 import { X_TERMINAL_BASE_URI, XTerminalProfilesSingleton } from './profiles'
@@ -55,9 +55,6 @@ class XTerminalSingleton {
 	}
 
 	activate (state) {
-		// set start command asyncronously
-		setShellStartCommand()
-
 		// Load profiles configuration.
 		this.profilesSingleton = XTerminalProfilesSingleton.instance
 
@@ -67,6 +64,9 @@ class XTerminalSingleton {
 
 		// Disposables for this plugin.
 		this.disposables = new CompositeDisposable()
+
+		// set start command asyncronously
+		this.setShellStartCommand()
 
 		// Set holding all terminals available at any moment.
 		this.terminals_set = new Set()
@@ -568,6 +568,19 @@ class XTerminalSingleton {
 			activeItem = activeItem.getElement()
 			activeItem.focus()
 		}
+	}
+
+	// set start command asyncronously
+	async setShellStartCommand () {
+		if (atom.config.get('x-terminal.spawnPtySettings.autoCommand')) {
+			const shellStartCommand = await getShellStartCommand()
+			atom.config.set('x-terminal.spawnPtySettings.command', shellStartCommand)
+		}
+		this.disposables.add(
+			atom.config.observe('x-terminal.spawnPtySettings.command', () => {
+				atom.config.set('x-terminal.spawnPtySettings.autoCommand', false)
+			}),
+		)
 	}
 }
 

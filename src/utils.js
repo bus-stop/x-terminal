@@ -64,7 +64,7 @@ export function recalculateActive (terminalsSet, active) {
 }
 
 // finds the default shell start commmand
-async function getShellStartCommand () {
+export async function getShellStartCommand () {
 	let shellStartCommand
 	if (process.platform === 'win32') {
 		// Windows
@@ -85,10 +85,4 @@ async function getShellStartCommand () {
 		shellStartCommand = process.env.SHELL || '/bin/sh'
 		return shellStartCommand
 	}
-}
-
-// set start command asyncronously
-export async function setShellStartCommand () {
-	const shellStartCommand = await getShellStartCommand()
-	atom.config.set('x-terminal.spawnPtySettings.command', shellStartCommand)
 }
