@@ -1,3 +1,52 @@
+## [9.0.2](https://github.com/bus-stop/x-terminal/compare/v9.0.1...v9.0.2) (2020-07-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency uuid to ^8.3.0 ([#130](https://github.com/bus-stop/x-terminal/issues/130)) ([7f9c991](https://github.com/bus-stop/x-terminal/commit/7f9c991b9dc3f6f897d77b60d9b0e8cb1562b77c))
+
+## [9.0.1](https://github.com/bus-stop/x-terminal/compare/v9.0.0...v9.0.1) (2020-07-26)
+
+
+### Bug Fixes
+
+* use cascade menu in context menu ([#125](https://github.com/bus-stop/x-terminal/issues/125)) ([295c699](https://github.com/bus-stop/x-terminal/commit/295c69936cf8fb8966c41f1c95621379bb531aa3))
+
+# [9.0.0](https://github.com/bus-stop/x-terminal/compare/v8.2.6...v9.0.0) (2020-07-15)
+
+
+### Bug Fixes
+
+* remove NODE_ENV variable by default ([#114](https://github.com/bus-stop/x-terminal/issues/114)) ([66a9a86](https://github.com/bus-stop/x-terminal/commit/66a9a861a039ea88d72bc98b9ad06a4d986c21d6))
+
+
+### BREAKING CHANGES
+
+* The default for Environment Deletions setting changed from `[]` to `["NODE_ENV"]`
+
+To restore previous behavior change the setting to `[]`
+
+## [8.2.6](https://github.com/bus-stop/x-terminal/compare/v8.2.5...v8.2.6) (2020-07-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency marked to ^1.1.1 ([#113](https://github.com/bus-stop/x-terminal/issues/113)) ([98f0a0d](https://github.com/bus-stop/x-terminal/commit/98f0a0d45ed3e57e9631c01555daa3bccc933649))
+
+## [8.2.5](https://github.com/bus-stop/x-terminal/compare/v8.2.4...v8.2.5) (2020-07-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency xterm to v4.8.1 ([#112](https://github.com/bus-stop/x-terminal/issues/112)) ([debbdba](https://github.com/bus-stop/x-terminal/commit/debbdba50a3d4cca6f0c374c3a453ebadfde2f26))
+
+## [8.2.4](https://github.com/bus-stop/x-terminal/compare/v8.2.3...v8.2.4) (2020-07-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency xterm to v4.8.0 ([#111](https://github.com/bus-stop/x-terminal/issues/111)) ([20aa134](https://github.com/bus-stop/x-terminal/commit/20aa134fbb91f661a1a9948ef6876c1550da8543))
+
 ## [8.2.3](https://github.com/bus-stop/x-terminal/compare/v8.2.2...v8.2.3) (2020-06-24)
 
 

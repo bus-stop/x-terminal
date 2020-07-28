@@ -33,7 +33,7 @@ export function resetConfigDefaults () {
 		webLinks: true,
 		env: '',
 		setEnv: '{}',
-		deleteEnv: '[]',
+		deleteEnv: '["NODE_ENV"]',
 		encoding: '',
 		fontSize: 14,
 		// NOTE: Atom will crash if the font is set below 8.
