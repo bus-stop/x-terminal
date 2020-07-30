@@ -18,5 +18,6 @@ module.exports = {
 		'comma-dangle': ['error', 'always-multiline'],
 		indent: ['error', 'tab', { SwitchCase: 1 }],
 		'no-tabs': ['error', { allowIndentationTabs: true }],
+		'no-console': 'warn',
 	},
 }
