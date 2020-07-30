@@ -53,6 +53,8 @@ const X_TERMINAL_OPTIONS = [
 	'promptToStartup',
 ]
 
+let triedInitialization = false
+
 class XTerminalElementImpl extends HTMLElement {
 	async initialize (model) {
 		this.profilesSingleton = XTerminalProfilesSingleton.instance
@@ -132,8 +134,16 @@ class XTerminalElementImpl extends HTMLElement {
 			)
 			resolveInit()
 		} catch (ex) {
-			rejectInit(ex)
-			throw ex
+			// TODO #57
+			triedInitialization = true
+			if (!triedInitialization) {
+				try {
+					this.initialize(model)
+				} catch (ex2) {
+					rejectInit(ex2)
+					throw ex2
+				}
+			}
 		}
 		this.isInitialized = true
 	}
