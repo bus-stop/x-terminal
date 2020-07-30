@@ -1,3 +1,10 @@
+## [9.0.3](https://github.com/bus-stop/x-terminal/compare/v9.0.2...v9.0.3) (2020-07-30)
+
+
+### Bug Fixes
+
+* fix resize when switching docks ([#129](https://github.com/bus-stop/x-terminal/issues/129)) ([888a26b](https://github.com/bus-stop/x-terminal/commit/888a26bc03292e54b8286a73ac4aa30668da82e5))
+
 ## [9.0.2](https://github.com/bus-stop/x-terminal/compare/v9.0.1...v9.0.2) (2020-07-27)
 
 
