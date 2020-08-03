@@ -72,6 +72,7 @@ class XTerminalElementImpl extends HTMLElement {
 		this.atomXtermProfileMenuElement = new XTerminalProfileMenuElement()
 		this.hoveredLink = null
 		this.pendingTerminalProfileOptions = {}
+		this.mainDivContentRect = null
 		this.terminalDivInitiallyVisible = false
 		this.isInitialized = false
 		let resolveInit, rejectInit
@@ -89,7 +90,9 @@ class XTerminalElementImpl extends HTMLElement {
 			// An element resize detector is used to check when this element is
 			// resized due to the pane resizing or due to the entire window
 			// resizing.
-			this.mainDivResizeObserver = new ResizeObserver((entries, observer) => {
+			this.mainDivResizeObserver = new ResizeObserver(entries => {
+				const lastEntry = entries.pop()
+				this.mainDivContentRect = lastEntry.contentRect
 				this.refitTerminal()
 			})
 			this.mainDivResizeObserver.observe(this.mainDiv)
@@ -99,11 +102,9 @@ class XTerminalElementImpl extends HTMLElement {
 			}))
 			// Add an IntersectionObserver in order to apply new options and
 			// refit as soon as the terminal is visible.
-			this.terminalDivIntersectionObserver = new IntersectionObserver((entries, observer) => {
-				// NOTE: Only the terminal div should be observed therefore there
-				// should only be one entry.
-				const visible = entries.some(e => e.intersectionRatio === 1.0)
-				if (visible) {
+			this.terminalDivIntersectionObserver = new IntersectionObserver(entries => {
+				const lastEntry = entries.pop()
+				if (lastEntry.intersectionRatio === 1.0) {
 					this.terminalDivInitiallyVisible = true
 					this.applyPendingTerminalProfileOptions()
 					// Remove observer once visible
@@ -678,7 +679,12 @@ class XTerminalElementImpl extends HTMLElement {
 
 	refitTerminal () {
 		// Only refit the terminal when it is completely visible.
-		if (this.terminalDivInitiallyVisible) {
+		if (
+			this.terminalDivInitiallyVisible &&
+			this.mainDivContentRect &&
+			this.mainDivContentRect.width > 0 &&
+			this.mainDivContentRect.height > 0
+		) {
 			this.fitAddon.fit()
 			const geometry = this.fitAddon.proposeDimensions()
 			if (geometry && this.isPtyProcessRunning()) {
