@@ -1,3 +1,10 @@
+## [9.0.4](https://github.com/bus-stop/x-terminal/compare/v9.0.3...v9.0.4) (2020-08-05)
+
+
+### Bug Fixes
+
+* fix terminal resize when hidden ([#136](https://github.com/bus-stop/x-terminal/issues/136)) ([025cd5d](https://github.com/bus-stop/x-terminal/commit/025cd5dece40da556686c44b427493582c204482))
+
 ## [9.0.3](https://github.com/bus-stop/x-terminal/compare/v9.0.2...v9.0.3) (2020-07-30)
 
 
