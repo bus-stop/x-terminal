@@ -86,7 +86,6 @@ class XTerminalElementImpl extends HTMLElement {
 			this.setAttribute('session-id', this.model.getSessionId())
 			await this.atomXtermProfileMenuElement.initialize(new XTerminalProfileMenuModel(this.model))
 			this.menuDiv.append(this.atomXtermProfileMenuElement)
-			await this.createTerminal()
 			// An element resize detector is used to check when this element is
 			// resized due to the pane resizing or due to the entire window
 			// resizing.
@@ -102,10 +101,11 @@ class XTerminalElementImpl extends HTMLElement {
 			}))
 			// Add an IntersectionObserver in order to apply new options and
 			// refit as soon as the terminal is visible.
-			this.terminalDivIntersectionObserver = new IntersectionObserver(entries => {
+			this.terminalDivIntersectionObserver = new IntersectionObserver(async entries => {
 				const lastEntry = entries.pop()
 				if (lastEntry.intersectionRatio === 1.0) {
 					this.terminalDivInitiallyVisible = true
+					await this.createTerminal()
 					this.applyPendingTerminalProfileOptions()
 					// Remove observer once visible
 					this.terminalDivIntersectionObserver.disconnect()
