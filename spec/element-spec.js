@@ -49,6 +49,7 @@ describe('XTerminalElement', () => {
 			['removeItem', 'getActiveItem', 'destroyItem'])
 		const element = new XTerminalElement()
 		await element.initialize(model)
+		await element.createTerminal()
 		return element
 	}
 
@@ -1592,13 +1593,31 @@ describe('XTerminalElement', () => {
 
 	it('refitTerminal() terminal not visible', () => {
 		spyOn(this.element.fitAddon, 'proposeDimensions')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = false
+		this.element.refitTerminal()
+		expect(this.element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
+	})
+
+	it('refitTerminal() terminal no width', () => {
+		spyOn(this.element.fitAddon, 'proposeDimensions')
+		this.element.mainDivContentRect = { width: 0, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
+		this.element.refitTerminal()
+		expect(this.element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
+	})
+
+	it('refitTerminal() terminal no height', () => {
+		spyOn(this.element.fitAddon, 'proposeDimensions')
+		this.element.mainDivContentRect = { width: 1, height: 0 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.refitTerminal()
 		expect(this.element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
 	})
 
 	it('refitTerminal() terminal completely visible', () => {
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(null)
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.refitTerminal()
 		expect(this.element.fitAddon.proposeDimensions).toHaveBeenCalled()
@@ -1610,6 +1629,7 @@ describe('XTerminalElement', () => {
 			rows: this.element.terminal.rows,
 		})
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = false
 		this.element.refitTerminal()
@@ -1622,6 +1642,7 @@ describe('XTerminalElement', () => {
 			rows: this.element.terminal.rows,
 		})
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = false
 		this.element.refitTerminal()
@@ -1634,6 +1655,7 @@ describe('XTerminalElement', () => {
 			rows: this.element.terminal.rows + 1,
 		})
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = false
 		this.element.refitTerminal()
@@ -1646,6 +1668,7 @@ describe('XTerminalElement', () => {
 			rows: this.element.terminal.rows + 1,
 		})
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = false
 		this.element.refitTerminal()
@@ -1658,6 +1681,7 @@ describe('XTerminalElement', () => {
 			rows: this.element.terminal.rows - 1,
 		})
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = false
 		this.element.refitTerminal()
@@ -1670,6 +1694,7 @@ describe('XTerminalElement', () => {
 			rows: this.element.terminal.rows - 1,
 		})
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = false
 		this.element.refitTerminal()
@@ -1682,6 +1707,7 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows,
 		})
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
@@ -1694,6 +1720,7 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows,
 		})
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
@@ -1706,6 +1733,7 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows + 1,
 		})
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
@@ -1718,6 +1746,7 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows + 1,
 		})
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
@@ -1730,6 +1759,7 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows,
 		})
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
@@ -1742,6 +1772,7 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows - 1,
 		})
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
@@ -1754,6 +1785,7 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows - 1,
 		})
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
@@ -1767,6 +1799,7 @@ describe('XTerminalElement', () => {
 		}
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
@@ -1780,6 +1813,7 @@ describe('XTerminalElement', () => {
 		}
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
@@ -1793,6 +1827,7 @@ describe('XTerminalElement', () => {
 		}
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
@@ -1806,6 +1841,7 @@ describe('XTerminalElement', () => {
 		}
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
@@ -1819,6 +1855,7 @@ describe('XTerminalElement', () => {
 		}
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
@@ -1832,6 +1869,7 @@ describe('XTerminalElement', () => {
 		}
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
 		spyOn(this.element.terminal, 'resize')
+		this.element.mainDivContentRect = { width: 1, height: 1 }
 		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
