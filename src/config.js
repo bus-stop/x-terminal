@@ -320,6 +320,21 @@ export const config = configOrder({
 					toMenuSetting: (val) => JSON.stringify(val),
 				},
 			},
+			useEditorFont: {
+				title: 'Use editor\'s font',
+				description: 'This uses the editor\'s font as the font of the terminal.',
+				type: 'boolean',
+				default: configDefaults.useEditorFont,
+				profileData: {
+					defaultProfile: configDefaults.useEditorFont,
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => (val !== null && val !== ''),
+					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.terminalSettings.useEditorFont', configDefaults.useEditorFont),
+					fromMenuSetting: (element, baseValue) => element.checked,
+					toMenuSetting: (val) => val,
+				},
+			},
 			fontFamily: {
 				title: 'Font Family',
 				description: 'Font family used in terminal emulator.',
