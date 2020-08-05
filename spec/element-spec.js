@@ -49,6 +49,7 @@ describe('XTerminalElement', () => {
 			['removeItem', 'getActiveItem', 'destroyItem'])
 		const element = new XTerminalElement()
 		await element.initialize(model)
+		await element.createTerminal()
 		return element
 	}
 
