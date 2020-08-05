@@ -213,6 +213,13 @@ class XTerminalSingleton {
 				'x-terminal:copy': () => this.copy(),
 				'x-terminal:paste': () => this.paste(),
 			}),
+
+			// font config observer
+			atom.config.observe('x-terminal.terminalSettings.useEditorFont', (useEditorFont) => {
+				if (useEditorFont) {
+					atom.config.set('x-terminal.terminalSettings.fontFamily', atom.config.get('editor.fontFamily'))
+				}
+			}),
 		)
 	}
 

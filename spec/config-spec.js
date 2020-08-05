@@ -185,12 +185,20 @@ describe('Call to maximumFontSize', () => {
 	})
 })
 
-describe('Call to fontFamily()', () => {
-	it('return the same font of the editor', () => {
+describe('fontFamily test', () => {
+	it('uses editor\'s font', () => {
+		atom.config.set('x-terminal.terminalSettings.useEditorFont', true)
+		expect(resetConfigDefaults().fontFamily).toBe(atom.config.get('editor.fontFamily'))
+	})
+
+	it('uses the font set manually', () => {
+		atom.config.set('x-terminal.terminalSettings.useEditorFont', false)
 		atom.config.set('editor.fontFamily', 'Cascadia Code PL')
 		expect(resetConfigDefaults().fontFamily).toBe('Cascadia Code PL')
 	})
-	it('return \'monospace\' when the editor font is not set', () => {
+
+	it('uses \'monospace\' when the editor font is not set', () => {
+		atom.config.set('x-terminal.terminalSettings.useEditorFont', false)
 		atom.config.set('editor.fontFamily', '')
 		expect(resetConfigDefaults().fontFamily).toBe('monospace')
 	})
