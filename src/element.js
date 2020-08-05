@@ -105,8 +105,13 @@ class XTerminalElementImpl extends HTMLElement {
 				const lastEntry = entries.pop()
 				if (lastEntry.intersectionRatio === 1.0) {
 					this.terminalDivInitiallyVisible = true
-					await this.createTerminal()
-					this.applyPendingTerminalProfileOptions()
+					try {
+						await this.createTerminal()
+						this.applyPendingTerminalProfileOptions()
+						resolveInit()
+					} catch (ex) {
+						rejectInit(ex)
+					}
 					// Remove observer once visible
 					this.terminalDivIntersectionObserver.disconnect()
 					this.terminalDivIntersectionObserver = null
@@ -141,7 +146,6 @@ class XTerminalElementImpl extends HTMLElement {
 				},
 				{ capture: true },
 			)
-			resolveInit()
 		} catch (ex) {
 			rejectInit(ex)
 			throw ex
