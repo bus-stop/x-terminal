@@ -1,3 +1,10 @@
+## [9.0.5](https://github.com/bus-stop/x-terminal/compare/v9.0.4...v9.0.5) (2020-08-05)
+
+
+### Bug Fixes
+
+* resolve initialization promise after terminal is visible ([2589573](https://github.com/bus-stop/x-terminal/commit/2589573553ffc1a191ac7d492d1e6ceaaffa2890))
+
 ## [9.0.4](https://github.com/bus-stop/x-terminal/compare/v9.0.3...v9.0.4) (2020-08-05)
 
 
