@@ -45,4 +45,18 @@ describe('x-terminal', () => {
 			expect(moveDown).toHaveBeenCalledWith(1)
 		})
 	})
+
+	describe('unfocus()', () => {
+		it('focuses atom-workspace', async () => {
+			jasmine.attachToDOM(atom.views.getView(atom.workspace))
+			await xTerminalInstance.activate()
+			const model = await xTerminalInstance.openInCenterOrDock(atom.workspace)
+			await model.initializedPromise
+			await model.element.createTerminal()
+
+			expect(model.element).toHaveFocus()
+			xTerminalInstance.unfocus()
+			expect(model.element).not.toHaveFocus()
+		})
+	})
 })
