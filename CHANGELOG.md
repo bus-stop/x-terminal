@@ -1,3 +1,10 @@
+# [9.1.0](https://github.com/bus-stop/x-terminal/compare/v9.0.5...v9.1.0) (2020-08-19)
+
+
+### Features
+
+* add x-terminal:unfocus command ([#141](https://github.com/bus-stop/x-terminal/issues/141)) ([e128b93](https://github.com/bus-stop/x-terminal/commit/e128b934d00f03145b577eeda1dc612918aa3731))
+
 ## [9.0.5](https://github.com/bus-stop/x-terminal/compare/v9.0.4...v9.0.5) (2020-08-05)
 
 
