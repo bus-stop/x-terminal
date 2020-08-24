@@ -511,7 +511,7 @@ class XTerminalSingleton {
 	unfocus () {
 		atom.views.getView(atom.workspace).focus()
 	}
-
+	
 	focus () {
         // if non exist, then open one
 		if (this.terminals_set.size == 0) {
