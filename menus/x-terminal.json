@@ -6,6 +6,10 @@
         "command": "x-terminal:open"
       },
       {
+        "label": "Focus On Terminal",
+        "command": "x-terminal:focus"
+      },
+      {
         "label": "Close",
         "command": "x-terminal:close"
       },
@@ -85,6 +89,10 @@
         "command": "x-terminal:open"
       },
       {
+        "label": "Focus On Terminal",
+        "command": "x-terminal:focus"
+      },
+      {
         "label": "Close",
         "command": "x-terminal:close"
       },
@@ -153,6 +161,10 @@
         {
           "label": "Open New Terminal",
           "command": "x-terminal:open"
+        },
+        {
+          "label": "Focus On Terminal",
+          "command": "x-terminal:focus"
         },
         {
           "label": "Open New Terminal (Split Up)",
@@ -230,6 +242,10 @@
             "submenu": [{
               "label": "Open New Terminal",
               "command": "x-terminal:open"
+            },
+            {
+              "label": "Focus On Terminal",
+              "command": "x-terminal:focus"
             },
             {
               "label": "Open New Terminal (Split Up)",
