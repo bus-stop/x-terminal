@@ -53,6 +53,7 @@ class XTerminalModel {
 		this.element = null
 		this.pane = null
 		this.title = DEFAULT_TITLE
+        this.lastActivity = (new Date()).getTime()
 		if (this.profile.title !== null) {
 			this.title = this.profile.title
 		}
@@ -167,6 +168,7 @@ class XTerminalModel {
 	}
 
 	handleNewDataArrival () {
+		this.lastActivity = (new Date()).getTime()
 		if (!this.pane) {
 			this.pane = atom.workspace.paneForItem(this)
 		}
@@ -203,6 +205,7 @@ class XTerminalModel {
 	}
 
 	focusOnTerminal () {
+		this.lastActivity = (new Date()).getTime()
 		this.element.focusOnTerminal()
 		const oldIsModified = this.modified
 		this.modified = false
@@ -222,6 +225,7 @@ class XTerminalModel {
 	}
 
 	copyFromTerminal () {
+		this.lastActivity = (new Date()).getTime()
 		return this.element.terminal.getSelection()
 	}
 
@@ -230,6 +234,7 @@ class XTerminalModel {
 	}
 
 	pasteToTerminal (text) {
+		this.lastActivity = (new Date()).getTime()
 		this.element.ptyProcess.write(text)
 	}
 
