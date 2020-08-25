@@ -1918,10 +1918,6 @@ describe('XTerminalElement', () => {
 		expect(this.element.hoveredLink).toBeNull()
 	})
 
-	it('terminalDiv initially does not have link class', () => {
-		expect(this.element.terminalDiv.classList.contains('x-terminal-term-container-has-link')).toBe(false)
-	})
-
 	it('on \'data\' handler no custom title on win32 platform', async () => {
 		Object.defineProperty(process, 'platform', {
 			value: 'win32',
