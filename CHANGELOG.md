@@ -1,3 +1,11 @@
+## [9.1.2](https://github.com/bus-stop/x-terminal/compare/v9.1.1...v9.1.2) (2020-08-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency whatwg-url to ^8.2.1 ([#150](https://github.com/bus-stop/x-terminal/issues/150)) ([45c42e7](https://github.com/bus-stop/x-terminal/commit/45c42e76cabf3b2ba317d18b3c267ac7c09bed9d))
+* add experimental note to webgl setting ([#149](https://github.com/bus-stop/x-terminal/issues/149)) ([c1b5eae](https://github.com/bus-stop/x-terminal/commit/c1b5eae4ab4bcb9d75bf642acc42bfbc14d3114c))
+
 ## [9.1.1](https://github.com/bus-stop/x-terminal/compare/v9.1.0...v9.1.1) (2020-08-24)
 
 
