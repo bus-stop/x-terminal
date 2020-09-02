@@ -1,3 +1,10 @@
+## [9.1.3](https://github.com/bus-stop/x-terminal/compare/v9.1.2...v9.1.3) (2020-09-02)
+
+
+### Bug Fixes
+
+* **deps:** update deps ([ac1bfbb](https://github.com/bus-stop/x-terminal/commit/ac1bfbbec0f491ac7296d5f8b08855e5e3ddd9f0))
+
 ## [9.1.2](https://github.com/bus-stop/x-terminal/compare/v9.1.1...v9.1.2) (2020-08-28)
 
 
