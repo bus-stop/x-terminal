@@ -74,6 +74,10 @@ class XTerminalSingleton {
 				this.profilesSingleton.resetBaseProfile()
 			}))
 		}
+		// Monitor for editor.fontFamily changes for the useEditorFont setting.
+		this.disposables.add(atom.config.onDidChange('editor.fontFamily', ({ newValue, oldValue }) => {
+			this.profilesSingleton.resetBaseProfile()
+		}))
 
 		this.disposables.add(
 			// Register view provider for terminal emulator item.

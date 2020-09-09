@@ -323,8 +323,8 @@ export const config = configOrder({
 				},
 			},
 			useEditorFont: {
-				title: 'Use editor\'s font',
-				description: 'This uses the editor\'s font as the font of the terminal.',
+				title: 'Use editor\'s Font Family',
+				description: 'Use editor\'s Font Family setting in the terminal. (Overrides Font Family below)',
 				type: 'boolean',
 				default: configDefaults.useEditorFont,
 				profileData: {
