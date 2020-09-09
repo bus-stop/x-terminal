@@ -348,7 +348,7 @@ export const config = configOrder({
 					toUrlParam: (val) => val,
 					fromUrlParam: (val) => val,
 					checkUrlParam: (val) => true,
-					toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.fontFamily') || configDefaults.fontFamily),
+					toBaseProfile: (previousValue) => getFontFamilyBaseProfile(),
 					fromMenuSetting: (element, baseValue) => (element.getModel().getText() || baseValue),
 					toMenuSetting: (val) => val,
 				},
@@ -855,6 +855,13 @@ export const config = configOrder({
 		},
 	},
 })
+
+function getFontFamilyBaseProfile () {
+	if (atom.config.get('x-terminal.terminalSettings.useEditorFont') && atom.config.get('editor.fontFamily')) {
+		return atom.config.get('editor.fontFamily')
+	}
+	return atom.config.get('x-terminal.terminalSettings.fontFamily') || configDefaults.fontFamily
+}
 
 function validateBooleanConfigSetting (name, defaultValue) {
 	const value = atom.config.get(name)
