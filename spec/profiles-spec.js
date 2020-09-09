@@ -425,6 +425,26 @@ describe('XTerminalProfilesSingleton', () => {
 		expect(XTerminalProfilesSingleton.instance.getBaseProfile()).toEqual(expected)
 	})
 
+	it('getBaseProfile() useEditorFont true', () => {
+		atom.config.set('x-terminal.terminalSettings.useEditorFont', true)
+		atom.config.set('editor.fontFamily', 'test')
+		atom.config.set('x-terminal.terminalSettings.fontFamily', 'monospace')
+		XTerminalProfilesSingleton.instance.resetBaseProfile()
+		const baseProfile = XTerminalProfilesSingleton.instance.getBaseProfile()
+
+		expect(baseProfile.fontFamily).toBe('test')
+	})
+
+	it('getBaseProfile() useEditorFont false', () => {
+		atom.config.set('x-terminal.terminalSettings.useEditorFont', false)
+		atom.config.set('editor.fontFamily', 'test')
+		atom.config.set('x-terminal.terminalSettings.fontFamily', 'monospace')
+		XTerminalProfilesSingleton.instance.resetBaseProfile()
+		const baseProfile = XTerminalProfilesSingleton.instance.getBaseProfile()
+
+		expect(baseProfile.fontFamily).toBe('monospace')
+	})
+
 	it('resetBaseProfile()', () => {
 		XTerminalProfilesSingleton.instance.baseProfile.env = 'asdfasdfafd'
 		XTerminalProfilesSingleton.instance.resetBaseProfile()
