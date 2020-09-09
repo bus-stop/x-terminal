@@ -212,6 +212,7 @@ class XTerminalSingleton {
 				'x-terminal:restart': () => this.restart(),
 				'x-terminal:copy': () => this.copy(),
 				'x-terminal:paste': () => this.paste(),
+				'x-terminal:unfocus': () => this.unfocus(),
 			}),
 
 			// font config observer
@@ -362,14 +363,22 @@ class XTerminalSingleton {
 	 * @return {XTerminalModel} Instance of XTerminalModel.
 	 */
 	async runCommands (commands) {
-		const options = this.addDefaultPosition()
-		const model = await this.open(
-			XTerminalProfilesSingleton.instance.generateNewUri(),
-			options,
-		)
-		await model.element.initializedPromise
+		let terminal
+		if (atom.config.get('x-terminal.terminalSettings.runInActive')) {
+			terminal = this.getActiveTerminal()
+		}
+
+		if (!terminal) {
+			const options = this.addDefaultPosition()
+			terminal = await this.open(
+				XTerminalProfilesSingleton.instance.generateNewUri(),
+				options,
+			)
+		}
+
+		await terminal.element.initializedPromise
 		for (const command of commands) {
-			model.runCommand(command)
+			terminal.runCommand(command)
 		}
 	}
 
@@ -503,6 +512,10 @@ class XTerminalSingleton {
 
 	paste () {
 		this.performOperationOnItem('paste')
+	}
+
+	unfocus () {
+		atom.views.getView(atom.workspace).focus()
 	}
 
 	toggleProfileMenu () {

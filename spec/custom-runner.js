@@ -21,7 +21,13 @@
 
 import { createRunner } from 'atom-jasmine3-test-runner'
 
-module.exports = createRunner({}, () => {
+module.exports = createRunner({
+	specHelper: {
+		attachToDom: true,
+		customMatchers: true,
+	},
+}, () => {
+	// eslint-disable-next-line no-console
 	const warn = console.warn.bind(console)
 	beforeEach(() => {
 		spyOn(console, 'warn').and.callFake((...args) => {

@@ -443,10 +443,11 @@ describe('XTerminalProfilesSingleton', () => {
 
 	it('sanitizeData() valid and unknown keys set', () => {
 		const expected = getDefaultExpectedProfile()
-		const data = Object.assign({}, expected, {
+		const data = {
+			...expected,
 			foo: 'bar',
 			baz: null,
-		})
+		}
 		expect(XTerminalProfilesSingleton.instance.sanitizeData(data)).toEqual(expected)
 	})
 
@@ -481,7 +482,10 @@ describe('XTerminalProfilesSingleton', () => {
 			command: './manage.py',
 			args: ['runserver', '9000'],
 		}
-		const expected = Object.assign({}, XTerminalProfilesSingleton.instance.getBaseProfile(), data)
+		const expected = {
+			...XTerminalProfilesSingleton.instance.getBaseProfile(),
+			...data,
+		}
 		const profileName = 'Django module runserver'
 		await XTerminalProfilesSingleton.instance.setProfile(profileName, data)
 		const profile = await XTerminalProfilesSingleton.instance.getProfile(profileName)
@@ -566,10 +570,11 @@ describe('XTerminalProfilesSingleton', () => {
 			promptToStartup: false,
 			copyOnSelect: false,
 		}
-		const data = Object.assign({}, validData, {
+		const data = {
+			...validData,
 			foo: 'bar',
 			baz: null,
-		})
+		}
 		const expected = 'args=%5B%5D&command=somecommand&copyOnSelect=false&cwd=%2Fsome%2Fpath&deleteEnv=%5B%5D&encoding=&env=null&fontSize=14&leaveOpenAfterExit=true&name=sometermtype&promptToStartup=false&relaunchTerminalOnStartup=true&setEnv=%7B%7D&title=&xtermOptions=%7B%22cursorBlink%22%3Atrue%7D'
 		const url = XTerminalProfilesSingleton.instance.generateNewUrlFromProfileData(data)
 		url.searchParams.sort()

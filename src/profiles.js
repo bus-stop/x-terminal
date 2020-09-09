@@ -104,7 +104,10 @@ class XTerminalProfilesSingleton {
 	diffProfiles (oldProfile, newProfile) {
 		// This method will return added or modified entries.
 		const diff = detailedDiff(oldProfile, newProfile)
-		return Object.assign(diff.added, diff.updated)
+		return {
+			...diff.added,
+			...diff.updated,
+		}
 	}
 
 	getDefaultProfile () {

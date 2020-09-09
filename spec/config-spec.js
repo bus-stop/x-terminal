@@ -341,6 +341,11 @@ describe('Call to allowHiddenToStayActive()', () => {
 		expect(configDefaults.allowHiddenToStayActive).toBe(false)
 	})
 })
+describe('Call to runInActive()', () => {
+	it('return false', () => {
+		expect(configDefaults.runInActive).toBe(false)
+	})
+})
 
 describe('Call to leaveOpenAfterExit()', () => {
 	it('return true', () => {

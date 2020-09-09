@@ -49,6 +49,7 @@ describe('XTerminalElement', () => {
 			['removeItem', 'getActiveItem', 'destroyItem'])
 		const element = new XTerminalElement()
 		await element.initialize(model)
+		await element.createTerminal()
 		return element
 	}
 
@@ -1592,21 +1593,32 @@ describe('XTerminalElement', () => {
 
 	it('refitTerminal() terminal not visible', () => {
 		spyOn(this.element.fitAddon, 'proposeDimensions')
-		this.element.terminalDivIntersectionRatio = 0.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = false
 		this.element.refitTerminal()
 		expect(this.element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
 	})
 
-	it('refitTerminal() terminal partially visible', () => {
+	it('refitTerminal() terminal no width', () => {
 		spyOn(this.element.fitAddon, 'proposeDimensions')
-		this.element.terminalDivIntersectionRatio = 0.5
+		this.element.mainDivContentRect = { width: 0, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
+		this.element.refitTerminal()
+		expect(this.element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
+	})
+
+	it('refitTerminal() terminal no height', () => {
+		spyOn(this.element.fitAddon, 'proposeDimensions')
+		this.element.mainDivContentRect = { width: 1, height: 0 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.refitTerminal()
 		expect(this.element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
 	})
 
 	it('refitTerminal() terminal completely visible', () => {
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(null)
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.refitTerminal()
 		expect(this.element.fitAddon.proposeDimensions).toHaveBeenCalled()
 	})
@@ -1617,7 +1629,8 @@ describe('XTerminalElement', () => {
 			rows: this.element.terminal.rows,
 		})
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = false
 		this.element.refitTerminal()
 		expect(this.element.terminal.resize).not.toHaveBeenCalled()
@@ -1629,7 +1642,8 @@ describe('XTerminalElement', () => {
 			rows: this.element.terminal.rows,
 		})
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = false
 		this.element.refitTerminal()
 		expect(this.element.terminal.resize).toHaveBeenCalled()
@@ -1641,7 +1655,8 @@ describe('XTerminalElement', () => {
 			rows: this.element.terminal.rows + 1,
 		})
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = false
 		this.element.refitTerminal()
 		expect(this.element.terminal.resize).toHaveBeenCalled()
@@ -1653,7 +1668,8 @@ describe('XTerminalElement', () => {
 			rows: this.element.terminal.rows + 1,
 		})
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = false
 		this.element.refitTerminal()
 		expect(this.element.terminal.resize).toHaveBeenCalled()
@@ -1665,7 +1681,8 @@ describe('XTerminalElement', () => {
 			rows: this.element.terminal.rows - 1,
 		})
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = false
 		this.element.refitTerminal()
 		expect(this.element.terminal.resize).toHaveBeenCalled()
@@ -1677,7 +1694,8 @@ describe('XTerminalElement', () => {
 			rows: this.element.terminal.rows - 1,
 		})
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = false
 		this.element.refitTerminal()
 		expect(this.element.terminal.resize).toHaveBeenCalled()
@@ -1689,7 +1707,8 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows,
 		})
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
 		expect(this.element.ptyProcess.resize).not.toHaveBeenCalled()
@@ -1701,7 +1720,8 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows,
 		})
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
 		expect(this.element.ptyProcess.resize).toHaveBeenCalled()
@@ -1713,7 +1733,8 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows + 1,
 		})
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
 		expect(this.element.ptyProcess.resize).toHaveBeenCalled()
@@ -1725,7 +1746,8 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows + 1,
 		})
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
 		expect(this.element.ptyProcess.resize).toHaveBeenCalled()
@@ -1737,7 +1759,8 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows,
 		})
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
 		expect(this.element.ptyProcess.resize).toHaveBeenCalled()
@@ -1749,7 +1772,8 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows - 1,
 		})
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
 		expect(this.element.ptyProcess.resize).toHaveBeenCalled()
@@ -1761,7 +1785,8 @@ describe('XTerminalElement', () => {
 			rows: this.element.ptyProcessRows - 1,
 		})
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
 		expect(this.element.ptyProcess.resize).toHaveBeenCalled()
@@ -1774,7 +1799,8 @@ describe('XTerminalElement', () => {
 		}
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
 		expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
@@ -1787,7 +1813,8 @@ describe('XTerminalElement', () => {
 		}
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
 		expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
@@ -1800,7 +1827,8 @@ describe('XTerminalElement', () => {
 		}
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
 		expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
@@ -1813,7 +1841,8 @@ describe('XTerminalElement', () => {
 		}
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
 		expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
@@ -1826,7 +1855,8 @@ describe('XTerminalElement', () => {
 		}
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
 		expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
@@ -1839,7 +1869,8 @@ describe('XTerminalElement', () => {
 		}
 		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
 		spyOn(this.element.terminal, 'resize')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.mainDivContentRect = { width: 1, height: 1 }
+		this.element.terminalDivInitiallyVisible = true
 		this.element.ptyProcessRunning = true
 		this.element.refitTerminal()
 		expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
@@ -1885,10 +1916,6 @@ describe('XTerminalElement', () => {
 
 	it('hoveredLink initially null', () => {
 		expect(this.element.hoveredLink).toBeNull()
-	})
-
-	it('terminalDiv initially does not have link class', () => {
-		expect(this.element.terminalDiv.classList.contains('x-terminal-term-container-has-link')).toBe(false)
 	})
 
 	it('on \'data\' handler no custom title on win32 platform', async () => {
@@ -2224,7 +2251,7 @@ describe('XTerminalElement', () => {
 
 	it('applyPendingTerminalProfileOptions() terminal not visible', () => {
 		spyOn(this.element, 'refitTerminal')
-		this.element.terminalDivIntersectionRatio = 0.0
+		this.element.terminalDivInitiallyVisible = false
 		this.element.applyPendingTerminalProfileOptions()
 		expect(this.element.refitTerminal).not.toHaveBeenCalled()
 	})
@@ -2234,7 +2261,7 @@ describe('XTerminalElement', () => {
 		spyOn(this.element, 'setMainBackgroundColor')
 		spyOn(this.element, 'restartPtyProcess')
 		spyOn(this.element.terminal, 'setOption')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.terminalDivInitiallyVisible = true
 		this.element.applyPendingTerminalProfileOptions()
 		expect(this.element.setMainBackgroundColor).toHaveBeenCalled()
 		expect(this.element.terminal.setOption).not.toHaveBeenCalled()
@@ -2247,7 +2274,7 @@ describe('XTerminalElement', () => {
 		spyOn(this.element, 'setMainBackgroundColor')
 		spyOn(this.element, 'restartPtyProcess')
 		spyOn(this.element.terminal, 'setOption')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.terminalDivInitiallyVisible = true
 		this.element.pendingTerminalProfileOptions.xtermOptions = {
 			cursorBlink: true,
 		}
@@ -2263,7 +2290,7 @@ describe('XTerminalElement', () => {
 		spyOn(this.element, 'setMainBackgroundColor')
 		spyOn(this.element, 'restartPtyProcess')
 		spyOn(this.element.terminal, 'setOption')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.terminalDivInitiallyVisible = true
 		this.element.pendingTerminalProfileOptions.command = 'somecommand'
 		this.element.applyPendingTerminalProfileOptions()
 		expect(this.element.setMainBackgroundColor).toHaveBeenCalled()
@@ -2277,7 +2304,7 @@ describe('XTerminalElement', () => {
 		spyOn(this.element, 'setMainBackgroundColor')
 		spyOn(this.element, 'restartPtyProcess')
 		spyOn(this.element.terminal, 'setOption')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.terminalDivInitiallyVisible = true
 		this.element.pendingTerminalProfileOptions.xtermOptions = {
 			cursorBlink: true,
 		}
@@ -2291,7 +2318,7 @@ describe('XTerminalElement', () => {
 
 	it('applyPendingTerminalProfileOptions() terminal not visible pending xtermOptions and pty changes kept', () => {
 		spyOn(this.element, 'refitTerminal')
-		this.element.terminalDivIntersectionRatio = 0.0
+		this.element.terminalDivInitiallyVisible = false
 		this.element.pendingTerminalProfileOptions.xtermOptions = {
 			cursorBlink: true,
 		}
@@ -2307,7 +2334,7 @@ describe('XTerminalElement', () => {
 
 	it('applyPendingTerminalProfileOptions() terminal visible pending xtermOptions and pty changes removed', () => {
 		spyOn(this.element, 'refitTerminal')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.terminalDivInitiallyVisible = true
 		this.element.pendingTerminalProfileOptions.xtermOptions = {
 			cursorBlink: true,
 		}
@@ -2318,7 +2345,7 @@ describe('XTerminalElement', () => {
 
 	it('applyPendingTerminalProfileOptions() terminal not visible x-terminal options removed', () => {
 		spyOn(this.element, 'refitTerminal')
-		this.element.terminalDivIntersectionRatio = 0.0
+		this.element.terminalDivInitiallyVisible = false
 		this.element.pendingTerminalProfileOptions.leaveOpenAfterExit = true
 		this.element.pendingTerminalProfileOptions.relaunchTerminalOnStartup = true
 		this.element.pendingTerminalProfileOptions.title = 'foo'
@@ -2328,7 +2355,7 @@ describe('XTerminalElement', () => {
 
 	it('applyPendingTerminalProfileOptions() terminal visible x-terminal options removed', () => {
 		spyOn(this.element, 'refitTerminal')
-		this.element.terminalDivIntersectionRatio = 1.0
+		this.element.terminalDivInitiallyVisible = true
 		this.element.pendingTerminalProfileOptions.leaveOpenAfterExit = true
 		this.element.pendingTerminalProfileOptions.relaunchTerminalOnStartup = true
 		this.element.pendingTerminalProfileOptions.title = 'foo'

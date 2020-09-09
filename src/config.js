@@ -64,6 +64,7 @@ export function resetConfigDefaults () {
 		colorBrightCyan: '#34e2e2',
 		colorBrightWhite: '#eeeeec',
 		allowHiddenToStayActive: false,
+		runInActive: false,
 		leaveOpenAfterExit: true,
 		allowRelaunchingTerminalsOnStartup: true,
 		relaunchTerminalOnStartup: true,
@@ -255,7 +256,7 @@ export const config = configOrder({
 		properties: {
 			webgl: {
 				title: 'WebGL Renderer',
-				description: 'Enable the WebGL-based renderer using the xterm.js [WebGL addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-webgl)',
+				description: 'Enable the WebGL-based renderer using the **experimental** xterm.js [WebGL addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-webgl)',
 				type: 'boolean',
 				default: configDefaults.webgl,
 				profileData: {
@@ -406,6 +407,12 @@ export const config = configOrder({
 				description: 'When an active terminal is hidden keep it active until another terminal is focused.',
 				type: 'boolean',
 				default: configDefaults.allowHiddenToStayActive,
+			},
+			runInActive: {
+				title: 'Run in Active Terminal',
+				description: 'Whether to run commands from the service API in the active terminal or in a new terminal.',
+				type: 'boolean',
+				default: configDefaults.runInActive,
 			},
 			leaveOpenAfterExit: {
 				title: 'Leave Open After Exit',

@@ -1,3 +1,74 @@
+## [9.1.5](https://github.com/bus-stop/x-terminal/compare/v9.1.4...v9.1.5) (2020-09-09)
+
+
+### Bug Fixes
+
+* **deps:** update xterm and addons ([#160](https://github.com/bus-stop/x-terminal/issues/160)) ([4d1e98d](https://github.com/bus-stop/x-terminal/commit/4d1e98d83459ffebe357dfdab25bb586de7a5443))
+
+## [9.1.4](https://github.com/bus-stop/x-terminal/compare/v9.1.3...v9.1.4) (2020-09-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency whatwg-url to ^8.2.2 ([#157](https://github.com/bus-stop/x-terminal/issues/157)) ([30689ee](https://github.com/bus-stop/x-terminal/commit/30689ee56a6b916d237298403c6d11a06cad14a9))
+
+## [9.1.3](https://github.com/bus-stop/x-terminal/compare/v9.1.2...v9.1.3) (2020-09-02)
+
+
+### Bug Fixes
+
+* **deps:** update deps ([ac1bfbb](https://github.com/bus-stop/x-terminal/commit/ac1bfbbec0f491ac7296d5f8b08855e5e3ddd9f0))
+
+## [9.1.2](https://github.com/bus-stop/x-terminal/compare/v9.1.1...v9.1.2) (2020-08-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency whatwg-url to ^8.2.1 ([#150](https://github.com/bus-stop/x-terminal/issues/150)) ([45c42e7](https://github.com/bus-stop/x-terminal/commit/45c42e76cabf3b2ba317d18b3c267ac7c09bed9d))
+* add experimental note to webgl setting ([#149](https://github.com/bus-stop/x-terminal/issues/149)) ([c1b5eae](https://github.com/bus-stop/x-terminal/commit/c1b5eae4ab4bcb9d75bf642acc42bfbc14d3114c))
+
+## [9.1.1](https://github.com/bus-stop/x-terminal/compare/v9.1.0...v9.1.1) (2020-08-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency whatwg-url to ^8.2.0 ([#143](https://github.com/bus-stop/x-terminal/issues/143)) ([a50c38e](https://github.com/bus-stop/x-terminal/commit/a50c38e1e51214d6fa7e9c14899178e05c730a5a))
+
+# [9.1.0](https://github.com/bus-stop/x-terminal/compare/v9.0.5...v9.1.0) (2020-08-19)
+
+
+### Features
+
+* add x-terminal:unfocus command ([#141](https://github.com/bus-stop/x-terminal/issues/141)) ([e128b93](https://github.com/bus-stop/x-terminal/commit/e128b934d00f03145b577eeda1dc612918aa3731))
+
+## [9.0.5](https://github.com/bus-stop/x-terminal/compare/v9.0.4...v9.0.5) (2020-08-05)
+
+
+### Bug Fixes
+
+* resolve initialization promise after terminal is visible ([2589573](https://github.com/bus-stop/x-terminal/commit/2589573553ffc1a191ac7d492d1e6ceaaffa2890))
+
+## [9.0.4](https://github.com/bus-stop/x-terminal/compare/v9.0.3...v9.0.4) (2020-08-05)
+
+
+### Bug Fixes
+
+* fix terminal resize when hidden ([#136](https://github.com/bus-stop/x-terminal/issues/136)) ([025cd5d](https://github.com/bus-stop/x-terminal/commit/025cd5dece40da556686c44b427493582c204482))
+
+## [9.0.3](https://github.com/bus-stop/x-terminal/compare/v9.0.2...v9.0.3) (2020-07-30)
+
+
+### Bug Fixes
+
+* fix resize when switching docks ([#129](https://github.com/bus-stop/x-terminal/issues/129)) ([888a26b](https://github.com/bus-stop/x-terminal/commit/888a26bc03292e54b8286a73ac4aa30668da82e5))
+
+## [9.0.2](https://github.com/bus-stop/x-terminal/compare/v9.0.1...v9.0.2) (2020-07-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency uuid to ^8.3.0 ([#130](https://github.com/bus-stop/x-terminal/issues/130)) ([7f9c991](https://github.com/bus-stop/x-terminal/commit/7f9c991b9dc3f6f897d77b60d9b0e8cb1562b77c))
+
 ## [9.0.1](https://github.com/bus-stop/x-terminal/compare/v9.0.0...v9.0.1) (2020-07-26)
 
 
