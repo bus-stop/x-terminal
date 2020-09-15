@@ -25,6 +25,7 @@ import { Terminal } from 'xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import { WebLinksAddon } from 'xterm-addon-web-links'
 import { WebglAddon } from 'xterm-addon-webgl'
+import { LigaturesAddon } from 'xterm-addon-ligatures'
 import { shell } from 'electron'
 
 import { configDefaults, COLORS, CONFIG_DATA } from './config'
@@ -450,6 +451,7 @@ class XTerminalElementImpl extends HTMLElement {
 			this.terminal.loadAddon(new WebLinksAddon((e, uri) => { shell.openExternal(uri) }))
 		}
 		this.terminal.open(this.terminalDiv)
+		this.terminal.loadAddon(new LigaturesAddon())
 		if (this.model.profile.webgl) {
 			this.terminal.loadAddon(new WebglAddon())
 		}
