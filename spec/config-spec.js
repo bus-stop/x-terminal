@@ -27,11 +27,7 @@ import path from 'path'
 describe('config', () => {
 	describe('shellCommand', () => {
 		const savedPlatform = process.platform
-		let savedEnv
-
-		beforeEach(() => {
-			savedEnv = JSON.parse(JSON.stringify(process.env))
-		})
+		const savedEnv = JSON.parse(JSON.stringify(process.env))
 
 		afterEach(() => {
 			process.env = savedEnv

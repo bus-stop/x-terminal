@@ -451,9 +451,11 @@ class XTerminalElementImpl extends HTMLElement {
 			this.terminal.loadAddon(new WebLinksAddon((e, uri) => { shell.openExternal(uri) }))
 		}
 		this.terminal.open(this.terminalDiv)
-		this.terminal.loadAddon(new LigaturesAddon())
 		if (this.model.profile.webgl) {
 			this.terminal.loadAddon(new WebglAddon())
+		}
+		if (this.model.profile.ligatures) {
+			this.terminal.loadAddon(new LigaturesAddon())
 		}
 		this.ptyProcessCols = 80
 		this.ptyProcessRows = 25
