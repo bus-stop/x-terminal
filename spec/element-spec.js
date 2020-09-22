@@ -1338,7 +1338,6 @@ describe('XTerminalElement', () => {
 		const { Terminal } = require('xterm')
 		const { WebLinksAddon } = require('xterm-addon-web-links')
 		const { WebglAddon } = require('xterm-addon-webgl')
-		const { LigaturesAddon } = require('xterm-addon-ligatures')
 
 		beforeEach(() => {
 			spyOn(Terminal.prototype, 'loadAddon').and.callThrough()
@@ -1382,26 +1381,6 @@ describe('XTerminalElement', () => {
 			await createNewElement(url.href)
 			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
 				return call.args[0] instanceof WebglAddon
-			})
-			expect(wasAdded).toBe(false)
-		})
-
-		it('createTerminal() enable ligatures addon', async () => {
-			const params = new URLSearchParams({ ligatures: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			await createNewElement(url.href)
-			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
-				return call.args[0] instanceof LigaturesAddon
-			})
-			expect(wasAdded).toBe(true)
-		})
-
-		it('createTerminal() disable ligatures addon', async () => {
-			const params = new URLSearchParams({ ligatures: false })
-			const url = new URL('x-terminal://?' + params.toString())
-			await createNewElement(url.href)
-			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
-				return call.args[0] instanceof LigaturesAddon
 			})
 			expect(wasAdded).toBe(false)
 		})

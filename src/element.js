@@ -454,9 +454,7 @@ class XTerminalElementImpl extends HTMLElement {
 		if (this.model.profile.webgl) {
 			this.terminal.loadAddon(new WebglAddon())
 		}
-		if (this.model.profile.ligatures) {
-			this.terminal.loadAddon(new LigaturesAddon())
-		}
+		this.terminal.loadAddon(new LigaturesAddon())
 		this.ptyProcessCols = 80
 		this.ptyProcessRows = 25
 		this.refitTerminal()

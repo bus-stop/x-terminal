@@ -78,7 +78,6 @@ describe('XTerminalProfilesSingleton', () => {
 			copyOnSelect: false,
 			webgl: true,
 			webLinks: false,
-			ligatures: false,
 		}
 	}
 
@@ -103,7 +102,6 @@ describe('XTerminalProfilesSingleton', () => {
 		url.searchParams.set('copyOnSelect', JSON.stringify(defaultProfile.copyOnSelect))
 		url.searchParams.set('webgl', defaultProfile.webgl)
 		url.searchParams.set('webLinks', defaultProfile.webLinks)
-		url.searchParams.set('ligatures', defaultProfile.ligatures)
 		return url
 	}
 
@@ -234,9 +232,6 @@ describe('XTerminalProfilesSingleton', () => {
 			return true
 		}
 		if (key === 'x-terminal.xtermAddons.webLinks') {
-			return false
-		}
-		if (key === 'x-terminal.xtermAddons.ligatures') {
 			return false
 		}
 		throw new Error('Unknown key: ' + key)
@@ -374,7 +369,6 @@ describe('XTerminalProfilesSingleton', () => {
 			copyOnSelect: atom.config.get('x-terminal.terminalSettings.copyOnSelect') || configDefaults.copyOnSelect,
 			webgl: atom.config.get('x-terminal.xtermAddons.webgl') || configDefaults.webgl,
 			webLinks: atom.config.get('x-terminal.xtermAddons.webLinks') || configDefaults.webLinks,
-			ligatures: atom.config.get('x-terminal.xtermAddons.ligatures') || configDefaults.ligatures,
 		}
 		expect(XTerminalProfilesSingleton.instance.getBaseProfile()).toEqual(expected)
 	})
@@ -427,7 +421,6 @@ describe('XTerminalProfilesSingleton', () => {
 			copyOnSelect: true,
 			webgl: true,
 			webLinks: false,
-			ligatures: false,
 		}
 		expect(XTerminalProfilesSingleton.instance.getBaseProfile()).toEqual(expected)
 	})
@@ -659,7 +652,6 @@ describe('XTerminalProfilesSingleton', () => {
 			copyOnSelect: configDefaults.copyOnSelect,
 			webgl: configDefaults.webgl,
 			webLinks: configDefaults.webLinks,
-			ligatures: configDefaults.ligatures,
 		}
 		expect(XTerminalProfilesSingleton.instance.createProfileDataFromUri(url.href)).toEqual(expected)
 	})
@@ -1026,7 +1018,6 @@ describe('XTerminalProfilesSingleton', () => {
 			copyOnSelect: configDefaults.copyOnSelect,
 			webgl: configDefaults.webgl,
 			webLinks: configDefaults.webLinks,
-			ligatures: configDefaults.ligatures,
 		}
 		expect(XTerminalProfilesSingleton.instance.getDefaultProfile()).toEqual(expected)
 	})
