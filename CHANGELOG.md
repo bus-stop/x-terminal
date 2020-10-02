@@ -1,3 +1,16 @@
+# [10.0.0](https://github.com/bus-stop/x-terminal/compare/v9.1.7...v10.0.0) (2020-10-02)
+
+
+### Features
+
+* Add ligatures support ([#126](https://github.com/bus-stop/x-terminal/issues/126)) ([8cc7f1f](https://github.com/bus-stop/x-terminal/commit/8cc7f1f06be94130bf068e557cbca63a171a99df))
+* add x-terminal:focus ([#175](https://github.com/bus-stop/x-terminal/issues/175)) ([3c4ef6a](https://github.com/bus-stop/x-terminal/commit/3c4ef6a8cf5afc4b883e549abf6de8d198378bcf))
+
+
+### BREAKING CHANGES
+
+* Default font to use Atom's font setting.
+
 ## [9.1.7](https://github.com/bus-stop/x-terminal/compare/v9.1.6...v9.1.7) (2020-09-30)
 
 
