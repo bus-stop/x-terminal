@@ -39,7 +39,8 @@ export function resetConfigDefaults () {
 		// NOTE: Atom will crash if the font is set below 8.
 		minimumFontSize: 8,
 		maximumFontSize: 100,
-		fontFamily: 'monospace',
+		useEditorFont: true,
+		fontFamily: atom.config.get('editor.fontFamily') || 'monospace',
 		theme: 'Custom',
 		colorForeground: '#ffffff',
 		colorBackground: '#000000',
@@ -321,6 +322,21 @@ export const config = configOrder({
 					toMenuSetting: (val) => JSON.stringify(val),
 				},
 			},
+			useEditorFont: {
+				title: 'Use editor\'s Font Family',
+				description: 'Use editor\'s Font Family setting in the terminal. (Overrides Font Family below)',
+				type: 'boolean',
+				default: configDefaults.useEditorFont,
+				profileData: {
+					defaultProfile: configDefaults.useEditorFont,
+					toUrlParam: (val) => JSON.stringify(val),
+					fromUrlParam: (val) => JSON.parse(val),
+					checkUrlParam: (val) => (val !== null && val !== ''),
+					toBaseProfile: (previousValue) => validateBooleanConfigSetting('x-terminal.terminalSettings.useEditorFont', configDefaults.useEditorFont),
+					fromMenuSetting: (element, baseValue) => element.checked,
+					toMenuSetting: (val) => val,
+				},
+			},
 			fontFamily: {
 				title: 'Font Family',
 				description: 'Font family used in terminal emulator.',
@@ -332,7 +348,7 @@ export const config = configOrder({
 					toUrlParam: (val) => val,
 					fromUrlParam: (val) => val,
 					checkUrlParam: (val) => true,
-					toBaseProfile: (previousValue) => (atom.config.get('x-terminal.terminalSettings.fontFamily') || configDefaults.fontFamily),
+					toBaseProfile: (previousValue) => getFontFamilyBaseProfile(),
 					fromMenuSetting: (element, baseValue) => (element.getModel().getText() || baseValue),
 					toMenuSetting: (val) => val,
 				},
@@ -839,6 +855,13 @@ export const config = configOrder({
 		},
 	},
 })
+
+function getFontFamilyBaseProfile () {
+	if (atom.config.get('x-terminal.terminalSettings.useEditorFont') && atom.config.get('editor.fontFamily')) {
+		return atom.config.get('editor.fontFamily')
+	}
+	return atom.config.get('x-terminal.terminalSettings.fontFamily') || configDefaults.fontFamily
+}
 
 function validateBooleanConfigSetting (name, defaultValue) {
 	const value = atom.config.get(name)
