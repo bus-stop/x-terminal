@@ -5,6 +5,10 @@ import * as xTerminal from '../src/x-terminal'
 const xTerminalInstance = xTerminal.getInstance()
 
 describe('x-terminal', () => {
+	afterEach(() => {
+		xTerminalInstance.exitAllTerminals()
+	})
+
 	describe('getSelectedText()', () => {
 		it('returns selection', () => {
 			spyOn(atom.workspace, 'getActiveTextEditor').and.returnValue({
@@ -57,6 +61,34 @@ describe('x-terminal', () => {
 			expect(model.element).toHaveFocus()
 			xTerminalInstance.unfocus()
 			expect(model.element).not.toHaveFocus()
+		})
+	})
+
+	describe('focus()', () => {
+		it('opens new terminal', async () => {
+			const workspace = atom.views.getView(atom.workspace)
+			jasmine.attachToDOM(workspace)
+			await xTerminalInstance.activate()
+			workspace.focus()
+			spyOn(xTerminalInstance, 'open')
+
+			expect(xTerminalInstance.open).not.toHaveBeenCalled()
+			xTerminalInstance.focus()
+			expect(xTerminalInstance.open).toHaveBeenCalledTimes(1)
+		})
+
+		it('focuses terminal', async () => {
+			const workspace = atom.views.getView(atom.workspace)
+			jasmine.attachToDOM(workspace)
+			await xTerminalInstance.activate()
+			const model = await xTerminalInstance.openInCenterOrDock(atom.workspace)
+			await model.initializedPromise
+			await model.element.createTerminal()
+			workspace.focus()
+
+			expect(model.element).not.toHaveFocus()
+			xTerminalInstance.focus()
+			expect(model.element).toHaveFocus()
 		})
 	})
 
