@@ -511,19 +511,16 @@ class XTerminalSingleton {
 	unfocus () {
 		atom.views.getView(atom.workspace).focus()
 	}
-	
+
 	focus () {
-        // if non exist, then open one
-		if (this.terminals_set.size == 0) {
-            this.open(
-                this.profilesSingleton.generateNewUri(),
-                this.addDefaultPosition(),
-            )
-        // otherwise find the most recently active terminal and focus on it
-        } else {
-            const sortedTerminals = ([...this.terminals_set]).sort((a,b)=>a.lastActivity - b.lastActivity)
-            sortedTerminals[0].focusOnTerminal()
-        }
+		// if non exist, then open one
+		if (this.terminals_set.size === 0) {
+			this.openTerminal()
+		// otherwise find the most recently active terminal and focus on it
+		} else {
+			const activeTerminal = [...this.terminals_set].find(t => t.activeIndex === 0)
+			activeTerminal.focusOnTerminal()
+		}
 	}
 
 	toggleProfileMenu () {
