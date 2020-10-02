@@ -217,6 +217,7 @@ class XTerminalSingleton {
 				'x-terminal:copy': () => this.copy(),
 				'x-terminal:paste': () => this.paste(),
 				'x-terminal:unfocus': () => this.unfocus(),
+				'x-terminal:focus': () => this.focus(),
 			}),
 		)
 	}
@@ -513,6 +514,15 @@ class XTerminalSingleton {
 
 	unfocus () {
 		atom.views.getView(atom.workspace).focus()
+	}
+
+	focus () {
+		if (this.terminals_set.size === 0) {
+			this.openTerminal()
+		} else {
+			const activeTerminal = [...this.terminals_set].find(t => t.activeIndex === 0)
+			activeTerminal.focusOnTerminal()
+		}
 	}
 
 	toggleProfileMenu () {
