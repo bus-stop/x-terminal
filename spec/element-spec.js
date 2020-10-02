@@ -1918,10 +1918,6 @@ describe('XTerminalElement', () => {
 		expect(this.element.hoveredLink).toBeNull()
 	})
 
-	it('terminalDiv initially does not have link class', () => {
-		expect(this.element.terminalDiv.classList.contains('x-terminal-term-container-has-link')).toBe(false)
-	})
-
 	it('on \'data\' handler no custom title on win32 platform', async () => {
 		Object.defineProperty(process, 'platform', {
 			value: 'win32',
@@ -2234,7 +2230,7 @@ describe('XTerminalElement', () => {
 		const expected = {
 			cursorBlink: true,
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: this.element.getTheme(),
 		}
 		expect(this.element.getXtermOptions()).toEqual(expected)
@@ -2247,7 +2243,7 @@ describe('XTerminalElement', () => {
 		const expected = {
 			cursorBlink: true,
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: this.element.getTheme(),
 		}
 		expect(this.element.getXtermOptions()).toEqual(expected)
@@ -2402,7 +2398,7 @@ describe('XTerminalElement', () => {
 	it('base profile changed, font size and xterm options remained the same', () => {
 		const profile = {
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: 'Custom',
 			colorForeground: '#ffffff',
 			colorBackground: '#000000',
@@ -2441,7 +2437,7 @@ describe('XTerminalElement', () => {
 	it('base profile changed, font size changed, xterm options remained the same', () => {
 		const profile = {
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: 'Custom',
 			colorForeground: '#ffffff',
 			colorBackground: '#000000',
@@ -2484,7 +2480,7 @@ describe('XTerminalElement', () => {
 	it('base profile changed, font size remained the same, xterm options changed', () => {
 		const profile = {
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: 'Custom',
 			colorForeground: '#ffffff',
 			colorBackground: '#000000',
@@ -2531,7 +2527,7 @@ describe('XTerminalElement', () => {
 	it('base profile changed, font size and xterm options changed', () => {
 		const profile = {
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: 'Custom',
 			colorForeground: '#ffffff',
 			colorBackground: '#000000',
@@ -2581,7 +2577,7 @@ describe('XTerminalElement', () => {
 		const profile = {
 			command: 'somecommand',
 			fontSize: 14,
-			fontFamily: 'monospace',
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: 'Custom',
 			colorForeground: '#ffffff',
 			colorBackground: '#000000',

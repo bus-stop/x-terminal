@@ -44,7 +44,8 @@ describe('XTerminalProfilesSingleton', () => {
 			deleteEnv: ['NODE_ENV'],
 			encoding: null,
 			fontSize: 14,
-			fontFamily: 'monospace',
+			useEditorFont: true,
+			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
 			theme: 'Custom',
 			colorForeground: '#ffffff',
 			colorBackground: '#000000',
@@ -134,6 +135,9 @@ describe('XTerminalProfilesSingleton', () => {
 		}
 		if (key === 'x-terminal.terminalSettings.fontSize') {
 			return 20
+		}
+		if (key === 'x-terminal.terminalSettings.useEditorFont') {
+			return false
 		}
 		if (key === 'x-terminal.terminalSettings.fontFamily') {
 			return 'test'
@@ -333,6 +337,7 @@ describe('XTerminalProfilesSingleton', () => {
 			deleteEnv: JSON.parse(atom.config.get('x-terminal.spawnPtySettings.deleteEnv') || configDefaults.deleteEnv),
 			encoding: encoding || null,
 			fontSize: atom.config.get('x-terminal.terminalSettings.fontSize') || configDefaults.fontSize,
+			useEditorFont: true,
 			fontFamily: atom.config.get('x-terminal.terminalSettings.fontFamily') || configDefaults.fontFamily,
 			theme: atom.config.get('x-terminal.terminalSettings.colors.theme') || configDefaults.theme,
 			colorForeground: atom.config.get('x-terminal.terminalSettings.colors.foreground') || configDefaults.colorForeground,
@@ -382,6 +387,7 @@ describe('XTerminalProfilesSingleton', () => {
 			deleteEnv: ['FOO'],
 			encoding: 'someencoding',
 			fontSize: 20,
+			useEditorFont: false,
 			fontFamily: 'test',
 			theme: 'Homebrew',
 			colorForeground: '#123456',
@@ -417,6 +423,26 @@ describe('XTerminalProfilesSingleton', () => {
 			webLinks: false,
 		}
 		expect(XTerminalProfilesSingleton.instance.getBaseProfile()).toEqual(expected)
+	})
+
+	it('getBaseProfile() useEditorFont true', () => {
+		atom.config.set('x-terminal.terminalSettings.useEditorFont', true)
+		atom.config.set('editor.fontFamily', 'test')
+		atom.config.set('x-terminal.terminalSettings.fontFamily', 'monospace')
+		XTerminalProfilesSingleton.instance.resetBaseProfile()
+		const baseProfile = XTerminalProfilesSingleton.instance.getBaseProfile()
+
+		expect(baseProfile.fontFamily).toBe('test')
+	})
+
+	it('getBaseProfile() useEditorFont false', () => {
+		atom.config.set('x-terminal.terminalSettings.useEditorFont', false)
+		atom.config.set('editor.fontFamily', 'test')
+		atom.config.set('x-terminal.terminalSettings.fontFamily', 'monospace')
+		XTerminalProfilesSingleton.instance.resetBaseProfile()
+		const baseProfile = XTerminalProfilesSingleton.instance.getBaseProfile()
+
+		expect(baseProfile.fontFamily).toBe('monospace')
 	})
 
 	it('resetBaseProfile()', () => {
@@ -594,6 +620,7 @@ describe('XTerminalProfilesSingleton', () => {
 			deleteEnv: JSON.parse(configDefaults.deleteEnv),
 			encoding: null,
 			fontSize: configDefaults.fontSize,
+			useEditorFont: configDefaults.useEditorFont,
 			fontFamily: configDefaults.fontFamily,
 			theme: configDefaults.theme,
 			colorForeground: configDefaults.colorForeground,
@@ -959,6 +986,7 @@ describe('XTerminalProfilesSingleton', () => {
 			deleteEnv: JSON.parse(configDefaults.deleteEnv),
 			encoding: null,
 			fontSize: configDefaults.fontSize,
+			useEditorFont: configDefaults.useEditorFont,
 			fontFamily: configDefaults.fontFamily,
 			theme: configDefaults.theme,
 			colorForeground: configDefaults.colorForeground,

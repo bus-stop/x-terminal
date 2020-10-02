@@ -1,3 +1,46 @@
+## [9.1.7](https://github.com/bus-stop/x-terminal/compare/v9.1.6...v9.1.7) (2020-09-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency whatwg-url to ^8.3.0 ([#173](https://github.com/bus-stop/x-terminal/issues/173)) ([7d1e036](https://github.com/bus-stop/x-terminal/commit/7d1e036967f4363653278a7500f94f08290f7c8f))
+
+## [9.1.6](https://github.com/bus-stop/x-terminal/compare/v9.1.5...v9.1.6) (2020-09-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency marked to ^1.2.0 ([#172](https://github.com/bus-stop/x-terminal/issues/172)) ([8127785](https://github.com/bus-stop/x-terminal/commit/8127785559e2c1d637648436dc0739fed6535f57))
+
+## [9.1.5](https://github.com/bus-stop/x-terminal/compare/v9.1.4...v9.1.5) (2020-09-09)
+
+
+### Bug Fixes
+
+* **deps:** update xterm and addons ([#160](https://github.com/bus-stop/x-terminal/issues/160)) ([4d1e98d](https://github.com/bus-stop/x-terminal/commit/4d1e98d83459ffebe357dfdab25bb586de7a5443))
+
+## [9.1.4](https://github.com/bus-stop/x-terminal/compare/v9.1.3...v9.1.4) (2020-09-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency whatwg-url to ^8.2.2 ([#157](https://github.com/bus-stop/x-terminal/issues/157)) ([30689ee](https://github.com/bus-stop/x-terminal/commit/30689ee56a6b916d237298403c6d11a06cad14a9))
+
+## [9.1.3](https://github.com/bus-stop/x-terminal/compare/v9.1.2...v9.1.3) (2020-09-02)
+
+
+### Bug Fixes
+
+* **deps:** update deps ([ac1bfbb](https://github.com/bus-stop/x-terminal/commit/ac1bfbbec0f491ac7296d5f8b08855e5e3ddd9f0))
+
+## [9.1.2](https://github.com/bus-stop/x-terminal/compare/v9.1.1...v9.1.2) (2020-08-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency whatwg-url to ^8.2.1 ([#150](https://github.com/bus-stop/x-terminal/issues/150)) ([45c42e7](https://github.com/bus-stop/x-terminal/commit/45c42e76cabf3b2ba317d18b3c267ac7c09bed9d))
+* add experimental note to webgl setting ([#149](https://github.com/bus-stop/x-terminal/issues/149)) ([c1b5eae](https://github.com/bus-stop/x-terminal/commit/c1b5eae4ab4bcb9d75bf642acc42bfbc14d3114c))
+
 ## [9.1.1](https://github.com/bus-stop/x-terminal/compare/v9.1.0...v9.1.1) (2020-08-24)
 
 
