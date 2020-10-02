@@ -5,8 +5,12 @@ import * as xTerminal from '../src/x-terminal'
 const xTerminalInstance = xTerminal.getInstance()
 
 describe('x-terminal', () => {
-	afterEach(() => {
-		xTerminalInstance.exitAllTerminals()
+	beforeEach(async () => {
+		await xTerminalInstance.activate()
+	})
+
+	afterEach(async () => {
+		await xTerminalInstance.deactivate()
 	})
 
 	describe('getSelectedText()', () => {
@@ -53,7 +57,6 @@ describe('x-terminal', () => {
 	describe('unfocus()', () => {
 		it('focuses atom-workspace', async () => {
 			jasmine.attachToDOM(atom.views.getView(atom.workspace))
-			await xTerminalInstance.activate()
 			const model = await xTerminalInstance.openInCenterOrDock(atom.workspace)
 			await model.initializedPromise
 			await model.element.createTerminal()
@@ -68,7 +71,6 @@ describe('x-terminal', () => {
 		it('opens new terminal', async () => {
 			const workspace = atom.views.getView(atom.workspace)
 			jasmine.attachToDOM(workspace)
-			await xTerminalInstance.activate()
 			workspace.focus()
 			spyOn(xTerminalInstance, 'open')
 
@@ -80,7 +82,6 @@ describe('x-terminal', () => {
 		it('focuses terminal', async () => {
 			const workspace = atom.views.getView(atom.workspace)
 			jasmine.attachToDOM(workspace)
-			await xTerminalInstance.activate()
 			const model = await xTerminalInstance.openInCenterOrDock(atom.workspace)
 			await model.initializedPromise
 			await model.element.createTerminal()
