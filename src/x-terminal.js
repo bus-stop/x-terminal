@@ -517,10 +517,8 @@ class XTerminalSingleton {
 	}
 
 	focus () {
-		// if non exist, then open one
 		if (this.terminals_set.size === 0) {
 			this.openTerminal()
-		// otherwise find the most recently active terminal and focus on it
 		} else {
 			const activeTerminal = [...this.terminals_set].find(t => t.activeIndex === 0)
 			activeTerminal.focusOnTerminal()

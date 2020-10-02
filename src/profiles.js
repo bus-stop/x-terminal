@@ -134,6 +134,9 @@ class XTerminalProfilesSingleton {
 	}
 
 	sanitizeData (unsanitizedData) {
+		if (!unsanitizedData) {
+			return {}
+		}
 		const sanitizedData = {}
 		for (const data of CONFIG_DATA) {
 			if (!data.profileKey) continue

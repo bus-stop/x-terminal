@@ -270,21 +270,21 @@ class XTerminalModel {
 	/* Public methods are defined below this line. */
 
 	/**
-   * Retrieve profile for this {@link XTerminalModel} instance.
-   *
-   * @function
-   * @return {Object} Profile for {@link XTerminalModel} instance.
-   */
+	 * Retrieve profile for this {@link XTerminalModel} instance.
+	 *
+	 * @function
+	 * @return {Object} Profile for {@link XTerminalModel} instance.
+	 */
 	getProfile () {
 		return this.profile
 	}
 
 	/**
-   * Apply profile changes to {@link XTerminalModel} instance.
-   *
-   * @function
-   * @param {Object} profileChanges Profile changes to apply.
-   */
+	 * Apply profile changes to {@link XTerminalModel} instance.
+	 *
+	 * @function
+	 * @param {Object} profileChanges Profile changes to apply.
+	 */
 	applyProfileChanges (profileChanges) {
 		profileChanges = this.profilesSingleton.sanitizeData(profileChanges)
 		this.profile = this.profilesSingleton.deepClone({
