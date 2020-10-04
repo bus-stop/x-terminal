@@ -52,7 +52,7 @@
     "fs-extra": "^9.0.1",
     "marked": "^1.2.0",
     "node-pty-prebuilt-multiarch": "^0.9.0",
-    "uuid": "^8.3.0",
+    "uuid": "^8.3.1",
     "whatwg-url": "^8.3.0",
     "xterm": "4.9.0",
     "xterm-addon-fit": "0.4.0",
