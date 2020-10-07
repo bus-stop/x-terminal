@@ -1,3 +1,15 @@
+# [11.0.0](https://github.com/bus-stop/x-terminal/compare/v10.0.2...v11.0.0) (2020-10-07)
+
+
+### Features
+
+* default command to powershell if available ([#177](https://github.com/bus-stop/x-terminal/issues/177)) ([350d8c2](https://github.com/bus-stop/x-terminal/commit/350d8c2926449c406225ae7eb0af1c312e38ebfa))
+
+
+### BREAKING CHANGES
+
+* Powershell will become the default on windows if the Command setting has not changed from the default. To change it back just delete the Command setting.
+
 ## [10.0.2](https://github.com/bus-stop/x-terminal/compare/v10.0.1...v10.0.2) (2020-10-07)
 
 
