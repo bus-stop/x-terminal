@@ -1,3 +1,10 @@
+## [10.0.2](https://github.com/bus-stop/x-terminal/compare/v10.0.1...v10.0.2) (2020-10-07)
+
+
+### Bug Fixes
+
+* add `x-terminal:focus` command to atom-workspace ([#179](https://github.com/bus-stop/x-terminal/issues/179)) ([4bac2f8](https://github.com/bus-stop/x-terminal/commit/4bac2f88789aa2261ba09cdcad86e467ed89dd2d))
+
 ## [10.0.1](https://github.com/bus-stop/x-terminal/compare/v10.0.0...v10.0.1) (2020-10-04)
 
 
