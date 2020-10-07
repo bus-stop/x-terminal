@@ -521,7 +521,7 @@ class XTerminalSingleton {
 			this.openTerminal()
 		} else {
 			const activeTerminal = [...this.terminals_set].find(t => t.activeIndex === 0)
-			activeTerminal.focusOnTerminal()
+			activeTerminal.focusOnTerminal(true)
 		}
 	}
 

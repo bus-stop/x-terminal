@@ -202,11 +202,10 @@ class XTerminalModel {
 		}
 	}
 
-	focusOnTerminal () {
-		this.element.focusOnTerminal()
-		const oldIsModified = this.modified
-		this.modified = false
-		if (oldIsModified !== this.modified) {
+	focusOnTerminal (double) {
+		this.element.focusOnTerminal(double)
+		if (this.modified) {
+			this.modified = false
 			this.emitter.emit('did-change-modified', this.modified)
 		}
 	}
