@@ -21,6 +21,7 @@
 
 import os from 'os'
 import path from 'path'
+import which from 'which'
 
 export function resetConfigDefaults () {
 	return {
@@ -950,3 +951,28 @@ function configToData (obj, prefix) {
 }
 
 export const CONFIG_DATA = configToData(config, 'x-terminal')
+
+export async function setInitialCommand (which) {
+	let command
+	if (process.platform === 'win32') {
+		try {
+			command = await which('pwsh.exe')
+		} catch (e1) {
+			try {
+				command = await which('powershell.exe')
+			} catch (e2) {
+				// powershell not found
+			}
+		}
+	}
+
+	if (command && atom.config.get('x-terminal.command') === configDefaults.command) {
+		atom.config.set('x-terminal.command', command)
+	}
+}
+
+// set shell command automatically on first install
+if (localStorage.getItem('x-terminal.initialCommandSet') === null) {
+	localStorage.setItem('x-terminal.initialCommandSet', 'true')
+	setInitialCommand(which)
+}

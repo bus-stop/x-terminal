@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { configDefaults, resetConfigDefaults } from '../src/config'
+import { configDefaults, resetConfigDefaults, setInitialCommand } from '../src/config'
 
 import os from 'os'
 import path from 'path'
@@ -446,6 +446,56 @@ describe('config', () => {
 	describe('apiOpenPosition', () => {
 		it('return \'Center\'', () => {
 			expect(configDefaults.apiOpenPosition).toBe('Center')
+		})
+	})
+
+	describe('setInitialCommand()', () => {
+		const savedPlatform = process.platform
+
+		beforeEach(() => {
+			Object.defineProperty(process, 'platform', {
+				value: 'win32',
+			})
+			atom.config.set('x-terminal.command', configDefaults.command)
+		})
+
+		afterEach(() => {
+			Object.defineProperty(process, 'platform', {
+				value: savedPlatform,
+			})
+		})
+
+		it('should set x-terminal.command to pwsh', async () => {
+			const shell = 'path/to/pwsh.exe'
+			await setInitialCommand(async (file) => {
+				if (file === 'pwsh.exe') {
+					return shell
+				}
+				throw new Error('ENOENT')
+			})
+
+			expect(atom.config.get('x-terminal.command')).toBe(shell)
+		})
+
+		it('should set x-terminal.command to powershell', async () => {
+			const shell = 'path/to/powershell.exe'
+			await setInitialCommand(async (file) => {
+				if (file === 'powershell.exe') {
+					return shell
+				}
+				throw new Error('ENOENT')
+			})
+
+			expect(atom.config.get('x-terminal.command')).toBe(shell)
+		})
+
+		it('should set x-terminal.command to powershell', async () => {
+			const shell = configDefaults.command
+			await setInitialCommand(async () => {
+				throw new Error('ENOENT')
+			})
+
+			expect(atom.config.get('x-terminal.command')).toBe(shell)
 		})
 	})
 })
