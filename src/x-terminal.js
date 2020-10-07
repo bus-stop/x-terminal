@@ -210,6 +210,7 @@ class XTerminalSingleton {
 				'x-terminal:close-all': () => this.exitAllTerminals(),
 				'x-terminal:insert-selected-text': () => this.insertSelection(),
 				'x-terminal:run-selected-text': () => this.runSelection(),
+				'x-terminal:focus': () => this.focus(),
 			}),
 			atom.commands.add('x-terminal', {
 				'x-terminal:close': () => this.close(),
@@ -217,7 +218,6 @@ class XTerminalSingleton {
 				'x-terminal:copy': () => this.copy(),
 				'x-terminal:paste': () => this.paste(),
 				'x-terminal:unfocus': () => this.unfocus(),
-				'x-terminal:focus': () => this.focus(),
 			}),
 		)
 	}
