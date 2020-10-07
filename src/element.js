@@ -704,10 +704,14 @@ class XTerminalElementImpl extends HTMLElement {
 		}
 	}
 
-	focusOnTerminal () {
+	focusOnTerminal (double) {
 		if (this.terminal) {
 			this.model.setActive()
 			this.terminal.focus()
+			if (double) {
+				// second focus will send command to pty
+				this.terminal.focus()
+			}
 		}
 	}
 
