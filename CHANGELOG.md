@@ -1,3 +1,10 @@
+## [11.0.1](https://github.com/bus-stop/x-terminal/compare/v11.0.0...v11.0.1) (2020-10-07)
+
+
+### Bug Fixes
+
+* fix initial command set ([c2376b8](https://github.com/bus-stop/x-terminal/commit/c2376b84f9c5e58d754f213826fea0e50d3170da))
+
 # [11.0.0](https://github.com/bus-stop/x-terminal/compare/v10.0.2...v11.0.0) (2020-10-07)
 
 
