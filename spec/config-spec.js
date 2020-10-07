@@ -456,7 +456,7 @@ describe('config', () => {
 			Object.defineProperty(process, 'platform', {
 				value: 'win32',
 			})
-			atom.config.set('x-terminal.command', configDefaults.command)
+			atom.config.set('x-terminal.spawnPtySettings.command', configDefaults.command)
 		})
 
 		afterEach(() => {
@@ -474,7 +474,7 @@ describe('config', () => {
 				throw new Error('ENOENT')
 			})
 
-			expect(atom.config.get('x-terminal.command')).toBe(shell)
+			expect(atom.config.get('x-terminal.spawnPtySettings.command')).toBe(shell)
 		})
 
 		it('should set x-terminal.command to powershell', async () => {
@@ -486,7 +486,7 @@ describe('config', () => {
 				throw new Error('ENOENT')
 			})
 
-			expect(atom.config.get('x-terminal.command')).toBe(shell)
+			expect(atom.config.get('x-terminal.spawnPtySettings.command')).toBe(shell)
 		})
 
 		it('should set x-terminal.command to powershell', async () => {
@@ -495,7 +495,7 @@ describe('config', () => {
 				throw new Error('ENOENT')
 			})
 
-			expect(atom.config.get('x-terminal.command')).toBe(shell)
+			expect(atom.config.get('x-terminal.spawnPtySettings.command')).toBe(shell)
 		})
 	})
 })

@@ -966,8 +966,8 @@ export async function setInitialCommand (which) {
 		}
 	}
 
-	if (command && atom.config.get('x-terminal.command') === configDefaults.command) {
-		atom.config.set('x-terminal.command', command)
+	if (command && atom.config.get('x-terminal.spawnPtySettings.command') === configDefaults.command) {
+		atom.config.set('x-terminal.spawnPtySettings.command', command)
 	}
 }
 
