@@ -218,6 +218,7 @@ class XTerminalSingleton {
 				'x-terminal:copy': () => this.copy(),
 				'x-terminal:paste': () => this.paste(),
 				'x-terminal:unfocus': () => this.unfocus(),
+				'x-terminal:clear': () => this.clear(),
 			}),
 		)
 	}
@@ -305,19 +306,24 @@ class XTerminalSingleton {
 		return terminals.find(t => t.isActiveTerminal())
 	}
 
+	performOnActiveTerminal (operation) {
+		const terminal = this.getActiveTerminal()
+		if (terminal) {
+			operation(terminal)
+		}
+	}
+
 	insertSelection () {
 		const selection = this.getSelectedText()
-		const terminal = this.getActiveTerminal()
-		if (selection && terminal) {
-			terminal.pasteToTerminal(selection)
+		if (selection) {
+			this.performOnActiveTerminal(t => t.pasteToTerminal(selection))
 		}
 	}
 
 	runSelection () {
 		const selection = this.getSelectedText()
-		const terminal = this.getActiveTerminal()
-		if (selection && terminal) {
-			terminal.runCommand(selection)
+		if (selection) {
+			this.performOnActiveTerminal(t => t.runCommand(selection))
 		}
 	}
 
@@ -474,46 +480,28 @@ class XTerminalSingleton {
 		}
 	}
 
-	performOperationOnItem (operation) {
-		const item = atom.workspace.getActivePaneItem()
-		if (isXTerminalModel(item)) {
-			switch (operation) {
-				case 'close':
-					item.exit()
-					break
-				case 'restart':
-					item.restartPtyProcess()
-					break
-				case 'copy':
-					atom.clipboard.write(item.copyFromTerminal())
-					break
-				case 'paste':
-					item.pasteToTerminal(atom.clipboard.read())
-					break
-				default:
-					throw new Error('Unknown operation: ' + operation)
-			}
-		}
-	}
-
 	close () {
-		this.performOperationOnItem('close')
+		this.performOnActiveTerminal(t => t.exit())
 	}
 
 	restart () {
-		this.performOperationOnItem('restart')
+		this.performOnActiveTerminal(t => t.restartPtyProcess())
 	}
 
 	copy () {
-		this.performOperationOnItem('copy')
+		this.performOnActiveTerminal(t => atom.clipboard.write(t.copyFromTerminal()))
 	}
 
 	paste () {
-		this.performOperationOnItem('paste')
+		this.performOnActiveTerminal(t => t.pasteToTerminal(atom.clipboard.read()))
 	}
 
 	unfocus () {
 		atom.views.getView(atom.workspace).focus()
+	}
+
+	clear () {
+		this.performOnActiveTerminal(t => t.clear())
 	}
 
 	focus () {

@@ -628,6 +628,12 @@ class XTerminalElementImpl extends HTMLElement {
 		}
 	}
 
+	clear () {
+		if (this.terminal) {
+			return this.terminal.clear()
+		}
+	}
+
 	applyPendingTerminalProfileOptions () {
 		// For any changes involving the xterm.js Terminal object, only apply them
 		// when the terminal is visible.
