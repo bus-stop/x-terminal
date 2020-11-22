@@ -143,4 +143,101 @@ describe('x-terminal', () => {
 			expect(newTerminal.runCommand).toHaveBeenCalledWith('command 2')
 		})
 	})
+
+	describe('close()', () => {
+		let activeTerminal
+		beforeEach(() => {
+			activeTerminal = {
+				element: {
+					initializedPromise: Promise.resolve(),
+				},
+				exit: jasmine.createSpy('activeTerminal.exit'),
+			}
+			spyOn(xTerminalInstance, 'getActiveTerminal').and.returnValue(activeTerminal)
+		})
+
+		it('closes terminal', async () => {
+			await xTerminalInstance.close()
+
+			expect(activeTerminal.exit).toHaveBeenCalled()
+		})
+	})
+
+	describe('restart()', () => {
+		let activeTerminal
+		beforeEach(() => {
+			activeTerminal = {
+				element: {
+					initializedPromise: Promise.resolve(),
+				},
+				restartPtyProcess: jasmine.createSpy('activeTerminal.restartPtyProcess'),
+			}
+			spyOn(xTerminalInstance, 'getActiveTerminal').and.returnValue(activeTerminal)
+		})
+
+		it('restarts terminal', async () => {
+			await xTerminalInstance.restart()
+
+			expect(activeTerminal.restartPtyProcess).toHaveBeenCalled()
+		})
+	})
+
+	describe('copy()', () => {
+		let activeTerminal
+		beforeEach(() => {
+			activeTerminal = {
+				element: {
+					initializedPromise: Promise.resolve(),
+				},
+				copyFromTerminal: jasmine.createSpy('activeTerminal.copy').and.returnValue('copied'),
+			}
+			spyOn(xTerminalInstance, 'getActiveTerminal').and.returnValue(activeTerminal)
+			spyOn(atom.clipboard, 'write')
+		})
+
+		it('copys terminal', async () => {
+			await xTerminalInstance.copy()
+
+			expect(atom.clipboard.write).toHaveBeenCalledWith('copied')
+		})
+	})
+
+	describe('paste()', () => {
+		let activeTerminal
+		beforeEach(() => {
+			activeTerminal = {
+				element: {
+					initializedPromise: Promise.resolve(),
+				},
+				pasteToTerminal: jasmine.createSpy('activeTerminal.paste'),
+			}
+			spyOn(xTerminalInstance, 'getActiveTerminal').and.returnValue(activeTerminal)
+			spyOn(atom.clipboard, 'read').and.returnValue('copied')
+		})
+
+		it('pastes terminal', async () => {
+			await xTerminalInstance.paste()
+
+			expect(activeTerminal.pasteToTerminal).toHaveBeenCalledWith('copied')
+		})
+	})
+
+	describe('clear()', () => {
+		let activeTerminal
+		beforeEach(() => {
+			activeTerminal = {
+				element: {
+					initializedPromise: Promise.resolve(),
+				},
+				clear: jasmine.createSpy('activeTerminal.clear'),
+			}
+			spyOn(xTerminalInstance, 'getActiveTerminal').and.returnValue(activeTerminal)
+		})
+
+		it('clears terminal', async () => {
+			await xTerminalInstance.clear()
+
+			expect(activeTerminal.clear).toHaveBeenCalled()
+		})
+	})
 })
