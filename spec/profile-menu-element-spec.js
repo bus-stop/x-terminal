@@ -22,7 +22,7 @@
 import { XTerminalProfileMenuElement } from '../src/profile-menu-element'
 
 describe('XTerminalProfileMenuElement', () => {
-	this.element = null
+	let element
 
 	beforeEach(async () => {
 		const model = jasmine.createSpyObj(
@@ -53,173 +53,173 @@ describe('XTerminalProfileMenuElement', () => {
 		)
 		model.getXTerminalModel.and.returnValue(model.atomXtermModel)
 		model.getXTerminalModelElement.and.returnValue(mock)
-		this.element = new XTerminalProfileMenuElement()
-		this.element.initialize(model)
-		await this.element.initializedPromise
+		element = new XTerminalProfileMenuElement()
+		element.initialize(model)
+		await element.initializedPromise
 	})
 
 	it('initialize()', async () => {
-		await this.element.initializedPromise
+		await element.initializedPromise
 	})
 
 	it('destroy() disposables not set', () => {
-		this.element.disposables = null
-		this.element.destroy()
+		element.disposables = null
+		element.destroy()
 	})
 
 	it('destroy() disposables is set', () => {
-		this.element.disposables = jasmine.createSpyObj(
+		element.disposables = jasmine.createSpyObj(
 			'disposables',
 			[
 				'dispose',
 			],
 		)
-		this.element.destroy()
-		expect(this.element.disposables.dispose).toHaveBeenCalled()
+		element.destroy()
+		expect(element.disposables.dispose).toHaveBeenCalled()
 	})
 
 	it('getModelProfile()', () => {
 		const mock = jasmine.createSpy('mock')
-		this.element.model.atomXtermModel.profile = mock
-		expect(this.element.getModelProfile()).toBe(mock)
+		element.model.atomXtermModel.profile = mock
+		expect(element.getModelProfile()).toBe(mock)
 	})
 
 	it('getMenuElements()', () => {
-		expect(this.element.getMenuElements()).toBeTruthy()
+		expect(element.getMenuElements()).toBeTruthy()
 	})
 
 	it('getProfileMenuSettings()', () => {
-		const expected = this.element.profilesSingleton.getBaseProfile()
-		const actual = this.element.getProfileMenuSettings()
+		const expected = element.profilesSingleton.getBaseProfile()
+		const actual = element.getProfileMenuSettings()
 		expect(actual).toEqual(expected)
 	})
 
 	it('applyProfileChanges()', () => {
-		this.element.applyProfileChanges('foo')
-		expect(this.element.model.getXTerminalModel().applyProfileChanges).toHaveBeenCalledWith('foo')
+		element.applyProfileChanges('foo')
+		expect(element.model.getXTerminalModel().applyProfileChanges).toHaveBeenCalledWith('foo')
 	})
 
 	it('applyProfileChanges() profile menu hidden', () => {
-		spyOn(this.element, 'hideProfileMenu')
-		this.element.applyProfileChanges('foo')
-		expect(this.element.hideProfileMenu).toHaveBeenCalled()
+		spyOn(element, 'hideProfileMenu')
+		element.applyProfileChanges('foo')
+		expect(element.hideProfileMenu).toHaveBeenCalled()
 	})
 
 	it('restartTerminal()', () => {
-		this.element.restartTerminal()
-		expect(this.element.model.getXTerminalModelElement().restartPtyProcess).toHaveBeenCalled()
+		element.restartTerminal()
+		expect(element.model.getXTerminalModelElement().restartPtyProcess).toHaveBeenCalled()
 	})
 
 	it('restartTerminal() profile menu hidden', () => {
-		spyOn(this.element, 'hideProfileMenu')
-		this.element.restartTerminal()
-		expect(this.element.hideProfileMenu).toHaveBeenCalled()
+		spyOn(element, 'hideProfileMenu')
+		element.restartTerminal()
+		expect(element.hideProfileMenu).toHaveBeenCalled()
 	})
 
 	it('createMenuItemContainer() check id', () => {
-		const container = this.element.createMenuItemContainer('foo', 'bar', 'baz')
+		const container = element.createMenuItemContainer('foo', 'bar', 'baz')
 		expect(container.getAttribute('id')).toBe('foo')
 	})
 
 	it('createMenuItemContainer() check title', () => {
-		const container = this.element.createMenuItemContainer('foo', 'bar', 'baz')
+		const container = element.createMenuItemContainer('foo', 'bar', 'baz')
 		const titleDiv = container.querySelector('.x-terminal-profile-menu-item-title')
 		expect(titleDiv.textContent).toBe('bar')
 	})
 
 	it('createMenuItemContainer() check description', () => {
-		const container = this.element.createMenuItemContainer('foo', 'bar', 'baz')
+		const container = element.createMenuItemContainer('foo', 'bar', 'baz')
 		const descriptionDiv = container.querySelector('.x-terminal-profile-menu-item-description')
 		expect(descriptionDiv.innerHTML).toBe('<p>baz</p>\n')
 	})
 
 	it('createProfilesDropDownSelectItem() check id', async () => {
-		const select = await this.element.createProfilesDropDownSelectItem()
+		const select = await element.createProfilesDropDownSelectItem()
 		expect(select.getAttribute('id')).toBe('profiles-dropdown')
 	})
 
 	it('createProfilesDropDownSelectItem() check classList', async () => {
-		const select = await this.element.createProfilesDropDownSelectItem()
+		const select = await element.createProfilesDropDownSelectItem()
 		expect(select.classList.contains('x-terminal-profile-menu-item-select')).toBe(true)
 	})
 
 	it('createProfilesDropDown()', async () => {
-		const menuItemContainer = await this.element.createProfilesDropDown()
+		const menuItemContainer = await element.createProfilesDropDown()
 		expect(menuItemContainer.getAttribute('id')).toBe('profiles-selection')
 	})
 
 	it('createProfileMenuButtons()', () => {
-		const buttonsContainer = this.element.createProfileMenuButtons()
+		const buttonsContainer = element.createProfileMenuButtons()
 		expect(buttonsContainer.classList.contains('x-terminal-profile-menu-buttons-div')).toBe(true)
 	})
 
 	it('createButton()', () => {
-		const button = this.element.createButton()
+		const button = element.createButton()
 		expect(button.classList.contains('x-terminal-profile-menu-button')).toBe(true)
 	})
 
 	it('createTextbox()', () => {
-		const menuItemContainer = this.element.createTextbox('foo', 'bar', 'baz', 'cat', 'dog')
+		const menuItemContainer = element.createTextbox('foo', 'bar', 'baz', 'cat', 'dog')
 		expect(menuItemContainer.getAttribute('id')).toBe('foo')
 	})
 
 	it('createCheckbox()', () => {
-		const menuItemContainer = this.element.createCheckbox('foo', 'bar', 'baz', true, false)
+		const menuItemContainer = element.createCheckbox('foo', 'bar', 'baz', true, false)
 		expect(menuItemContainer.getAttribute('id')).toBe('foo')
 	})
 
 	it('isVisible() initial value', () => {
-		expect(this.element.isVisible()).toBe(false)
+		expect(element.isVisible()).toBe(false)
 	})
 
 	it('hideProfileMenu()', () => {
-		this.element.hideProfileMenu()
-		expect(this.element.style.visibility).toBe('hidden')
+		element.hideProfileMenu()
+		expect(element.style.visibility).toBe('hidden')
 	})
 
 	it('hideProfileMenu() terminal shown', () => {
-		this.element.hideProfileMenu()
-		expect(this.element.model.getXTerminalModelElement().showTerminal).toHaveBeenCalled()
+		element.hideProfileMenu()
+		expect(element.model.getXTerminalModelElement().showTerminal).toHaveBeenCalled()
 	})
 
 	it('hideProfileMenu() terminal focused', () => {
-		this.element.hideProfileMenu()
-		expect(this.element.model.getXTerminalModelElement().focusOnTerminal).toHaveBeenCalled()
+		element.hideProfileMenu()
+		expect(element.model.getXTerminalModelElement().focusOnTerminal).toHaveBeenCalled()
 	})
 
 	it('showProfileMenu()', () => {
-		this.element.showProfileMenu()
-		expect(this.element.style.visibility).toBe('visible')
+		element.showProfileMenu()
+		expect(element.style.visibility).toBe('visible')
 	})
 
 	it('showProfileMenu() terminal hidden', () => {
-		this.element.showProfileMenu()
-		expect(this.element.model.getXTerminalModelElement().hideTerminal).toHaveBeenCalled()
+		element.showProfileMenu()
+		expect(element.model.getXTerminalModelElement().hideTerminal).toHaveBeenCalled()
 	})
 
 	it('toggleProfileMenu() currently hidden', () => {
-		spyOn(this.element, 'isVisible').and.returnValue(false)
-		spyOn(this.element, 'showProfileMenu')
-		this.element.toggleProfileMenu()
-		expect(this.element.showProfileMenu).toHaveBeenCalled()
+		spyOn(element, 'isVisible').and.returnValue(false)
+		spyOn(element, 'showProfileMenu')
+		element.toggleProfileMenu()
+		expect(element.showProfileMenu).toHaveBeenCalled()
 	})
 
 	it('toggleProfileMenu() currently visible', () => {
-		spyOn(this.element, 'isVisible').and.returnValue(true)
-		spyOn(this.element, 'hideProfileMenu')
-		this.element.toggleProfileMenu()
-		expect(this.element.hideProfileMenu).toHaveBeenCalled()
+		spyOn(element, 'isVisible').and.returnValue(true)
+		spyOn(element, 'hideProfileMenu')
+		element.toggleProfileMenu()
+		expect(element.hideProfileMenu).toHaveBeenCalled()
 	})
 
 	it('getNewProfileAndChanges()', () => {
-		spyOn(this.element, 'getProfileMenuSettings').and.returnValue({
+		spyOn(element, 'getProfileMenuSettings').and.returnValue({
 			args: [
 				'--foo',
 				'--bar',
 				'--baz',
 			],
 		})
-		this.element.model.atomXtermModel.getProfile.and.returnValue({
+		element.model.atomXtermModel.getProfile.and.returnValue({
 			command: 'somecommand',
 		})
 		const expected = {
@@ -238,60 +238,60 @@ describe('XTerminalProfileMenuElement', () => {
 				],
 			},
 		}
-		const actual = this.element.getNewProfileAndChanges()
+		const actual = element.getNewProfileAndChanges()
 		expect(actual).toEqual(expected)
 	})
 
 	it('loadProfile()', () => {
-		spyOn(this.element, 'applyProfileChanges')
-		this.element.loadProfile()
-		expect(this.element.applyProfileChanges).toHaveBeenCalled()
+		spyOn(element, 'applyProfileChanges')
+		element.loadProfile()
+		expect(element.applyProfileChanges).toHaveBeenCalled()
 	})
 
 	it('saveProfile()', () => {
-		spyOn(this.element, 'promptForNewProfileName')
-		this.element.saveProfile()
-		expect(this.element.promptForNewProfileName).toHaveBeenCalled()
+		spyOn(element, 'promptForNewProfileName')
+		element.saveProfile()
+		expect(element.promptForNewProfileName).toHaveBeenCalled()
 	})
 
 	it('deleteProfile() nothing selected', () => {
-		spyOn(this.element, 'promptDelete')
-		this.element.deleteProfile()
-		expect(this.element.promptDelete).not.toHaveBeenCalled()
+		spyOn(element, 'promptDelete')
+		element.deleteProfile()
+		expect(element.promptDelete).not.toHaveBeenCalled()
 	})
 
 	it('deleteProfile() option selected', () => {
-		spyOn(this.element, 'promptDelete')
+		spyOn(element, 'promptDelete')
 		const mock = jasmine.createSpy('mock')
 		mock.options = [{ text: 'foo' }]
 		mock.selectedIndex = 0
-		spyOn(this.element.mainDiv, 'querySelector').and.returnValue(mock)
-		this.element.deleteProfile()
-		expect(this.element.promptDelete).toHaveBeenCalledWith('foo')
+		spyOn(element.mainDiv, 'querySelector').and.returnValue(mock)
+		element.deleteProfile()
+		expect(element.promptDelete).toHaveBeenCalledWith('foo')
 	})
 
 	it('promptDelete()', (done) => {
-		spyOn(this.element.deleteProfileModel, 'promptDelete').and.callFake((newProfile) => {
+		spyOn(element.deleteProfileModel, 'promptDelete').and.callFake((newProfile) => {
 			expect(newProfile).toBe('foo')
 			done()
 		})
-		this.element.promptDelete('foo')
+		element.promptDelete('foo')
 	})
 
 	it('promptForNewProfileName()', (done) => {
-		spyOn(this.element.saveProfileModel, 'promptForNewProfileName').and.callFake((newProfile, profileChanges) => {
+		spyOn(element.saveProfileModel, 'promptForNewProfileName').and.callFake((newProfile, profileChanges) => {
 			expect(newProfile).toBe('foo')
 			expect(profileChanges).toBe('bar')
 			done()
 		})
-		this.element.promptForNewProfileName('foo', 'bar')
+		element.promptForNewProfileName('foo', 'bar')
 	})
 
 	it('setNewMenuSettings()', () => {
-		this.element.setNewMenuSettings(this.element.profilesSingleton.getBaseProfile())
+		element.setNewMenuSettings(element.profilesSingleton.getBaseProfile())
 	})
 
 	it('setNewMenuSettings() clear = true', () => {
-		this.element.setNewMenuSettings(this.element.profilesSingleton.getBaseProfile(), true)
+		element.setNewMenuSettings(element.profilesSingleton.getBaseProfile(), true)
 	})
 })

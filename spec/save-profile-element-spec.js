@@ -22,21 +22,21 @@
 import { XTerminalSaveProfileElement } from '../src/save-profile-element'
 
 describe('XTerminalSaveProfileElement', () => {
-	this.model = null
+	let model
 
 	beforeEach(() => {
-		this.model = jasmine.createSpyObj('model', ['setElement'])
+		model = jasmine.createSpyObj('model', ['setElement'])
 	})
 
 	it('initialize()', () => {
 		const element = new XTerminalSaveProfileElement()
-		element.initialize(this.model)
+		element.initialize(model)
 		expect(element.messageDiv.textContent).toBe('Enter new profile name')
 	})
 
 	it('setNewTextbox()', () => {
 		const element = new XTerminalSaveProfileElement()
-		element.initialize(this.model)
+		element.initialize(model)
 		const textbox = jasmine.createSpyObj('textbox', ['getElement'])
 		textbox.getElement.and.returnValue(document.createElement('div'))
 		element.setNewTextbox(textbox)
