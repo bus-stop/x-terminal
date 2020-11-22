@@ -2247,6 +2247,12 @@ describe('XTerminalElement', () => {
 		expect(element.getXtermOptions()).toEqual(expected)
 	})
 
+	it('clear terminal', () => {
+		spyOn(element.terminal, 'clear')
+		element.clear()
+		expect(element.terminal.clear).toHaveBeenCalled()
+	})
+
 	it('applyPendingTerminalProfileOptions() terminal not visible', () => {
 		spyOn(element, 'refitTerminal')
 		element.terminalDivInitiallyVisible = false

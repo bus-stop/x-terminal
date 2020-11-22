@@ -45,7 +45,7 @@ describe('XTerminalModel', () => {
 		pane = jasmine.createSpyObj('pane',
 			['destroyItem', 'getActiveItem'])
 		element = jasmine.createSpyObj('element',
-			['destroy', 'refitTerminal', 'focusOnTerminal', 'clickOnCurrentAnchor', 'getCurrentAnchorHref', 'restartPtyProcess'])
+			['destroy', 'refitTerminal', 'focusOnTerminal', 'clickOnCurrentAnchor', 'getCurrentAnchorHref', 'restartPtyProcess', 'clear'])
 		element.terminal = jasmine.createSpyObj('terminal',
 			['getSelection'])
 		element.ptyProcess = jasmine.createSpyObj('ptyProcess',
@@ -469,6 +469,12 @@ describe('XTerminalModel', () => {
 		const expectedText = 'some text'
 		model.pasteToTerminal(expectedText)
 		expect(model.element.ptyProcess.write.calls.allArgs()).toEqual([[expectedText]])
+	})
+
+	it('clear()', () => {
+		model.element = element
+		model.clear()
+		expect(model.element.clear).toHaveBeenCalled()
 	})
 
 	it('setActive()', async function () {
