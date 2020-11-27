@@ -1,3 +1,10 @@
+# [11.1.0](https://github.com/bus-stop/x-terminal/compare/v11.0.5...v11.1.0) (2020-11-27)
+
+
+### Features
+
+* add x-terminal:clear command ([#216](https://github.com/bus-stop/x-terminal/issues/216)) ([228e621](https://github.com/bus-stop/x-terminal/commit/228e621a7733a260f516a94670ed31ce14852321))
+
 ## [11.0.5](https://github.com/bus-stop/x-terminal/compare/v11.0.4...v11.0.5) (2020-11-19)
 
 
