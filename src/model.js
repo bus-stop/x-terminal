@@ -232,6 +232,12 @@ class XTerminalModel {
 		this.element.ptyProcess.write(text)
 	}
 
+	clear () {
+		if (this.element) {
+			return this.element.clear()
+		}
+	}
+
 	setActive () {
 		recalculateActive(this.terminals_set, this)
 	}

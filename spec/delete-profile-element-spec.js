@@ -22,21 +22,21 @@
 import { XTerminalDeleteProfileElement } from '../src/delete-profile-element'
 
 describe('XTerminalDeleteProfileElement', () => {
-	this.model = null
+	let model
 
 	beforeEach(() => {
-		this.model = jasmine.createSpyObj('model', ['setElement'])
+		model = jasmine.createSpyObj('model', ['setElement'])
 	})
 
 	it('initialize()', () => {
 		const element = new XTerminalDeleteProfileElement()
-		element.initialize(this.model)
+		element.initialize(model)
 		expect(element.promptButtonsDiv.childElementCount).toBe(0)
 	})
 
 	it('setNewPrompt()', () => {
 		const element = new XTerminalDeleteProfileElement()
-		element.initialize(this.model)
+		element.initialize(model)
 		const profileName = 'foo'
 		const confirmHandler = () => {}
 		const cancelHandler = () => {}

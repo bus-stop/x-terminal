@@ -237,10 +237,12 @@ describe('XTerminalProfilesSingleton', () => {
 		throw new Error('Unknown key: ' + key)
 	}
 
+	let origAtomConfigGet, disposables, origProfilesConfigPath
+
 	beforeEach(async () => {
-		this.origAtomConfigGet = atom.config.get
-		this.disposables = new CompositeDisposable()
-		this.origProfilesConfigPath = XTerminalProfilesSingleton.instance.profilesConfigPath
+		origAtomConfigGet = atom.config.get
+		disposables = new CompositeDisposable()
+		origProfilesConfigPath = XTerminalProfilesSingleton.instance.profilesConfigPath
 		XTerminalProfilesSingleton.instance.resetBaseProfile()
 		await XTerminalProfilesSingleton.instance.profilesLoadPromise
 		const _path = await temp.mkdir()
@@ -250,10 +252,10 @@ describe('XTerminalProfilesSingleton', () => {
 	})
 
 	afterEach(async () => {
-		atom.config.get = this.origAtomConfigGet
+		atom.config.get = origAtomConfigGet
 		await temp.cleanup()
-		XTerminalProfilesSingleton.instance.profilesConfigPath = this.origProfilesConfigPath
-		this.disposables.dispose()
+		XTerminalProfilesSingleton.instance.profilesConfigPath = origProfilesConfigPath
+		disposables.dispose()
 	})
 
 	it('XTerminalProfilesSingleton cannot be instantiated directly', () => {
@@ -270,7 +272,7 @@ describe('XTerminalProfilesSingleton', () => {
 	it('has proper profiles.json path', () => {
 		const expected = path.join(configDefaults.userDataPath, 'profiles.json')
 		// Need to check to original profiles config path.
-		expect(this.origProfilesConfigPath).toBe(expected)
+		expect(origProfilesConfigPath).toBe(expected)
 	})
 
 	it('sortProfiles()', () => {
@@ -288,7 +290,7 @@ describe('XTerminalProfilesSingleton', () => {
 	})
 
 	it('reloadProfiles()', (done) => {
-		this.disposables.add(XTerminalProfilesSingleton.instance.onDidReloadProfiles((profiles) => {
+		disposables.add(XTerminalProfilesSingleton.instance.onDidReloadProfiles((profiles) => {
 			done()
 		}))
 		XTerminalProfilesSingleton.instance.reloadProfiles()
@@ -296,12 +298,12 @@ describe('XTerminalProfilesSingleton', () => {
 
 	it('onDidReloadProfiles()', () => {
 		// Should just work.
-		this.disposables.add(XTerminalProfilesSingleton.instance.onDidReloadProfiles((profiles) => {}))
+		disposables.add(XTerminalProfilesSingleton.instance.onDidReloadProfiles((profiles) => {}))
 	})
 
 	it('onDidResetBaseProfile()', () => {
 		// Should just work.
-		this.disposables.add(XTerminalProfilesSingleton.instance.onDidResetBaseProfile((baseProfile) => {}))
+		disposables.add(XTerminalProfilesSingleton.instance.onDidResetBaseProfile((baseProfile) => {}))
 	})
 
 	it('updateProfiles()', async () => {

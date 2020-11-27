@@ -49,14 +49,16 @@
     "ctrl-shift-c": "x-terminal:copy",
     "shift-insert": "x-terminal:paste",
     "ctrl-shift-v": "x-terminal:paste",
-    "ctrl-shift-u": "x-terminal:unfocus"
+    "ctrl-shift-u": "x-terminal:unfocus",
+    "ctrl-l": "x-terminal:clear"
   },
   ".platform-win32 x-terminal": {
     "ctrl-insert": "x-terminal:copy",
     "ctrl-shift-c": "x-terminal:copy",
     "shift-insert": "x-terminal:paste",
     "ctrl-shift-v": "x-terminal:paste",
-    "ctrl-shift-u": "x-terminal:unfocus"
+    "ctrl-shift-u": "x-terminal:unfocus",
+    "ctrl-l": "x-terminal:clear"
   },
   ".platform-darwin x-terminal": {
     "ctrl-shift-c": "x-terminal:copy",
@@ -65,6 +67,7 @@
     "shift-insert": "x-terminal:paste",
     "cmd-c": "x-terminal:copy",
     "cmd-v": "x-terminal:paste",
-    "ctrl-shift-u": "x-terminal:unfocus"
+    "ctrl-shift-u": "x-terminal:unfocus",
+    "ctrl-l": "x-terminal:clear"
   }
 }

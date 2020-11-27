@@ -18,6 +18,10 @@
         "command": "x-terminal:restart"
       },
       {
+        "label": "Clear",
+        "command": "x-terminal:clear"
+      },
+      {
         "type": "separator"
       },
       {

@@ -33,25 +33,24 @@ import { URL, URLSearchParams } from 'whatwg-url'
 
 temp.track()
 
-describe('XTerminalElement', () => {
-	const savedPlatform = process.platform
-	this.element = null
-	this.tmpdir = null
+async function createNewElement (uri = 'x-terminal://somesessionid/') {
+	const terminalsSet = new Set()
+	const model = new XTerminalModel({
+		uri: uri,
+		terminals_set: terminalsSet,
+	})
+	await model.initializedPromise
+	model.pane = jasmine.createSpyObj('pane',
+		['removeItem', 'getActiveItem', 'destroyItem'])
+	const element = new XTerminalElement()
+	await element.initialize(model)
+	await element.createTerminal()
+	return element
+}
 
-	const createNewElement = async (uri = 'x-terminal://somesessionid/') => {
-		const terminalsSet = new Set()
-		const model = new XTerminalModel({
-			uri: uri,
-			terminals_set: terminalsSet,
-		})
-		await model.initializedPromise
-		model.pane = jasmine.createSpyObj('pane',
-			['removeItem', 'getActiveItem', 'destroyItem'])
-		const element = new XTerminalElement()
-		await element.initialize(model)
-		await element.createTerminal()
-		return element
-	}
+describe('XTerminalElement', () => {
+	let element, tmpdir
+	const savedPlatform = process.platform
 
 	beforeEach(async () => {
 		atom.config.clear()
@@ -62,13 +61,12 @@ describe('XTerminalElement', () => {
 			.and.returnValue('sometestprocess')
 		spyOn(nodePty, 'spawn').and.returnValue(ptyProcess)
 		spyOn(shell, 'openExternal')
-		const element = await createNewElement()
-		this.element = element
-		this.tmpdir = await temp.mkdir()
+		element = await createNewElement()
+		tmpdir = await temp.mkdir()
 	})
 
 	afterEach(async () => {
-		this.element.destroy()
+		element.destroy()
 		Object.defineProperty(process, 'platform', {
 			value: savedPlatform,
 		})
@@ -78,32 +76,32 @@ describe('XTerminalElement', () => {
 
 	it('initialize(model)', () => {
 		// Simply test if the terminal has been created.
-		expect(this.element.terminal).toBeTruthy()
+		expect(element.terminal).toBeTruthy()
 	})
 
 	it('initialize(model) check session-id', () => {
-		expect(this.element.getAttribute('session-id')).toBe('somesessionid')
+		expect(element.getAttribute('session-id')).toBe('somesessionid')
 	})
 
 	it('destroy() check ptyProcess killed', () => {
-		this.element.destroy()
-		expect(this.element.ptyProcess.kill).toHaveBeenCalled()
+		element.destroy()
+		expect(element.ptyProcess.kill).toHaveBeenCalled()
 	})
 
 	it('destroy() check terminal destroyed', () => {
-		spyOn(this.element.terminal, 'dispose').and.callThrough()
-		this.element.destroy()
-		expect(this.element.terminal.dispose).toHaveBeenCalled()
+		spyOn(element.terminal, 'dispose').and.callThrough()
+		element.destroy()
+		expect(element.terminal.dispose).toHaveBeenCalled()
 	})
 
 	it('destroy() check disposables disposed', () => {
-		spyOn(this.element.disposables, 'dispose').and.callThrough()
-		this.element.destroy()
-		expect(this.element.disposables.dispose).toHaveBeenCalled()
+		spyOn(element.disposables, 'dispose').and.callThrough()
+		element.destroy()
+		expect(element.disposables.dispose).toHaveBeenCalled()
 	})
 
 	it('getShellCommand()', () => {
-		expect(this.element.getShellCommand()).toBe(configDefaults.command)
+		expect(element.getShellCommand()).toBe(configDefaults.command)
 	})
 
 	it('getShellCommand() command set in uri', async () => {
@@ -115,7 +113,7 @@ describe('XTerminalElement', () => {
 	})
 
 	it('getArgs()', () => {
-		expect(this.element.getArgs()).toEqual([])
+		expect(element.getArgs()).toEqual([])
 	})
 
 	it('getArgs() args set in uri', async () => {
@@ -127,12 +125,12 @@ describe('XTerminalElement', () => {
 	})
 
 	it('getArgs() throw exception when args is not an array', () => {
-		this.element.model.profile.args = {}
-		expect(() => { this.element.getArgs() }).toThrow(new Error('Arguments set are not an array.'))
+		element.model.profile.args = {}
+		expect(() => { element.getArgs() }).toThrow(new Error('Arguments set are not an array.'))
 	})
 
 	it('getTermType()', () => {
-		expect(this.element.getTermType()).toBe(configDefaults.termType)
+		expect(element.getTermType()).toBe(configDefaults.termType)
 	})
 
 	it('getTermType() name set in uri', async () => {
@@ -144,37 +142,37 @@ describe('XTerminalElement', () => {
 	})
 
 	it('checkPathIsDirectory() no path given', async () => {
-		const isDirectory = await this.element.checkPathIsDirectory()
+		const isDirectory = await element.checkPathIsDirectory()
 		expect(isDirectory).toBe(false)
 	})
 
 	it('checkPathIsDirectory() path set to undefined', async () => {
-		const isDirectory = await this.element.checkPathIsDirectory(undefined)
+		const isDirectory = await element.checkPathIsDirectory(undefined)
 		expect(isDirectory).toBe(false)
 	})
 
 	it('checkPathIsDirectory() path set to null', async () => {
-		const isDirectory = await this.element.checkPathIsDirectory(null)
+		const isDirectory = await element.checkPathIsDirectory(null)
 		expect(isDirectory).toBe(false)
 	})
 
 	it('checkPathIsDirectory() path set to tmpdir', async () => {
-		const isDirectory = await this.element.checkPathIsDirectory(this.tmpdir)
+		const isDirectory = await element.checkPathIsDirectory(tmpdir)
 		expect(isDirectory).toBe(true)
 	})
 
 	it('checkPathIsDirectory() path set to non-existent dir', async () => {
-		const isDirectory = await this.element.checkPathIsDirectory(path.join(this.tmpdir, 'non-existent-dir'))
+		const isDirectory = await element.checkPathIsDirectory(path.join(tmpdir, 'non-existent-dir'))
 		expect(isDirectory).toBe(false)
 	})
 
 	it('getCwd()', async () => {
-		const cwd = await this.element.getCwd()
+		const cwd = await element.getCwd()
 		expect(cwd).toBe(configDefaults.cwd)
 	})
 
 	it('getCwd() cwd set in uri', async () => {
-		const expected = this.tmpdir
+		const expected = tmpdir
 		const params = new URLSearchParams({ cwd: expected })
 		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
@@ -185,7 +183,7 @@ describe('XTerminalElement', () => {
 	it('getCwd() ignore cwd in uri if projectCwd is set', async () => {
 		const expected = await temp.mkdir('projectCwd')
 		spyOn(atom.project, 'getPaths').and.returnValue([expected])
-		const params = new URLSearchParams({ projectCwd: true, cwd: this.tmpdir })
+		const params = new URLSearchParams({ projectCwd: true, cwd: tmpdir })
 		const url = new URL('x-terminal://?' + params.toString())
 		const element = await createNewElement(url.href)
 		const cwd = await element.getCwd()
@@ -197,13 +195,13 @@ describe('XTerminalElement', () => {
 			'previousActiveItem',
 			['getPath'],
 		)
-		previousActiveItem.getPath.and.returnValue(this.tmpdir)
+		previousActiveItem.getPath.and.returnValue(tmpdir)
 		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(
 			previousActiveItem,
 		)
 		const element = await createNewElement()
 		const cwd = await element.getCwd()
-		expect(cwd).toBe(this.tmpdir)
+		expect(cwd).toBe(tmpdir)
 	})
 
 	it('getCwd() model getPath() returns invalid path', async () => {
@@ -211,7 +209,7 @@ describe('XTerminalElement', () => {
 			'previousActiveItem',
 			['getPath'],
 		)
-		previousActiveItem.getPath.and.returnValue(path.join(this.tmpdir, 'non-existent-dir'))
+		previousActiveItem.getPath.and.returnValue(path.join(tmpdir, 'non-existent-dir'))
 		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(
 			previousActiveItem,
 		)
@@ -221,16 +219,16 @@ describe('XTerminalElement', () => {
 	})
 
 	it('getCwd() non-existent cwd set in uri', async () => {
-		const dir = path.join(this.tmpdir, 'non-existent-dir')
+		const dir = path.join(tmpdir, 'non-existent-dir')
 		const params = new URLSearchParams({ cwd: dir })
 		const url = new URL('x-terminal://?' + params.toString())
 		await createNewElement(url.href)
-		const cwd = await this.element.getCwd()
+		const cwd = await element.getCwd()
 		expect(cwd).toBe(configDefaults.cwd)
 	})
 
 	it('getCwd() non-existent project path added', async () => {
-		spyOn(atom.project, 'getPaths').and.returnValue([path.join(this.tmpdir, 'non-existent-dir')])
+		spyOn(atom.project, 'getPaths').and.returnValue([path.join(tmpdir, 'non-existent-dir')])
 		const element = await createNewElement()
 		const cwd = await element.getCwd()
 		expect(cwd).toBe(configDefaults.cwd)
@@ -240,7 +238,7 @@ describe('XTerminalElement', () => {
 		const NODE_ENV = process.env.NODE_ENV
 		try {
 			delete process.env.NODE_ENV
-			expect(JSON.stringify(this.element.getEnv())).toEqual(JSON.stringify(process.env))
+			expect(JSON.stringify(element.getEnv())).toEqual(JSON.stringify(process.env))
 		} finally {
 			process.env.NODE_ENV = NODE_ENV
 		}
@@ -255,8 +253,8 @@ describe('XTerminalElement', () => {
 	})
 
 	it('getEnv() throw exception when env is not an object', () => {
-		this.element.model.profile.env = []
-		expect(() => { this.element.getEnv() }).toThrow(new Error('Environment set is not an object.'))
+		element.model.profile.env = []
+		expect(() => { element.getEnv() }).toThrow(new Error('Environment set is not an object.'))
 	})
 
 	it('getEnv() setEnv set in uri', async () => {
@@ -270,25 +268,25 @@ describe('XTerminalElement', () => {
 	it('getEnv() deleteEnv set in config', () => {
 		atom.config.set('x-terminal.spawnPtySettings.env', JSON.stringify({ var1: 'value1' }))
 		atom.config.set('x-terminal.spawnPtySettings.deleteEnv', JSON.stringify(['var1']))
-		expect(this.element.getEnv().var1).toBe(undefined)
+		expect(element.getEnv().var1).toBe(undefined)
 	})
 
 	it('getEnv() deleteEnv set in uri', async () => {
 		const params = new URLSearchParams({ env: JSON.stringify({ var1: 'value1' }), deleteEnv: JSON.stringify(['var1']) })
 		const url = new URL('x-terminal://?' + params.toString())
 		await createNewElement(url.href)
-		expect(this.element.getEnv().var1).toBe(undefined)
+		expect(element.getEnv().var1).toBe(undefined)
 	})
 
 	it('getEnv() deleteEnv has precendence over senEnv', () => {
 		atom.config.set('x-terminal.spawnPtySettings.env', JSON.stringify({ var1: 'value1' }))
 		atom.config.set('x-terminal.spawnPtySettings.setEnv', JSON.stringify({ var2: 'value2' }))
 		atom.config.set('x-terminal.spawnPtySettings.deleteEnv', JSON.stringify(['var2']))
-		expect(this.element.getEnv().var2).toBe(undefined)
+		expect(element.getEnv().var2).toBe(undefined)
 	})
 
 	it('getEncoding()', () => {
-		expect(this.element.getEncoding()).toBeNull()
+		expect(element.getEncoding()).toBeNull()
 	})
 
 	it('getEncoding() encoding set in uri', async () => {
@@ -300,7 +298,7 @@ describe('XTerminalElement', () => {
 	})
 
 	it('leaveOpenAfterExit()', () => {
-		expect(this.element.leaveOpenAfterExit()).toBe(true)
+		expect(element.leaveOpenAfterExit()).toBe(true)
 	})
 
 	it('leaveOpenAfterExit() true set in uri', async () => {
@@ -320,7 +318,7 @@ describe('XTerminalElement', () => {
 	})
 
 	it('isPromptToStartup()', () => {
-		expect(this.element.isPromptToStartup()).toBe(false)
+		expect(element.isPromptToStartup()).toBe(false)
 	})
 
 	it('isPromptToStartup() false set in uri', async () => {
@@ -340,26 +338,26 @@ describe('XTerminalElement', () => {
 	})
 
 	it('isPtyProcessRunning() ptyProcess null, ptyProcessRunning false', () => {
-		this.element.ptyProcess = null
-		this.element.ptyProcessRunning = false
-		expect(this.element.isPtyProcessRunning()).toBeFalsy()
+		element.ptyProcess = null
+		element.ptyProcessRunning = false
+		expect(element.isPtyProcessRunning()).toBeFalsy()
 	})
 
 	it('isPtyProcessRunning() ptyProcess not null, ptyProcessRunning false', () => {
-		this.element.ptyProcess = jasmine.createSpyObj('ptyProcess', ['kill'])
-		this.element.ptyProcessRunning = false
-		expect(this.element.isPtyProcessRunning()).toBeFalsy()
+		element.ptyProcess = jasmine.createSpyObj('ptyProcess', ['kill'])
+		element.ptyProcessRunning = false
+		expect(element.isPtyProcessRunning()).toBeFalsy()
 	})
 
 	it('isPtyProcessRunning() ptyProcess not null, ptyProcessRunning true', () => {
-		this.element.ptyProcess = jasmine.createSpyObj('ptyProcess', ['kill'])
-		this.element.ptyProcessRunning = true
-		expect(this.element.isPtyProcessRunning()).toBeTruthy()
+		element.ptyProcess = jasmine.createSpyObj('ptyProcess', ['kill'])
+		element.ptyProcessRunning = true
+		expect(element.isPtyProcessRunning()).toBeTruthy()
 	})
 
 	describe('getTheme()', () => {
 		it('Custom', () => {
-			const theme = this.element.getTheme({ theme: 'Custom' })
+			const theme = element.getTheme({ theme: 'Custom' })
 			expect(theme).toEqual({
 				background: '#000000',
 				foreground: '#ffffff',
@@ -396,7 +394,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Atom Dark', () => {
-			const theme = this.element.getTheme({ theme: 'Atom Dark' })
+			const theme = element.getTheme({ theme: 'Atom Dark' })
 			expect(theme).toEqual({
 				background: '#1d1f21',
 				foreground: '#c5c8c6',
@@ -433,7 +431,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Atom Light', () => {
-			const theme = this.element.getTheme({ theme: 'Atom Light' })
+			const theme = element.getTheme({ theme: 'Atom Light' })
 			expect(theme).toEqual({
 				background: '#ffffff',
 				foreground: '#555555',
@@ -470,7 +468,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Base16 Tomorrow Dark', () => {
-			const theme = this.element.getTheme({ theme: 'Base16 Tomorrow Dark' })
+			const theme = element.getTheme({ theme: 'Base16 Tomorrow Dark' })
 			expect(theme).toEqual({
 				background: '#1d1f21',
 				foreground: '#c5c8c6',
@@ -508,7 +506,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Base16 Tomorrow Light', () => {
-			const theme = this.element.getTheme({ theme: 'Base16 Tomorrow Light' })
+			const theme = element.getTheme({ theme: 'Base16 Tomorrow Light' })
 			expect(theme).toEqual({
 				background: '#ffffff',
 				foreground: '#1d1f21',
@@ -546,7 +544,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Christmas', () => {
-			const theme = this.element.getTheme({ theme: 'Christmas' })
+			const theme = element.getTheme({ theme: 'Christmas' })
 			expect(theme).toEqual({
 				background: '#0c0047',
 				foreground: '#f81705',
@@ -583,7 +581,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('City Lights', () => {
-			const theme = this.element.getTheme({ theme: 'City Lights' })
+			const theme = element.getTheme({ theme: 'City Lights' })
 			expect(theme).toEqual({
 				background: '#181d23',
 				foreground: '#666d81',
@@ -621,7 +619,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Dracula', () => {
-			const theme = this.element.getTheme({ theme: 'Dracula' })
+			const theme = element.getTheme({ theme: 'Dracula' })
 			expect(theme).toEqual({
 				background: '#1e1f29',
 				foreground: 'white',
@@ -658,7 +656,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Grass', () => {
-			const theme = this.element.getTheme({ theme: 'Grass' })
+			const theme = element.getTheme({ theme: 'Grass' })
 			expect(theme).toEqual({
 				background: 'rgb(19, 119, 61)',
 				foreground: 'rgb(255, 240, 165)',
@@ -695,7 +693,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Homebrew', () => {
-			const theme = this.element.getTheme({ theme: 'Homebrew' })
+			const theme = element.getTheme({ theme: 'Homebrew' })
 			expect(theme).toEqual({
 				background: '#000000',
 				foreground: 'rgb(41, 254, 20)',
@@ -732,7 +730,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Inverse', () => {
-			const theme = this.element.getTheme({ theme: 'Inverse' })
+			const theme = element.getTheme({ theme: 'Inverse' })
 			expect(theme).toEqual({
 				background: '#ffffff',
 				foreground: '#000000',
@@ -769,7 +767,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Linux', () => {
-			const theme = this.element.getTheme({ theme: 'Linux' })
+			const theme = element.getTheme({ theme: 'Linux' })
 			expect(theme).toEqual({
 				background: '#000000',
 				foreground: 'rgb(230, 230, 230)',
@@ -806,7 +804,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Man Page', () => {
-			const theme = this.element.getTheme({ theme: 'Man Page' })
+			const theme = element.getTheme({ theme: 'Man Page' })
 			expect(theme).toEqual({
 				background: 'rgb(254, 244, 156)',
 				foreground: 'black',
@@ -843,7 +841,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Novel', () => {
-			const theme = this.element.getTheme({ theme: 'Novel' })
+			const theme = element.getTheme({ theme: 'Novel' })
 			expect(theme).toEqual({
 				background: 'rgb(223, 219, 196)',
 				foreground: 'rgb(77, 47, 46)',
@@ -880,7 +878,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Ocean', () => {
-			const theme = this.element.getTheme({ theme: 'Ocean' })
+			const theme = element.getTheme({ theme: 'Ocean' })
 			expect(theme).toEqual({
 				background: 'rgb(44, 102, 201)',
 				foreground: 'white',
@@ -917,7 +915,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('One Dark', () => {
-			const theme = this.element.getTheme({ theme: 'One Dark' })
+			const theme = element.getTheme({ theme: 'One Dark' })
 			expect(theme).toEqual({
 				background: '#282c34',
 				foreground: '#abb2bf',
@@ -954,7 +952,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('One Light', () => {
-			const theme = this.element.getTheme({ theme: 'One Light' })
+			const theme = element.getTheme({ theme: 'One Light' })
 			expect(theme).toEqual({
 				background: 'hsl(230, 1%, 98%)',
 				foreground: 'hsl(230, 8%, 24%)',
@@ -991,7 +989,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Predawn', () => {
-			const theme = this.element.getTheme({ theme: 'Predawn' })
+			const theme = element.getTheme({ theme: 'Predawn' })
 			expect(theme).toEqual({
 				background: '#282828',
 				foreground: '#f1f1f1',
@@ -1028,7 +1026,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Pro', () => {
-			const theme = this.element.getTheme({ theme: 'Pro' })
+			const theme = element.getTheme({ theme: 'Pro' })
 			expect(theme).toEqual({
 				background: '#000000',
 				foreground: 'rgb(244, 244, 244)',
@@ -1065,7 +1063,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Red Sands', () => {
-			const theme = this.element.getTheme({ theme: 'Red Sands' })
+			const theme = element.getTheme({ theme: 'Red Sands' })
 			expect(theme).toEqual({
 				background: 'rgb(143, 53, 39)',
 				foreground: 'rgb(215, 201, 167)',
@@ -1102,7 +1100,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Red', () => {
-			const theme = this.element.getTheme({ theme: 'Red' })
+			const theme = element.getTheme({ theme: 'Red' })
 			expect(theme).toEqual({
 				background: '#000000',
 				foreground: 'rgb(255, 38, 14)',
@@ -1139,7 +1137,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Silver Aerogel', () => {
-			const theme = this.element.getTheme({ theme: 'Silver Aerogel' })
+			const theme = element.getTheme({ theme: 'Silver Aerogel' })
 			expect(theme).toEqual({
 				background: 'rgb(146, 146, 146)',
 				foreground: '#000000',
@@ -1176,7 +1174,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Solarized Dark', () => {
-			const theme = this.element.getTheme({ theme: 'Solarized Dark' })
+			const theme = element.getTheme({ theme: 'Solarized Dark' })
 			expect(theme).toEqual({
 				background: '#042029',
 				foreground: '#708284',
@@ -1213,7 +1211,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Solarized Light', () => {
-			const theme = this.element.getTheme({ theme: 'Solarized Light' })
+			const theme = element.getTheme({ theme: 'Solarized Light' })
 			expect(theme).toEqual({
 				background: '#fdf6e3',
 				foreground: '#657a81',
@@ -1250,7 +1248,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Solid Colors', () => {
-			const theme = this.element.getTheme({ theme: 'Solid Colors' })
+			const theme = element.getTheme({ theme: 'Solid Colors' })
 			expect(theme).toEqual({
 				background: 'rgb(120, 132, 151)',
 				foreground: '#000000',
@@ -1287,7 +1285,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('Standard', () => {
-			const theme = this.element.getTheme({ theme: 'Standard' })
+			const theme = element.getTheme({ theme: 'Standard' })
 			const root = getComputedStyle(document.documentElement)
 			expect(theme).toEqual({
 				background: root.getPropertyValue('--standard-app-background-color'),
@@ -1327,11 +1325,11 @@ describe('XTerminalElement', () => {
 	})
 
 	it('createTerminal() check terminal object', () => {
-		expect(this.element.terminal).toBeTruthy()
+		expect(element.terminal).toBeTruthy()
 	})
 
 	it('createTerminal() check ptyProcess object', () => {
-		expect(this.element.ptyProcess).toBeTruthy()
+		expect(element.ptyProcess).toBeTruthy()
 	})
 
 	describe('loaded addons', () => {
@@ -1387,15 +1385,15 @@ describe('XTerminalElement', () => {
 	})
 
 	it('restartPtyProcess() check new pty process created', async () => {
-		const oldPtyProcess = this.element.ptyProcess
+		const oldPtyProcess = element.ptyProcess
 		const newPtyProcess = jasmine.createSpyObj('ptyProcess',
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = jasmine.createSpy('process')
 			.and.returnValue('sometestprocess')
 		nodePty.spawn.and.returnValue(newPtyProcess)
-		await this.element.restartPtyProcess()
-		expect(this.element.ptyProcess).toBe(newPtyProcess)
-		expect(oldPtyProcess).not.toBe(this.element.ptyProcess)
+		await element.restartPtyProcess()
+		expect(element.ptyProcess).toBe(newPtyProcess)
+		expect(oldPtyProcess).not.toBe(element.ptyProcess)
 	})
 
 	it('restartPtyProcess() check ptyProcessRunning set to true', async () => {
@@ -1404,21 +1402,21 @@ describe('XTerminalElement', () => {
 		newPtyProcess.process = jasmine.createSpy('process')
 			.and.returnValue('sometestprocess')
 		nodePty.spawn.and.returnValue(newPtyProcess)
-		await this.element.restartPtyProcess()
-		expect(this.element.ptyProcessRunning).toBe(true)
+		await element.restartPtyProcess()
+		expect(element.ptyProcessRunning).toBe(true)
 	})
 
 	it('restartPtyProcess() command not found', async () => {
-		spyOn(this.element, 'showNotification')
-		this.element.model.profile.command = 'somecommand'
+		spyOn(element, 'showNotification')
+		element.model.profile.command = 'somecommand'
 		const fakeCall = () => {
 			throw Error('File not found: somecommand')
 		}
 		nodePty.spawn.and.callFake(fakeCall)
-		await this.element.restartPtyProcess()
-		expect(this.element.ptyProcess).toBe(null)
-		expect(this.element.ptyProcessRunning).toBe(false)
-		expect(this.element.showNotification.calls.argsFor(0)).toEqual(
+		await element.restartPtyProcess()
+		expect(element.ptyProcess).toBe(null)
+		expect(element.ptyProcessRunning).toBe(false)
+		expect(element.showNotification.calls.argsFor(0)).toEqual(
 			[
 				"Could not find command 'somecommand'.",
 				'error',
@@ -1427,16 +1425,16 @@ describe('XTerminalElement', () => {
 	})
 
 	it('restartPtyProcess() some other error thrown', async () => {
-		spyOn(this.element, 'showNotification')
-		this.element.model.profile.command = 'somecommand'
+		spyOn(element, 'showNotification')
+		element.model.profile.command = 'somecommand'
 		const fakeCall = () => {
 			throw Error('Something went wrong')
 		}
 		nodePty.spawn.and.callFake(fakeCall)
-		await this.element.restartPtyProcess()
-		expect(this.element.ptyProcess).toBe(null)
-		expect(this.element.ptyProcessRunning).toBe(false)
-		expect(this.element.showNotification.calls.argsFor(0)).toEqual(
+		await element.restartPtyProcess()
+		expect(element.ptyProcess).toBe(null)
+		expect(element.ptyProcessRunning).toBe(false)
+		expect(element.showNotification.calls.argsFor(0)).toEqual(
 			[
 				"Launching 'somecommand' raised the following error: Something went wrong",
 				'error',
@@ -1446,476 +1444,476 @@ describe('XTerminalElement', () => {
 
 	it('ptyProcess exit handler set ptyProcessRunning to false', () => {
 		let exitHandler
-		for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
+		for (const arg of element.ptyProcess.on.calls.allArgs()) {
 			if (arg[0] === 'exit') {
 				exitHandler = arg[1]
 				break
 			}
 		}
-		spyOn(this.element.model, 'exit')
-		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(false)
+		spyOn(element.model, 'exit')
+		spyOn(element, 'leaveOpenAfterExit').and.returnValue(false)
 		exitHandler(0)
-		expect(this.element.ptyProcessRunning).toBe(false)
+		expect(element.ptyProcessRunning).toBe(false)
 	})
 
 	it('ptyProcess exit handler code 0 don\'t leave open', () => {
 		let exitHandler
-		for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
+		for (const arg of element.ptyProcess.on.calls.allArgs()) {
 			if (arg[0] === 'exit') {
 				exitHandler = arg[1]
 				break
 			}
 		}
-		spyOn(this.element.model, 'exit')
-		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(false)
+		spyOn(element.model, 'exit')
+		spyOn(element, 'leaveOpenAfterExit').and.returnValue(false)
 		exitHandler(0)
-		expect(this.element.model.exit).toHaveBeenCalled()
+		expect(element.model.exit).toHaveBeenCalled()
 	})
 
 	it('ptyProcess exit handler code 1 don\'t leave open', () => {
 		let exitHandler
-		for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
+		for (const arg of element.ptyProcess.on.calls.allArgs()) {
 			if (arg[0] === 'exit') {
 				exitHandler = arg[1]
 				break
 			}
 		}
-		spyOn(this.element.model, 'exit')
-		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(false)
+		spyOn(element.model, 'exit')
+		spyOn(element, 'leaveOpenAfterExit').and.returnValue(false)
 		exitHandler(1)
-		expect(this.element.model.exit).toHaveBeenCalled()
+		expect(element.model.exit).toHaveBeenCalled()
 	})
 
 	it('ptyProcess exit handler code 0 leave open', () => {
 		let exitHandler
-		for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
+		for (const arg of element.ptyProcess.on.calls.allArgs()) {
 			if (arg[0] === 'exit') {
 				exitHandler = arg[1]
 				break
 			}
 		}
-		spyOn(this.element.model, 'exit')
-		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
+		spyOn(element.model, 'exit')
+		spyOn(element, 'leaveOpenAfterExit').and.returnValue(true)
 		exitHandler(0)
-		expect(this.element.model.exit).not.toHaveBeenCalled()
+		expect(element.model.exit).not.toHaveBeenCalled()
 	})
 
 	it('ptyProcess exit handler code 0 leave open check top message', () => {
 		let exitHandler
-		for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
+		for (const arg of element.ptyProcess.on.calls.allArgs()) {
 			if (arg[0] === 'exit') {
 				exitHandler = arg[1]
 				break
 			}
 		}
-		spyOn(this.element.model, 'exit')
-		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
+		spyOn(element.model, 'exit')
+		spyOn(element, 'leaveOpenAfterExit').and.returnValue(true)
 		exitHandler(0)
-		const successDiv = this.element.topDiv.querySelector('.x-terminal-notice-success')
-		const errorDiv = this.element.topDiv.querySelector('.x-terminal-notice-error')
+		const successDiv = element.topDiv.querySelector('.x-terminal-notice-success')
+		const errorDiv = element.topDiv.querySelector('.x-terminal-notice-error')
 		expect(successDiv).not.toBeNull()
 		expect(errorDiv).toBeNull()
 	})
 
 	it('ptyProcess exit handler code 1 leave open check top message', () => {
 		let exitHandler
-		for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
+		for (const arg of element.ptyProcess.on.calls.allArgs()) {
 			if (arg[0] === 'exit') {
 				exitHandler = arg[1]
 				break
 			}
 		}
-		spyOn(this.element.model, 'exit')
-		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
+		spyOn(element.model, 'exit')
+		spyOn(element, 'leaveOpenAfterExit').and.returnValue(true)
 		exitHandler(1)
-		const successDiv = this.element.topDiv.querySelector('.x-terminal-notice-success')
-		const errorDiv = this.element.topDiv.querySelector('.x-terminal-notice-error')
+		const successDiv = element.topDiv.querySelector('.x-terminal-notice-success')
+		const errorDiv = element.topDiv.querySelector('.x-terminal-notice-error')
 		expect(successDiv).toBeNull()
 		expect(errorDiv).not.toBeNull()
 	})
 
 	it('ptyProcess exit handler code 0 leave open check top message has restart button', () => {
 		let exitHandler
-		for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
+		for (const arg of element.ptyProcess.on.calls.allArgs()) {
 			if (arg[0] === 'exit') {
 				exitHandler = arg[1]
 				break
 			}
 		}
-		spyOn(this.element.model, 'exit')
-		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
+		spyOn(element.model, 'exit')
+		spyOn(element, 'leaveOpenAfterExit').and.returnValue(true)
 		exitHandler(0)
-		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-success')
+		const messageDiv = element.topDiv.querySelector('.x-terminal-notice-success')
 		const restartButton = messageDiv.querySelector('.btn-success')
 		expect(restartButton).not.toBeNull()
 	})
 
 	it('ptyProcess exit handler code 1 leave open check top message has restart button', () => {
 		let exitHandler
-		for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
+		for (const arg of element.ptyProcess.on.calls.allArgs()) {
 			if (arg[0] === 'exit') {
 				exitHandler = arg[1]
 				break
 			}
 		}
-		spyOn(this.element.model, 'exit')
-		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
+		spyOn(element.model, 'exit')
+		spyOn(element, 'leaveOpenAfterExit').and.returnValue(true)
 		exitHandler(1)
-		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-error')
+		const messageDiv = element.topDiv.querySelector('.x-terminal-notice-error')
 		const restartButton = messageDiv.querySelector('.btn-error')
 		expect(restartButton).not.toBeNull()
 	})
 
 	it('ptyProcess exit handler code 0 leave open check restart button click handler', () => {
 		let exitHandler
-		for (const arg of this.element.ptyProcess.on.calls.allArgs()) {
+		for (const arg of element.ptyProcess.on.calls.allArgs()) {
 			if (arg[0] === 'exit') {
 				exitHandler = arg[1]
 				break
 			}
 		}
-		spyOn(this.element.model, 'exit')
-		spyOn(this.element, 'leaveOpenAfterExit').and.returnValue(true)
+		spyOn(element.model, 'exit')
+		spyOn(element, 'leaveOpenAfterExit').and.returnValue(true)
 		exitHandler(0)
-		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-success')
+		const messageDiv = element.topDiv.querySelector('.x-terminal-notice-success')
 		const restartButton = messageDiv.querySelector('.btn-success')
-		spyOn(this.element, 'restartPtyProcess')
+		spyOn(element, 'restartPtyProcess')
 		const mouseEvent = new MouseEvent('click')
 		restartButton.dispatchEvent(mouseEvent)
-		expect(this.element.restartPtyProcess).toHaveBeenCalled()
+		expect(element.restartPtyProcess).toHaveBeenCalled()
 	})
 
 	it('refitTerminal() initial state', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions')
-		this.element.refitTerminal()
-		expect(this.element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
+		spyOn(element.fitAddon, 'proposeDimensions')
+		element.refitTerminal()
+		expect(element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
 	})
 
 	it('refitTerminal() terminal not visible', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = false
-		this.element.refitTerminal()
-		expect(this.element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
+		spyOn(element.fitAddon, 'proposeDimensions')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = false
+		element.refitTerminal()
+		expect(element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
 	})
 
 	it('refitTerminal() terminal no width', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions')
-		this.element.mainDivContentRect = { width: 0, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.refitTerminal()
-		expect(this.element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
+		spyOn(element.fitAddon, 'proposeDimensions')
+		element.mainDivContentRect = { width: 0, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.refitTerminal()
+		expect(element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
 	})
 
 	it('refitTerminal() terminal no height', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions')
-		this.element.mainDivContentRect = { width: 1, height: 0 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.refitTerminal()
-		expect(this.element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
+		spyOn(element.fitAddon, 'proposeDimensions')
+		element.mainDivContentRect = { width: 1, height: 0 }
+		element.terminalDivInitiallyVisible = true
+		element.refitTerminal()
+		expect(element.fitAddon.proposeDimensions).not.toHaveBeenCalled()
 	})
 
 	it('refitTerminal() terminal completely visible', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(null)
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.refitTerminal()
-		expect(this.element.fitAddon.proposeDimensions).toHaveBeenCalled()
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue(null)
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.refitTerminal()
+		expect(element.fitAddon.proposeDimensions).toHaveBeenCalled()
 	})
 
 	it('refitTerminal() terminal size not changed', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
-			cols: this.element.terminal.cols,
-			rows: this.element.terminal.rows,
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue({
+			cols: element.terminal.cols,
+			rows: element.terminal.rows,
 		})
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = false
-		this.element.refitTerminal()
-		expect(this.element.terminal.resize).not.toHaveBeenCalled()
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = false
+		element.refitTerminal()
+		expect(element.terminal.resize).not.toHaveBeenCalled()
 	})
 
 	it('refitTerminal() terminal size cols increased', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
-			cols: this.element.terminal.cols + 1,
-			rows: this.element.terminal.rows,
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue({
+			cols: element.terminal.cols + 1,
+			rows: element.terminal.rows,
 		})
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = false
-		this.element.refitTerminal()
-		expect(this.element.terminal.resize).toHaveBeenCalled()
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = false
+		element.refitTerminal()
+		expect(element.terminal.resize).toHaveBeenCalled()
 	})
 
 	it('refitTerminal() terminal size rows increased', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
-			cols: this.element.terminal.cols,
-			rows: this.element.terminal.rows + 1,
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue({
+			cols: element.terminal.cols,
+			rows: element.terminal.rows + 1,
 		})
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = false
-		this.element.refitTerminal()
-		expect(this.element.terminal.resize).toHaveBeenCalled()
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = false
+		element.refitTerminal()
+		expect(element.terminal.resize).toHaveBeenCalled()
 	})
 
 	it('refitTerminal() terminal size cols and rows increased', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
-			cols: this.element.terminal.cols + 1,
-			rows: this.element.terminal.rows + 1,
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue({
+			cols: element.terminal.cols + 1,
+			rows: element.terminal.rows + 1,
 		})
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = false
-		this.element.refitTerminal()
-		expect(this.element.terminal.resize).toHaveBeenCalled()
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = false
+		element.refitTerminal()
+		expect(element.terminal.resize).toHaveBeenCalled()
 	})
 
 	it('refitTerminal() terminal size rows decreased', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
-			cols: this.element.terminal.cols,
-			rows: this.element.terminal.rows - 1,
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue({
+			cols: element.terminal.cols,
+			rows: element.terminal.rows - 1,
 		})
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = false
-		this.element.refitTerminal()
-		expect(this.element.terminal.resize).toHaveBeenCalled()
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = false
+		element.refitTerminal()
+		expect(element.terminal.resize).toHaveBeenCalled()
 	})
 
 	it('refitTerminal() terminal size cols and rows decreased', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
-			cols: this.element.terminal.cols - 1,
-			rows: this.element.terminal.rows - 1,
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue({
+			cols: element.terminal.cols - 1,
+			rows: element.terminal.rows - 1,
 		})
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = false
-		this.element.refitTerminal()
-		expect(this.element.terminal.resize).toHaveBeenCalled()
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = false
+		element.refitTerminal()
+		expect(element.terminal.resize).toHaveBeenCalled()
 	})
 
 	it('refitTerminal() pty process size not changed ptyProcess running', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
-			cols: this.element.ptyProcessCols,
-			rows: this.element.ptyProcessRows,
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue({
+			cols: element.ptyProcessCols,
+			rows: element.ptyProcessRows,
 		})
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = true
-		this.element.refitTerminal()
-		expect(this.element.ptyProcess.resize).not.toHaveBeenCalled()
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = true
+		element.refitTerminal()
+		expect(element.ptyProcess.resize).not.toHaveBeenCalled()
 	})
 
 	it('refitTerminal() pty process size cols increased ptyProcess running', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
-			cols: this.element.ptyProcessCols + 1,
-			rows: this.element.ptyProcessRows,
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue({
+			cols: element.ptyProcessCols + 1,
+			rows: element.ptyProcessRows,
 		})
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = true
-		this.element.refitTerminal()
-		expect(this.element.ptyProcess.resize).toHaveBeenCalled()
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = true
+		element.refitTerminal()
+		expect(element.ptyProcess.resize).toHaveBeenCalled()
 	})
 
 	it('refitTerminal() pty process size rows increased ptyProcess running', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
-			cols: this.element.ptyProcessCols,
-			rows: this.element.ptyProcessRows + 1,
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue({
+			cols: element.ptyProcessCols,
+			rows: element.ptyProcessRows + 1,
 		})
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = true
-		this.element.refitTerminal()
-		expect(this.element.ptyProcess.resize).toHaveBeenCalled()
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = true
+		element.refitTerminal()
+		expect(element.ptyProcess.resize).toHaveBeenCalled()
 	})
 
 	it('refitTerminal() pty process size cols and rows increased ptyProcess running', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
-			cols: this.element.ptyProcessCols + 1,
-			rows: this.element.ptyProcessRows + 1,
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue({
+			cols: element.ptyProcessCols + 1,
+			rows: element.ptyProcessRows + 1,
 		})
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = true
-		this.element.refitTerminal()
-		expect(this.element.ptyProcess.resize).toHaveBeenCalled()
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = true
+		element.refitTerminal()
+		expect(element.ptyProcess.resize).toHaveBeenCalled()
 	})
 
 	it('refitTerminal() pty process size cols decreased ptyProcess running', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
-			cols: this.element.ptyProcessCols - 1,
-			rows: this.element.ptyProcessRows,
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue({
+			cols: element.ptyProcessCols - 1,
+			rows: element.ptyProcessRows,
 		})
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = true
-		this.element.refitTerminal()
-		expect(this.element.ptyProcess.resize).toHaveBeenCalled()
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = true
+		element.refitTerminal()
+		expect(element.ptyProcess.resize).toHaveBeenCalled()
 	})
 
 	it('refitTerminal() pty process size rows decreased ptyProcess running', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
-			cols: this.element.ptyProcessCols,
-			rows: this.element.ptyProcessRows - 1,
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue({
+			cols: element.ptyProcessCols,
+			rows: element.ptyProcessRows - 1,
 		})
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = true
-		this.element.refitTerminal()
-		expect(this.element.ptyProcess.resize).toHaveBeenCalled()
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = true
+		element.refitTerminal()
+		expect(element.ptyProcess.resize).toHaveBeenCalled()
 	})
 
 	it('refitTerminal() pty process size cols and rows decreased ptyProcess running', () => {
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue({
-			cols: this.element.ptyProcessCols - 1,
-			rows: this.element.ptyProcessRows - 1,
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue({
+			cols: element.ptyProcessCols - 1,
+			rows: element.ptyProcessRows - 1,
 		})
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = true
-		this.element.refitTerminal()
-		expect(this.element.ptyProcess.resize).toHaveBeenCalled()
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = true
+		element.refitTerminal()
+		expect(element.ptyProcess.resize).toHaveBeenCalled()
 	})
 
 	it('refitTerminal() pty process size cols increased ptyProcess running check call args', () => {
 		const expected = {
-			cols: this.element.ptyProcessCols + 1,
-			rows: this.element.ptyProcessRows,
+			cols: element.ptyProcessCols + 1,
+			rows: element.ptyProcessRows,
 		}
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = true
-		this.element.refitTerminal()
-		expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue(expected)
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = true
+		element.refitTerminal()
+		expect(element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
 	})
 
 	it('refitTerminal() pty process size rows increased ptyProcess running check call args', () => {
 		const expected = {
-			cols: this.element.ptyProcessCols,
-			rows: this.element.ptyProcessRows + 1,
+			cols: element.ptyProcessCols,
+			rows: element.ptyProcessRows + 1,
 		}
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = true
-		this.element.refitTerminal()
-		expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue(expected)
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = true
+		element.refitTerminal()
+		expect(element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
 	})
 
 	it('refitTerminal() pty process size cols and rows increased ptyProcess running check call args', () => {
 		const expected = {
-			cols: this.element.ptyProcessCols + 1,
-			rows: this.element.ptyProcessRows + 1,
+			cols: element.ptyProcessCols + 1,
+			rows: element.ptyProcessRows + 1,
 		}
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = true
-		this.element.refitTerminal()
-		expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue(expected)
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = true
+		element.refitTerminal()
+		expect(element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
 	})
 
 	it('refitTerminal() pty process size cols decreased ptyProcess running check call args', () => {
 		const expected = {
-			cols: this.element.ptyProcessCols - 1,
-			rows: this.element.ptyProcessRows,
+			cols: element.ptyProcessCols - 1,
+			rows: element.ptyProcessRows,
 		}
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = true
-		this.element.refitTerminal()
-		expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue(expected)
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = true
+		element.refitTerminal()
+		expect(element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
 	})
 
 	it('refitTerminal() pty process size rows decreased ptyProcess running check call args', () => {
 		const expected = {
-			cols: this.element.ptyProcessCols,
-			rows: this.element.ptyProcessRows - 1,
+			cols: element.ptyProcessCols,
+			rows: element.ptyProcessRows - 1,
 		}
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = true
-		this.element.refitTerminal()
-		expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue(expected)
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = true
+		element.refitTerminal()
+		expect(element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
 	})
 
 	it('refitTerminal() pty process size cols and rows decreased ptyProcess running check call args', () => {
 		const expected = {
-			cols: this.element.ptyProcessCols - 1,
-			rows: this.element.ptyProcessRows - 1,
+			cols: element.ptyProcessCols - 1,
+			rows: element.ptyProcessRows - 1,
 		}
-		spyOn(this.element.fitAddon, 'proposeDimensions').and.returnValue(expected)
-		spyOn(this.element.terminal, 'resize')
-		this.element.mainDivContentRect = { width: 1, height: 1 }
-		this.element.terminalDivInitiallyVisible = true
-		this.element.ptyProcessRunning = true
-		this.element.refitTerminal()
-		expect(this.element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
+		spyOn(element.fitAddon, 'proposeDimensions').and.returnValue(expected)
+		spyOn(element.terminal, 'resize')
+		element.mainDivContentRect = { width: 1, height: 1 }
+		element.terminalDivInitiallyVisible = true
+		element.ptyProcessRunning = true
+		element.refitTerminal()
+		expect(element.ptyProcess.resize).toHaveBeenCalledWith(expected.cols, expected.rows)
 	})
 
 	it('focusOnTerminal()', () => {
-		spyOn(this.element.terminal, 'focus')
-		spyOn(this.element.model, 'setActive')
-		this.element.focusOnTerminal()
-		expect(this.element.model.setActive).toHaveBeenCalled()
-		expect(this.element.terminal.focus).toHaveBeenCalled()
+		spyOn(element.terminal, 'focus')
+		spyOn(element.model, 'setActive')
+		element.focusOnTerminal()
+		expect(element.model.setActive).toHaveBeenCalled()
+		expect(element.terminal.focus).toHaveBeenCalled()
 	})
 
 	it('focusOnTerminal() terminal not set', () => {
-		this.element.terminal = null
-		this.element.focusOnTerminal()
+		element.terminal = null
+		element.focusOnTerminal()
 	})
 
 	it('toggleProfileMenu()', (done) => {
-		this.element.atomXtermProfileMenuElement = jasmine.createSpyObj(
+		element.atomXtermProfileMenuElement = jasmine.createSpyObj(
 			'atomXtermProfileMenuElement',
 			[
 				'toggleProfileMenu',
 				'destroy',
 			],
 		)
-		this.element.atomXtermProfileMenuElement.initializedPromise = Promise.resolve()
-		this.element.atomXtermProfileMenuElement.toggleProfileMenu.and.callFake(() => {
+		element.atomXtermProfileMenuElement.initializedPromise = Promise.resolve()
+		element.atomXtermProfileMenuElement.toggleProfileMenu.and.callFake(() => {
 			done()
 		})
-		this.element.toggleProfileMenu()
+		element.toggleProfileMenu()
 	})
 
 	it('hideTerminal()', () => {
-		this.element.hideTerminal()
-		expect(this.element.terminalDiv.style.visibility).toBe('hidden')
+		element.hideTerminal()
+		expect(element.terminalDiv.style.visibility).toBe('hidden')
 	})
 
 	it('showTerminal()', () => {
-		this.element.showTerminal()
-		expect(this.element.terminalDiv.style.visibility).toBe('visible')
+		element.showTerminal()
+		expect(element.terminalDiv.style.visibility).toBe('visible')
 	})
 
 	it('hoveredLink initially null', () => {
-		expect(this.element.hoveredLink).toBeNull()
+		expect(element.hoveredLink).toBeNull()
 	})
 
 	it('on \'data\' handler no custom title on win32 platform', async () => {
@@ -1926,11 +1924,11 @@ describe('XTerminalElement', () => {
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
-		await this.element.restartPtyProcess()
-		const args = this.element.ptyProcess.on.calls.argsFor(0)
+		await element.restartPtyProcess()
+		const args = element.ptyProcess.on.calls.argsFor(0)
 		const onDataCallback = args[1]
 		onDataCallback('')
-		expect(this.element.model.title).toBe('X Terminal')
+		expect(element.model.title).toBe('X Terminal')
 	})
 
 	it('on \'data\' handler no custom title on linux platform', async () => {
@@ -1941,11 +1939,11 @@ describe('XTerminalElement', () => {
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
-		await this.element.restartPtyProcess()
-		const args = this.element.ptyProcess.on.calls.argsFor(0)
+		await element.restartPtyProcess()
+		const args = element.ptyProcess.on.calls.argsFor(0)
 		const onDataCallback = args[1]
 		onDataCallback('')
-		expect(this.element.model.title).toBe('sometestprocess')
+		expect(element.model.title).toBe('sometestprocess')
 	})
 
 	it('on \'data\' handler custom title on win32 platform', async () => {
@@ -1956,12 +1954,12 @@ describe('XTerminalElement', () => {
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
-		this.element.model.profile.title = 'foo'
-		await this.element.restartPtyProcess()
-		const args = this.element.ptyProcess.on.calls.argsFor(0)
+		element.model.profile.title = 'foo'
+		await element.restartPtyProcess()
+		const args = element.ptyProcess.on.calls.argsFor(0)
 		const onDataCallback = args[1]
 		onDataCallback('')
-		expect(this.element.model.title).toBe('foo')
+		expect(element.model.title).toBe('foo')
 	})
 
 	it('on \'data\' handler custom title on linux platform', async () => {
@@ -1972,12 +1970,12 @@ describe('XTerminalElement', () => {
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
-		this.element.model.profile.title = 'foo'
-		await this.element.restartPtyProcess()
-		const args = this.element.ptyProcess.on.calls.argsFor(0)
+		element.model.profile.title = 'foo'
+		await element.restartPtyProcess()
+		const args = element.ptyProcess.on.calls.argsFor(0)
 		const onDataCallback = args[1]
 		onDataCallback('')
-		expect(this.element.model.title).toBe('foo')
+		expect(element.model.title).toBe('foo')
 	})
 
 	it('on \'exit\' handler leave open after exit success', async () => {
@@ -1985,14 +1983,14 @@ describe('XTerminalElement', () => {
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
-		this.element.model.profile.title = 'foo'
-		await this.element.restartPtyProcess()
-		const args = this.element.ptyProcess.on.calls.argsFor(1)
+		element.model.profile.title = 'foo'
+		await element.restartPtyProcess()
+		const args = element.ptyProcess.on.calls.argsFor(1)
 		const onExitCallback = args[1]
-		this.element.model.profile.leaveOpenAfterExit = true
+		element.model.profile.leaveOpenAfterExit = true
 		onExitCallback(0)
-		expect(this.element.querySelector('.x-terminal-notice-success')).toBeTruthy()
-		expect(this.element.querySelector('.x-terminal-notice-error')).toBe(null)
+		expect(element.querySelector('.x-terminal-notice-success')).toBeTruthy()
+		expect(element.querySelector('.x-terminal-notice-error')).toBe(null)
 	})
 
 	it('on \'exit\' handler leave open after exit failure', async () => {
@@ -2000,14 +1998,14 @@ describe('XTerminalElement', () => {
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
-		this.element.model.profile.title = 'foo'
-		await this.element.restartPtyProcess()
-		const args = this.element.ptyProcess.on.calls.argsFor(1)
+		element.model.profile.title = 'foo'
+		await element.restartPtyProcess()
+		const args = element.ptyProcess.on.calls.argsFor(1)
 		const onExitCallback = args[1]
-		this.element.model.profile.leaveOpenAfterExit = true
+		element.model.profile.leaveOpenAfterExit = true
 		onExitCallback(1)
-		expect(this.element.querySelector('.x-terminal-notice-success')).toBe(null)
-		expect(this.element.querySelector('.x-terminal-notice-error')).toBeTruthy()
+		expect(element.querySelector('.x-terminal-notice-success')).toBe(null)
+		expect(element.querySelector('.x-terminal-notice-error')).toBeTruthy()
 	})
 
 	it('on \'exit\' handler do not leave open', async () => {
@@ -2015,37 +2013,37 @@ describe('XTerminalElement', () => {
 			['kill', 'write', 'resize', 'on', 'removeAllListeners'])
 		newPtyProcess.process = 'sometestprocess'
 		nodePty.spawn.and.returnValue(newPtyProcess)
-		this.element.model.profile.title = 'foo'
-		await this.element.restartPtyProcess()
-		const args = this.element.ptyProcess.on.calls.argsFor(1)
+		element.model.profile.title = 'foo'
+		await element.restartPtyProcess()
+		const args = element.ptyProcess.on.calls.argsFor(1)
 		const onExitCallback = args[1]
-		this.element.model.profile.leaveOpenAfterExit = false
-		spyOn(this.element.model, 'exit')
+		element.model.profile.leaveOpenAfterExit = false
+		spyOn(element.model, 'exit')
 		onExitCallback(1)
-		expect(this.element.model.exit).toHaveBeenCalled()
+		expect(element.model.exit).toHaveBeenCalled()
 	})
 
 	it('showNotification() success message', () => {
-		this.element.showNotification(
+		element.showNotification(
 			'foo',
 			'success',
 		)
-		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-success')
+		const messageDiv = element.topDiv.querySelector('.x-terminal-notice-success')
 		expect(messageDiv.textContent).toBe('fooRestart')
 	})
 
 	it('showNotification() error message', () => {
-		this.element.showNotification(
+		element.showNotification(
 			'foo',
 			'error',
 		)
-		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-error')
+		const messageDiv = element.topDiv.querySelector('.x-terminal-notice-error')
 		expect(messageDiv.textContent).toBe('fooRestart')
 	})
 
 	it('showNotification() success message with Atom notification', () => {
 		spyOn(atom.notifications, 'addSuccess')
-		this.element.showNotification(
+		element.showNotification(
 			'foo',
 			'success',
 		)
@@ -2054,7 +2052,7 @@ describe('XTerminalElement', () => {
 
 	it('showNotification() error message with Atom notification', () => {
 		spyOn(atom.notifications, 'addError')
-		this.element.showNotification(
+		element.showNotification(
 			'foo',
 			'error',
 		)
@@ -2063,7 +2061,7 @@ describe('XTerminalElement', () => {
 
 	it('showNotification() warning message with Atom notification', () => {
 		spyOn(atom.notifications, 'addWarning')
-		this.element.showNotification(
+		element.showNotification(
 			'foo',
 			'warning',
 		)
@@ -2072,7 +2070,7 @@ describe('XTerminalElement', () => {
 
 	it('showNotification() info message with Atom notification', () => {
 		spyOn(atom.notifications, 'addInfo')
-		this.element.showNotification(
+		element.showNotification(
 			'foo',
 			'info',
 		)
@@ -2081,7 +2079,7 @@ describe('XTerminalElement', () => {
 
 	it('showNotification() bogus info type with Atom notification', () => {
 		const call = () => {
-			this.element.showNotification(
+			element.showNotification(
 				'foo',
 				'bogus',
 			)
@@ -2090,36 +2088,36 @@ describe('XTerminalElement', () => {
 	})
 
 	it('showNotification() custom restart button text', () => {
-		this.element.showNotification(
+		element.showNotification(
 			'foo',
 			'info',
 			'Some text',
 		)
-		const restartButton = this.element.topDiv.querySelector('.x-terminal-restart-btn')
+		const restartButton = element.topDiv.querySelector('.x-terminal-restart-btn')
 		expect(restartButton.firstChild.nodeValue).toBe('Some text')
 	})
 
 	it('promptToStartup()', async () => {
-		await this.element.promptToStartup()
-		const restartButton = this.element.topDiv.querySelector('.x-terminal-restart-btn')
+		await element.promptToStartup()
+		const restartButton = element.topDiv.querySelector('.x-terminal-restart-btn')
 		expect(restartButton.firstChild.nodeValue).toBe('Start')
 	})
 
 	it('promptToStartup() check message without title', async () => {
 		const command = ['some_command', 'a', 'b', 'c']
-		spyOn(this.element, 'getShellCommand').and.returnValue(command[0])
-		spyOn(this.element, 'getArgs').and.returnValue(command.slice(1))
+		spyOn(element, 'getShellCommand').and.returnValue(command[0])
+		spyOn(element, 'getArgs').and.returnValue(command.slice(1))
 		const expected = `New command ${JSON.stringify(command)} ready to start.`
-		await this.element.promptToStartup()
-		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-info')
+		await element.promptToStartup()
+		const messageDiv = element.topDiv.querySelector('.x-terminal-notice-info')
 		expect(messageDiv.firstChild.nodeValue).toBe(expected)
 	})
 
 	it('promptToStartup() check message with title', async () => {
-		this.element.model.profile.title = 'My Profile'
+		element.model.profile.title = 'My Profile'
 		const expected = 'New command for profile My Profile ready to start.'
-		await this.element.promptToStartup()
-		const messageDiv = this.element.topDiv.querySelector('.x-terminal-notice-info')
+		await element.promptToStartup()
+		const messageDiv = element.topDiv.querySelector('.x-terminal-notice-info')
 		expect(messageDiv.firstChild.nodeValue).toBe(expected)
 	})
 
@@ -2127,16 +2125,16 @@ describe('XTerminalElement', () => {
 		const wheelEvent = new WheelEvent('wheel', {
 			deltaY: -150,
 		})
-		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(14)
+		element.terminalDiv.dispatchEvent(wheelEvent)
+		expect(element.model.profile.fontSize).toBe(14)
 	})
 
 	it('use wheelScrollDown on terminal container', () => {
 		const wheelEvent = new WheelEvent('wheel', {
 			deltaY: 150,
 		})
-		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(14)
+		element.terminalDiv.dispatchEvent(wheelEvent)
+		expect(element.model.profile.fontSize).toBe(14)
 	})
 
 	it('use ctrl+wheelScrollUp on terminal container, editor.zoomFontWhenCtrlScrolling = true', () => {
@@ -2145,8 +2143,8 @@ describe('XTerminalElement', () => {
 			deltaY: -150,
 			ctrlKey: true,
 		})
-		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(15)
+		element.terminalDiv.dispatchEvent(wheelEvent)
+		expect(element.model.profile.fontSize).toBe(15)
 	})
 
 	it('use ctrl+wheelScrollDown on terminal container, editor.zoomFontWhenCtrlScrolling = true', () => {
@@ -2155,8 +2153,8 @@ describe('XTerminalElement', () => {
 			deltaY: 150,
 			ctrlKey: true,
 		})
-		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(13)
+		element.terminalDiv.dispatchEvent(wheelEvent)
+		expect(element.model.profile.fontSize).toBe(13)
 	})
 
 	it('use ctrl+wheelScrollUp on terminal container, editor.zoomFontWhenCtrlScrolling = false', () => {
@@ -2165,8 +2163,8 @@ describe('XTerminalElement', () => {
 			deltaY: -150,
 			ctrlKey: true,
 		})
-		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(14)
+		element.terminalDiv.dispatchEvent(wheelEvent)
+		expect(element.model.profile.fontSize).toBe(14)
 	})
 
 	it('use ctrl+wheelScrollDown on terminal container, editor.zoomFontWhenCtrlScrolling = false', () => {
@@ -2175,54 +2173,54 @@ describe('XTerminalElement', () => {
 			deltaY: 150,
 			ctrlKey: true,
 		})
-		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(14)
+		element.terminalDiv.dispatchEvent(wheelEvent)
+		expect(element.model.profile.fontSize).toBe(14)
 	})
 
 	it('use ctrl+wheelScrollUp font already at maximum', () => {
-		this.element.model.profile.fontSize = configDefaults.maximumFontSize
+		element.model.profile.fontSize = configDefaults.maximumFontSize
 		const wheelEvent = new WheelEvent('wheel', {
 			deltaY: -150,
 			ctrlKey: true,
 		})
-		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(configDefaults.maximumFontSize)
+		element.terminalDiv.dispatchEvent(wheelEvent)
+		expect(element.model.profile.fontSize).toBe(configDefaults.maximumFontSize)
 	})
 
 	it('use ctrl+wheelScrollDown font already at minimum', () => {
-		this.element.model.profile.fontSize = configDefaults.minimumFontSize
+		element.model.profile.fontSize = configDefaults.minimumFontSize
 		const wheelEvent = new WheelEvent('wheel', {
 			deltaY: 150,
 			ctrlKey: true,
 		})
-		this.element.terminalDiv.dispatchEvent(wheelEvent)
-		expect(this.element.model.profile.fontSize).toBe(configDefaults.minimumFontSize)
+		element.terminalDiv.dispatchEvent(wheelEvent)
+		expect(element.model.profile.fontSize).toBe(configDefaults.minimumFontSize)
 	})
 
 	it('copy on select', async () => {
 		spyOn(atom.clipboard, 'write')
-		this.element.model.profile.copyOnSelect = true
-		await new Promise(resolve => this.element.terminal.write('test', resolve))
-		this.element.terminal.selectLines(0, 0)
-		const selection = this.element.terminal.getSelection()
+		element.model.profile.copyOnSelect = true
+		await new Promise(resolve => element.terminal.write('test', resolve))
+		element.terminal.selectLines(0, 0)
+		const selection = element.terminal.getSelection()
 		expect(atom.clipboard.write).toHaveBeenCalledWith(selection)
 	})
 
 	it('does not copy on clear selection', async () => {
 		spyOn(atom.clipboard, 'write')
-		this.element.model.profile.copyOnSelect = true
-		await new Promise(resolve => this.element.terminal.write('test', resolve))
-		this.element.terminal.selectLines(0, 0)
+		element.model.profile.copyOnSelect = true
+		await new Promise(resolve => element.terminal.write('test', resolve))
+		element.terminal.selectLines(0, 0)
 		atom.clipboard.write.calls.reset()
-		this.element.terminal.clearSelection()
+		element.terminal.clearSelection()
 		expect(atom.clipboard.write).not.toHaveBeenCalled()
 	})
 
 	it('does not copy if copyOnSelect is false', async () => {
 		spyOn(atom.clipboard, 'write')
-		this.element.model.profile.copyOnSelect = false
-		await new Promise(resolve => this.element.terminal.write('test', resolve))
-		this.element.terminal.selectLines(0, 0)
+		element.model.profile.copyOnSelect = false
+		await new Promise(resolve => element.terminal.write('test', resolve))
+		element.terminal.selectLines(0, 0)
 		expect(atom.clipboard.write).not.toHaveBeenCalled()
 	})
 
@@ -2231,100 +2229,106 @@ describe('XTerminalElement', () => {
 			cursorBlink: true,
 			fontSize: 14,
 			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
-			theme: this.element.getTheme(),
+			theme: element.getTheme(),
 		}
-		expect(this.element.getXtermOptions()).toEqual(expected)
+		expect(element.getXtermOptions()).toEqual(expected)
 	})
 
 	it('getXtermOptions() xtermOptions in profile', () => {
-		this.element.model.profile.xtermOptions = {
+		element.model.profile.xtermOptions = {
 			cursorBlink: true,
 		}
 		const expected = {
 			cursorBlink: true,
 			fontSize: 14,
 			fontFamily: 'Menlo, Consolas, DejaVu Sans Mono, monospace',
-			theme: this.element.getTheme(),
+			theme: element.getTheme(),
 		}
-		expect(this.element.getXtermOptions()).toEqual(expected)
+		expect(element.getXtermOptions()).toEqual(expected)
+	})
+
+	it('clear terminal', () => {
+		spyOn(element.terminal, 'clear')
+		element.clear()
+		expect(element.terminal.clear).toHaveBeenCalled()
 	})
 
 	it('applyPendingTerminalProfileOptions() terminal not visible', () => {
-		spyOn(this.element, 'refitTerminal')
-		this.element.terminalDivInitiallyVisible = false
-		this.element.applyPendingTerminalProfileOptions()
-		expect(this.element.refitTerminal).not.toHaveBeenCalled()
+		spyOn(element, 'refitTerminal')
+		element.terminalDivInitiallyVisible = false
+		element.applyPendingTerminalProfileOptions()
+		expect(element.refitTerminal).not.toHaveBeenCalled()
 	})
 
 	it('applyPendingTerminalProfileOptions() terminal visible no pending changes', () => {
-		spyOn(this.element, 'refitTerminal')
-		spyOn(this.element, 'setMainBackgroundColor')
-		spyOn(this.element, 'restartPtyProcess')
-		spyOn(this.element.terminal, 'setOption')
-		this.element.terminalDivInitiallyVisible = true
-		this.element.applyPendingTerminalProfileOptions()
-		expect(this.element.setMainBackgroundColor).toHaveBeenCalled()
-		expect(this.element.terminal.setOption).not.toHaveBeenCalled()
-		expect(this.element.restartPtyProcess).not.toHaveBeenCalled()
-		expect(this.element.refitTerminal).toHaveBeenCalled()
+		spyOn(element, 'refitTerminal')
+		spyOn(element, 'setMainBackgroundColor')
+		spyOn(element, 'restartPtyProcess')
+		spyOn(element.terminal, 'setOption')
+		element.terminalDivInitiallyVisible = true
+		element.applyPendingTerminalProfileOptions()
+		expect(element.setMainBackgroundColor).toHaveBeenCalled()
+		expect(element.terminal.setOption).not.toHaveBeenCalled()
+		expect(element.restartPtyProcess).not.toHaveBeenCalled()
+		expect(element.refitTerminal).toHaveBeenCalled()
 	})
 
 	it('applyPendingTerminalProfileOptions() terminal visible pending xtermOptions', () => {
-		spyOn(this.element, 'refitTerminal')
-		spyOn(this.element, 'setMainBackgroundColor')
-		spyOn(this.element, 'restartPtyProcess')
-		spyOn(this.element.terminal, 'setOption')
-		this.element.terminalDivInitiallyVisible = true
-		this.element.pendingTerminalProfileOptions.xtermOptions = {
+		spyOn(element, 'refitTerminal')
+		spyOn(element, 'setMainBackgroundColor')
+		spyOn(element, 'restartPtyProcess')
+		spyOn(element.terminal, 'setOption')
+		element.terminalDivInitiallyVisible = true
+		element.pendingTerminalProfileOptions.xtermOptions = {
 			cursorBlink: true,
 		}
-		this.element.applyPendingTerminalProfileOptions()
-		expect(this.element.setMainBackgroundColor).toHaveBeenCalled()
-		expect(this.element.terminal.setOption).toHaveBeenCalled()
-		expect(this.element.restartPtyProcess).not.toHaveBeenCalled()
-		expect(this.element.refitTerminal).toHaveBeenCalled()
+		element.applyPendingTerminalProfileOptions()
+		expect(element.setMainBackgroundColor).toHaveBeenCalled()
+		expect(element.terminal.setOption).toHaveBeenCalled()
+		expect(element.restartPtyProcess).not.toHaveBeenCalled()
+		expect(element.refitTerminal).toHaveBeenCalled()
 	})
 
 	it('applyPendingTerminalProfileOptions() terminal visible pending pty changes', () => {
-		spyOn(this.element, 'refitTerminal')
-		spyOn(this.element, 'setMainBackgroundColor')
-		spyOn(this.element, 'restartPtyProcess')
-		spyOn(this.element.terminal, 'setOption')
-		this.element.terminalDivInitiallyVisible = true
-		this.element.pendingTerminalProfileOptions.command = 'somecommand'
-		this.element.applyPendingTerminalProfileOptions()
-		expect(this.element.setMainBackgroundColor).toHaveBeenCalled()
-		expect(this.element.terminal.setOption).not.toHaveBeenCalled()
-		expect(this.element.restartPtyProcess).toHaveBeenCalled()
-		expect(this.element.refitTerminal).toHaveBeenCalled()
+		spyOn(element, 'refitTerminal')
+		spyOn(element, 'setMainBackgroundColor')
+		spyOn(element, 'restartPtyProcess')
+		spyOn(element.terminal, 'setOption')
+		element.terminalDivInitiallyVisible = true
+		element.pendingTerminalProfileOptions.command = 'somecommand'
+		element.applyPendingTerminalProfileOptions()
+		expect(element.setMainBackgroundColor).toHaveBeenCalled()
+		expect(element.terminal.setOption).not.toHaveBeenCalled()
+		expect(element.restartPtyProcess).toHaveBeenCalled()
+		expect(element.refitTerminal).toHaveBeenCalled()
 	})
 
 	it('applyPendingTerminalProfileOptions() terminal visible pending xtermOptions and pty changes', () => {
-		spyOn(this.element, 'refitTerminal')
-		spyOn(this.element, 'setMainBackgroundColor')
-		spyOn(this.element, 'restartPtyProcess')
-		spyOn(this.element.terminal, 'setOption')
-		this.element.terminalDivInitiallyVisible = true
-		this.element.pendingTerminalProfileOptions.xtermOptions = {
+		spyOn(element, 'refitTerminal')
+		spyOn(element, 'setMainBackgroundColor')
+		spyOn(element, 'restartPtyProcess')
+		spyOn(element.terminal, 'setOption')
+		element.terminalDivInitiallyVisible = true
+		element.pendingTerminalProfileOptions.xtermOptions = {
 			cursorBlink: true,
 		}
-		this.element.pendingTerminalProfileOptions.command = 'somecommand'
-		this.element.applyPendingTerminalProfileOptions()
-		expect(this.element.setMainBackgroundColor).toHaveBeenCalled()
-		expect(this.element.terminal.setOption).toHaveBeenCalled()
-		expect(this.element.restartPtyProcess).toHaveBeenCalled()
-		expect(this.element.refitTerminal).toHaveBeenCalled()
+		element.pendingTerminalProfileOptions.command = 'somecommand'
+		element.applyPendingTerminalProfileOptions()
+		expect(element.setMainBackgroundColor).toHaveBeenCalled()
+		expect(element.terminal.setOption).toHaveBeenCalled()
+		expect(element.restartPtyProcess).toHaveBeenCalled()
+		expect(element.refitTerminal).toHaveBeenCalled()
 	})
 
 	it('applyPendingTerminalProfileOptions() terminal not visible pending xtermOptions and pty changes kept', () => {
-		spyOn(this.element, 'refitTerminal')
-		this.element.terminalDivInitiallyVisible = false
-		this.element.pendingTerminalProfileOptions.xtermOptions = {
+		spyOn(element, 'refitTerminal')
+		element.terminalDivInitiallyVisible = false
+		element.pendingTerminalProfileOptions.xtermOptions = {
 			cursorBlink: true,
 		}
-		this.element.pendingTerminalProfileOptions.command = 'somecommand'
-		this.element.applyPendingTerminalProfileOptions()
-		expect(this.element.pendingTerminalProfileOptions).toEqual({
+		element.pendingTerminalProfileOptions.command = 'somecommand'
+		element.applyPendingTerminalProfileOptions()
+		expect(element.pendingTerminalProfileOptions).toEqual({
 			xtermOptions: {
 				cursorBlink: true,
 			},
@@ -2333,63 +2337,63 @@ describe('XTerminalElement', () => {
 	})
 
 	it('applyPendingTerminalProfileOptions() terminal visible pending xtermOptions and pty changes removed', () => {
-		spyOn(this.element, 'refitTerminal')
-		this.element.terminalDivInitiallyVisible = true
-		this.element.pendingTerminalProfileOptions.xtermOptions = {
+		spyOn(element, 'refitTerminal')
+		element.terminalDivInitiallyVisible = true
+		element.pendingTerminalProfileOptions.xtermOptions = {
 			cursorBlink: true,
 		}
-		this.element.pendingTerminalProfileOptions.command = 'somecommand'
-		this.element.applyPendingTerminalProfileOptions()
-		expect(this.element.pendingTerminalProfileOptions).toEqual({})
+		element.pendingTerminalProfileOptions.command = 'somecommand'
+		element.applyPendingTerminalProfileOptions()
+		expect(element.pendingTerminalProfileOptions).toEqual({})
 	})
 
 	it('applyPendingTerminalProfileOptions() terminal not visible x-terminal options removed', () => {
-		spyOn(this.element, 'refitTerminal')
-		this.element.terminalDivInitiallyVisible = false
-		this.element.pendingTerminalProfileOptions.leaveOpenAfterExit = true
-		this.element.pendingTerminalProfileOptions.relaunchTerminalOnStartup = true
-		this.element.pendingTerminalProfileOptions.title = 'foo'
-		this.element.applyPendingTerminalProfileOptions()
-		expect(this.element.pendingTerminalProfileOptions).toEqual({})
+		spyOn(element, 'refitTerminal')
+		element.terminalDivInitiallyVisible = false
+		element.pendingTerminalProfileOptions.leaveOpenAfterExit = true
+		element.pendingTerminalProfileOptions.relaunchTerminalOnStartup = true
+		element.pendingTerminalProfileOptions.title = 'foo'
+		element.applyPendingTerminalProfileOptions()
+		expect(element.pendingTerminalProfileOptions).toEqual({})
 	})
 
 	it('applyPendingTerminalProfileOptions() terminal visible x-terminal options removed', () => {
-		spyOn(this.element, 'refitTerminal')
-		this.element.terminalDivInitiallyVisible = true
-		this.element.pendingTerminalProfileOptions.leaveOpenAfterExit = true
-		this.element.pendingTerminalProfileOptions.relaunchTerminalOnStartup = true
-		this.element.pendingTerminalProfileOptions.title = 'foo'
-		this.element.applyPendingTerminalProfileOptions()
-		expect(this.element.pendingTerminalProfileOptions).toEqual({})
+		spyOn(element, 'refitTerminal')
+		element.terminalDivInitiallyVisible = true
+		element.pendingTerminalProfileOptions.leaveOpenAfterExit = true
+		element.pendingTerminalProfileOptions.relaunchTerminalOnStartup = true
+		element.pendingTerminalProfileOptions.title = 'foo'
+		element.applyPendingTerminalProfileOptions()
+		expect(element.pendingTerminalProfileOptions).toEqual({})
 	})
 
 	it('queueNewProfileChanges() no previous changes', () => {
-		spyOn(this.element, 'applyPendingTerminalProfileOptions')
+		spyOn(element, 'applyPendingTerminalProfileOptions')
 		const profileChanges = {
 			command: 'somecommand',
 		}
-		this.element.queueNewProfileChanges(profileChanges)
-		expect(this.element.pendingTerminalProfileOptions).toEqual(profileChanges)
+		element.queueNewProfileChanges(profileChanges)
+		expect(element.pendingTerminalProfileOptions).toEqual(profileChanges)
 	})
 
 	it('queueNewProfileChanges() previous command change made', () => {
-		spyOn(this.element, 'applyPendingTerminalProfileOptions')
-		this.element.pendingTerminalProfileOptions.command = 'somecommand'
+		spyOn(element, 'applyPendingTerminalProfileOptions')
+		element.pendingTerminalProfileOptions.command = 'somecommand'
 		const profileChanges = {
 			command: 'someothercommand',
 		}
-		this.element.queueNewProfileChanges(profileChanges)
-		expect(this.element.pendingTerminalProfileOptions).toEqual(profileChanges)
+		element.queueNewProfileChanges(profileChanges)
+		expect(element.pendingTerminalProfileOptions).toEqual(profileChanges)
 	})
 
 	it('queueNewProfileChanges() another setting', () => {
-		spyOn(this.element, 'applyPendingTerminalProfileOptions')
-		this.element.pendingTerminalProfileOptions.command = 'somecommand'
+		spyOn(element, 'applyPendingTerminalProfileOptions')
+		element.pendingTerminalProfileOptions.command = 'somecommand'
 		const profileChanges = {
 			args: ['--foo', '--bar', '--baz'],
 		}
-		this.element.queueNewProfileChanges(profileChanges)
-		expect(this.element.pendingTerminalProfileOptions).toEqual({
+		element.queueNewProfileChanges(profileChanges)
+		expect(element.pendingTerminalProfileOptions).toEqual({
 			command: 'somecommand',
 			args: ['--foo', '--bar', '--baz'],
 		})
@@ -2425,13 +2429,13 @@ describe('XTerminalElement', () => {
 				cursorBlink: true,
 			},
 		}
-		spyOn(this.element.model, 'getProfile').and.returnValue(profile)
-		spyOn(this.element.model, 'applyProfileChanges')
-		this.element.profilesSingleton.emitter.emit(
+		spyOn(element.model, 'getProfile').and.returnValue(profile)
+		spyOn(element.model, 'applyProfileChanges')
+		element.profilesSingleton.emitter.emit(
 			'did-reset-base-profile',
 			profile,
 		)
-		expect(this.element.model.applyProfileChanges).toHaveBeenCalledWith({})
+		expect(element.model.applyProfileChanges).toHaveBeenCalledWith({})
 	})
 
 	it('base profile changed, font size changed, xterm options remained the same', () => {
@@ -2464,15 +2468,15 @@ describe('XTerminalElement', () => {
 				cursorBlink: true,
 			},
 		}
-		const newBaseProfile = this.element.profilesSingleton.deepClone(profile)
+		const newBaseProfile = element.profilesSingleton.deepClone(profile)
 		newBaseProfile.fontSize = 15
-		spyOn(this.element.model, 'getProfile').and.returnValue(profile)
-		spyOn(this.element.model, 'applyProfileChanges')
-		this.element.profilesSingleton.emitter.emit(
+		spyOn(element.model, 'getProfile').and.returnValue(profile)
+		spyOn(element.model, 'applyProfileChanges')
+		element.profilesSingleton.emitter.emit(
 			'did-reset-base-profile',
 			newBaseProfile,
 		)
-		expect(this.element.model.applyProfileChanges).toHaveBeenCalledWith({
+		expect(element.model.applyProfileChanges).toHaveBeenCalledWith({
 			fontSize: 15,
 		})
 	})
@@ -2507,17 +2511,17 @@ describe('XTerminalElement', () => {
 				cursorBlink: true,
 			},
 		}
-		const newBaseProfile = this.element.profilesSingleton.deepClone(profile)
+		const newBaseProfile = element.profilesSingleton.deepClone(profile)
 		newBaseProfile.xtermOptions = {
 			cursorBlink: false,
 		}
-		spyOn(this.element.model, 'getProfile').and.returnValue(profile)
-		spyOn(this.element.model, 'applyProfileChanges')
-		this.element.profilesSingleton.emitter.emit(
+		spyOn(element.model, 'getProfile').and.returnValue(profile)
+		spyOn(element.model, 'applyProfileChanges')
+		element.profilesSingleton.emitter.emit(
 			'did-reset-base-profile',
 			newBaseProfile,
 		)
-		expect(this.element.model.applyProfileChanges).toHaveBeenCalledWith({
+		expect(element.model.applyProfileChanges).toHaveBeenCalledWith({
 			xtermOptions: {
 				cursorBlink: false,
 			},
@@ -2554,18 +2558,18 @@ describe('XTerminalElement', () => {
 				cursorBlink: true,
 			},
 		}
-		const newBaseProfile = this.element.profilesSingleton.deepClone(profile)
+		const newBaseProfile = element.profilesSingleton.deepClone(profile)
 		newBaseProfile.fontSize = 15
 		newBaseProfile.xtermOptions = {
 			cursorBlink: false,
 		}
-		spyOn(this.element.model, 'getProfile').and.returnValue(profile)
-		spyOn(this.element.model, 'applyProfileChanges')
-		this.element.profilesSingleton.emitter.emit(
+		spyOn(element.model, 'getProfile').and.returnValue(profile)
+		spyOn(element.model, 'applyProfileChanges')
+		element.profilesSingleton.emitter.emit(
 			'did-reset-base-profile',
 			newBaseProfile,
 		)
-		expect(this.element.model.applyProfileChanges).toHaveBeenCalledWith({
+		expect(element.model.applyProfileChanges).toHaveBeenCalledWith({
 			fontSize: 15,
 			xtermOptions: {
 				cursorBlink: false,
@@ -2604,14 +2608,14 @@ describe('XTerminalElement', () => {
 				cursorBlink: true,
 			},
 		}
-		const newBaseProfile = this.element.profilesSingleton.deepClone(profile)
+		const newBaseProfile = element.profilesSingleton.deepClone(profile)
 		newBaseProfile.command = 'someothercommand'
-		spyOn(this.element.model, 'getProfile').and.returnValue(profile)
-		spyOn(this.element.model, 'applyProfileChanges')
-		this.element.profilesSingleton.emitter.emit(
+		spyOn(element.model, 'getProfile').and.returnValue(profile)
+		spyOn(element.model, 'applyProfileChanges')
+		element.profilesSingleton.emitter.emit(
 			'did-reset-base-profile',
 			newBaseProfile,
 		)
-		expect(this.element.model.applyProfileChanges).toHaveBeenCalledWith({})
+		expect(element.model.applyProfileChanges).toHaveBeenCalledWith({})
 	})
 })
