@@ -212,6 +212,71 @@ class XTerminalSingleton {
 				'x-terminal:run-selected-text': () => this.runSelection(),
 				'x-terminal:focus': () => this.focus(),
 			}),
+			atom.commands.add('atom-text-editor, .tree-view, .tab-bar', {
+				'x-terminal:open-context-menu': {
+					hiddenInCommandPalette: true,
+					didDispatch: ({ target }) => this.open(
+						this.profilesSingleton.generateNewUri(),
+						this.addDefaultPosition({ target }),
+					),
+				},
+				'x-terminal:open-center-context-menu': {
+					hiddenInCommandPalette: true,
+					didDispatch: ({ target }) => this.openInCenterOrDock(
+						atom.workspace,
+						{ target },
+					),
+				},
+				'x-terminal:open-split-up-context-menu': {
+					hiddenInCommandPalette: true,
+					didDispatch: ({ target }) => this.open(
+						this.profilesSingleton.generateNewUri(),
+						{ split: 'up', target },
+					),
+				},
+				'x-terminal:open-split-down-context-menu': {
+					hiddenInCommandPalette: true,
+					didDispatch: ({ target }) => this.open(
+						this.profilesSingleton.generateNewUri(),
+						{ split: 'down', target },
+					),
+				},
+				'x-terminal:open-split-left-context-menu': {
+					hiddenInCommandPalette: true,
+					didDispatch: ({ target }) => this.open(
+						this.profilesSingleton.generateNewUri(),
+						{ split: 'left', target },
+					),
+				},
+				'x-terminal:open-split-right-context-menu': {
+					hiddenInCommandPalette: true,
+					didDispatch: ({ target }) => this.open(
+						this.profilesSingleton.generateNewUri(),
+						{ split: 'right', target },
+					),
+				},
+				'x-terminal:open-split-bottom-dock-context-menu': {
+					hiddenInCommandPalette: true,
+					didDispatch: ({ target }) => this.openInCenterOrDock(
+						atom.workspace.getBottomDock(),
+						{ target },
+					),
+				},
+				'x-terminal:open-split-left-dock-context-menu': {
+					hiddenInCommandPalette: true,
+					didDispatch: ({ target }) => this.openInCenterOrDock(
+						atom.workspace.getLeftDock(),
+						{ target },
+					),
+				},
+				'x-terminal:open-split-right-dock-context-menu': {
+					hiddenInCommandPalette: true,
+					didDispatch: ({ target }) => this.openInCenterOrDock(
+						atom.workspace.getRightDock(),
+						{ target },
+					),
+				},
+			}),
 			atom.commands.add('x-terminal', {
 				'x-terminal:close': () => this.close(),
 				'x-terminal:restart': () => this.restart(),
@@ -256,6 +321,48 @@ class XTerminalSingleton {
 			this.profilesSingleton.generateNewUri(),
 			options,
 		)
+	}
+
+	getPath (target) {
+		if (!target) {
+			const paths = atom.project.getPaths()
+			if (paths && paths.length > 0) {
+				return paths[0]
+			}
+			return null
+		}
+
+		const treeView = target.closest('.tree-view')
+		if (treeView) {
+			// called from treeview
+			const selected = treeView.querySelector('.selected > .list-item > .name, .selected > .name')
+			if (selected) {
+				return selected.dataset.path
+			}
+			return null
+		}
+
+		const tab = target.closest('.tab-bar > .tab')
+		if (tab) {
+			// called from tab
+			const title = tab.querySelector('.title')
+			if (title && title.dataset.path) {
+				return title.dataset.path
+			}
+			return null
+		}
+
+		const textEditor = target.closest('atom-text-editor')
+		if (textEditor && typeof textEditor.getModel === 'function') {
+			// called from atom-text-editor
+			const model = textEditor.getModel()
+			if (model && typeof model.getPath === 'function') {
+				return model.getPath()
+			}
+			return null
+		}
+
+		return null
 	}
 
 	refitAllTerminals () {
