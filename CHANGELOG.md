@@ -1,3 +1,10 @@
+## [12.0.1](https://github.com/bus-stop/x-terminal/compare/v12.0.0...v12.0.1) (2020-12-02)
+
+
+### Bug Fixes
+
+* set target in uri ([ddbd54c](https://github.com/bus-stop/x-terminal/commit/ddbd54cf74f33cb89582baff323b1cdef4b8ad5c))
+
 # [12.0.0](https://github.com/bus-stop/x-terminal/compare/v11.1.0...v12.0.0) (2020-12-02)
 
 
