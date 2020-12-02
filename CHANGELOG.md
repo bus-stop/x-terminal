@@ -1,3 +1,15 @@
+# [12.0.0](https://github.com/bus-stop/x-terminal/compare/v11.1.0...v12.0.0) (2020-12-02)
+
+
+### Features
+
+* add context-menu items to tree view and tabs ([#213](https://github.com/bus-stop/x-terminal/issues/213)) ([84246bc](https://github.com/bus-stop/x-terminal/commit/84246bc6e78390d0f3fe1d783bb60ea5443dc7b3))
+
+
+### BREAKING CHANGES
+
+* change the way cwd is calculated
+
 # [11.1.0](https://github.com/bus-stop/x-terminal/compare/v11.0.5...v11.1.0) (2020-11-27)
 
 
