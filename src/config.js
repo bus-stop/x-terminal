@@ -169,7 +169,7 @@ export const config = configOrder({
 			},
 			projectCwd: {
 				title: 'Use Project Directory',
-				description: 'Use the first project directory when launching command.',
+				description: 'Use project directory if cwd is in a project when launching command.',
 				type: 'boolean',
 				default: configDefaults.projectCwd,
 				profileData: {

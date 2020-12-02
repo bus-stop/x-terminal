@@ -71,18 +71,27 @@ class XTerminalModel {
 	}
 
 	async initialize () {
+		let cwd
+
+		if (this.options.target) {
+			cwd = this.options.target
+		} else if (this.profile.projectCwd) {
+			const previousActiveItem = atom.workspace.getActivePaneItem()
+			if (typeof previousActiveItem !== 'undefined' && typeof previousActiveItem.getPath === 'function') {
+				cwd = previousActiveItem.getPath()
+				const dir = atom.project.relativizePath(cwd)[0]
+				if (dir) {
+					this.profile.cwd = dir
+					return
+				}
+			} else {
+				cwd = atom.project.getPaths()[0]
+			}
+		} else {
+			cwd = this.profile.cwd
+		}
+
 		const baseProfile = this.profilesSingleton.getBaseProfile()
-		const previousActiveItem = atom.workspace.getActivePaneItem()
-		let cwd = this.profile.projectCwd ? atom.project.getPaths()[0] : this.profile.cwd
-		if (typeof previousActiveItem !== 'undefined' && typeof previousActiveItem.getPath === 'function') {
-			cwd = previousActiveItem.getPath()
-		}
-		const dir = atom.project.relativizePath(cwd)[0]
-		if (dir) {
-			// Use project paths whenever they are available by default.
-			this.profile.cwd = dir
-			return
-		}
 		if (!cwd) {
 			this.profile.cwd = baseProfile.cwd
 			return

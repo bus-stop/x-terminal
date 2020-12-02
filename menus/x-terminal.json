@@ -76,12 +76,12 @@
         "command": "x-terminal:close-all"
       }
     ],
-    "atom-text-editor": [{
+    "atom-text-editor, .tree-view, .tab-bar": [{
       "label": "X Terminal",
       "submenu": [
         {
           "label": "Open New Terminal",
-          "command": "x-terminal:open"
+          "command": "x-terminal:open-context-menu"
         },
         {
           "label": "Focus On Terminal",
@@ -89,31 +89,31 @@
         },
         {
           "label": "Open New Terminal (Split Up)",
-          "command": "x-terminal:open-split-up"
+          "command": "x-terminal:open-split-up-context-menu"
         },
         {
           "label": "Open New Terminal (Split Down)",
-          "command": "x-terminal:open-split-down"
+          "command": "x-terminal:open-split-down-context-menu"
         },
         {
           "label": "Open New Terminal (Split Left)",
-          "command": "x-terminal:open-split-left"
+          "command": "x-terminal:open-split-left-context-menu"
         },
         {
           "label": "Open New Terminal (Split Right)",
-          "command": "x-terminal:open-split-right"
+          "command": "x-terminal:open-split-right-context-menu"
         },
         {
           "label": "Open New Terminal (Bottom Dock)",
-          "command": "x-terminal:open-split-bottom-dock"
+          "command": "x-terminal:open-split-bottom-dock-context-menu"
         },
         {
           "label": "Open New Terminal (Left Dock)",
-          "command": "x-terminal:open-split-left-dock"
+          "command": "x-terminal:open-split-left-dock-context-menu"
         },
         {
           "label": "Open New Terminal (Right Dock)",
-          "command": "x-terminal:open-split-right-dock"
+          "command": "x-terminal:open-split-right-dock-context-menu"
         },
         {
           "label": "Reorganize Terminal Tabs (Current Pane)",

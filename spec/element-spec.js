@@ -33,11 +33,17 @@ import { URL, URLSearchParams } from 'whatwg-url'
 
 temp.track()
 
-async function createNewElement (uri = 'x-terminal://somesessionid/') {
-	const terminalsSet = new Set()
+async function createNewElement (params, options = {}) {
+	let uri = 'x-terminal://somesessionid/'
+	if (params) {
+		const searchParams = new URLSearchParams(params)
+		const url = new URL('x-terminal://?' + searchParams.toString())
+		uri = url.href
+	}
 	const model = new XTerminalModel({
 		uri: uri,
-		terminals_set: terminalsSet,
+		terminals_set: new Set(),
+		...options,
 	})
 	await model.initializedPromise
 	model.pane = jasmine.createSpyObj('pane',
@@ -106,9 +112,7 @@ describe('XTerminalElement', () => {
 
 	it('getShellCommand() command set in uri', async () => {
 		const expected = 'somecommand'
-		const params = new URLSearchParams({ command: expected })
-		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		const element = await createNewElement({ command: expected })
 		expect(element.getShellCommand()).toBe(expected)
 	})
 
@@ -118,9 +122,7 @@ describe('XTerminalElement', () => {
 
 	it('getArgs() args set in uri', async () => {
 		const expected = ['some', 'extra', 'args']
-		const params = new URLSearchParams({ args: JSON.stringify(expected) })
-		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		const element = await createNewElement({ args: JSON.stringify(expected) })
 		expect(element.getArgs()).toEqual(expected)
 	})
 
@@ -135,9 +137,7 @@ describe('XTerminalElement', () => {
 
 	it('getTermType() name set in uri', async () => {
 		const expected = 'sometermtype'
-		const params = new URLSearchParams({ name: expected })
-		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		const element = await createNewElement({ name: expected })
 		expect(element.getTermType()).toBe(expected)
 	})
 
@@ -173,9 +173,21 @@ describe('XTerminalElement', () => {
 
 	it('getCwd() cwd set in uri', async () => {
 		const expected = tmpdir
-		const params = new URLSearchParams({ cwd: expected })
-		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		const element = await createNewElement({ cwd: expected })
+		const cwd = await element.getCwd()
+		expect(cwd).toBe(expected)
+	})
+
+	it('getCwd() cwd set if target in uri', async () => {
+		const expected = tmpdir
+		const element = await createNewElement(null, { target: expected })
+		const cwd = await element.getCwd()
+		expect(cwd).toBe(expected)
+	})
+
+	it('getCwd() ignore cwd in target if projectCwd is set', async () => {
+		const expected = await temp.mkdir('targetCwd')
+		const element = await createNewElement({ cwd: tmpdir }, { target: expected })
 		const cwd = await element.getCwd()
 		expect(cwd).toBe(expected)
 	})
@@ -183,9 +195,7 @@ describe('XTerminalElement', () => {
 	it('getCwd() ignore cwd in uri if projectCwd is set', async () => {
 		const expected = await temp.mkdir('projectCwd')
 		spyOn(atom.project, 'getPaths').and.returnValue([expected])
-		const params = new URLSearchParams({ projectCwd: true, cwd: tmpdir })
-		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		const element = await createNewElement({ projectCwd: true, cwd: tmpdir })
 		const cwd = await element.getCwd()
 		expect(cwd).toBe(expected)
 	})
@@ -199,7 +209,7 @@ describe('XTerminalElement', () => {
 		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(
 			previousActiveItem,
 		)
-		const element = await createNewElement()
+		const element = await createNewElement({ projectCwd: true })
 		const cwd = await element.getCwd()
 		expect(cwd).toBe(tmpdir)
 	})
@@ -213,23 +223,21 @@ describe('XTerminalElement', () => {
 		spyOn(atom.workspace, 'getActivePaneItem').and.returnValue(
 			previousActiveItem,
 		)
-		const element = await createNewElement()
+		const element = await createNewElement({ projectCwd: true })
 		const cwd = await element.getCwd()
 		expect(cwd).toBe(configDefaults.cwd)
 	})
 
 	it('getCwd() non-existent cwd set in uri', async () => {
 		const dir = path.join(tmpdir, 'non-existent-dir')
-		const params = new URLSearchParams({ cwd: dir })
-		const url = new URL('x-terminal://?' + params.toString())
-		await createNewElement(url.href)
+		await createNewElement({ cwd: dir })
 		const cwd = await element.getCwd()
 		expect(cwd).toBe(configDefaults.cwd)
 	})
 
 	it('getCwd() non-existent project path added', async () => {
 		spyOn(atom.project, 'getPaths').and.returnValue([path.join(tmpdir, 'non-existent-dir')])
-		const element = await createNewElement()
+		const element = await createNewElement({ projectCwd: true })
 		const cwd = await element.getCwd()
 		expect(cwd).toBe(configDefaults.cwd)
 	})
@@ -246,9 +254,7 @@ describe('XTerminalElement', () => {
 
 	it('getEnv() env set in uri', async () => {
 		const expected = { var1: 'value1', var2: 'value2' }
-		const params = new URLSearchParams({ env: JSON.stringify(expected) })
-		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		const element = await createNewElement({ env: JSON.stringify(expected) })
 		expect(element.getEnv()).toEqual(expected)
 	})
 
@@ -259,9 +265,7 @@ describe('XTerminalElement', () => {
 
 	it('getEnv() setEnv set in uri', async () => {
 		const expected = { var2: 'value2' }
-		const params = new URLSearchParams({ env: JSON.stringify({ var1: 'value1' }), setEnv: JSON.stringify(expected) })
-		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		const element = await createNewElement({ env: JSON.stringify({ var1: 'value1' }), setEnv: JSON.stringify(expected) })
 		expect(element.getEnv().var2).toEqual(expected.var2)
 	})
 
@@ -272,9 +276,7 @@ describe('XTerminalElement', () => {
 	})
 
 	it('getEnv() deleteEnv set in uri', async () => {
-		const params = new URLSearchParams({ env: JSON.stringify({ var1: 'value1' }), deleteEnv: JSON.stringify(['var1']) })
-		const url = new URL('x-terminal://?' + params.toString())
-		await createNewElement(url.href)
+		await createNewElement({ env: JSON.stringify({ var1: 'value1' }), deleteEnv: JSON.stringify(['var1']) })
 		expect(element.getEnv().var1).toBe(undefined)
 	})
 
@@ -291,9 +293,7 @@ describe('XTerminalElement', () => {
 
 	it('getEncoding() encoding set in uri', async () => {
 		const expected = 'someencoding'
-		const params = new URLSearchParams({ encoding: expected })
-		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		const element = await createNewElement({ encoding: expected })
 		expect(element.getEncoding()).toBe(expected)
 	})
 
@@ -303,17 +303,13 @@ describe('XTerminalElement', () => {
 
 	it('leaveOpenAfterExit() true set in uri', async () => {
 		const expected = true
-		const params = new URLSearchParams({ leaveOpenAfterExit: expected })
-		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		const element = await createNewElement({ leaveOpenAfterExit: expected })
 		expect(element.leaveOpenAfterExit()).toBe(expected)
 	})
 
 	it('leaveOpenAfterExit() false set in uri', async () => {
 		const expected = false
-		const params = new URLSearchParams({ leaveOpenAfterExit: expected })
-		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		const element = await createNewElement({ leaveOpenAfterExit: expected })
 		expect(element.leaveOpenAfterExit()).toBe(expected)
 	})
 
@@ -323,17 +319,13 @@ describe('XTerminalElement', () => {
 
 	it('isPromptToStartup() false set in uri', async () => {
 		const expected = false
-		const params = new URLSearchParams({ promptToStartup: expected })
-		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		const element = await createNewElement({ promptToStartup: expected })
 		expect(element.isPromptToStartup()).toBe(expected)
 	})
 
 	it('isPromptToStartup() true set in uri', async () => {
 		const expected = true
-		const params = new URLSearchParams({ promptToStartup: expected })
-		const url = new URL('x-terminal://?' + params.toString())
-		const element = await createNewElement(url.href)
+		const element = await createNewElement({ promptToStartup: expected })
 		expect(element.isPromptToStartup()).toBe(expected)
 	})
 
@@ -385,9 +377,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Custom webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Custom' })
 				expect(webgltheme.selection).toBe('#4d4d4d')
 			})
@@ -422,9 +412,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Atom Dark webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Atom Dark' })
 				expect(webgltheme.selection).toBe('#999999')
 			})
@@ -459,9 +447,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Atom Light webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Atom Light' })
 				expect(webgltheme.selection).toBe('#afc4da')
 			})
@@ -497,9 +483,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Base16 Tomorrow Dark webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Base16 Tomorrow Dark' })
 				expect(webgltheme.selection).toBe('#b4b7b4')
 			})
@@ -535,9 +519,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Base16 Tomorrow Light webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Base16 Tomorrow Light' })
 				expect(webgltheme.selection).toBe('#282a2e')
 			})
@@ -572,9 +554,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Christmas webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Christmas' })
 				expect(webgltheme.selection).toBe('#298f16')
 			})
@@ -610,9 +590,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('City Lights webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'City Lights' })
 				expect(webgltheme.selection).toBe('#2a2f38')
 			})
@@ -647,9 +625,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Dracula webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Dracula' })
 				expect(webgltheme.selection).toBe('#44475a')
 			})
@@ -684,9 +660,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Grass webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Grass' })
 				expect(webgltheme.selection).toBe('rgba(182, 73, 38, .99)')
 			})
@@ -721,9 +695,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Homebrew webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Homebrew' })
 				expect(webgltheme.selection).toBe('rgba(7, 30, 155, .99)')
 			})
@@ -758,9 +730,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Inverse webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Inverse' })
 				expect(webgltheme.selection).toBe('rgba(178, 215, 255, .99)')
 			})
@@ -795,9 +765,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Linux webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Linux' })
 				expect(webgltheme.selection).toBe('rgba(155, 30, 7, .99)')
 			})
@@ -832,9 +800,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Man Page webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Man Page' })
 				expect(webgltheme.selection).toBe('rgba(178, 215, 255, .99)')
 			})
@@ -869,9 +835,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Novel webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Novel' })
 				expect(webgltheme.selection).toBe('rgba(155, 153, 122, .99)')
 			})
@@ -906,9 +870,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Ocean webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Ocean' })
 				expect(webgltheme.selection).toBe('rgba(41, 134, 255, .99)')
 			})
@@ -943,9 +905,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('One Dark webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'One Dark' })
 				expect(webgltheme.selection).toBe('#9196a1')
 			})
@@ -980,9 +940,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('One Light webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'One Light' })
 				expect(webgltheme.selection).toBe('hsl(230, 1%, 90%)')
 			})
@@ -1017,9 +975,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Predawn webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Predawn' })
 				expect(webgltheme.selection).toBe('rgba(255,255,255,0.25)')
 			})
@@ -1054,9 +1010,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Pro webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Pro' })
 				expect(webgltheme.selection).toBe('rgba(82, 82, 82, .99)')
 			})
@@ -1091,9 +1045,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Red Sands webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Red Sands' })
 				expect(webgltheme.selection).toBe('rgba(60, 25, 22, .99)')
 			})
@@ -1128,9 +1080,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Red webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Red' })
 				expect(webgltheme.selection).toBe('rgba(7, 30, 155, .99)')
 			})
@@ -1165,9 +1115,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Silver Aerogel webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Silver Aerogel' })
 				expect(webgltheme.selection).toBe('rgba(120, 123, 156, .99)')
 			})
@@ -1202,9 +1150,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Solarized Dark webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Solarized Dark' })
 				expect(webgltheme.selection).toBe('#839496')
 			})
@@ -1239,9 +1185,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Solarized Light webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Solarized Light' })
 				expect(webgltheme.selection).toBe('#ece7d5')
 			})
@@ -1276,9 +1220,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('Solid Colors webgl selection', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Solid Colors' })
 				expect(webgltheme.selection).toBe('rgba(178, 215, 255, .99)')
 			})
@@ -1315,9 +1257,7 @@ describe('XTerminalElement', () => {
 		if (process.platform !== 'linux') {
 			it('Standard webgl selection', async () => {
 				const root = getComputedStyle(document.documentElement)
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				const element = await createNewElement(url.href)
+				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Standard' })
 				expect(webgltheme.selection).toBe(root.getPropertyValue('--standard-background-color-selected'))
 			})
@@ -1342,9 +1282,7 @@ describe('XTerminalElement', () => {
 		})
 
 		it('createTerminal() enable web-link addon', async () => {
-			const params = new URLSearchParams({ webLinks: true })
-			const url = new URL('x-terminal://?' + params.toString())
-			await createNewElement(url.href)
+			await createNewElement({ webLinks: true })
 			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
 				return call.args[0] instanceof WebLinksAddon
 			})
@@ -1352,9 +1290,7 @@ describe('XTerminalElement', () => {
 		})
 
 		it('createTerminal() disable web-link addon', async () => {
-			const params = new URLSearchParams({ webLinks: false })
-			const url = new URL('x-terminal://?' + params.toString())
-			await createNewElement(url.href)
+			await createNewElement({ webLinks: false })
 			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
 				return call.args[0] instanceof WebLinksAddon
 			})
@@ -1363,9 +1299,7 @@ describe('XTerminalElement', () => {
 
 		if (process.platform !== 'linux') {
 			it('createTerminal() enable webgl addon', async () => {
-				const params = new URLSearchParams({ webgl: true })
-				const url = new URL('x-terminal://?' + params.toString())
-				await createNewElement(url.href)
+				await createNewElement({ webgl: true })
 				const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
 					return call.args[0] instanceof WebglAddon
 				})
@@ -1374,9 +1308,7 @@ describe('XTerminalElement', () => {
 		}
 
 		it('createTerminal() disable webgl addon', async () => {
-			const params = new URLSearchParams({ webgl: false })
-			const url = new URL('x-terminal://?' + params.toString())
-			await createNewElement(url.href)
+			await createNewElement({ webgl: false })
 			const wasAdded = Terminal.prototype.loadAddon.calls.all().some(call => {
 				return call.args[0] instanceof WebglAddon
 			})
