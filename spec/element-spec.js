@@ -178,20 +178,6 @@ describe('XTerminalElement', () => {
 		expect(cwd).toBe(expected)
 	})
 
-	it('getCwd() cwd set if target in uri', async () => {
-		const expected = tmpdir
-		const element = await createNewElement(null, { target: expected })
-		const cwd = await element.getCwd()
-		expect(cwd).toBe(expected)
-	})
-
-	it('getCwd() ignore cwd in target if projectCwd is set', async () => {
-		const expected = await temp.mkdir('targetCwd')
-		const element = await createNewElement({ cwd: tmpdir }, { target: expected })
-		const cwd = await element.getCwd()
-		expect(cwd).toBe(expected)
-	})
-
 	it('getCwd() ignore cwd in uri if projectCwd is set', async () => {
 		const expected = await temp.mkdir('projectCwd')
 		spyOn(atom.project, 'getPaths').and.returnValue([expected])

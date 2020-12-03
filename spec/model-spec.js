@@ -81,12 +81,6 @@ describe('XTerminalModel', () => {
 		expect(model.getPath()).toBe(tmpdir)
 	})
 
-	it('use target with valid cwd passed in uri', async () => {
-		const expected = await temp.mkdir('targetCwd')
-		const model = await createNewModel({ cwd: tmpdir }, { target: expected })
-		expect(model.getPath()).toBe(expected)
-	})
-
 	it('use projectCwd with valid cwd passed in uri', async () => {
 		const expected = await temp.mkdir('projectCwd')
 		spyOn(atom.project, 'getPaths').and.returnValue([expected])
