@@ -46,6 +46,7 @@ class XTerminalModel {
 		this.uri = this.options.uri
 		const url = new URL(this.uri)
 		this.sessionId = url.host
+		this.uriCwd = url.searchParams.get('cwd')
 		this.profilesSingleton = XTerminalProfilesSingleton.instance
 		this.profile = this.profilesSingleton.createProfileDataFromUri(this.uri)
 		this.terminals_set = this.options.terminals_set
@@ -73,8 +74,8 @@ class XTerminalModel {
 	async initialize () {
 		let cwd
 
-		if (this.options.target) {
-			cwd = this.options.target
+		if (this.uriCwd) {
+			cwd = this.uriCwd
 		} else if (this.profile.projectCwd) {
 			const previousActiveItem = atom.workspace.getActivePaneItem()
 			if (typeof previousActiveItem !== 'undefined' && typeof previousActiveItem.getPath === 'function') {
