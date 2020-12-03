@@ -1,3 +1,10 @@
+## [12.0.2](https://github.com/bus-stop/x-terminal/compare/v12.0.1...v12.0.2) (2020-12-03)
+
+
+### Bug Fixes
+
+* use cwd param for target ([#227](https://github.com/bus-stop/x-terminal/issues/227)) ([309619f](https://github.com/bus-stop/x-terminal/commit/309619f17be04652cec3605a189ec535f730ca64))
+
 ## [12.0.1](https://github.com/bus-stop/x-terminal/compare/v12.0.0...v12.0.1) (2020-12-02)
 
 
