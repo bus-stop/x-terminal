@@ -112,13 +112,8 @@ class XTerminalSingleton {
 			// Add opener for terminal emulator item.
 			atom.workspace.addOpener((uri) => {
 				if (uri.startsWith(X_TERMINAL_BASE_URI)) {
-					const { searchParams } = new URL(uri)
-					const target = searchParams.get('target')
-					searchParams.delete('target')
-
 					const item = new XTerminalModel({
 						uri,
-						target,
 						terminals_set: this.terminals_set,
 					})
 					return item
@@ -441,10 +436,8 @@ class XTerminalSingleton {
 
 	async open (uri, options = {}) {
 		const url = new URL(uri)
-		let relaunchTerminalOnStartup = url.searchParams.get('relaunchTerminalOnStartup')
-		if (relaunchTerminalOnStartup === null) {
-			relaunchTerminalOnStartup = this.profilesSingleton.getBaseProfile().relaunchTerminalOnStartup
-			if (!relaunchTerminalOnStartup) {
+		if (url.searchParams.get('relaunchTerminalOnStartup') === null) {
+			if (!this.profilesSingleton.getBaseProfile().relaunchTerminalOnStartup) {
 				url.searchParams.set('relaunchTerminalOnStartup', false)
 			}
 		}
@@ -452,7 +445,7 @@ class XTerminalSingleton {
 		if (options.target) {
 			const target = this.getPath(options.target)
 			if (target) {
-				url.searchParams.set('target', target)
+				url.searchParams.set('cwd', target)
 			}
 		}
 

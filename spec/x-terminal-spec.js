@@ -240,4 +240,31 @@ describe('x-terminal', () => {
 			expect(activeTerminal.clear).toHaveBeenCalled()
 		})
 	})
+
+	describe('open()', () => {
+		let uri
+		beforeEach(() => {
+			uri = xTerminalInstance.profilesSingleton.generateNewUri()
+			spyOn(atom.workspace, 'open')
+		})
+
+		it('simple', async () => {
+			await xTerminalInstance.open(uri)
+
+			expect(atom.workspace.open).toHaveBeenCalledWith(uri, {})
+		})
+
+		it('target to cwd', async () => {
+			const testPath = '/test/path'
+			spyOn(xTerminalInstance, 'getPath').and.returnValue(testPath)
+			await xTerminalInstance.open(
+				uri,
+				{ target: true },
+			)
+
+			const url = new URL(atom.workspace.open.calls.mostRecent().args[0])
+
+			expect(url.searchParams.get('cwd')).toBe(testPath)
+		})
+	})
 })
