@@ -178,10 +178,11 @@ describe('XTerminalElement', () => {
 		expect(cwd).toBe(expected)
 	})
 
-	it('getCwd() ignore cwd in uri if projectCwd is set', async () => {
+	it('getCwd() ignore cwd base profile if projectCwd is set', async () => {
+		atom.config.set('x-terminal.spawnPtySettings.cwd', tmpdir)
 		const expected = await temp.mkdir('projectCwd')
 		spyOn(atom.project, 'getPaths').and.returnValue([expected])
-		const element = await createNewElement({ projectCwd: true, cwd: tmpdir })
+		const element = await createNewElement({ projectCwd: true })
 		const cwd = await element.getCwd()
 		expect(cwd).toBe(expected)
 	})
