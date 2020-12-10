@@ -25,6 +25,7 @@ module.exports = createRunner({
 	specHelper: {
 		attachToDom: true,
 		customMatchers: true,
+		ci: true,
 	},
 }, () => {
 	// eslint-disable-next-line no-console
