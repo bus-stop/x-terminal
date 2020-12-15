@@ -50,7 +50,7 @@
   "dependencies": {
     "deep-object-diff": "^1.1.0",
     "fs-extra": "^9.0.1",
-    "marked": "^1.2.6",
+    "marked": "^1.2.7",
     "node-pty-prebuilt-multiarch": "^0.9.0",
     "uuid": "^8.3.2",
     "whatwg-url": "^8.4.0",
