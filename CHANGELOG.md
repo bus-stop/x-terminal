@@ -1,3 +1,10 @@
+# [12.1.0](https://github.com/bus-stop/x-terminal/compare/v12.0.4...v12.1.0) (2021-01-02)
+
+
+### Features
+
+* provide terminal service ([#236](https://github.com/bus-stop/x-terminal/issues/236)) ([8e994d7](https://github.com/bus-stop/x-terminal/commit/8e994d741f86166b8ce6c89bade98bbee3ed4537))
+
 ## [12.0.4](https://github.com/bus-stop/x-terminal/compare/v12.0.3...v12.0.4) (2020-12-10)
 
 
