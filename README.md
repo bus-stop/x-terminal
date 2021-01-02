@@ -134,12 +134,61 @@ There are also activity notifications for terminal tabs not in focus.
 
 ## Services
 
-For plugin writers, the `x-terminal` package supports two services, `atom-xterm` and `platformioIDETerminal`, which
+For plugin writers, the `x-terminal` package supports three services, `terminal`, `atom-xterm`, and `platformioIDETerminal`, which
 can be used to easily open terminals. These methods are provided using Atom's [services](http://flight-manual.atom.io/behind-atom/sections/interacting-with-other-packages-via-services/)
 API.
 
 To use a service, add a consumer method to consume the service, or
 rather a JavaScript object that provides methods to open terminals and run commands.
+
+### 'terminal' service v1.0.0
+
+The `terminal` service provides an object with `updateProcessEnv`, `run`, `getTerminalViews`, and `open` methods.
+
+As an example on how to use the provided `run()` method, your
+`package.json` should have the following.
+
+```json
+{
+  "consumedServices": {
+    "terminal": {
+      "versions": {
+        "^1.0.0": "consumeTerminalService"
+      }
+    }
+  }
+}
+```
+
+Your package's main module should then define a `consumeTerminalService`
+method, for example.
+
+```js
+import { Disposable } from 'atom'
+
+export default {
+  terminalService: null,
+
+  consumeTerminalService (terminalService) {
+    this.terminalService = terminalService
+    return new Disposable(() => {
+      this.terminalService = null
+    })
+  },
+
+  // . . .
+}
+```
+
+Once the service is consumed, use the `run()` method that is provided
+by the service, for example.
+
+```js
+// Launch `somecommand --foo --bar --baz` in a terminal.
+this.terminalService.run([
+   'somecommand --foo --bar --baz'
+])
+```
 
 ### 'atom-xterm' service v2.0.0
 
