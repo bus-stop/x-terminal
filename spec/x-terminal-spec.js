@@ -268,3 +268,38 @@ describe('x-terminal', () => {
 		})
 	})
 })
+
+describe('x-terminal services', () => {
+	beforeEach(async () => {
+		atom.packages.triggerDeferredActivationHooks()
+		atom.packages.triggerActivationHook('core:loaded-shell-environment')
+		await atom.packages.activatePackage('x-terminal')
+	})
+
+	it('terminal.run', async () => {
+		spyOn(xTerminalInstance, 'runCommands')
+		const service = await new Promise(resolve => {
+			atom.packages.serviceHub.consume('terminal', '^1.0.0', resolve)
+		})
+		service.run(['test'])
+		expect(xTerminalInstance.runCommands).toHaveBeenCalledWith(['test'])
+	})
+
+	it('platformioIDETerminal.run', async () => {
+		spyOn(xTerminalInstance, 'runCommands')
+		const service = await new Promise(resolve => {
+			atom.packages.serviceHub.consume('platformioIDETerminal', '^1.1.0', resolve)
+		})
+		service.run(['test'])
+		expect(xTerminalInstance.runCommands).toHaveBeenCalledWith(['test'])
+	})
+
+	it('atom-xterm.openTerminal', async () => {
+		spyOn(xTerminalInstance, 'openTerminal')
+		const service = await new Promise(resolve => {
+			atom.packages.serviceHub.consume('atom-xterm', '^2.0.0', resolve)
+		})
+		service.openTerminal({})
+		expect(xTerminalInstance.openTerminal).toHaveBeenCalledWith({})
+	})
+})

@@ -593,6 +593,17 @@ class XTerminalSingleton {
 		}
 	}
 
+	/**
+	 * Function providing service functions offered by 'terminal' service.
+	 *
+	 * @function
+	 * @returns {Object} Object holding service functions.
+	 */
+	provideTerminalService () {
+		// for now it is the same as platformioIDETerminal service
+		return this.providePlatformIOIDEService()
+	}
+
 	close () {
 		this.performOnActiveTerminal(t => t.exit())
 	}
@@ -723,4 +734,8 @@ export function provideAtomXtermService () {
 
 export function providePlatformIOIDEService () {
 	return XTerminalSingleton.instance.providePlatformIOIDEService()
+}
+
+export function provideTerminalService () {
+	return XTerminalSingleton.instance.provideTerminalService()
 }

@@ -45,6 +45,12 @@
       "versions": {
         "1.1.0": "providePlatformIOIDEService"
       }
+    },
+    "terminal": {
+      "description": "Run commands and open terminals.",
+      "versions": {
+        "1.0.0": "provideTerminalService"
+      }
     }
   },
   "dependencies": {
