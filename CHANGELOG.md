@@ -1,3 +1,10 @@
+## [12.1.1](https://github.com/bus-stop/x-terminal/compare/v12.1.0...v12.1.1) (2021-01-19)
+
+
+### Bug Fixes
+
+* Update ligatures addon ([#241](https://github.com/bus-stop/x-terminal/issues/241)) ([6acec00](https://github.com/bus-stop/x-terminal/commit/6acec000aa2d648f1354851e4c16899a4f184435))
+
 # [12.1.0](https://github.com/bus-stop/x-terminal/compare/v12.0.4...v12.1.0) (2021-01-02)
 
 
