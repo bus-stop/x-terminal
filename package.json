@@ -76,7 +76,7 @@
     "eslint-plugin-json": "^2.1.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "semantic-release": "^17.3.6",
+    "semantic-release": "^17.3.7",
     "stylelint": "^13.9.0",
     "stylelint-config-standard": "^20.0.0",
     "temp": "^0.9.4"
