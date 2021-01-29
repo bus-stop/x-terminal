@@ -1,3 +1,10 @@
+## [12.1.2](https://github.com/bus-stop/x-terminal/compare/v12.1.1...v12.1.2) (2021-01-29)
+
+
+### Bug Fixes
+
+* update xterm and plugins ([#252](https://github.com/bus-stop/x-terminal/issues/252)) ([d25e8e3](https://github.com/bus-stop/x-terminal/commit/d25e8e38283b731848adfdc2b6462a123d806111))
+
 ## [12.1.1](https://github.com/bus-stop/x-terminal/compare/v12.1.0...v12.1.1) (2021-01-19)
 
 
