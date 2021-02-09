@@ -1,3 +1,15 @@
+# [13.0.0](https://github.com/bus-stop/x-terminal/compare/v12.1.2...v13.0.0) (2021-02-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency node-pty-prebuilt-multiarch to ^0.10.0 ([#256](https://github.com/bus-stop/x-terminal/issues/256)) ([0ad0bf0](https://github.com/bus-stop/x-terminal/commit/0ad0bf0caa8a2b8aee09369b67b54404d9433839))
+
+
+### BREAKING CHANGES
+
+* **deps:** Probably need to uninstall and reinstall to rebuild dependencies.
+
 ## [12.1.2](https://github.com/bus-stop/x-terminal/compare/v12.1.1...v12.1.2) (2021-01-29)
 
 
