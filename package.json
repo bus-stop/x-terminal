@@ -57,7 +57,7 @@
     "deep-object-diff": "^1.1.0",
     "fs-extra": "^9.1.0",
     "marked": "^2.0.0",
-    "node-pty-prebuilt-multiarch": "^0.9.0",
+    "node-pty-prebuilt-multiarch": "^0.10.0",
     "uuid": "^8.3.2",
     "whatwg-url": "^8.4.0",
     "which": "^2.0.2",
