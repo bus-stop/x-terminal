@@ -6,5 +6,11 @@
     "automerge": true,
     "commitMessageTopic": "devDependency {{depName}}"
   },
+  "packageRules": [
+    {
+      "matchPackagePatterns": "^xterm",
+      "groupName": "xterm"
+    }
+  ],
   "rangeStrategy": "bump"
 }
