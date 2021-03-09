@@ -1,3 +1,10 @@
+## [13.0.2](https://github.com/bus-stop/x-terminal/compare/v13.0.1...v13.0.2) (2021-03-09)
+
+
+### Bug Fixes
+
+* **deps:** update xterm ([#274](https://github.com/bus-stop/x-terminal/issues/274)) ([42de3af](https://github.com/bus-stop/x-terminal/commit/42de3af0a2277c3d38e45e8c6689a7ca30f067e6))
+
 ## [13.0.1](https://github.com/bus-stop/x-terminal/compare/v13.0.0...v13.0.1) (2021-02-27)
 
 
