@@ -1,3 +1,10 @@
+## [13.0.4](https://github.com/bus-stop/x-terminal/compare/v13.0.3...v13.0.4) (2021-05-03)
+
+
+### Bug Fixes
+
+* activate pane item on focus ([#292](https://github.com/bus-stop/x-terminal/issues/292)) ([dcb0fc5](https://github.com/bus-stop/x-terminal/commit/dcb0fc53a33946a0917aa0b0bd82728121bdfe58))
+
 ## [13.0.3](https://github.com/bus-stop/x-terminal/compare/v13.0.2...v13.0.3) (2021-03-24)
 
 
