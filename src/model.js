@@ -213,6 +213,9 @@ class XTerminalModel {
 	}
 
 	focusOnTerminal (double) {
+		if (this.pane) {
+			this.pane.activateItem(this)
+		}
 		this.element.focusOnTerminal(double)
 		if (this.modified) {
 			this.modified = false

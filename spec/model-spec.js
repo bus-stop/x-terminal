@@ -55,7 +55,7 @@ describe('XTerminalModel', () => {
 		spyOn(XTerminalProfilesSingleton.instance, 'generateNewUri').and.returnValue(uri)
 		model = await createNewModel()
 		pane = jasmine.createSpyObj('pane',
-			['destroyItem', 'getActiveItem'])
+			['destroyItem', 'getActiveItem', 'activateItem'])
 		element = jasmine.createSpyObj('element',
 			['destroy', 'refitTerminal', 'focusOnTerminal', 'clickOnCurrentAnchor', 'getCurrentAnchorHref', 'restartPtyProcess', 'clear'])
 		element.terminal = jasmine.createSpyObj('terminal',
@@ -371,6 +371,13 @@ describe('XTerminalModel', () => {
 		spyOn(model.emitter, 'emit')
 		model.focusOnTerminal()
 		expect(model.emitter.emit).toHaveBeenCalled()
+	})
+
+	it('focusOnTerminal() activate pane', () => {
+		model.element = element
+		model.pane = pane
+		model.focusOnTerminal()
+		expect(model.pane.activateItem).toHaveBeenCalled()
 	})
 
 	it('exit()', () => {
