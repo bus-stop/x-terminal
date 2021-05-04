@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "deep-object-diff": "^1.1.0",
-    "fs-extra": "^9.1.0",
+    "fs-extra": "^10.0.0",
     "marked": "^2.0.3",
     "node-pty-prebuilt-multiarch": "^0.10.0",
     "uuid": "^8.3.2",
