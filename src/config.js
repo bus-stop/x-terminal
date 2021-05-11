@@ -257,7 +257,7 @@ export const config = configOrder({
 		properties: {
 			webgl: {
 				title: 'WebGL Renderer',
-				description: 'Enable the WebGL-based renderer using the **experimental** xterm.js [WebGL addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-webgl)',
+				description: 'Enable the WebGL-based renderer using the xterm.js [WebGL addon](https://github.com/xtermjs/xterm.js/tree/master/addons/xterm-addon-webgl)',
 				type: 'boolean',
 				default: configDefaults.webgl,
 				profileData: {
