@@ -1,3 +1,10 @@
+## [13.0.7](https://github.com/bus-stop/x-terminal/compare/v13.0.6...v13.0.7) (2021-05-11)
+
+
+### Bug Fixes
+
+* remove experimental note from webgl config ([3137d7e](https://github.com/bus-stop/x-terminal/commit/3137d7e018a884fe874c3b876410b1c0b8648484))
+
 ## [13.0.6](https://github.com/bus-stop/x-terminal/compare/v13.0.5...v13.0.6) (2021-05-11)
 
 
