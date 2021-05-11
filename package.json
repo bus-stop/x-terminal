@@ -6,7 +6,7 @@
   "bugs": {
     "url": "https://github.com/bus-stop/x-terminal/issues/new/choose"
   },
-  "version": "13.0.5",
+  "version": "13.0.6",
   "description": "An xterm based Atom plugin for providing terminals inside your Atom workspace. A fork of atom-xterm",
   "keywords": [
     "terminal",
