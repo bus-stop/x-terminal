@@ -1,3 +1,10 @@
+## [13.0.8](https://github.com/bus-stop/x-terminal/compare/v13.0.7...v13.0.8) (2021-05-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency xterm-addon-webgl to v0.11.1 ([#305](https://github.com/bus-stop/x-terminal/issues/305)) ([2b8eb6b](https://github.com/bus-stop/x-terminal/commit/2b8eb6bb3ae7ad5aa5efc4d3d97b924eee53ac89))
+
 ## [13.0.7](https://github.com/bus-stop/x-terminal/compare/v13.0.6...v13.0.7) (2021-05-11)
 
 
