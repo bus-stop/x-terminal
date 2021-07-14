@@ -1,3 +1,10 @@
+## [13.0.12](https://github.com/bus-stop/x-terminal/compare/v13.0.11...v13.0.12) (2021-07-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency xterm-addon-ligatures to v0.5.1 ([#338](https://github.com/bus-stop/x-terminal/issues/338)) ([8fbda3b](https://github.com/bus-stop/x-terminal/commit/8fbda3b0292b11822ca202ba45e522059f40dc3f))
+
 ## [13.0.11](https://github.com/bus-stop/x-terminal/compare/v13.0.10...v13.0.11) (2021-06-28)
 
 
