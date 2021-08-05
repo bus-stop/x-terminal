@@ -1,3 +1,10 @@
+## [13.0.13](https://github.com/bus-stop/x-terminal/compare/v13.0.12...v13.0.13) (2021-08-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency whatwg-url to ^9.1.0 ([#341](https://github.com/bus-stop/x-terminal/issues/341)) ([e6512c3](https://github.com/bus-stop/x-terminal/commit/e6512c335f5724270c4a59867206ad303e4c9749))
+
 ## [13.0.12](https://github.com/bus-stop/x-terminal/compare/v13.0.11...v13.0.12) (2021-07-14)
 
 
