@@ -1,3 +1,10 @@
+## [13.0.17](https://github.com/bus-stop/x-terminal/compare/v13.0.16...v13.0.17) (2021-10-07)
+
+
+### Bug Fixes
+
+* update deps ([#366](https://github.com/bus-stop/x-terminal/issues/366)) ([0baa997](https://github.com/bus-stop/x-terminal/commit/0baa997a25a38b0d3340eaa3a0769aca7b375476))
+
 ## [13.0.16](https://github.com/bus-stop/x-terminal/compare/v13.0.15...v13.0.16) (2021-09-11)
 
 
