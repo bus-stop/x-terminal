@@ -1,3 +1,10 @@
+## [13.0.18](https://github.com/bus-stop/x-terminal/compare/v13.0.17...v13.0.18) (2021-10-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency whatwg-url to v11 ([#372](https://github.com/bus-stop/x-terminal/issues/372)) ([187d5c5](https://github.com/bus-stop/x-terminal/commit/187d5c55fad3c0e0ed747fc54c71b995a301217c))
+
 ## [13.0.17](https://github.com/bus-stop/x-terminal/compare/v13.0.16...v13.0.17) (2021-10-07)
 
 
