@@ -119,7 +119,7 @@ x-terminal-profile {
 }
 
 .x-terminal-profile-menu-item-label {
-	-webkit-user-select: none;
+	user-select: none;
 	cursor: default;
 	display: block;
 	max-width: 100%;
@@ -148,13 +148,13 @@ x-terminal-profile {
 
 .x-terminal-profile-menu-item-title {
 	font-size: @font-size + 4px;
-	-webkit-user-select: none;
+	user-select: none;
 	color: @text-color;
 }
 
 .x-terminal-profile-menu-item-description {
 	color: @text-color-subtle;
-	-webkit-user-select: none;
+	user-select: none;
 	cursor: default;
 
 	&:empty {
@@ -213,7 +213,7 @@ x-terminal-profile {
 
 		&::-webkit-color-swatch {
 			border-radius: @component-border-radius;
-			border: 1px solid hsla(0, 0%, 0%, 0.1);
+			border: 1px solid hsl(0deg 0% 0% / 10%);
 		}
 
 		&:hover {
