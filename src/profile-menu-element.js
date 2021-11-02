@@ -20,7 +20,7 @@
  */
 
 import { CompositeDisposable, TextEditor } from 'atom'
-import {marked} from 'marked/lib/marked.cjs'
+import { marked } from 'marked/lib/marked.cjs'
 
 import { XTerminalProfilesSingleton } from './profiles'
 import { XTerminalDeleteProfileModel } from './delete-profile-model'
