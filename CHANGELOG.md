@@ -1,3 +1,10 @@
+## [13.0.19](https://github.com/bus-stop/x-terminal/compare/v13.0.18...v13.0.19) (2021-11-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency marked to v4 ([#379](https://github.com/bus-stop/x-terminal/issues/379)) ([477144a](https://github.com/bus-stop/x-terminal/commit/477144a1b36cc7affbaeb81e136deca9b0a6b237))
+
 ## [13.0.18](https://github.com/bus-stop/x-terminal/compare/v13.0.17...v13.0.18) (2021-10-20)
 
 
