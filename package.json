@@ -61,11 +61,11 @@
     "uuid": "^8.3.2",
     "whatwg-url": "^11.0.0",
     "which": "^2.0.2",
-    "xterm": "4.15.0",
+    "xterm": "4.16.0",
     "xterm-addon-fit": "0.5.0",
     "xterm-addon-ligatures": "0.5.1",
-    "xterm-addon-web-links": "0.4.0",
-    "xterm-addon-webgl": "0.11.3"
+    "xterm-addon-web-links": "0.5.0",
+    "xterm-addon-webgl": "0.11.4"
   },
   "devDependencies": {
     "@semantic-release/apm-config": "^9.0.1",
