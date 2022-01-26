@@ -1,3 +1,10 @@
+## [13.0.23](https://github.com/bus-stop/x-terminal/compare/v13.0.22...v13.0.23) (2022-01-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency deep-object-diff to ^1.1.7 ([#409](https://github.com/bus-stop/x-terminal/issues/409)) ([d433e10](https://github.com/bus-stop/x-terminal/commit/d433e10f3126e614584f57d1235cb5a39f7e6f78))
+
 ## [13.0.22](https://github.com/bus-stop/x-terminal/compare/v13.0.21...v13.0.22) (2021-12-23)
 
 
