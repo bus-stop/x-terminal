@@ -1,3 +1,10 @@
+## [13.0.26](https://github.com/bus-stop/x-terminal/compare/v13.0.25...v13.0.26) (2022-03-13)
+
+
+### Bug Fixes
+
+* fix marked import for Atom 1.61 ([#424](https://github.com/bus-stop/x-terminal/issues/424)) ([7f18724](https://github.com/bus-stop/x-terminal/commit/7f187246b0002a57f64092441a8d559431ee2942))
+
 ## [13.0.25](https://github.com/bus-stop/x-terminal/compare/v13.0.24...v13.0.25) (2022-03-01)
 
 
