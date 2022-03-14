@@ -93,6 +93,72 @@ describe('x-terminal', () => {
 		})
 	})
 
+	describe('focus-next', () => {
+		it('opens new terminal', async () => {
+			const workspace = atom.views.getView(atom.workspace)
+			jasmine.attachToDOM(workspace)
+			workspace.focus()
+			spyOn(xTerminalInstance, 'open')
+
+			expect(xTerminalInstance.open).not.toHaveBeenCalled()
+			xTerminalInstance.focus(1)
+			expect(xTerminalInstance.open).toHaveBeenCalledTimes(1)
+		})
+
+		it('focuses next terminal', async () => {
+			const workspace = atom.views.getView(atom.workspace)
+			jasmine.attachToDOM(workspace)
+			const terminals = []
+			for (let i = 0; i < 3; i++) {
+				terminals[i] = await xTerminalInstance.openInCenterOrDock(atom.workspace)
+				await terminals[i].initializedPromise
+				await terminals[i].element.createTerminal()
+			}
+			expect(terminals[2].element).toHaveFocus()
+			xTerminalInstance.focusNext()
+			expect(terminals[0].element).toHaveFocus()
+			xTerminalInstance.focusNext()
+			expect(terminals[1].element).toHaveFocus()
+			xTerminalInstance.focusNext()
+			expect(terminals[2].element).toHaveFocus()
+			xTerminalInstance.focusNext()
+			expect(terminals[0].element).toHaveFocus()
+		})
+	})
+
+	describe('focus-previous', () => {
+		it('opens new terminal', async () => {
+			const workspace = atom.views.getView(atom.workspace)
+			jasmine.attachToDOM(workspace)
+			workspace.focus()
+			spyOn(xTerminalInstance, 'open')
+
+			expect(xTerminalInstance.open).not.toHaveBeenCalled()
+			xTerminalInstance.focus(-1)
+			expect(xTerminalInstance.open).toHaveBeenCalledTimes(1)
+		})
+
+		it('focuses prev terminal', async () => {
+			const workspace = atom.views.getView(atom.workspace)
+			jasmine.attachToDOM(workspace)
+			const terminals = []
+			for (let i = 0; i < 3; i++) {
+				terminals[i] = await xTerminalInstance.openInCenterOrDock(atom.workspace)
+				await terminals[i].initializedPromise
+				await terminals[i].element.createTerminal()
+			}
+			expect(terminals[2].element).toHaveFocus()
+			xTerminalInstance.focusPrev()
+			expect(terminals[1].element).toHaveFocus()
+			xTerminalInstance.focusPrev()
+			expect(terminals[0].element).toHaveFocus()
+			xTerminalInstance.focusPrev()
+			expect(terminals[2].element).toHaveFocus()
+			xTerminalInstance.focusPrev()
+			expect(terminals[1].element).toHaveFocus()
+		})
+	})
+
 	describe('runCommands()', () => {
 		let activeTerminal, newTerminal, commands
 		beforeEach(() => {

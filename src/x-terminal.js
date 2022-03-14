@@ -211,6 +211,8 @@ class XTerminalSingleton {
 				'x-terminal:insert-selected-text': () => this.insertSelection(),
 				'x-terminal:run-selected-text': () => this.runSelection(),
 				'x-terminal:focus': () => this.focus(),
+				'x-terminal:focus-next': () => this.focusNext(),
+				'x-terminal:focus-previous': () => this.focusPrev(),
 			}),
 			atom.commands.add('atom-text-editor, .tree-view, .tab-bar', {
 				'x-terminal:open-context-menu': {
@@ -634,6 +636,32 @@ class XTerminalSingleton {
 		} else {
 			const activeTerminal = [...this.terminals_set].find(t => t.activeIndex === 0)
 			activeTerminal.focusOnTerminal(true)
+		}
+	}
+
+	focusNext () {
+		if (this.terminals_set.size === 0) {
+			this.openTerminal()
+		} else {
+			const terminals = [...this.terminals_set]
+			let i = terminals.findIndex(t => t.activeIndex === 0) + 1
+			if (i >= terminals.length) {
+				i -= terminals.length
+			}
+			terminals[i].focusOnTerminal(true)
+		}
+	}
+
+	focusPrev () {
+		if (this.terminals_set.size === 0) {
+			this.openTerminal()
+		} else {
+			const terminals = [...this.terminals_set]
+			let i = terminals.findIndex(t => t.activeIndex === 0) - 1
+			if (i < 0) {
+				i += terminals.length
+			}
+			terminals[i].focusOnTerminal(true)
 		}
 	}
 
