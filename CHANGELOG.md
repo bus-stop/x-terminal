@@ -1,3 +1,10 @@
+# [13.1.0](https://github.com/bus-stop/x-terminal/compare/v13.0.26...v13.1.0) (2022-03-16)
+
+
+### Features
+
+* add `focus-next` and `focus-previous` commands ([#426](https://github.com/bus-stop/x-terminal/issues/426)) ([01d00db](https://github.com/bus-stop/x-terminal/commit/01d00dbff58ae32b98b6f5b0837785a948cb5ee1))
+
 ## [13.0.26](https://github.com/bus-stop/x-terminal/compare/v13.0.25...v13.0.26) (2022-03-13)
 
 
