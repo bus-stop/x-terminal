@@ -142,7 +142,7 @@ class XTerminalElementImpl extends HTMLElement {
 					} else if (fontSize > configDefaults.maximumFontSize) {
 						fontSize = configDefaults.maximumFontSize
 					}
-					this.model.applyProfileChanges({ fontSize: fontSize })
+					this.model.applyProfileChanges({ fontSize })
 					wheelEvent.stopPropagation()
 				},
 				{ capture: true },
@@ -563,11 +563,7 @@ class XTerminalElementImpl extends HTMLElement {
 		// Attach pty process to terminal.
 		// NOTE: This must be done after the terminal is attached to the
 		// parent element and refitted.
-		this.ptyProcessOptions = {
-			name: name,
-			cwd: cwd,
-			env: env,
-		}
+		this.ptyProcessOptions = { name, cwd, env }
 		if (encoding) {
 			// There's some issue if 'encoding=null' is passed in the options,
 			// therefore, only set it if there's an actual encoding to set.

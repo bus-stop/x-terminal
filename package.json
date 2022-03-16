@@ -70,16 +70,16 @@
   "devDependencies": {
     "@semantic-release/apm-config": "^9.0.1",
     "atom-jasmine3-test-runner": "^5.2.11",
-    "eslint": "^8.4.1",
-    "eslint-config-standard": "^16.0.3",
+    "eslint": "^8.11.0",
+    "eslint-config-standard": "^17.0.0-1",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-json": "^3.1.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-n": "^14.0.0",
+    "eslint-plugin-promise": "^6.0.0",
     "postcss-less": "^6.0.0",
     "semantic-release": "^19.0.2",
     "stylelint": "^14.5.3",
-    "stylelint-config-standard": "^24.0.0",
+    "stylelint-config-standard": "^25.0.0",
     "temp": "^0.9.4"
   },
   "scripts": {

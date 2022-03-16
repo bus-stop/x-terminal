@@ -427,8 +427,8 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 			newProfile,
 		)
 		return {
-			newProfile: newProfile,
-			profileChanges: profileChanges,
+			newProfile,
+			profileChanges,
 		}
 	}
 
