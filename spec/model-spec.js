@@ -38,7 +38,7 @@ async function createNewModel (params, options = {}) {
 		uri = url.href
 	}
 	const model = new XTerminalModel({
-		uri: uri,
+		uri,
 		terminals_set: new Set(),
 		...options,
 	})

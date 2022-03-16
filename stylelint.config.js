@@ -7,6 +7,7 @@ module.exports = {
 		'no-invalid-position-at-import-rule': null,
 		'selector-pseudo-element-colon-notation': 'double',
 		'no-extra-semicolons': true,
+		'function-no-unknown': null,
 		indentation: 'tab',
 		'selector-type-no-unknown': [
 			true, {
