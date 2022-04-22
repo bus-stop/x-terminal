@@ -10,7 +10,6 @@ env:
 
 jobs:
   Test:
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     strategy:
       fail-fast: false
       matrix:
@@ -18,8 +17,8 @@ jobs:
         version: [stable, beta]
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v2
-    - uses: UziTech/action-setup-atom@v2
+    - uses: actions/checkout@v3
+    - uses: UziTech/action-setup-atom@v3
       with:
         version: ${{ matrix.version }}
     - name: Install dependencies
@@ -28,11 +27,10 @@ jobs:
       run: atom --test spec
 
   Lint:
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
       - name: NPM install
@@ -46,9 +44,9 @@ jobs:
       github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: UziTech/action-setup-atom@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: UziTech/action-setup-atom@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
       - name: NPM install
@@ -58,10 +56,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ATOM_ACCESS_TOKEN: ${{ secrets.ATOM_ACCESS_TOKEN }}
         run: npx semantic-release
-
-  Skip:
-    if: contains(github.event.head_commit.message, '[skip ci]')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Skip CI 🚫
-        run: echo skip ci
