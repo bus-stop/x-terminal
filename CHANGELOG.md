@@ -1,3 +1,11 @@
+## [13.1.1](https://github.com/bus-stop/x-terminal/compare/v13.1.0...v13.1.1) (2022-04-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency fs-extra to ^10.1.0 ([#438](https://github.com/bus-stop/x-terminal/issues/438)) ([2073e82](https://github.com/bus-stop/x-terminal/commit/2073e82099dffc387baa171414bbf66ffb51f2be))
+* **deps:** update dependency marked to ^4.0.14 ([#434](https://github.com/bus-stop/x-terminal/issues/434)) ([22abffd](https://github.com/bus-stop/x-terminal/commit/22abffd36e1775c9828a640dc0008e7e571d070a))
+
 # [13.1.0](https://github.com/bus-stop/x-terminal/compare/v13.0.26...v13.1.0) (2022-03-16)
 
 
