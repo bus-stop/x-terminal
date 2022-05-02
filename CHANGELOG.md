@@ -1,3 +1,10 @@
+## [13.1.2](https://github.com/bus-stop/x-terminal/compare/v13.1.1...v13.1.2) (2022-05-02)
+
+
+### Bug Fixes
+
+* remove flaky windows tests ([a1099ac](https://github.com/bus-stop/x-terminal/commit/a1099ac5194e1dcc82e72141bb824abdbfe4264f))
+
 ## [13.1.1](https://github.com/bus-stop/x-terminal/compare/v13.1.0...v13.1.1) (2022-04-22)
 
 
