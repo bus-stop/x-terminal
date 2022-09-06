@@ -1,3 +1,10 @@
+## [13.1.5](https://github.com/bus-stop/x-terminal/compare/v13.1.4...v13.1.5) (2022-09-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency uuid to v9 ([#480](https://github.com/bus-stop/x-terminal/issues/480)) ([38396e5](https://github.com/bus-stop/x-terminal/commit/38396e5b92d87d920213c5a6f27a51b61362cdbe))
+
 ## [13.1.4](https://github.com/bus-stop/x-terminal/compare/v13.1.3...v13.1.4) (2022-07-11)
 
 
