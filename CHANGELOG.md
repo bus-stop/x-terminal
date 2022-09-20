@@ -8,7 +8,7 @@
 
 ### BREAKING CHANGES
 
-* - xterm options will need to update to v5.
+- xterm options will need to update to v5.
 - Theme `selection` color renamed to `selectionBackground`
 
 ## [13.1.5](https://github.com/bus-stop/x-terminal/compare/v13.1.4...v13.1.5) (2022-09-06)
