@@ -56,16 +56,16 @@
   "dependencies": {
     "deep-object-diff": "^1.1.7",
     "fs-extra": "^10.1.0",
-    "marked": "^4.0.18",
+    "marked": "^4.1.0",
     "node-pty-prebuilt-multiarch": "^0.10.0",
     "uuid": "^9.0.0",
     "whatwg-url": "^11.0.0",
     "which": "^2.0.2",
-    "xterm": "4.19.0",
-    "xterm-addon-fit": "0.5.0",
-    "xterm-addon-ligatures": "0.5.3",
-    "xterm-addon-web-links": "0.6.0",
-    "xterm-addon-webgl": "0.12.0"
+    "xterm": "5.0.0",
+    "xterm-addon-fit": "0.6.0",
+    "xterm-addon-ligatures": "0.6.0",
+    "xterm-addon-web-links": "0.7.0",
+    "xterm-addon-webgl": "0.13.0"
   },
   "devDependencies": {
     "@semantic-release/apm-config": "^9.0.1",
