@@ -51,7 +51,7 @@ describe('XTerminalProfilesSingleton', () => {
 			colorBackground: '#000000',
 			colorCursor: '#ffffff',
 			colorCursorAccent: '#000000',
-			colorSelection: '#4d4d4d',
+			colorSelectionBackground: '#4d4d4d',
 			colorBlack: '#2e3436',
 			colorRed: '#cc0000',
 			colorGreen: '#4e9a06',
@@ -157,7 +157,7 @@ describe('XTerminalProfilesSingleton', () => {
 		if (key === 'x-terminal.terminalSettings.colors.cursorAccent') {
 			return '#123459'
 		}
-		if (key === 'x-terminal.terminalSettings.colors.selection') {
+		if (key === 'x-terminal.terminalSettings.colors.selectionBackground') {
 			return '#123460'
 		}
 		if (key === 'x-terminal.terminalSettings.colors.black') {
@@ -346,7 +346,7 @@ describe('XTerminalProfilesSingleton', () => {
 			colorBackground: atom.config.get('x-terminal.terminalSettings.colors.background') || configDefaults.colorBackground,
 			colorCursor: atom.config.get('x-terminal.terminalSettings.colors.cursor') || configDefaults.colorCursor,
 			colorCursorAccent: atom.config.get('x-terminal.terminalSettings.colors.cursorAccent') || configDefaults.colorCursorAccent,
-			colorSelection: atom.config.get('x-terminal.terminalSettings.colors.selection') || configDefaults.colorSelection,
+			colorSelectionBackground: atom.config.get('x-terminal.terminalSettings.colors.selection') || configDefaults.colorSelectionBackground,
 			colorBlack: atom.config.get('x-terminal.terminalSettings.colors.black') || configDefaults.colorBlack,
 			colorRed: atom.config.get('x-terminal.terminalSettings.colors.red') || configDefaults.colorRed,
 			colorGreen: atom.config.get('x-terminal.terminalSettings.colors.green') || configDefaults.colorGreen,
@@ -396,7 +396,7 @@ describe('XTerminalProfilesSingleton', () => {
 			colorBackground: '#123457',
 			colorCursor: '#123458',
 			colorCursorAccent: '#123459',
-			colorSelection: '#123460',
+			colorSelectionBackground: '#123460',
 			colorBlack: '#123461',
 			colorRed: '#123462',
 			colorGreen: '#123463',
@@ -629,7 +629,7 @@ describe('XTerminalProfilesSingleton', () => {
 			colorBackground: configDefaults.colorBackground,
 			colorCursor: configDefaults.colorCursor,
 			colorCursorAccent: configDefaults.colorCursorAccent,
-			colorSelection: configDefaults.colorSelection,
+			colorSelectionBackground: configDefaults.colorSelectionBackground,
 			colorBlack: configDefaults.colorBlack,
 			colorRed: configDefaults.colorRed,
 			colorGreen: configDefaults.colorGreen,
@@ -995,7 +995,7 @@ describe('XTerminalProfilesSingleton', () => {
 			colorBackground: configDefaults.colorBackground,
 			colorCursor: configDefaults.colorCursor,
 			colorCursorAccent: configDefaults.colorCursorAccent,
-			colorSelection: configDefaults.colorSelection,
+			colorSelectionBackground: configDefaults.colorSelectionBackground,
 			colorBlack: configDefaults.colorBlack,
 			colorRed: configDefaults.colorRed,
 			colorGreen: configDefaults.colorGreen,

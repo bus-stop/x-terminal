@@ -366,7 +366,7 @@ describe('XTerminalElement', () => {
 			it('Custom webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Custom' })
-				expect(webgltheme.selection).toBe('#4d4d4d')
+				expect(webgltheme.selectionBackground).toBe('#4d4d4d')
 			})
 		}
 
@@ -401,7 +401,7 @@ describe('XTerminalElement', () => {
 			it('Atom Dark webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Atom Dark' })
-				expect(webgltheme.selection).toBe('#999999')
+				expect(webgltheme.selectionBackground).toBe('#999999')
 			})
 		}
 
@@ -436,7 +436,7 @@ describe('XTerminalElement', () => {
 			it('Atom Light webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Atom Light' })
-				expect(webgltheme.selection).toBe('#afc4da')
+				expect(webgltheme.selectionBackground).toBe('#afc4da')
 			})
 		}
 
@@ -472,7 +472,7 @@ describe('XTerminalElement', () => {
 			it('Base16 Tomorrow Dark webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Base16 Tomorrow Dark' })
-				expect(webgltheme.selection).toBe('#b4b7b4')
+				expect(webgltheme.selectionBackground).toBe('#b4b7b4')
 			})
 		}
 
@@ -508,7 +508,7 @@ describe('XTerminalElement', () => {
 			it('Base16 Tomorrow Light webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Base16 Tomorrow Light' })
-				expect(webgltheme.selection).toBe('#282a2e')
+				expect(webgltheme.selectionBackground).toBe('#282a2e')
 			})
 		}
 
@@ -543,7 +543,7 @@ describe('XTerminalElement', () => {
 			it('Christmas webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Christmas' })
-				expect(webgltheme.selection).toBe('#298f16')
+				expect(webgltheme.selectionBackground).toBe('#298f16')
 			})
 		}
 
@@ -579,7 +579,7 @@ describe('XTerminalElement', () => {
 			it('City Lights webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'City Lights' })
-				expect(webgltheme.selection).toBe('#2a2f38')
+				expect(webgltheme.selectionBackground).toBe('#2a2f38')
 			})
 		}
 
@@ -614,7 +614,7 @@ describe('XTerminalElement', () => {
 			it('Dracula webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Dracula' })
-				expect(webgltheme.selection).toBe('#44475a')
+				expect(webgltheme.selectionBackground).toBe('#44475a')
 			})
 		}
 
@@ -649,7 +649,7 @@ describe('XTerminalElement', () => {
 			it('Grass webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Grass' })
-				expect(webgltheme.selection).toBe('rgba(182, 73, 38, .99)')
+				expect(webgltheme.selectionBackground).toBe('rgba(182, 73, 38, .99)')
 			})
 		}
 
@@ -684,7 +684,7 @@ describe('XTerminalElement', () => {
 			it('Homebrew webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Homebrew' })
-				expect(webgltheme.selection).toBe('rgba(7, 30, 155, .99)')
+				expect(webgltheme.selectionBackground).toBe('rgba(7, 30, 155, .99)')
 			})
 		}
 
@@ -719,7 +719,7 @@ describe('XTerminalElement', () => {
 			it('Inverse webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Inverse' })
-				expect(webgltheme.selection).toBe('rgba(178, 215, 255, .99)')
+				expect(webgltheme.selectionBackground).toBe('rgba(178, 215, 255, .99)')
 			})
 		}
 
@@ -754,7 +754,7 @@ describe('XTerminalElement', () => {
 			it('Linux webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Linux' })
-				expect(webgltheme.selection).toBe('rgba(155, 30, 7, .99)')
+				expect(webgltheme.selectionBackground).toBe('rgba(155, 30, 7, .99)')
 			})
 		}
 
@@ -789,7 +789,7 @@ describe('XTerminalElement', () => {
 			it('Man Page webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Man Page' })
-				expect(webgltheme.selection).toBe('rgba(178, 215, 255, .99)')
+				expect(webgltheme.selectionBackground).toBe('rgba(178, 215, 255, .99)')
 			})
 		}
 
@@ -824,7 +824,7 @@ describe('XTerminalElement', () => {
 			it('Novel webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Novel' })
-				expect(webgltheme.selection).toBe('rgba(155, 153, 122, .99)')
+				expect(webgltheme.selectionBackground).toBe('rgba(155, 153, 122, .99)')
 			})
 		}
 
@@ -859,7 +859,7 @@ describe('XTerminalElement', () => {
 			it('Ocean webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Ocean' })
-				expect(webgltheme.selection).toBe('rgba(41, 134, 255, .99)')
+				expect(webgltheme.selectionBackground).toBe('rgba(41, 134, 255, .99)')
 			})
 		}
 
@@ -894,7 +894,7 @@ describe('XTerminalElement', () => {
 			it('One Dark webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'One Dark' })
-				expect(webgltheme.selection).toBe('#9196a1')
+				expect(webgltheme.selectionBackground).toBe('#9196a1')
 			})
 		}
 
@@ -929,7 +929,7 @@ describe('XTerminalElement', () => {
 			it('One Light webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'One Light' })
-				expect(webgltheme.selection).toBe('hsl(230, 1%, 90%)')
+				expect(webgltheme.selectionBackground).toBe('hsl(230, 1%, 90%)')
 			})
 		}
 
@@ -964,7 +964,7 @@ describe('XTerminalElement', () => {
 			it('Predawn webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Predawn' })
-				expect(webgltheme.selection).toBe('rgba(255,255,255,0.25)')
+				expect(webgltheme.selectionBackground).toBe('rgba(255,255,255,0.25)')
 			})
 		}
 
@@ -999,7 +999,7 @@ describe('XTerminalElement', () => {
 			it('Pro webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Pro' })
-				expect(webgltheme.selection).toBe('rgba(82, 82, 82, .99)')
+				expect(webgltheme.selectionBackground).toBe('rgba(82, 82, 82, .99)')
 			})
 		}
 
@@ -1034,7 +1034,7 @@ describe('XTerminalElement', () => {
 			it('Red Sands webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Red Sands' })
-				expect(webgltheme.selection).toBe('rgba(60, 25, 22, .99)')
+				expect(webgltheme.selectionBackground).toBe('rgba(60, 25, 22, .99)')
 			})
 		}
 
@@ -1069,7 +1069,7 @@ describe('XTerminalElement', () => {
 			it('Red webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Red' })
-				expect(webgltheme.selection).toBe('rgba(7, 30, 155, .99)')
+				expect(webgltheme.selectionBackground).toBe('rgba(7, 30, 155, .99)')
 			})
 		}
 
@@ -1104,7 +1104,7 @@ describe('XTerminalElement', () => {
 			it('Silver Aerogel webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Silver Aerogel' })
-				expect(webgltheme.selection).toBe('rgba(120, 123, 156, .99)')
+				expect(webgltheme.selectionBackground).toBe('rgba(120, 123, 156, .99)')
 			})
 		}
 
@@ -1139,7 +1139,7 @@ describe('XTerminalElement', () => {
 			it('Solarized Dark webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Solarized Dark' })
-				expect(webgltheme.selection).toBe('#839496')
+				expect(webgltheme.selectionBackground).toBe('#839496')
 			})
 		}
 
@@ -1174,7 +1174,7 @@ describe('XTerminalElement', () => {
 			it('Solarized Light webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Solarized Light' })
-				expect(webgltheme.selection).toBe('#ece7d5')
+				expect(webgltheme.selectionBackground).toBe('#ece7d5')
 			})
 		}
 
@@ -1209,7 +1209,7 @@ describe('XTerminalElement', () => {
 			it('Solid Colors webgl selection', async () => {
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Solid Colors' })
-				expect(webgltheme.selection).toBe('rgba(178, 215, 255, .99)')
+				expect(webgltheme.selectionBackground).toBe('rgba(178, 215, 255, .99)')
 			})
 		}
 
@@ -1246,7 +1246,7 @@ describe('XTerminalElement', () => {
 				const root = getComputedStyle(document.documentElement)
 				const element = await createNewElement({ webgl: true })
 				const webgltheme = element.getTheme({ theme: 'Standard' })
-				expect(webgltheme.selection).toBe(root.getPropertyValue('--standard-background-color-selected'))
+				expect(webgltheme.selectionBackground).toBe(root.getPropertyValue('--standard-background-color-selected'))
 			})
 		}
 	})
@@ -2319,7 +2319,7 @@ describe('XTerminalElement', () => {
 			colorBackground: '#000000',
 			colorCursor: '#ffffff',
 			colorCursorAccent: '#000000',
-			colorSelection: '#4d4d4d',
+			colorSelectionBackground: '#4d4d4d',
 			colorBlack: '#2e3436',
 			colorRed: '#cc0000',
 			colorGreen: '#4e9a06',
@@ -2358,7 +2358,7 @@ describe('XTerminalElement', () => {
 			colorBackground: '#000000',
 			colorCursor: '#ffffff',
 			colorCursorAccent: '#000000',
-			colorSelection: '#4d4d4d',
+			colorSelectionBackground: '#4d4d4d',
 			colorBlack: '#2e3436',
 			colorRed: '#cc0000',
 			colorGreen: '#4e9a06',
@@ -2401,7 +2401,7 @@ describe('XTerminalElement', () => {
 			colorBackground: '#000000',
 			colorCursor: '#ffffff',
 			colorCursorAccent: '#000000',
-			colorSelection: '#4d4d4d',
+			colorSelectionBackground: '#4d4d4d',
 			colorBlack: '#2e3436',
 			colorRed: '#cc0000',
 			colorGreen: '#4e9a06',
@@ -2448,7 +2448,7 @@ describe('XTerminalElement', () => {
 			colorBackground: '#000000',
 			colorCursor: '#ffffff',
 			colorCursorAccent: '#000000',
-			colorSelection: '#4d4d4d',
+			colorSelectionBackground: '#4d4d4d',
 			colorBlack: '#2e3436',
 			colorRed: '#cc0000',
 			colorGreen: '#4e9a06',
@@ -2498,7 +2498,7 @@ describe('XTerminalElement', () => {
 			colorBackground: '#000000',
 			colorCursor: '#ffffff',
 			colorCursorAccent: '#000000',
-			colorSelection: '#4d4d4d',
+			colorSelectionBackground: '#4d4d4d',
 			colorBlack: '#2e3436',
 			colorRed: '#cc0000',
 			colorGreen: '#4e9a06',

@@ -230,9 +230,9 @@ describe('config', () => {
 		})
 	})
 
-	describe('colorSelection', () => {
+	describe('colorSelectionBackground', () => {
 		it('return \'#4d4d4d\'', () => {
-			expect(configDefaults.colorSelection).toBe('#4d4d4d')
+			expect(configDefaults.colorSelectionBackground).toBe('#4d4d4d')
 		})
 	})
 
