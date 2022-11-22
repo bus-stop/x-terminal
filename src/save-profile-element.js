@@ -40,10 +40,12 @@ class XTerminalSaveProfileElementImpl extends HTMLElement {
 	}
 }
 
-const XTerminalSaveProfileElement = document.registerElement('x-terminal-save-profile', {
-	prototype: XTerminalSaveProfileElementImpl.prototype,
-})
+window.customElements.define('x-terminal-save-profile', XTerminalSaveProfileElementImpl)
+
+function createXTerminalSaveProfileElement () {
+	return document.createElement('x-terminal-save-profile')
+}
 
 export {
-	XTerminalSaveProfileElement,
+	createXTerminalSaveProfileElement,
 }

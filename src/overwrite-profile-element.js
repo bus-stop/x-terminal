@@ -55,10 +55,12 @@ class XTerminalOverwriteProfileElementImpl extends HTMLElement {
 	}
 }
 
-const XTerminalOverwriteProfileElement = document.registerElement('x-terminal-overwrite-profile', {
-	prototype: XTerminalOverwriteProfileElementImpl.prototype,
-})
+window.customElements.define('x-terminal-overwrite-profile', XTerminalOverwriteProfileElementImpl)
+
+function createXTerminalOverwriteProfileElement () {
+	return document.createElement('x-terminal-overwrite-profile')
+}
 
 export {
-	XTerminalOverwriteProfileElement,
+	createXTerminalOverwriteProfileElement,
 }

@@ -55,10 +55,12 @@ class XTerminalDeleteProfileElementImpl extends HTMLElement {
 	}
 }
 
-const XTerminalDeleteProfileElement = document.registerElement('x-terminal-delete-profile', {
-	prototype: XTerminalDeleteProfileElementImpl.prototype,
-})
+window.customElements.define('x-terminal-delete-profile', XTerminalDeleteProfileElementImpl)
+
+function createXTerminalDeleteProfileElement () {
+	return document.createElement('x-terminal-delete-profile')
+}
 
 export {
-	XTerminalDeleteProfileElement,
+	createXTerminalDeleteProfileElement,
 }

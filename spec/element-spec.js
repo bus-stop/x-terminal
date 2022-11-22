@@ -23,7 +23,7 @@ import * as nodePty from 'node-pty-prebuilt-multiarch'
 import { shell } from 'electron'
 
 import { configDefaults } from '../src/config'
-import { XTerminalElement } from '../src/element'
+import { createXTerminalElement } from '../src/element'
 import { XTerminalModel } from '../src/model'
 
 import path from 'path'
@@ -48,7 +48,7 @@ async function createNewElement (params, options = {}) {
 	await model.initializedPromise
 	model.pane = jasmine.createSpyObj('pane',
 		['removeItem', 'getActiveItem', 'destroyItem'])
-	const element = new XTerminalElement()
+	const element = createXTerminalElement()
 	await element.initialize(model)
 	await element.createTerminal()
 	return element

@@ -493,10 +493,12 @@ class XTerminalProfileMenuElementImpl extends HTMLElement {
 	}
 }
 
-const XTerminalProfileMenuElement = document.registerElement('x-terminal-profile', {
-	prototype: XTerminalProfileMenuElementImpl.prototype,
-})
+window.customElements.define('x-terminal-profile', XTerminalProfileMenuElementImpl)
+
+function createXTerminalProfileMenuElement () {
+	return document.createElement('x-terminal-profile')
+}
 
 export {
-	XTerminalProfileMenuElement,
+	createXTerminalProfileMenuElement,
 }
