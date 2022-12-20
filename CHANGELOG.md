@@ -1,3 +1,12 @@
+## [14.0.4](https://github.com/bus-stop/x-terminal/compare/v14.0.3...v14.0.4) (2022-12-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency deep-object-diff to ^1.1.9 ([#505](https://github.com/bus-stop/x-terminal/issues/505)) ([18fc497](https://github.com/bus-stop/x-terminal/commit/18fc4976f0a053d2f75279491129ce4a5a7964f2))
+* **deps:** update dependency fs-extra to v11 ([#511](https://github.com/bus-stop/x-terminal/issues/511)) ([62ba576](https://github.com/bus-stop/x-terminal/commit/62ba5761fc9a6439659e3c04c086954151b93634))
+* **deps:** update dependency marked to ^4.2.4 ([#499](https://github.com/bus-stop/x-terminal/issues/499)) ([37fd045](https://github.com/bus-stop/x-terminal/commit/37fd0456aef4e62e61dd59fcbae126278c26610c))
+
 ## [14.0.3](https://github.com/bus-stop/x-terminal/compare/v14.0.2...v14.0.3) (2022-12-20)
 
 
