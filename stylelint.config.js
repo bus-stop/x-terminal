@@ -8,6 +8,7 @@ module.exports = {
 		'selector-pseudo-element-colon-notation': 'double',
 		'no-extra-semicolons': true,
 		'function-no-unknown': null,
+		'import-notation': 'string',
 		indentation: 'tab',
 		'selector-type-no-unknown': [
 			true, {
