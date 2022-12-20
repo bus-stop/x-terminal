@@ -60,7 +60,7 @@
     "node-pty-prebuilt-multiarch": "^0.10.0",
     "uuid": "^9.0.0",
     "whatwg-url": "^11.0.0",
-    "which": "^2.0.2",
+    "which": "^3.0.0",
     "xterm": "5.1.0",
     "xterm-addon-fit": "0.6.0",
     "xterm-addon-ligatures": "0.6.0",
