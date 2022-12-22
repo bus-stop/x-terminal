@@ -1,3 +1,10 @@
+## [14.0.5](https://github.com/bus-stop/x-terminal/compare/v14.0.4...v14.0.5) (2022-12-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency xterm-addon-fit to v0.7.0 ([#518](https://github.com/bus-stop/x-terminal/issues/518)) ([406742a](https://github.com/bus-stop/x-terminal/commit/406742a27cb845083c17d50c38f76b2e4316a64f))
+
 ## [14.0.4](https://github.com/bus-stop/x-terminal/compare/v14.0.3...v14.0.4) (2022-12-20)
 
 
