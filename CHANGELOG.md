@@ -1,3 +1,10 @@
+## [14.0.6](https://github.com/bus-stop/x-terminal/compare/v14.0.5...v14.0.6) (2023-01-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency whatwg-url to v12 ([#526](https://github.com/bus-stop/x-terminal/issues/526)) ([3729cee](https://github.com/bus-stop/x-terminal/commit/3729cee26ade73da1b0028e882107d3d82edbf74))
+
 ## [14.0.5](https://github.com/bus-stop/x-terminal/compare/v14.0.4...v14.0.5) (2022-12-22)
 
 
